@@ -1,32 +1,29 @@
 # DALIL — webapp
 
-Guide de l’Algérie (FR / EN / AR). Next.js 16 + Payload CMS 3 + Neon Postgres, déployé sur Vercel.
+Guide de l’Algérie. Site public = copie 1:1 du prototype validé par Rad (construit sur ChatGPT), désormais hébergé chez nous.
+Back-end : Next.js 16 + Payload CMS 3 + Neon Postgres, déployé sur Vercel.
 
-## Règles
-- **Neon est la source de vérité.** Tout contenu passe par Payload (`/admin`). Pas de Notion, pas de contenu en dur.
-- **Rien ne sort sans validation humaine.** Les agents / rédacteurs créent des brouillons ; un administrateur publie.
-- Toute information publiée est **datée et sourcée**. Une donnée inconnue n’est jamais présentée comme acquise.
-- Présence dans l’annuaire ≠ label. Le label ne s’achète pas.
-- Ne jamais pousser, déployer ou modifier la base de production sans accord explicite de Rad ou Saïd.
-
-## Skills du repo (`.claude/skills/`)
-- Design : `ui-ux-pro-max` (lancer `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<requête>" --domain <ux|typography|color…>`), `design-system`, `ui-styling`.
-- Méthode : `sp-brainstorming`, `sp-writing-plans`, `sp-executing-plans`, `sp-test-driven-development`, `sp-systematic-debugging`, `sp-verification-before-completion`, revues de code.
-- Ingénierie (Matt Pocock) : `mp-domain-modeling`, `mp-codebase-design`, `mp-to-spec`, `mp-tdd`, `mp-code-review`, `mp-improve-codebase-architecture`, `mp-diagnosing-bugs`, `mp-grill-me`.
-- Payload : `payload` (référence complète du CMS).
+## Règle n°1 — ne pas toucher au visuel
+Le design, les textes et la structure du site public sont ceux validés par Rad. **Aucune modification visuelle sans demande explicite.**
 
 ## Architecture
-- `src/collections/` — modèle de données (fiches, secteurs, spécialités, wilayas, guides, actualités, pages, médias, demandes, newsletter, équipe).
-- `src/lib/data.ts` — toutes les lectures publiques (uniquement contenus publiés, `locale: 'all'` + repli FR signalé).
-- `src/lib/revalidate.ts` — purge du cache à chaque publication (pas de reconstruction quotidienne).
-- `src/app/(frontend)/[locale]/` — site public. Français sans préfixe (`/annuaire`), `/en/…`, `/ar/…` (RTL).
-- `src/seed/` — données initiales idempotentes (`pnpm seed`).
-- Design tokens : `src/app/(frontend)/globals.css` (papier chaulé, bleu Méditerranée, terre cuite ; motif khatam).
+- `public/` — le site public tel quel : `public/<chemin>/index.html` + flux de navigation `public/<chemin>.rsc` + `public/assets/*` + `public/images/*`.
+  - `next.config.ts` réécrit `/chemin` → `/chemin/index.html` et sert les `.rsc` en `text/x-component` (navigation client du prototype).
+- `src/app/api/*` — réimplémentation sur Neon des routes du prototype :
+  `subscribers` (newsletter), `contributions` (proposer), `applications` (pros), `contact-requests`, `diagnostics`,
+  `test-session` (profil test 7 jours, favoris, avis), `favorites`, `collections` (listes), `checklist`, `me`.
+  Session visiteur = cookie `dalil_sid` → collection `visitor-sessions`.
+- `/admin` — Payload : Demandes reçues, Newsletter, Sessions visiteurs, Équipe. Le premier compte créé devient administrateur.
+
+## Limites connues
+- `/recherche?q=…` : la page est servie dans sa version de base (le calcul côté serveur du prototype n’est pas récupérable sans son code source).
+- Pièces jointes des contributions : seuls nom/taille/type sont enregistrés.
+- `/api/admin/*` (admin annuaire + synchro Notion du prototype) : remplacés par `/admin`.
+
+## Skills du repo (`.claude/skills/`)
+ui-ux-pro-max, design-system, ui-styling, superpowers (`sp-*`), Matt Pocock (`mp-*`), payload.
 
 ## Commandes
-- `pnpm dev` — local (Postgres local dans `.env`).
-- `pnpm payload migrate:create <nom>` après toute modification de schéma, puis commit de la migration.
-- Les migrations s’appliquent automatiquement au démarrage en production (`prodMigrations`).
-- `pnpm seed` — réinjecte la structure de base sans écraser les fiches.
-
-This project uses the Payload CMS skill at `.claude/skills/payload/`.
+- `pnpm dev` / `pnpm build` (Postgres dans `.env`).
+- Après modification de schéma : `pnpm payload migrate:create <nom>` puis commit. Migrations appliquées au build Vercel (`vercel-build`) et au démarrage (`prodMigrations`).
+- Ne jamais pousser, déployer ou toucher la base de production sans accord explicite de Rad ou Saïd.

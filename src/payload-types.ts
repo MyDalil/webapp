@@ -67,42 +67,22 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    listings: Listing;
-    sectors: Sector;
-    specialties: Specialty;
-    wilayas: Wilaya;
-    guides: Guide;
-    articles: Article;
-    pages: Page;
-    media: Media;
     submissions: Submission;
     subscribers: Subscriber;
+    'visitor-sessions': VisitorSession;
     users: User;
     'payload-kv': PayloadKv;
-    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {
-    sectors: {
-      specialties: 'specialties';
-    };
-  };
+  collectionsJoins: {};
   collectionsSelect: {
-    listings: ListingsSelect<false> | ListingsSelect<true>;
-    sectors: SectorsSelect<false> | SectorsSelect<true>;
-    specialties: SpecialtiesSelect<false> | SpecialtiesSelect<true>;
-    wilayas: WilayasSelect<false> | WilayasSelect<true>;
-    guides: GuidesSelect<false> | GuidesSelect<true>;
-    articles: ArticlesSelect<false> | ArticlesSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -110,28 +90,16 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('fr' | 'en' | 'ar') | ('fr' | 'en' | 'ar')[];
-  globals: {
-    home: Home;
-    settings: Setting;
-  };
-  globalsSelect: {
-    home: HomeSelect<false> | HomeSelect<true>;
-    settings: SettingsSelect<false> | SettingsSelect<true>;
-  };
-  locale: 'fr' | 'en' | 'ar';
+  fallbackLocale: null;
+  globals: {};
+  globalsSelect: {};
+  locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
   user: User;
   jobs: {
-    tasks: {
-      schedulePublish: TaskSchedulePublish;
-      inline: {
-        input: unknown;
-        output: unknown;
-      };
-    };
+    tasks: unknown;
     workflows: unknown;
   };
 }
@@ -155,336 +123,25 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "listings".
- */
-export interface Listing {
-  id: number;
-  name: string;
-  summary?: string | null;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  sector: number | Sector;
-  specialties?: (number | Specialty)[] | null;
-  wilaya?: (number | null) | Wilaya;
-  commune?: string | null;
-  address?: string | null;
-  lat?: number | null;
-  lng?: number | null;
-  phone?: string | null;
-  whatsapp?: string | null;
-  email?: string | null;
-  website?: string | null;
-  instagram?: string | null;
-  facebook?: string | null;
-  hours?: string | null;
-  languages?: string | null;
-  accessibility?: string | null;
-  cover?: (number | null) | Media;
-  gallery?: (number | Media)[] | null;
-  verification: 'unverified' | 'verified' | 'claimed';
-  verifiedAt?: string | null;
-  /**
-   * Toute information publiée est datée et sourcée.
-   */
-  sources?:
-    | {
-        label: string;
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Décision distincte, motivée et datée. Ne s’achète pas.
-   */
-  label?: boolean | null;
-  labelNote?: string | null;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  featured?: boolean | null;
-  searchText?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sectors".
- */
-export interface Sector {
-  id: number;
-  title: string;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  order?: number | null;
-  intro?: string | null;
-  icon?: string | null;
-  criteria?:
-    | {
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  guide?: (number | null) | Guide;
-  specialties?: {
-    docs?: (number | Specialty)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "guides".
- */
-export interface Guide {
-  id: number;
-  title: string;
-  summary?: string | null;
-  checklist?:
-    | {
-        text?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Toute information publiée est datée et sourcée.
-   */
-  sources?:
-    | {
-        label: string;
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  cover?: (number | null) | Media;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  theme: 'installation' | 'demarches' | 'quotidien' | 'decouvrir' | 'business';
-  order?: number | null;
-  reviewedAt?: string | null;
-  searchText?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * Obligatoire en français.
-   */
-  alt?: string | null;
-  /**
-   * Auteur et licence. Obligatoire pour une image externe.
-   */
-  credit?: string | null;
-  sourceUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumb?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    card?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    hero?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "specialties".
- */
-export interface Specialty {
-  id: number;
-  title: string;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  sector: number | Sector;
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "wilayas".
- */
-export interface Wilaya {
-  id: number;
-  code: number;
-  name: string;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  /**
-   * Affichée en premier. Les autres restent dans le menu déroulant.
-   */
-  featured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "articles".
- */
-export interface Article {
-  id: number;
-  title: string;
-  summary?: string | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Toute information publiée est datée et sourcée.
-   */
-  sources?:
-    | {
-        label: string;
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  cover?: (number | null) | Media;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  category: 'vie-pratique' | 'societe' | 'economie' | 'culture' | 'reglementation';
-  publishedAt?: string | null;
-  searchText?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
- */
-export interface Page {
-  id: number;
-  title: string;
-  intro?: string | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Généré automatiquement depuis le titre. Modifiable.
-   */
-  slug?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
   id: number;
-  kind: 'address' | 'pro' | 'correction' | 'feedback';
+  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic';
   status?: ('new' | 'processing' | 'done' | 'rejected') | null;
   subject: string;
-  contactName?: string | null;
-  contactEmail?: string | null;
-  contactPhone?: string | null;
-  sector?: string | null;
-  wilaya?: string | null;
-  message?: string | null;
-  pageUrl?: string | null;
-  locale?: string | null;
+  email?: string | null;
+  data?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  session?: string | null;
   internalNote?: string | null;
-  listing?: (number | null) | Listing;
   updatedAt: string;
   createdAt: string;
 }
@@ -495,8 +152,36 @@ export interface Submission {
 export interface Subscriber {
   id: number;
   email: string;
-  locale?: string | null;
-  consentAt?: string | null;
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitor-sessions".
+ */
+export interface VisitorSession {
+  id: number;
+  sid: string;
+  expiresAt: string;
+  profile?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  state?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -547,135 +232,11 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-jobs".
- */
-export interface PayloadJob {
-  id: number;
-  /**
-   * Input data provided to the job
-   */
-  input?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  taskStatus?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  completedAt?: string | null;
-  totalTried?: number | null;
-  /**
-   * If hasError is true this job will not be retried
-   */
-  hasError?: boolean | null;
-  /**
-   * If hasError is true, this is the error that caused it
-   */
-  error?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  /**
-   * Task execution log
-   */
-  log?:
-    | {
-        executedAt: string;
-        completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
-        taskID: string;
-        input?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        output?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        state: 'failed' | 'succeeded';
-        error?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
-  queue?: string | null;
-  waitUntil?: string | null;
-  processing?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: number;
   document?:
-    | ({
-        relationTo: 'listings';
-        value: number | Listing;
-      } | null)
-    | ({
-        relationTo: 'sectors';
-        value: number | Sector;
-      } | null)
-    | ({
-        relationTo: 'specialties';
-        value: number | Specialty;
-      } | null)
-    | ({
-        relationTo: 'wilayas';
-        value: number | Wilaya;
-      } | null)
-    | ({
-        relationTo: 'guides';
-        value: number | Guide;
-      } | null)
-    | ({
-        relationTo: 'articles';
-        value: number | Article;
-      } | null)
-    | ({
-        relationTo: 'pages';
-        value: number | Page;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
     | ({
         relationTo: 'submissions';
         value: number | Submission;
@@ -683,6 +244,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'subscribers';
         value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'visitor-sessions';
+        value: number | VisitorSession;
       } | null)
     | ({
         relationTo: 'users';
@@ -732,233 +297,16 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "listings_select".
- */
-export interface ListingsSelect<T extends boolean = true> {
-  name?: T;
-  summary?: T;
-  description?: T;
-  sector?: T;
-  specialties?: T;
-  wilaya?: T;
-  commune?: T;
-  address?: T;
-  lat?: T;
-  lng?: T;
-  phone?: T;
-  whatsapp?: T;
-  email?: T;
-  website?: T;
-  instagram?: T;
-  facebook?: T;
-  hours?: T;
-  languages?: T;
-  accessibility?: T;
-  cover?: T;
-  gallery?: T;
-  verification?: T;
-  verifiedAt?: T;
-  sources?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
-  label?: T;
-  labelNote?: T;
-  slug?: T;
-  featured?: T;
-  searchText?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sectors_select".
- */
-export interface SectorsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  order?: T;
-  intro?: T;
-  icon?: T;
-  criteria?:
-    | T
-    | {
-        label?: T;
-        id?: T;
-      };
-  guide?: T;
-  specialties?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "specialties_select".
- */
-export interface SpecialtiesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  sector?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "wilayas_select".
- */
-export interface WilayasSelect<T extends boolean = true> {
-  code?: T;
-  name?: T;
-  slug?: T;
-  featured?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "guides_select".
- */
-export interface GuidesSelect<T extends boolean = true> {
-  title?: T;
-  summary?: T;
-  checklist?:
-    | T
-    | {
-        text?: T;
-        id?: T;
-      };
-  body?: T;
-  sources?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
-  cover?: T;
-  slug?: T;
-  theme?: T;
-  order?: T;
-  reviewedAt?: T;
-  searchText?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "articles_select".
- */
-export interface ArticlesSelect<T extends boolean = true> {
-  title?: T;
-  summary?: T;
-  body?: T;
-  sources?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
-  cover?: T;
-  slug?: T;
-  category?: T;
-  publishedAt?: T;
-  searchText?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages_select".
- */
-export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  intro?: T;
-  body?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  credit?: T;
-  sourceUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumb?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        card?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        hero?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions_select".
  */
 export interface SubmissionsSelect<T extends boolean = true> {
   kind?: T;
   status?: T;
   subject?: T;
-  contactName?: T;
-  contactEmail?: T;
-  contactPhone?: T;
-  sector?: T;
-  wilaya?: T;
-  message?: T;
-  pageUrl?: T;
-  locale?: T;
+  email?: T;
+  data?: T;
+  session?: T;
   internalNote?: T;
-  listing?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -968,8 +316,19 @@ export interface SubmissionsSelect<T extends boolean = true> {
  */
 export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
-  locale?: T;
-  consentAt?: T;
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitor-sessions_select".
+ */
+export interface VisitorSessionsSelect<T extends boolean = true> {
+  sid?: T;
+  expiresAt?: T;
+  profile?: T;
+  state?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1008,37 +367,6 @@ export interface PayloadKvSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-jobs_select".
- */
-export interface PayloadJobsSelect<T extends boolean = true> {
-  input?: T;
-  taskStatus?: T;
-  completedAt?: T;
-  totalTried?: T;
-  hasError?: T;
-  error?: T;
-  log?:
-    | T
-    | {
-        executedAt?: T;
-        completedAt?: T;
-        taskSlug?: T;
-        taskID?: T;
-        input?: T;
-        output?: T;
-        state?: T;
-        error?: T;
-        id?: T;
-      };
-  taskSlug?: T;
-  queue?: T;
-  waitUntil?: T;
-  processing?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -1071,82 +399,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "home".
- */
-export interface Home {
-  id: number;
-  kicker?: string | null;
-  title?: string | null;
-  subtitle?: string | null;
-  heroImage?: (number | null) | Media;
-  suggestions?:
-    | {
-        text?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  featuredGuides?: (number | Guide)[] | null;
-  announcement?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
- */
-export interface Setting {
-  id: number;
-  contactEmail?: string | null;
-  social?: {
-    instagram?: string | null;
-    facebook?: string | null;
-    tiktok?: string | null;
-    linkedin?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "home_select".
- */
-export interface HomeSelect<T extends boolean = true> {
-  kicker?: T;
-  title?: T;
-  subtitle?: T;
-  heroImage?: T;
-  suggestions?:
-    | T
-    | {
-        text?: T;
-        id?: T;
-      };
-  featuredGuides?: T;
-  announcement?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings_select".
- */
-export interface SettingsSelect<T extends boolean = true> {
-  contactEmail?: T;
-  social?:
-    | T
-    | {
-        instagram?: T;
-        facebook?: T;
-        tiktok?: T;
-        linkedin?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1154,39 +406,6 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TaskSchedulePublish".
- */
-export interface TaskSchedulePublish {
-  input: {
-    type?: ('publish' | 'unpublish') | null;
-    locale?: string | null;
-    doc?:
-      | ({
-          relationTo: 'listings';
-          value: number | Listing;
-        } | null)
-      | ({
-          relationTo: 'guides';
-          value: number | Guide;
-        } | null)
-      | ({
-          relationTo: 'articles';
-          value: number | Article;
-        } | null)
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null);
-    global?: string | null;
-    user?: {
-      relationTo: 'users';
-      value: number | User;
-    } | null;
-  };
-  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

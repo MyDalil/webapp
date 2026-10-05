@@ -1,0 +1,4 @@
+.claude
+src/migrations/*.json
+*.md
+.env*

@@ -1,27 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isStaff } from '@/lib/access'
 
-/** Créations publiques uniquement via les server actions du site (overrideAccess). */
+/**
+ * Données reçues du site public (formulaires d’origine du prototype DALIL).
+ * Les créations passent uniquement par les routes /api du site (overrideAccess).
+ */
 export const Subscribers: CollectionConfig = {
   slug: 'subscribers',
   labels: { singular: 'Abonné', plural: 'Newsletter' },
-  admin: { useAsTitle: 'email', defaultColumns: ['email', 'locale', 'createdAt'], group: 'Boîte de réception' },
+  admin: { useAsTitle: 'email', defaultColumns: ['email', 'source', 'createdAt'], group: 'Boîte de réception' },
   access: { read: isStaff, create: isAdmin, update: isAdmin, delete: isAdmin },
   fields: [
     { name: 'email', type: 'email', required: true, unique: true },
-    { name: 'locale', type: 'text', label: 'Langue' },
-    { name: 'consentAt', type: 'date', label: 'Consentement le' },
+    { name: 'source', type: 'text', label: 'Formulaire d’origine' },
   ],
 }
 
 export const Submissions: CollectionConfig = {
   slug: 'submissions',
   labels: { singular: 'Demande', plural: 'Demandes reçues' },
-  admin: {
-    useAsTitle: 'subject',
-    defaultColumns: ['subject', 'kind', 'status', 'createdAt'],
-    group: 'Boîte de réception',
-  },
+  admin: { useAsTitle: 'subject', defaultColumns: ['subject', 'kind', 'status', 'createdAt'], group: 'Boîte de réception' },
   defaultSort: '-createdAt',
   access: { read: isStaff, create: isAdmin, update: isStaff, delete: isAdmin },
   fields: [
@@ -34,10 +32,11 @@ export const Submissions: CollectionConfig = {
           label: 'Type',
           required: true,
           options: [
-            { label: 'Proposition d’adresse', value: 'address' },
-            { label: 'Candidature professionnel', value: 'pro' },
-            { label: 'Signalement / correction', value: 'correction' },
-            { label: 'Avis sur le site', value: 'feedback' },
+            { label: 'Contribution (proposer une adresse)', value: 'contribution' },
+            { label: 'Candidature professionnel', value: 'application' },
+            { label: 'Demande de contact', value: 'contact' },
+            { label: 'Avis (profil test)', value: 'feedback' },
+            { label: 'Parcours personnalisé', value: 'diagnostic' },
           ],
         },
         {
@@ -55,25 +54,23 @@ export const Submissions: CollectionConfig = {
       ],
     },
     { name: 'subject', type: 'text', label: 'Objet', required: true },
-    {
-      type: 'row',
-      fields: [
-        { name: 'contactName', type: 'text', label: 'Nom' },
-        { name: 'contactEmail', type: 'email', label: 'Email' },
-        { name: 'contactPhone', type: 'text', label: 'Téléphone' },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'sector', type: 'text', label: 'Secteur' },
-        { name: 'wilaya', type: 'text', label: 'Wilaya' },
-      ],
-    },
-    { name: 'message', type: 'textarea', label: 'Message' },
-    { name: 'pageUrl', type: 'text', label: 'Page concernée' },
-    { name: 'locale', type: 'text', label: 'Langue' },
+    { name: 'email', type: 'text', label: 'Email' },
+    { name: 'data', type: 'json', label: 'Contenu reçu' },
+    { name: 'session', type: 'text', label: 'Session visiteur', admin: { readOnly: true } },
     { name: 'internalNote', type: 'textarea', label: 'Note interne' },
-    { name: 'listing', type: 'relationship', relationTo: 'listings', label: 'Fiche créée / concernée' },
+  ],
+}
+
+/** Profils test, favoris, listes et checklist des visiteurs (cookie de session, 7 jours). */
+export const VisitorSessions: CollectionConfig = {
+  slug: 'visitor-sessions',
+  labels: { singular: 'Session visiteur', plural: 'Sessions visiteurs' },
+  admin: { useAsTitle: 'sid', defaultColumns: ['sid', 'expiresAt', 'updatedAt'], group: 'Boîte de réception' },
+  access: { read: isStaff, create: isAdmin, update: isAdmin, delete: isAdmin },
+  fields: [
+    { name: 'sid', type: 'text', required: true, unique: true, index: true },
+    { name: 'expiresAt', type: 'date', required: true },
+    { name: 'profile', type: 'json' },
+    { name: 'state', type: 'json', label: 'Favoris, listes, checklist, parcours' },
   ],
 }
