@@ -5,7 +5,19 @@ export const Users: CollectionConfig = {
   slug: 'users',
   labels: { singular: 'Membre de l’équipe', plural: 'Équipe' },
   admin: { useAsTitle: 'name', defaultColumns: ['name', 'email', 'role'], group: 'Administration' },
-  auth: true,
+  auth: { tokenExpiration: 60 * 60 * 24 * 7, maxLoginAttempts: 8, lockTime: 15 * 60 * 1000 },
+  hooks: {
+    beforeChange: [
+      // Le tout premier compte créé sur /admin devient administrateur.
+      async ({ data, operation, req }) => {
+        if (operation === 'create') {
+          const { totalDocs } = await req.payload.count({ collection: 'users', overrideAccess: true })
+          if (totalDocs === 0) return { ...data, role: 'admin' }
+        }
+        return data
+      },
+    ],
+  },
   access: {
     create: isAdmin,
     delete: isAdmin,
