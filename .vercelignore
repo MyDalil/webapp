@@ -2,3 +2,4 @@
 src/migrations/*.json
 *.md
 .env*
+/legacy

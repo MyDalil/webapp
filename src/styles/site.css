@@ -1,0 +1,28 @@
+/* Raccords entre la maquette (mockup.css) et le contenu du prototype (legacy.css). */
+
+/* Menu « Plus » : 4 colonnes */
+.mega-menu.mega-menu-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); width: min(980px, calc(100vw - 48px)); }
+@media (max-width: 1120px) { .mega-menu.mega-menu-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Liens de langue rendus comme les boutons de la maquette */
+.language-menu a { display: flex; align-items: center; gap: 10px; width: 100%; }
+
+/* Fenêtre de connexion */
+.login-dialog .login-note { display: block; margin-top: 10px; color: var(--muted); }
+
+/* Contenu du prototype : typographie et couleurs de la maquette */
+.legacy { background: var(--bg); }
+.legacy h1, .legacy h2, .legacy h3, .legacy h4 { font-family: Manrope, Inter, sans-serif; letter-spacing: -.03em; color: var(--text); }
+.legacy p { color: var(--muted); }
+.legacy .green-button, .legacy .outline-button { border-radius: 999px; }
+.legacy input, .legacy select, .legacy textarea { border-radius: 10px; }
+.legacy .section-label { color: var(--green); letter-spacing: .16em; }
+
+/* Pied de page du prototype sous la coque de la maquette */
+.site-footer-wrap { margin-top: 0; }
+.site-footer-wrap .site-footer { padding-bottom: 110px; }
+
+/* Le bouton de l’assistant ne masque pas le contenu sur mobile */
+@media (max-width: 760px) {
+  .legacy { padding-bottom: 24px; }
+}
