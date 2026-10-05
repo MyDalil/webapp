@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+
+/* ───────────────────────── DALIL — design tokens ─────────────────────────
+   Direction : éditoriale méditerranéenne. Papier chaulé (Alger la Blanche),
+   encre profonde, bleu de la baie, terre cuite saharienne en accent rare.
+   Motif signature : l’étoile à huit branches (khatam) des zelliges.        */
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-display: 'Fraunces Variable', 'Noto Naskh Arabic Variable', Georgia, serif;
+  --font-sans: 'IBM Plex Sans Variable', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+
+  --color-paper: #f6f3ec;
+  --color-surface: #fffdf8;
+  --color-sunk: #efeadf;
+  --color-ink: #15191c;
+  --color-ink-2: #3c4348;
+  --color-muted: #646a6f;
+  --color-line: #e2dccf;
+  --color-line-strong: #cfc6b4;
+  --color-sea: #0f4c5c;
+  --color-sea-2: #0b3a47;
+  --color-sea-soft: #dbe8ea;
+  --color-terra: #b0532c;
+  --color-terra-soft: #f3e2d8;
+  --color-casbah: #2f5d3a;
+  --color-casbah-soft: #dfeadf;
+  --color-on-sea: #fbf9f4;
+
+  --radius-card: 1.125rem;
+  --shadow-card: 0 1px 0 rgb(21 25 28 / 0.04), 0 8px 24px -12px rgb(21 25 28 / 0.18);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-paper: #0e1315;
+  --color-surface: #141b1e;
+  --color-sunk: #0a0e10;
+  --color-ink: #ece7dc;
+  --color-ink-2: #c9c3b7;
+  --color-muted: #9aa0a3;
+  --color-line: #253034;
+  --color-line-strong: #34434a;
+  --color-sea: #7fbfcc;
+  --color-sea-2: #a6d4dd;
+  --color-sea-soft: #16323a;
+  --color-terra: #e2916a;
+  --color-terra-soft: #3a2219;
+  --color-casbah: #8cc49a;
+  --color-casbah-soft: #17301f;
+  --color-on-sea: #0b1214;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Arabe : Naskh pour les titres, Plex Arabic pour le texte, interligne plus généreux */
+  [lang='ar'] {
+    --font-display: 'Noto Naskh Arabic Variable', 'Fraunces Variable', serif;
+    --font-sans: 'IBM Plex Sans Arabic', 'IBM Plex Sans Variable', system-ui, sans-serif;
+    line-height: 1.85;
+  }
+  [lang='ar'] .kicker {
+    letter-spacing: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    text-wrap: balance;
+    letter-spacing: -0.015em;
+  }
+  [lang='ar'] h1,
+  [lang='ar'] h2,
+  [lang='ar'] h3 {
+    letter-spacing: 0;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--color-terra);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-sea);
+    color: var(--color-on-sea);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 2rem;
+    }
+  }
+  .kicker {
+    @apply text-[0.78rem] font-semibold uppercase text-terra tracking-[0.14em];
+  }
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    transition:
+      border-color 200ms var(--ease-out-soft),
+      transform 200ms var(--ease-out-soft),
+      box-shadow 200ms var(--ease-out-soft);
+  }
+  a.card:hover,
+  .card-link:hover {
+    border-color: var(--color-line-strong);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-[0.95rem] font-semibold transition-colors duration-200;
+  }
+  .btn-primary {
+    background: var(--color-sea);
+    color: var(--color-on-sea);
+  }
+  .btn-primary:hover {
+    background: var(--color-sea-2);
+  }
+  .btn-ghost {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    background: var(--color-sunk);
+  }
+  .field {
+    @apply w-full rounded-xl border px-4 py-3 text-base;
+    background: var(--color-surface);
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-sea);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-sea) 22%, transparent);
+  }
+  .prose-dalil {
+    @apply max-w-[68ch] text-[1.0625rem] leading-[1.75] text-ink-2;
+  }
+  .prose-dalil h2 {
+    @apply mt-10 mb-3 text-2xl text-ink;
+  }
+  .prose-dalil h3 {
+    @apply mt-8 mb-2 text-xl text-ink;
+  }
+  .prose-dalil p {
+    @apply my-4;
+  }
+  .prose-dalil ul {
+    @apply my-4 list-disc ps-6;
+  }
+  .prose-dalil ol {
+    @apply my-4 list-decimal ps-6;
+  }
+  .prose-dalil a {
+    @apply text-sea underline decoration-1 underline-offset-4;
+  }
+  .prose-dalil blockquote {
+    @apply my-6 border-s-2 border-terra ps-5 italic;
+  }
+  /* Trame zellige : étoiles à huit branches, très discrète */
+  .zellige {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%230f4c5c' stroke-opacity='.09' stroke-width='1'%3E%3Cpath d='M28 10l5.3 12.7L46 28l-12.7 5.3L28 46l-5.3-12.7L10 28l12.7-5.3z'/%3E%3Crect x='15.3' y='15.3' width='25.4' height='25.4'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  [data-theme='dark'] .zellige {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%237fbfcc' stroke-opacity='.08' stroke-width='1'%3E%3Cpath d='M28 10l5.3 12.7L46 28l-12.7 5.3L28 46l-5.3-12.7L10 28l12.7-5.3z'/%3E%3Crect x='15.3' y='15.3' width='25.4' height='25.4'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .num {
+    font-family: var(--font-display);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
