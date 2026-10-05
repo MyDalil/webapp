@@ -23,6 +23,11 @@ Le visuel vient de la maquette (`src/styles/mockup.css`), les textes et fonction
 ## Skills du repo (`.claude/skills/`)
 ui-ux-pro-max, design-system, ui-styling, superpowers (`sp-*`), Matt Pocock (`mp-*`), payload.
 
+## Branches et mise en ligne
+- `main` = production (www.mydalil.com, base Neon `production`). **Jamais de push direct sur `main`.**
+- `preview` = test (preview.mydalil.com, protégé par la connexion Vercel, base Neon `preview` séparée).
+- Circuit : travail sur `preview` → Rad teste sur preview.mydalil.com → feu vert explicite de Rad → merge `preview` → `main`.
+
 ## Commandes
 - `pnpm dev` / `pnpm build` (Postgres dans `.env`).
 - Après modification de schéma : `pnpm payload migrate:create <nom>` puis commit. Migrations appliquées au build Vercel (`vercel-build`) et au démarrage (`prodMigrations`).
