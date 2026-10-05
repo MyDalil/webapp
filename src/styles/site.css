@@ -26,3 +26,25 @@
 @media (max-width: 760px) {
   .legacy { padding-bottom: 24px; }
 }
+
+/* En-têtes de pages du prototype au format « page-intro » de la maquette */
+.legacy .shell { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
+.legacy .subpage-hero { padding: 74px 0 40px; background: transparent; border: 0; }
+.legacy .subpage-hero h1 { max-width: 920px; margin-bottom: 14px; font-size: clamp(2.8rem, 5vw, 4.8rem); line-height: 1.08; font-weight: 700; }
+.legacy .subpage-hero p { max-width: 760px; font-size: 1.12rem; }
+.legacy .section-label { display: inline-block; margin-bottom: 14px; font-size: .76rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+
+/* Contribuer : formulaire du prototype puis note de modération en bandeau */
+.contribution-layout { padding-bottom: 90px; }
+.contribution-layout .legacy .shell { width: 100%; }
+.contribution-layout .legacy > section:first-child, .contribution-layout .legacy .contribution-section { padding-top: 8px; }
+.contribution-layout .moderation-note { margin-top: 32px; }
+.contribution-layout .moderation-note ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.contribution-layout .moderation-note li { margin: 12px 0 0; }
+@media (max-width: 760px) { .contribution-layout .moderation-note ol { grid-template-columns: 1fr; gap: 0; } }
+
+/* Espace particulier : contenu invité */
+.account-content .legacy { background: transparent; }
+.account-content .legacy .shell { width: 100%; }
+.account-content .legacy .member-section { padding-top: 24px; grid-template-columns: minmax(0, 1fr); }
+a.login-button { display: inline-flex; align-items: center; }

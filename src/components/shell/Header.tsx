@@ -61,9 +61,15 @@ export function Header() {
   const lang = path === '/ar' || path.startsWith('/ar/') ? 'ar' : path === '/en' || path.startsWith('/en/') ? 'en' : 'fr'
   const current = LANGS.find((l) => l.code === lang)!
 
+  const [who, setWho] = useState<string | null>(null)
+
   useEffect(() => {
     setMenu(null)
     setMobile(false)
+    fetch('/api/me')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => setWho(j?.profile?.nickname ?? null))
+      .catch(() => {})
   }, [path])
 
   useEffect(() => {
@@ -153,9 +159,15 @@ export function Header() {
               <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
             </svg>
           </button>
-          <button className="login-button" type="button" onClick={openLogin}>
-            Connexion
-          </button>
+          {who ? (
+            <Link className="login-button" href="/espace">
+              Mon espace
+            </Link>
+          ) : (
+            <button className="login-button" type="button" onClick={openLogin}>
+              Connexion
+            </button>
+          )}
           <button className="hamburger" type="button" aria-label={mobile ? 'Fermer la navigation' : 'Ouvrir la navigation'} aria-expanded={mobile} onClick={() => setMobile(!mobile)}>
             <span></span>
             <span></span>
