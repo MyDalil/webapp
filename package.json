@@ -14,7 +14,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && node scripts/copy-legacy-db.mjs && pnpm build"
+    "vercel-build": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && pnpm build"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
@@ -30,7 +30,6 @@
     "next": "16.3.3",
     "payload": "3.90.2",
     "pdfjs-dist": "^6.4.299",
-    "pg": "^8.20.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "server-only": "^0.0.1"

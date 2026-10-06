@@ -13,7 +13,7 @@ import { migrations } from './migrations'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-/** Base DALIL (intégration Neon du compte Vercel DALIL) en priorité ; DATABASE_URL = ancienne base, conservée en secours. */
+/** Base DALIL : intégration Neon du compte Vercel DALIL (préfixe DALIL_). */
 const databaseUrl = process.env.DALIL_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
 
 /** PAYLOAD_SECRET si défini, sinon dérivé de l’URL de base (secrète, injectée par Neon). */

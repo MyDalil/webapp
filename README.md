@@ -1,7 +1,7 @@
 # DALIL — webapp
 
 Guide de l’Algérie. Visuel = maquette DALIL validée par Rad (zip du 5 octobre 2026). Contenu = tout le prototype ChatGPT (dalil-algerie-public.vercel.app).
-Stack : Next.js 16 + Payload CMS 3 + Neon Postgres, déployé sur Vercel, domaine mydalil.com.
+Stack : Next.js 16 + Payload CMS 3 + Neon Postgres (intégration Vercel, variable `DALIL_DATABASE_URL`, une branche Neon par preview), déployé sur Vercel, domaine mydalil.com.
 
 ## Règle n°1 — ne pas inventer de design
 Le visuel vient de la maquette (`src/styles/mockup.css`), les textes et fonctions du prototype (`src/content/`).
