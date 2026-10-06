@@ -1,5 +1,5 @@
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-postgres'
-import listings from '../content/listings.json'
+import listings from '@/modules/annuaire/listings.json'
 
 type Listing = (typeof listings)[number]
 

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { formatDate } from '@/content/listings'
-import { Icon } from '@/components/Icon'
-import { SaveButton } from '@/components/SaveButton'
-import { PlaceActions } from '@/components/PlaceActions'
-import { PlaceMap } from '@/components/PlaceMap'
-import { RESULT_LABEL, STATUS_LABEL, coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/lib/places'
+import { formatDate } from '@/modules/annuaire'
+import { Icon } from '@/platform/ui/Icon'
+import { SaveButton } from '@/modules/membres/ui'
+import { PlaceActions } from '@/modules/annuaire/ui'
+import { PlaceMap } from '@/modules/annuaire/ui'
+import { RESULT_LABEL, STATUS_LABEL, coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
 
 type Props = { params: Promise<{ slug: string }> }
 

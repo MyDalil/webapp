@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { firstHeading, firstParagraph, getPage, ROUTES } from '@/content'
-import { Tree } from '@/components/Tree'
+import { firstHeading, firstParagraph, getPage, ROUTES } from '@/modules/contenus'
+import { Tree } from '@/modules/contenus/ui'
 
 type Props = { params: Promise<{ slug: string[] }> }
 

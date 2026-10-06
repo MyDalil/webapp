@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto'
 import { redirect } from 'next/navigation'
-import { payload } from '@/lib/site'
-import { SITE, layout, send, unsubscribe } from '@/lib/mail'
+import { payload } from '@/platform/http'
+import { SITE, layout, send, unsubscribe } from '@/platform/mail'
 
 export async function GET(req: Request) {
   const token = new URL(req.url).searchParams.get('token') ?? ''

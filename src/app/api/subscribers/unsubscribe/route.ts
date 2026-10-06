@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
-import { payload } from '@/lib/site'
+import { payload } from '@/platform/http'
 
 const valid = (t: string) => /^[A-Za-z0-9_-]{20,64}$/.test(t)
 

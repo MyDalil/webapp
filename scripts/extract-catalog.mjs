@@ -19,5 +19,5 @@ export const SECTORS: Sector[] = ${JSON.stringify(sectors, null, 1)}
 export const GUIDES: GuideRef[] = ${JSON.stringify(guides, null, 1)}
 export const WILAYAS: { code: number; name: string; transition?: boolean }[] = ${JSON.stringify(wilayas)}
 `
-fs.writeFileSync('src/content/catalog.ts', out)
+fs.writeFileSync('src/platform/referentiel/catalog.ts', out)
 console.log(sectors.length, 'secteurs', guides.length, 'guides', wilayas.length, 'wilayas')

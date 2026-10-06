@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { getPage, type Node } from '@/content'
-import { Tree } from '@/components/Tree'
-import { HomeSearch } from '@/components/HomeSearch'
-import { Icon } from '@/components/Icon'
+import { getPage, type Node } from '@/modules/contenus'
+import { Tree } from '@/modules/contenus/ui'
+import { HomeSearch } from '@/modules/recherche/ui'
+import { Icon } from '@/platform/ui/Icon'
 
 /** Sections du prototype reprises sous le hero de la maquette (le hero et les raccourcis d’origine sont remplacés). */
 const SKIP = ['stitch-hero', 'home-metrics']

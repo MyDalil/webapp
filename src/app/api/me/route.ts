@@ -1,4 +1,5 @@
-import { fail, json, readSession } from '@/lib/site'
+import { fail, json } from '@/platform/http'
+import { readSession } from '@/modules/membres'
 
 export async function GET() {
   const s = await readSession()

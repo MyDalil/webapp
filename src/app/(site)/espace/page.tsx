@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { MemberSpace } from '@/components/MemberSpace'
-import { Legacy } from '@/components/Legacy'
+import { MemberSpace } from '@/modules/membres/ui'
+import { Legacy } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = { title: 'Espace Particulier', robots: { index: false } }
 

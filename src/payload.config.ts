@@ -8,11 +8,12 @@ import { resendAdapter } from '@payloadcms/email-resend'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
 
-import { Users } from './collections/Users'
-import { Submissions, Subscribers, VisitorSessions } from './collections/Inbox'
-import { Places } from './collections/Places'
-import { Media } from './collections/Media'
-import { Campaigns } from './collections/Campaigns'
+import { Users } from '@/platform/auth/Users'
+import { Media } from '@/platform/storage/Media'
+import { Places } from '@/modules/annuaire/collections'
+import { Submissions } from '@/modules/messages/collections'
+import { Campaigns, Subscribers } from '@/modules/communication/collections'
+import { VisitorSessions } from '@/modules/membres/collections'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)

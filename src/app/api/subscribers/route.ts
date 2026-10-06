@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto'
-import { clean, fail, isEmail, json, payload } from '@/lib/site'
-import { SITE, layout, send } from '@/lib/mail'
+import { clean, fail, isEmail, json, payload } from '@/platform/http'
+import { SITE, layout, send } from '@/platform/mail'
 
 const token = () => randomBytes(24).toString('base64url')
 

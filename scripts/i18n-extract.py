@@ -31,11 +31,11 @@ def tree(n):
         else:
             for c in n: tree(c)
 
-for f in glob.glob('src/content/pages/*.json'):
+for f in glob.glob('src/modules/contenus/pages/*.json'):
     tree(json.load(open(f))['content'])
-tree(list(json.load(open('src/content/shell.json')).values()))
+tree(list(json.load(open('src/modules/contenus/shell.json')).values()))
 
-src = open('src/content/catalog.ts').read()
+src = open('src/platform/referentiel/catalog.ts').read()
 def literal(name):
     m = re.search(r'export const ' + name + r'[^=]*=\s*(\[.*?\n\])', src, re.S) or re.search(r'export const ' + name + r'[^=]*=\s*(\[.*\])', src)
     return json.loads(m.group(1))
@@ -47,7 +47,7 @@ for g in literal('GUIDES'):
     for x in g['steps']: add(x)
 for w in literal('WILAYAS'): add(w['name'])
 
-for l in json.load(open('src/content/listings.json')):
+for l in json.load(open('src/modules/annuaire/listings.json')):
     for k in ('category', 'city', 'sectorTitle', 'intro', 'place'): add(l.get(k))
     for k, v in l.get('criteria', []): add(k); add(v)
 

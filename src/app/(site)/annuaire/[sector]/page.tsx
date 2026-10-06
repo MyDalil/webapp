@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { SECTORS } from '@/content/catalog'
-import { getPlaces } from '@/lib/places'
-import { Directory } from '@/components/Directory'
+import { SECTORS } from '@/platform/referentiel/catalog'
+import { getPlaces } from '@/modules/annuaire'
+import { Directory } from '@/modules/annuaire/ui'
 
 type Props = { params: Promise<{ sector: string }> }
 

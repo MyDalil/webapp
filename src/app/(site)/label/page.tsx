@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Legacy } from '@/components/Legacy'
+import { Legacy } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
   title: 'Label DALIL Excellence',
