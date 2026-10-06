@@ -24,6 +24,6 @@ Aucun.
 Neon (sessions visiteurs).
 
 ## Prochaines étapes
-- Comptes membres publics : Particulier et Professionnel.
+- Comptes membres publics : un compte par personne (Particulier), avec un espace Professionnel activable en plus.
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
