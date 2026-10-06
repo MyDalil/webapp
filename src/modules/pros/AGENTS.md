@@ -23,6 +23,7 @@ Aucun en direct ; paiements plus tard.
 
 ## Prochaines étapes
 - Espace pro multi-établissements (un abonnement par établissement), invitation d’employés plus tard.
+- Revendication d’une fiche existante sur justificatif validé par l’équipe (sans effet sur la vérification).
 - Abonnements et paiements (fournisseur à choisir).
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
