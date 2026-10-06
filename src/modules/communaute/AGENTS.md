@@ -23,6 +23,6 @@ Aucun en direct.
 
 ## Prochaines étapes
 - Stocker les pièces jointes (Vercel Blob, contrôle du type et de la taille).
-- Avis publics : à concevoir avec `confiance`.
+- Avis publics réservés aux visites passées par DALIL (preuve de visite), email confirmé, un avis par visite, modération, anti-fraude, droit de réponse, sans effet sur `confiance`.
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
