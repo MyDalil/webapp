@@ -67,6 +67,8 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    places: Place;
+    media: Media;
     submissions: Submission;
     subscribers: Subscriber;
     'visitor-sessions': VisitorSession;
@@ -78,6 +80,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    places: PlacesSelect<false> | PlacesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
@@ -119,6 +123,214 @@ export interface UserAuthOperations {
   unlock: {
     email: string;
     password: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places".
+ */
+export interface Place {
+  id: number;
+  name: string;
+  sector:
+    | 'restaurants-gastronomie'
+    | 'education-formation'
+    | 'sante-soins'
+    | 'bien-etre-sport'
+    | 'logement-immobilier'
+    | 'hebergement-sejours'
+    | 'culture-nature-loisirs'
+    | 'mosquees-priere'
+    | 'commerces-achats'
+    | 'transports-mobilite'
+    | 'maison-travaux'
+    | 'droit-finance-conseil'
+    | 'administrations-services-publics';
+  /**
+   * Ex. Restaurants, Cafés, Écoles, Cliniques…
+   */
+  category: string;
+  /**
+   * Deux ou trois phrases factuelles.
+   */
+  intro?: string | null;
+  /**
+   * La première sert de couverture.
+   */
+  photos?: (number | Media)[] | null;
+  wilaya?:
+    | (
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12'
+        | '13'
+        | '14'
+        | '15'
+        | '16'
+        | '17'
+        | '18'
+        | '19'
+        | '20'
+        | '21'
+        | '22'
+        | '23'
+        | '24'
+        | '25'
+        | '26'
+        | '27'
+        | '28'
+        | '29'
+        | '30'
+        | '31'
+        | '32'
+        | '33'
+        | '34'
+        | '35'
+        | '36'
+        | '37'
+        | '38'
+        | '39'
+        | '40'
+        | '41'
+        | '42'
+        | '43'
+        | '44'
+        | '45'
+        | '46'
+        | '47'
+        | '48'
+        | '49'
+        | '50'
+        | '51'
+        | '52'
+        | '53'
+        | '54'
+        | '55'
+        | '56'
+        | '57'
+        | '58'
+        | '59'
+        | '60'
+        | '61'
+        | '62'
+        | '63'
+        | '64'
+        | '65'
+        | '66'
+        | '67'
+        | '68'
+        | '69'
+      )
+    | null;
+  city: string;
+  /**
+   * Affiché sous la photo. Ex. Saïd Hamdine, Alger.
+   */
+  place?: string | null;
+  address?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  phone?: string | null;
+  whatsapp?: string | null;
+  email?: string | null;
+  website?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  hours?:
+    | {
+        /**
+         * Ex. Samedi – jeudi
+         */
+        days: string;
+        /**
+         * Ex. 12h – 23h, ou Fermé
+         */
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Sinon, les coordonnées sont réservées aux visiteurs ayant un profil.
+   */
+  showContacts?: boolean | null;
+  verification: 'spotted' | 'checking' | 'verified' | 'labelled';
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  /**
+   * Pré-remplis selon le secteur. Mettez à jour après chaque visite.
+   */
+  criteria?:
+    | {
+        criterion: string;
+        result: 'pending' | 'ok' | 'partial' | 'ko' | 'na';
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        label?: string | null;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  internalNote?: string | null;
+  /**
+   * Généré depuis le nom. /adresses/…
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  /**
+   * Auteur ou source, affiché sous la photo.
+   */
+  credit?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumb?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    cover?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
   };
 }
 /**
@@ -238,6 +450,14 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'places';
+        value: number | Place;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
         relationTo: 'submissions';
         value: number | Submission;
       } | null)
@@ -294,6 +514,103 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places_select".
+ */
+export interface PlacesSelect<T extends boolean = true> {
+  name?: T;
+  sector?: T;
+  category?: T;
+  intro?: T;
+  photos?: T;
+  wilaya?: T;
+  city?: T;
+  place?: T;
+  address?: T;
+  lat?: T;
+  lng?: T;
+  phone?: T;
+  whatsapp?: T;
+  email?: T;
+  website?: T;
+  instagram?: T;
+  facebook?: T;
+  hours?:
+    | T
+    | {
+        days?: T;
+        time?: T;
+        id?: T;
+      };
+  showContacts?: T;
+  verification?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  criteria?:
+    | T
+    | {
+        criterion?: T;
+        result?: T;
+        note?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  internalNote?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  credit?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumb?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        cover?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

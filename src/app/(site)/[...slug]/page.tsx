@@ -13,7 +13,7 @@ export const dynamicParams = false
 const DEDICATED = ['/', '/recherche', '/annuaire', '/label', '/proposer', '/installation', '/espace']
 
 export function generateStaticParams() {
-  return ROUTES.filter((r) => !DEDICATED.includes(r) && !r.startsWith('/adresses/')).map((r) => ({ slug: r.slice(1).split('/') }))
+  return ROUTES.filter((r) => !DEDICATED.includes(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/')).map((r) => ({ slug: r.slice(1).split('/') }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

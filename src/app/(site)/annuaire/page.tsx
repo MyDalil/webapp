@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getPage, type Node } from '@/content'
 import { SECTORS } from '@/content/catalog'
-import { LISTINGS, cityPhoto } from '@/content/listings'
+import { getPlaces } from '@/lib/places'
 import { Directory } from '@/components/Directory'
 import { Tree } from '@/components/Tree'
 
@@ -10,12 +10,14 @@ export const metadata: Metadata = {
   description: 'Des lieux utiles et des professionnels présentés avec des critères lisibles, secteur par secteur.',
 }
 
+/** Rafraîchi à chaque enregistrement dans /admin ; filet de sécurité toutes les 5 minutes. */
+export const revalidate = 300
+
 const cls = (n: Node) => (Array.isArray(n) && n[0] === 'el' ? String(n[2].className ?? '') : '')
 
 export default async function AnnuairePage() {
-  const page = await getPage('/annuaire')
+  const [page, places] = await Promise.all([getPage('/annuaire'), getPlaces()])
   const sectors = (page?.content ?? []).filter((n) => !cls(n).includes('subpage-hero'))
-  const photos = Object.fromEntries(LISTINGS.map((l) => [l.slug, cityPhoto(l.city)]))
   return (
     <>
       <section className="page-intro container compact">
@@ -23,7 +25,7 @@ export default async function AnnuairePage() {
         <h1>Trouvez une adresse qui vous correspond.</h1>
         <p>Des lieux utiles et des professionnels présentés avec des critères lisibles. Choisissez un secteur ou recherchez directement.</p>
       </section>
-      <Directory listings={LISTINGS} sectors={SECTORS.map(({ slug, title }) => ({ slug, title }))} photos={photos} />
+      <Directory places={places} sectors={SECTORS.map(({ slug, title, categories }) => ({ slug, title, categories }))} />
       <div className="legacy">
         <Tree nodes={sectors} />
       </div>
