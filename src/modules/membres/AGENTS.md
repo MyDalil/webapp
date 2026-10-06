@@ -24,6 +24,6 @@ Aucun.
 Neon (sessions visiteurs).
 
 ## Prochaines étapes
-- Comptes membres publics (types de comptes à valider avec Rad : Particulier, Professionnel, Contributeur vérifié).
+- Comptes membres publics : Particulier et Professionnel.
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
