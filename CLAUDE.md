@@ -16,6 +16,13 @@ Le visuel vient de la maquette (`src/styles/mockup.css`), les textes et fonction
 - `/admin` — Payload : **Annuaire** (Adresses, Photos sur Vercel Blob `dalil-photos`), Boîte de réception (Demandes, Newsletter, Sessions visiteurs), Équipe. Le premier compte créé devient administrateur.
 - Annuaire : collection `places` (`src/collections/Places.ts`) → `src/lib/places.ts` → `/annuaire`, `/annuaire/[secteur]`, `/adresses/[slug]`. Pages rafraîchies à chaque enregistrement (`revalidatePath`). Brouillons visibles via le bouton Aperçu (`/api/preview`). Carte : Leaflet + fonds CARTO/OpenStreetMap ; sans coordonnées, position approximative au centre de la ville.
 
+## Emails (Resend, `src/lib/mail.ts`)
+Expéditeur `DALIL <salam@mydalil.com>` (domaine vérifié chez Resend, intégration Vercel → `RESEND_API_KEY`) ; salam@ est redirigée par Gandi vers la boîte de l’équipe.
+- Newsletter : confirmation (double opt-in) → bienvenue ; désinscription en un clic (en-têtes RFC 8058) ; envois depuis /admin « Envois newsletter » (test, puis envoi unique aux confirmés).
+- Contributions et candidatures : alerte équipe + accusé de réception ; emails de suivi à chaque changement de statut (`src/lib/notify.ts`), avec « Message au demandeur ».
+- Équipe /admin : invitation (choix du mot de passe), mot de passe oublié, alerte mot de passe modifié, alerte changement d’email.
+- À venir avec les comptes membres publics : vérification d’email, bienvenue, mot de passe oublié, suppression/export des données.
+
 ## Limites connues
 - Les 10 adresses reprises du prototype n’ont pas encore de coordonnées GPS ni de photos propres (à saisir dans /admin).
 - Pièces jointes des contributions : seuls nom/taille/type sont enregistrés.

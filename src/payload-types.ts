@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     submissions: Submission;
     subscribers: Subscriber;
+    campaigns: Campaign;
     'visitor-sessions': VisitorSession;
     users: User;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -340,7 +342,7 @@ export interface Media {
 export interface Submission {
   id: number;
   kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic';
-  status?: ('new' | 'processing' | 'done' | 'rejected') | null;
+  status?: ('new' | 'processing' | 'needs_info' | 'done' | 'rejected') | null;
   subject: string;
   email?: string | null;
   data?:
@@ -353,6 +355,10 @@ export interface Submission {
     | boolean
     | null;
   session?: string | null;
+  /**
+   * Envoyé par email avec le changement de statut (contributions et candidatures avec email). Obligatoire pour « Informations manquantes » et « Refusé ».
+   */
+  reply?: string | null;
   internalNote?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -369,7 +375,38 @@ export interface Subscriber {
    * Vide = lien de confirmation pas encore cliqué (ne pas lui écrire).
    */
   confirmedAt?: string | null;
+  unsubscribedAt?: string | null;
   token?: string | null;
+  unsubToken?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Rédigez, envoyez-vous un test, puis envoyez aux abonnés confirmés. Offre Resend gratuite : 100 emails par jour au maximum.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+  id: number;
+  subject: string;
+  title: string;
+  /**
+   * Une ligne vide sépare les paragraphes.
+   */
+  body: string;
+  ctaLabel?: string | null;
+  /**
+   * Ex. /annuaire ou https://…
+   */
+  ctaUrl?: string | null;
+  sendTest?: boolean | null;
+  /**
+   * Réservé aux administrateurs. Envoi unique et définitif.
+   */
+  sendNow?: boolean | null;
+  sentAt?: string | null;
+  recipients?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -469,6 +506,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'subscribers';
         value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'campaigns';
+        value: number | Campaign;
       } | null)
     | ({
         relationTo: 'visitor-sessions';
@@ -628,6 +669,7 @@ export interface SubmissionsSelect<T extends boolean = true> {
   email?: T;
   data?: T;
   session?: T;
+  reply?: T;
   internalNote?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -640,7 +682,26 @@ export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
   source?: T;
   confirmedAt?: T;
+  unsubscribedAt?: T;
   token?: T;
+  unsubToken?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+  subject?: T;
+  title?: T;
+  body?: T;
+  ctaLabel?: T;
+  ctaUrl?: T;
+  sendTest?: T;
+  sendNow?: T;
+  sentAt?: T;
+  recipients?: T;
   updatedAt?: T;
   createdAt?: T;
 }

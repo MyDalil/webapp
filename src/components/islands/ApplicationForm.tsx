@@ -41,6 +41,10 @@ export function ApplicationForm() {
           <span>Téléphone *</span>
           <input name="phone" required maxLength={30} />
         </label>
+        <label>
+          <span>Email *</span>
+          <input name="email" type="email" autoComplete="email" required maxLength={180} placeholder="contact@votre-activite.com" />
+        </label>
       </div>
       <label>
         <span>Activité et services *</span>

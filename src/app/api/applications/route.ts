@@ -5,6 +5,7 @@ export async function POST(req: Request) {
   if (!body) return fail('Formulaire invalide.')
   const businessName = clean(body.businessName, 200)
   if (!businessName) return fail('Indiquez le nom de votre activité.')
+  if (!isEmail(body.email)) return fail('Indiquez un email valide pour suivre votre candidature.')
   const data = Object.fromEntries(Object.entries(body).map(([k, v]) => [k, clean(v, 5000)]))
   const s = await readSession()
   const email = isEmail(data.email) ? data.email : undefined

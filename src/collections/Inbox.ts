@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import type { CollectionAfterChangeHook } from 'payload'
 import { isAdmin, isStaff } from '@/lib/access'
+import { notifySubmitter } from '@/lib/notify'
 
 /**
  * Données reçues du site public (formulaires d’origine du prototype DALIL).
@@ -8,14 +10,23 @@ import { isAdmin, isStaff } from '@/lib/access'
 export const Subscribers: CollectionConfig = {
   slug: 'subscribers',
   labels: { singular: 'Abonné', plural: 'Newsletter' },
-  admin: { useAsTitle: 'email', defaultColumns: ['email', 'confirmedAt', 'source', 'createdAt'], group: 'Boîte de réception' },
+  admin: { useAsTitle: 'email', defaultColumns: ['email', 'confirmedAt', 'unsubscribedAt', 'source', 'createdAt'], group: 'Boîte de réception' },
   access: { read: isStaff, create: isAdmin, update: isAdmin, delete: isAdmin },
   fields: [
     { name: 'email', type: 'email', required: true, unique: true },
     { name: 'source', type: 'text', label: 'Formulaire d’origine' },
     { name: 'confirmedAt', type: 'date', label: 'Inscription confirmée le', admin: { readOnly: true, description: 'Vide = lien de confirmation pas encore cliqué (ne pas lui écrire).' } },
+    { name: 'unsubscribedAt', type: 'date', label: 'Désinscrit le', admin: { readOnly: true } },
     { name: 'token', type: 'text', index: true, admin: { hidden: true }, access: { read: () => false } },
+    { name: 'unsubToken', type: 'text', index: true, admin: { hidden: true }, access: { read: () => false } },
   ],
+}
+
+/** Prévient le demandeur à chaque changement de statut fait par l’équipe. */
+const statusEmail: CollectionAfterChangeHook = async ({ doc, previousDoc, operation }) => {
+  if (operation !== 'update' || doc.status === previousDoc?.status) return doc
+  await notifySubmitter(doc)
+  return doc
 }
 
 export const Submissions: CollectionConfig = {
@@ -48,9 +59,10 @@ export const Submissions: CollectionConfig = {
           defaultValue: 'new',
           options: [
             { label: 'Nouveau', value: 'new' },
-            { label: 'En cours', value: 'processing' },
-            { label: 'Traité', value: 'done' },
-            { label: 'Rejeté', value: 'rejected' },
+            { label: 'En cours de vérification', value: 'processing' },
+            { label: 'Informations manquantes', value: 'needs_info' },
+            { label: 'Validé / publié', value: 'done' },
+            { label: 'Refusé', value: 'rejected' },
           ],
         },
       ],
@@ -59,8 +71,22 @@ export const Submissions: CollectionConfig = {
     { name: 'email', type: 'text', label: 'Email' },
     { name: 'data', type: 'json', label: 'Contenu reçu' },
     { name: 'session', type: 'text', label: 'Session visiteur', admin: { readOnly: true } },
-    { name: 'internalNote', type: 'textarea', label: 'Note interne' },
+    {
+      name: 'reply',
+      type: 'textarea',
+      label: 'Message au demandeur',
+      validate: (value: unknown, { siblingData }: { siblingData: Record<string, unknown> }) =>
+        ['needs_info', 'rejected'].includes(String(siblingData?.status)) && ['contribution', 'application'].includes(String(siblingData?.kind)) && siblingData?.email && !value
+          ? 'Expliquez au demandeur ce qui manque ou pourquoi la demande est refusée.'
+          : true,
+      admin: {
+        description:
+          'Envoyé par email avec le changement de statut (contributions et candidatures avec email). Obligatoire pour « Informations manquantes » et « Refusé ».',
+      },
+    },
+    { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais envoyée)' },
   ],
+  hooks: { afterChange: [statusEmail] },
 }
 
 /** Profils test, favoris, listes et checklist des visiteurs (cookie de session, 7 jours). */

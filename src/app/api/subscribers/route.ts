@@ -2,6 +2,8 @@ import { randomBytes } from 'crypto'
 import { clean, fail, isEmail, json, payload } from '@/lib/site'
 import { SITE, layout, send } from '@/lib/mail'
 
+const token = () => randomBytes(24).toString('base64url')
+
 /** Inscription newsletter en double confirmation : rien n’est envoyé à l’adresse tant que le lien n’est pas cliqué. */
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}))
@@ -11,17 +13,17 @@ export async function POST(req: Request) {
   const p = await payload()
   const found = await p.find({ collection: 'subscribers', where: { email: { equals: email } }, limit: 1, overrideAccess: true, showHiddenFields: true })
   const existing = found.docs[0]
-  if (existing?.confirmedAt) return json({ ok: true })
-  const token = randomBytes(24).toString('base64url')
-  if (existing) await p.update({ collection: 'subscribers', id: existing.id, data: { token }, overrideAccess: true })
-  else await p.create({ collection: 'subscribers', data: { email, source: clean(body.source, 80), token }, overrideAccess: true })
+  if (existing?.confirmedAt && !existing.unsubscribedAt) return json({ ok: true })
+  const confirm = token()
+  if (existing) await p.update({ collection: 'subscribers', id: existing.id, data: { token: confirm, confirmedAt: null, unsubscribedAt: null }, overrideAccess: true })
+  else await p.create({ collection: 'subscribers', data: { email, source: clean(body.source, 80), token: confirm, unsubToken: token() }, overrideAccess: true })
   await send(
     email,
     'Confirmez votre inscription à DALIL',
     layout(
       'Une dernière étape.',
-      '<p>Confirmez votre adresse pour recevoir les nouvelles de DALIL : ouvertures, nouveaux guides et adresses vérifiées.</p><p>Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet email.</p>',
-      { label: 'Confirmer mon inscription', href: `${SITE}/api/subscribers/confirm?token=${token}` },
+      '<p>Confirmez votre adresse pour recevoir les nouvelles de DALIL : ouvertures, nouveaux guides et adresses vérifiées.</p><p>Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet email : vous ne recevrez rien d’autre.</p>',
+      { label: 'Confirmer mon inscription', href: `${SITE}/api/subscribers/confirm?token=${confirm}` },
     ),
   )
   return json({ ok: true })
