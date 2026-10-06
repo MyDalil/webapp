@@ -22,7 +22,7 @@ Candidature reçue → alerte équipe + accusé ; statut « traité » → email
 Aucun en direct ; paiements plus tard.
 
 ## Prochaines étapes
-- Fiches professionnelles et espace pro.
+- Espace pro multi-établissements (un abonnement par établissement), invitation d’employés plus tard.
 - Abonnements et paiements (fournisseur à choisir).
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
