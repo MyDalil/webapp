@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { fr } from '@payloadcms/translations/languages/fr'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
 
@@ -32,6 +33,10 @@ export default buildConfig({
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
   collections: [Places, Media, Submissions, Subscribers, VisitorSessions, Users],
   editor: lexicalEditor(),
+  // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
+  ...(process.env.RESEND_API_KEY
+    ? { email: resendAdapter({ defaultFromAddress: 'salam@mydalil.com', defaultFromName: 'DALIL', apiKey: process.env.RESEND_API_KEY }) }
+    : {}),
   secret,
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   plugins: [

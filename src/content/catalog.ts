@@ -8,6 +8,7 @@ export const SECTORS: Sector[] = [
   "description": "Choisir une table, une pause gourmande ou un traiteur.",
   "categories": [
    "Restaurants",
+   "Restaurants familiaux",
    "Cafés",
    "Salons de thé",
    "Pâtisseries",
@@ -35,7 +36,9 @@ export const SECTORS: Sector[] = [
    "Espace de prière",
    "Jeux pour enfants",
    "Accessibilité",
-   "Originalité"
+   "Originalité",
+   "Sans alcool",
+   "Menu enfants"
   ],
   "guides": [
    "restaurants"
@@ -50,8 +53,7 @@ export const SECTORS: Sector[] = [
    "Écoles",
    "Universités",
    "Formation professionnelle",
-   "Écoles de langues",
-   "Enseignement coranique"
+   "Écoles de langues"
   ],
   "criteria": [
    "Programme",
@@ -78,7 +80,8 @@ export const SECTORS: Sector[] = [
    "Cliniques",
    "Hôpitaux",
    "Laboratoires",
-   "Pharmacies"
+   "Pharmacies",
+   "Hijama"
   ],
   "criteria": [
    "Spécialités",
@@ -105,7 +108,9 @@ export const SECTORS: Sector[] = [
    "Soins esthétiques",
    "Salles de sport",
    "Clubs sportifs",
-   "Installations sportives"
+   "Installations sportives",
+   "Salles de sport pour femmes",
+   "Piscines non mixtes"
   ],
   "criteria": [
    "Hygiène",
@@ -114,7 +119,8 @@ export const SECTORS: Sector[] = [
    "Équipements",
    "Horaires",
    "Tarifs",
-   "Accessibilité"
+   "Accessibilité",
+   "Horaires hommes / femmes"
   ],
   "guides": [
    "services-du-quotidien"
@@ -161,7 +167,10 @@ export const SECTORS: Sector[] = [
    "Tarifs",
    "Conditions d’annulation",
    "Chambres familiales",
-   "Accessibilité"
+   "Accessibilité",
+   "Sans alcool",
+   "Espace de prière",
+   "Piscine non mixte"
   ],
   "guides": [
    "decouvrir-algerie"
@@ -196,17 +205,26 @@ export const SECTORS: Sector[] = [
  },
  {
   "slug": "mosquees-priere",
-  "title": "Mosquées & Lieux de prière",
-  "description": "Repérer les lieux de prière et leurs informations pratiques.",
+  "title": "Mosquées & Vie musulmane",
+  "description": "Prier, apprendre et vivre sa foi au quotidien : mosquées, enseignement, librairies et services.",
   "categories": [
    "Mosquées",
-   "Espaces de prière"
+   "Salles de prière",
+   "Écoles coraniques",
+   "Instituts d’arabe et de sciences islamiques",
+   "Librairies islamiques",
+   "Associations caritatives et entraide",
+   "Pompes funèbres musulmanes et toilette mortuaire",
+   "Agences Omra & Hajj"
   ],
   "criteria": [
    "Localisation",
    "Accès",
-   "Espaces disponibles",
+   "Prière du vendredi",
+   "Espace femmes",
    "Ablutions",
+   "Cours et halaqat",
+   "Parking",
    "Accessibilité",
    "Horaires confirmés"
   ],
@@ -222,7 +240,9 @@ export const SECTORS: Sector[] = [
    "Librairies",
    "Alimentation",
    "Habillement",
-   "Équipement de la maison"
+   "Équipement de la maison",
+   "Mode modeste",
+   "Moutons de l’Aïd"
   ],
   "criteria": [
    "Produits",

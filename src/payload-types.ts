@@ -365,6 +365,11 @@ export interface Subscriber {
   id: number;
   email: string;
   source?: string | null;
+  /**
+   * Vide = lien de confirmation pas encore cliqué (ne pas lui écrire).
+   */
+  confirmedAt?: string | null;
+  token?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -634,6 +639,8 @@ export interface SubmissionsSelect<T extends boolean = true> {
 export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
   source?: T;
+  confirmedAt?: T;
+  token?: T;
   updatedAt?: T;
   createdAt?: T;
 }

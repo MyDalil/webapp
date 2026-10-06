@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Icon } from './Icon'
@@ -28,6 +28,12 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
   const [city, setCity] = useState('')
   const [status, setStatus] = useState('')
   const [order, setOrder] = useState<'relevance' | 'recent'>('relevance')
+
+  // Liens « catégorie » des cartes secteurs : /annuaire/<secteur>?category=…
+  useEffect(() => {
+    const c = new URLSearchParams(window.location.search).get('category')
+    if (c) setCategory(c)
+  }, [])
 
   const scoped = useMemo(() => places.filter((p) => !sector || p.sector === sector), [places, sector])
   const cities = useMemo(() => [...new Set(scoped.map((p) => p.city))].sort((a, b) => a.localeCompare(b, 'fr')), [scoped])

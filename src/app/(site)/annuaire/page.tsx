@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
-import { getPage, type Node } from '@/content'
+import Link from 'next/link'
 import { SECTORS } from '@/content/catalog'
 import { getPlaces } from '@/lib/places'
 import { Directory } from '@/components/Directory'
-import { Tree } from '@/components/Tree'
 
 export const metadata: Metadata = {
   title: 'Annuaire & Adresses',
@@ -13,11 +12,8 @@ export const metadata: Metadata = {
 /** Rafraîchi à chaque enregistrement dans /admin ; filet de sécurité toutes les 5 minutes. */
 export const revalidate = 300
 
-const cls = (n: Node) => (Array.isArray(n) && n[0] === 'el' ? String(n[2].className ?? '') : '')
-
 export default async function AnnuairePage() {
-  const [page, places] = await Promise.all([getPage('/annuaire'), getPlaces()])
-  const sectors = (page?.content ?? []).filter((n) => !cls(n).includes('subpage-hero'))
+  const places = await getPlaces()
   return (
     <>
       <section className="page-intro container compact">
@@ -26,8 +22,29 @@ export default async function AnnuairePage() {
         <p>Des lieux utiles et des professionnels présentés avec des critères lisibles. Choisissez un secteur ou recherchez directement.</p>
       </section>
       <Directory places={places} sectors={SECTORS.map(({ slug, title, categories }) => ({ slug, title, categories }))} />
+      {/* Cartes secteurs du prototype (même balisage), générées depuis le catalogue pour rester synchronisées. */}
       <div className="legacy">
-        <Tree nodes={sectors} />
+        <section className="shell discovery-grid">
+          {SECTORS.map((s, i) => (
+            <article key={s.slug}>
+              <span className="section-label">{String(i + 1).padStart(2, '0')}</span>
+              <h2>
+                <Link href={`/annuaire/${s.slug}`}>{s.title}</Link>
+              </h2>
+              <p>{s.description}</p>
+              <ul>
+                {s.categories.map((c) => (
+                  <li key={c}>
+                    <Link href={`/annuaire/${s.slug}?category=${encodeURIComponent(c)}`}>
+                      {c}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
       </div>
     </>
   )
