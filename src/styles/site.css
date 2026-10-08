@@ -90,3 +90,8 @@ a.login-button { display: inline-flex; align-items: center; }
 .place-map .leaflet-box { height: 280px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); }
 .place-map > small { display: block; margin-top: 8px; color: var(--muted); }
 @media (max-width: 760px) { .place-gallery { grid-template-columns: 1fr 1fr; } }
+
+/* Crédit obligatoire des photos sous licence libre */
+.photo-caption .photo-credit { display: block; margin-top: 4px; font-size: .68rem; opacity: .75; color: #fff; text-decoration: none; }
+.photo-caption .photo-credit:hover { opacity: 1; text-decoration: underline; }
+.place-gallery figcaption a { color: inherit; }

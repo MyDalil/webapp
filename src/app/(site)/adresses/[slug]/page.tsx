@@ -6,7 +6,7 @@ import { Icon } from '@/platform/ui/Icon'
 import { SaveButton } from '@/modules/membres/ui'
 import { PlaceActions } from '@/modules/annuaire/ui'
 import { PlaceMap } from '@/modules/annuaire/ui'
-import { RESULT_LABEL, STATUS_LABEL, coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
+import { RESULT_LABEL, STATUS_LABEL, coverCredit, coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -40,6 +40,7 @@ export default async function PlacePage({ params }: Props) {
   const checked = status === 'verified' || status === 'labelled'
   const { pos, exact } = position(p)
   const gallery = galleryOf(p)
+  const credit = coverCredit(p)
   const wilaya = wilayaName(p.wilaya)
   const contacts = [
     p.phone && { icon: 'file', label: p.phone, href: `tel:${p.phone.replace(/\s/g, '')}` },
@@ -60,6 +61,11 @@ export default async function PlacePage({ params }: Props) {
           <div className="photo-caption">
             <span>{p.city}</span>
             <strong>{p.place || p.city}</strong>
+            {credit && (
+              <a className="photo-credit" href={credit.href} target="_blank" rel="noopener">
+                {credit.text}
+              </a>
+            )}
           </div>
         </div>
         <div className="place-title-row">
@@ -93,7 +99,7 @@ export default async function PlacePage({ params }: Props) {
                 <figure key={g.url}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={g.url} alt={g.alt} loading="lazy" />
-                  {g.credit && <figcaption>{g.credit}</figcaption>}
+                  {g.credit && <figcaption>{g.href ? <a href={g.href} target="_blank" rel="noopener">{g.credit}</a> : g.credit}</figcaption>}
                 </figure>
               ))}
             </div>

@@ -160,6 +160,29 @@ export interface Place {
    * La première sert de couverture.
    */
   photos?: (number | Media)[] | null;
+  /**
+   * Wikimedia Commons ou autre source libre : auteur et licence obligatoires, affichés sous la photo. Utilisées après les photos DALIL.
+   */
+  externalPhotos?:
+    | {
+        url: string;
+        author: string;
+        license: string;
+        licenseUrl?: string | null;
+        page: string;
+        width?: number | null;
+        height?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  nameAr?: string | null;
+  nameEn?: string | null;
+  /**
+   * Ex. Patrimoine mondial de l’UNESCO, monument classé.
+   */
+  heritage?: string | null;
+  inception?: string | null;
+  wikipedia?: string | null;
   wilaya?:
     | (
         | '1'
@@ -286,6 +309,17 @@ export interface Place {
       }[]
     | null;
   internalNote?: string | null;
+  /**
+   * Calculé à l’enregistrement (règle écrite dans le module annuaire). Jamais lié à un paiement.
+   */
+  score?: number | null;
+  source?: {
+    provider?: ('dalil' | 'wikidata' | 'osm' | 'pro') | null;
+    externalId?: string | null;
+    url?: string | null;
+    notoriety?: number | null;
+    notes?: string | null;
+  };
   /**
    * Généré depuis le nom. /adresses/…
    */
@@ -571,6 +605,23 @@ export interface PlacesSelect<T extends boolean = true> {
   category?: T;
   intro?: T;
   photos?: T;
+  externalPhotos?:
+    | T
+    | {
+        url?: T;
+        author?: T;
+        license?: T;
+        licenseUrl?: T;
+        page?: T;
+        width?: T;
+        height?: T;
+        id?: T;
+      };
+  nameAr?: T;
+  nameEn?: T;
+  heritage?: T;
+  inception?: T;
+  wikipedia?: T;
   wilaya?: T;
   city?: T;
   place?: T;
@@ -610,6 +661,16 @@ export interface PlacesSelect<T extends boolean = true> {
         id?: T;
       };
   internalNote?: T;
+  score?: T;
+  source?:
+    | T
+    | {
+        provider?: T;
+        externalId?: T;
+        url?: T;
+        notoriety?: T;
+        notes?: T;
+      };
   slug?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -72,16 +72,27 @@ export function toCard(p: Place): PlaceCard {
     sectorTitle: sectorTitle(p.sector),
     place: p.place ?? '',
     status: p.verification ?? 'spotted',
-    photo: mediaUrl(p.photos?.[0], 'thumb') ?? cityPhoto(p.city),
+    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 640) : cityPhoto(p.city)),
     pos,
     exact,
     updated: p.updatedAt,
   }
 }
 
-export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? cityPhoto(p.city)
-export const galleryOf = (p: Place) =>
-  (p.photos ?? []).flatMap((m) => (m && typeof m === 'object' && m.url ? [{ url: m.sizes?.cover?.url ?? m.url, alt: m.alt, credit: m.credit ?? null }] : []))
+/** Photo sous licence libre (Commons) : vignette plus légère pour les cartes. */
+const sized = (url: string, w: number) => url.replace(/\/(\d+)px-/, `/${w}px-`)
+const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url)
+export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1600) : cityPhoto(p.city))
+/** Crédit de la couverture quand elle vient d’une source libre (obligatoire par la licence). */
+export const coverCredit = (p: Place) => {
+  if (mediaUrl(p.photos?.[0], 'cover')) return null
+  const x = external(p)[0]
+  return x ? { text: `Photo : ${x.author} · ${x.license}`, href: x.page } : null
+}
+export const galleryOf = (p: Place) => [
+  ...(p.photos ?? []).flatMap((m) => (m && typeof m === 'object' && m.url ? [{ url: m.sizes?.cover?.url ?? m.url, alt: m.alt, credit: m.credit ?? null, href: null as string | null }] : [])),
+  ...external(p).map((x) => ({ url: sized(x.url, 1280), alt: p.name, credit: `${x.author} · ${x.license}`, href: x.page as string | null })),
+]
 
 async function client() {
   return getPayload({ config })
@@ -91,7 +102,7 @@ async function client() {
 export async function getPlaces(): Promise<PlaceCard[]> {
   try {
     const payload = await client()
-    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, depth: 1, limit: 2000, sort: 'name', overrideAccess: false })
+    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, depth: 1, limit: 5000, sort: '-score', overrideAccess: false })
     return docs.map(toCard)
   } catch {
     return []

@@ -182,6 +182,11 @@ export const SECTORS: Sector[] = [
   "description": "Des lieux pour apprendre, se promener et partager une sortie.",
   "categories": [
    "Musées",
+   "Monuments et sites historiques",
+   "Sites archéologiques",
+   "Parcs naturels et réserves",
+   "Cascades, gorges et grottes",
+   "Lacs et oasis",
    "Bibliothèques",
    "Parcs",
    "Plages",
@@ -332,6 +337,8 @@ export const SECTORS: Sector[] = [
   "description": "Identifier le service compétent et les contacts utiles.",
   "categories": [
    "Administrations",
+   "Ministères",
+   "Ambassades",
    "Consulats",
    "Services municipaux",
    "Contacts utiles et urgences"

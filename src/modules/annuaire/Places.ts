@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, verificationTab } from '@/modules/confiance'
+import { scorePlace } from './ranking'
 
 const slugify = (s: string) =>
   s
@@ -13,9 +14,10 @@ const slugify = (s: string) =>
     .replace(/^-|-$/g, '')
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
-const prepare: CollectionBeforeValidateHook = ({ data }) => {
+const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
   if (!data) return data
   if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`)
+  data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)
   return data
 }
@@ -77,6 +79,41 @@ export const Places: CollectionConfig = {
             },
             { name: 'intro', type: 'textarea', label: 'Présentation', admin: { description: 'Deux ou trois phrases factuelles.' } },
             { name: 'photos', type: 'upload', relationTo: 'media', hasMany: true, label: 'Photos', admin: { description: 'La première sert de couverture.' } },
+            {
+              name: 'externalPhotos',
+              type: 'array',
+              label: 'Photos sous licence libre',
+              labels: { singular: 'Photo', plural: 'Photos sous licence libre' },
+              admin: { description: 'Wikimedia Commons ou autre source libre : auteur et licence obligatoires, affichés sous la photo. Utilisées après les photos DALIL.' },
+              fields: [
+                { name: 'url', type: 'text', label: 'Image', required: true },
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'author', type: 'text', label: 'Auteur', required: true },
+                    { name: 'license', type: 'text', label: 'Licence', required: true },
+                    { name: 'licenseUrl', type: 'text', label: 'Lien de la licence' },
+                  ],
+                },
+                { name: 'page', type: 'text', label: 'Page source', required: true },
+                { type: 'row', fields: [{ name: 'width', type: 'number', label: 'Largeur' }, { name: 'height', type: 'number', label: 'Hauteur' }] },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                { name: 'nameAr', type: 'text', label: 'Nom en arabe' },
+                { name: 'nameEn', type: 'text', label: 'Nom en anglais' },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                { name: 'heritage', type: 'text', label: 'Protection patrimoniale', admin: { description: 'Ex. Patrimoine mondial de l’UNESCO, monument classé.' } },
+                { name: 'inception', type: 'text', label: 'Date de création' },
+                { name: 'wikipedia', type: 'text', label: 'Article Wikipédia' },
+              ],
+            },
           ],
         },
         {
@@ -156,6 +193,20 @@ export const Places: CollectionConfig = {
           ],
         },
         verificationTab,
+      ],
+    },
+    { name: 'score', type: 'number', label: 'Score de classement', index: true, admin: { position: 'sidebar', readOnly: true, description: 'Calculé à l’enregistrement (règle écrite dans le module annuaire). Jamais lié à un paiement.' } },
+    {
+      name: 'source',
+      type: 'group',
+      label: 'Origine de la fiche',
+      admin: { position: 'sidebar' },
+      fields: [
+        { name: 'provider', type: 'select', label: 'Source', defaultValue: 'dalil', options: [{ label: 'Équipe DALIL', value: 'dalil' }, { label: 'Wikidata', value: 'wikidata' }, { label: 'OpenStreetMap', value: 'osm' }, { label: 'Établissement', value: 'pro' }] },
+        { name: 'externalId', type: 'text', label: 'Identifiant source', index: true },
+        { name: 'url', type: 'text', label: 'Lien source' },
+        { name: 'notoriety', type: 'number', label: 'Notoriété (nombre de Wikipédias)', admin: { readOnly: true } },
+        { name: 'notes', type: 'textarea', label: 'Notes de source (internes, jamais publiées)' },
       ],
     },
     { name: 'slug', type: 'text', label: 'Adresse de la page', unique: true, index: true, admin: { position: 'sidebar', description: 'Généré depuis le nom. /adresses/…' } },
