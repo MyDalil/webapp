@@ -43,6 +43,9 @@ export type PlaceCard = {
   place: string
   status: NonNullable<Place['verification']>
   photo: string
+  cover: string
+  credit: string | null
+  score: number
   pos: [number, number] | null
   exact: boolean
   updated: string
@@ -72,7 +75,10 @@ export function toCard(p: Place): PlaceCard {
     sectorTitle: sectorTitle(p.sector),
     place: p.place ?? '',
     status: p.verification ?? 'spotted',
-    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 640) : cityPhoto(p.city)),
+    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 960, external(p)[0].width) : cityPhoto(p.city)),
+    cover: coverOf(p),
+    credit: coverCredit(p)?.text ?? null,
+    score: p.score ?? 0,
     pos,
     exact,
     updated: p.updatedAt,
@@ -80,9 +86,14 @@ export function toCard(p: Place): PlaceCard {
 }
 
 /** Photo sous licence libre (Commons) : vignette plus légère pour les cartes. */
-const sized = (url: string, w: number) => url.replace(/\/(\d+)px-/, `/${w}px-`)
+// Wikimedia ne sert que des largeurs standard (960, 1280, 1920…) et jamais plus large que l’original.
+const STEPS = [960, 1280, 1920]
+const sized = (url: string, w: number, original?: number | null) => {
+  const fit = STEPS.filter((x) => x <= w && (!original || x <= original)).pop() ?? 960
+  return url.split('?')[0].replace(/\/(\d+)px-/, `/${fit}px-`)
+}
 const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url)
-export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1600) : cityPhoto(p.city))
+export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1920, external(p)[0].width) : cityPhoto(p.city))
 /** Crédit de la couverture quand elle vient d’une source libre (obligatoire par la licence). */
 export const coverCredit = (p: Place) => {
   if (mediaUrl(p.photos?.[0], 'cover')) return null
@@ -91,7 +102,7 @@ export const coverCredit = (p: Place) => {
 }
 export const galleryOf = (p: Place) => [
   ...(p.photos ?? []).flatMap((m) => (m && typeof m === 'object' && m.url ? [{ url: m.sizes?.cover?.url ?? m.url, alt: m.alt, credit: m.credit ?? null, href: null as string | null }] : [])),
-  ...external(p).map((x) => ({ url: sized(x.url, 1280), alt: p.name, credit: `${x.author} · ${x.license}`, href: x.page as string | null })),
+  ...external(p).map((x) => ({ url: sized(x.url, 1280, x.width), alt: p.name, credit: `${x.author} · ${x.license}`, href: x.page as string | null })),
 ]
 
 async function client() {
@@ -132,4 +143,27 @@ export async function getPlaceSlugs(): Promise<string[]> {
   } catch {
     return []
   }
+}
+
+/** Adresse de page d’une wilaya : /villes/alger, /villes/bejaia… */
+export const wilayaSlug = (name: string) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+export const wilayaBySlug = (slug: string) => WILAYAS.find((w) => wilayaSlug(w.name) === slug) ?? null
+
+export type CityTile = { code: string; name: string; slug: string; cover: string; credit: string | null; count: number; highlight: string }
+
+/** Vitrine : meilleures fiches illustrées et wilayas qui ont des lieux à montrer. */
+export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTile[]; total: number }> {
+  const all = await getPlaces()
+  const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
+  const byWilaya = new Map<string, PlaceCard[]>()
+  for (const p of illustrated) if (p.wilaya) byWilaya.set(p.wilaya, [...(byWilaya.get(p.wilaya) ?? []), p])
+  const cities = [...byWilaya.entries()]
+    .map(([name, list]) => ({ code: '', name, slug: wilayaSlug(name), cover: list[0].cover, credit: list[0].credit, count: list.length, highlight: list[0].name }))
+    .sort((a, b) => b.count - a.count)
+  return { top: illustrated.slice(0, 14), cities, total: all.length }
+}
+
+/** Lieux d’une wilaya, déjà classés par score. */
+export async function getWilayaPlaces(name: string): Promise<PlaceCard[]> {
+  return (await getPlaces()).filter((p) => p.wilaya === name)
 }

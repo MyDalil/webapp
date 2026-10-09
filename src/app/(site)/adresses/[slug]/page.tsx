@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { formatDate } from '@/modules/annuaire'
 import { Icon } from '@/platform/ui/Icon'
+import { Carousel } from '@/platform/ui/Carousel'
 import { SaveButton } from '@/modules/membres/ui'
 import { PlaceActions } from '@/modules/annuaire/ui'
 import { PlaceMap } from '@/modules/annuaire/ui'
@@ -57,7 +58,8 @@ export default async function PlacePage({ params }: Props) {
         <Link className="back-link" href={`/annuaire/${p.sector}`}>
           ← {sectorTitle(p.sector)}
         </Link>
-        <div className="place-cover" style={{ backgroundImage: `url(${coverOf(p)})` }}>
+        <div className="place-cover xp-cover">
+          <div className="xp-cover-img" data-parallax="0.1" style={{ backgroundImage: `url(${coverOf(p)})` }} />
           <div className="photo-caption">
             <span>{p.city}</span>
             <strong>{p.place || p.city}</strong>
@@ -94,15 +96,15 @@ export default async function PlacePage({ params }: Props) {
             </div>
           </div>
           {gallery.length > 1 && (
-            <div className="place-gallery">
+            <Carousel label={`Photos — ${p.name}`} variant="wide">
               {gallery.slice(1, 7).map((g) => (
-                <figure key={g.url}>
+                <figure key={g.url} className="gallery-slide">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={g.url} alt={g.alt} loading="lazy" />
                   {g.credit && <figcaption>{g.href ? <a href={g.href} target="_blank" rel="noopener">{g.credit}</a> : g.credit}</figcaption>}
                 </figure>
               ))}
-            </div>
+            </Carousel>
           )}
           {!!p.criteria?.length && (
             <div className="feature-grid">

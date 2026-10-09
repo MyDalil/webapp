@@ -9,10 +9,12 @@ import '@fontsource/manrope/700.css'
 import '@/styles/legacy.css'
 import '@/styles/mockup.css'
 import '@/styles/site.css'
+import '@/styles/experience.css'
 import { Header } from '@/platform/shell/Header'
 import { Assistant } from '@/modules/recherche/ui'
 import { LoginDialog } from '@/platform/shell/LoginDialog'
 import { Toast } from '@/platform/shell/Toast'
+import { Motion } from '@/platform/ui/Motion'
 import { Tree } from '@/modules/contenus/ui'
 import { SHELL } from '@/modules/contenus'
 
@@ -56,6 +58,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Assistant />
         <Toast />
+        <Motion />
         <LoginDialog />
       </body>
     </html>

@@ -1,107 +1,240 @@
 import Link from 'next/link'
-import { getPage, type Node } from '@/modules/contenus'
-import { Tree } from '@/modules/contenus/ui'
+import { getShowcase, type PlaceCard } from '@/modules/annuaire'
 import { HomeSearch } from '@/modules/recherche/ui'
+import { NewsletterForm } from '@/modules/communication/ui'
+import { Carousel } from '@/platform/ui/Carousel'
+import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon } from '@/platform/ui/Icon'
+import { GUIDES } from '@/platform/referentiel/catalog'
 
-/** Sections du prototype reprises sous le hero de la maquette (le hero et les raccourcis d’origine sont remplacés). */
-const SKIP = ['stitch-hero', 'home-metrics']
-const cls = (n: Node) => (Array.isArray(n) && n[0] === 'el' ? String(n[2].className ?? '') : '')
+export const revalidate = 300
+
+const ENVIES = [
+  ['Monuments et sites historiques', 'Monuments & histoire', 'culture-nature-loisirs'],
+  ['Sites archéologiques', 'Cités antiques', 'culture-nature-loisirs'],
+  ['Mosquées', 'Mosquées remarquables', 'mosquees-priere'],
+  ['Musées', 'Musées', 'culture-nature-loisirs'],
+  ['Parcs naturels et réserves', 'Grands espaces', 'culture-nature-loisirs'],
+  ['Cascades, gorges et grottes', 'Gorges, grottes & cascades', 'culture-nature-loisirs'],
+  ['Lacs et oasis', 'Lacs, chotts & oasis', 'culture-nature-loisirs'],
+  ['Plages', 'Plages', 'culture-nature-loisirs'],
+] as const
+
+const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée DALIL', labelled: 'Label Excellence' }
+
+function PlaceTile({ p, i }: { p: PlaceCard; i: number }) {
+  return (
+    <Link href={`/adresses/${p.slug}`} className="place-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+      <div className="place-tile-img" style={{ backgroundImage: `url(${p.photo})` }} />
+      <div className="place-tile-body">
+        <span className="chip">{p.category}</span>
+        <h3>{p.name}</h3>
+        <p>
+          {p.city}
+          {p.wilaya && p.wilaya !== p.city ? ` · ${p.wilaya}` : ''}
+        </p>
+        <small className={`status-dot status-${p.status}`}>{STATUS[p.status]}</small>
+      </div>
+    </Link>
+  )
+}
 
 export default async function Home() {
-  const page = await getPage('/')
-  const legacy = (page?.content ?? []).filter((n) => !SKIP.some((s) => cls(n).includes(s)))
+  const { top, cities, total } = await getShowcase()
+  const slides = top.slice(0, 6).map((p) => ({ src: p.cover, title: p.name, place: `${p.city} · ${p.category}`, href: `/adresses/${p.slug}`, credit: p.credit }))
+  const byCategory = (c: string) => top.concat([]).find((p) => p.category === c)
+  const sahara = top.find((p) => /tassili|djanet/i.test(p.name + p.city)) ?? top[0]
   return (
-    <>
-      <section className="hero home-hero">
-        <div className="hero-photo photo-algiers" aria-hidden="true"></div>
-        <div className="hero-shade"></div>
-        <div className="hero-content container">
+    <div className="xp">
+      <section className="xp-hero">
+        <Slideshow slides={slides} />
+        <div className="xp-hero-shade" />
+        <div className="xp-hero-content container">
           <p className="eyebrow inverse">Votre guide de l’Algérie</p>
           <h1>L’Algérie, plus proche de vous.</h1>
-          <p>Découvrez, préparez, vivez, partagez.</p>
+          <p className="xp-lead">Découvrez, préparez, vivez, partagez.</p>
           <HomeSearch />
         </div>
       </section>
 
       <section className="section container">
-        <div className="section-head">
+        <div className="section-head" data-reveal>
           <div>
             <p className="eyebrow">À votre rythme</p>
             <h2>Que souhaitez-vous faire aujourd’hui ?</h2>
-            <p>DALIL vous conduit directement vers l’information utile.</p>
           </div>
         </div>
         <div className="intent-grid">
-          <Link className="intent-card" href="/explorer">
-            <span>
-              <Icon name="pin" />
-            </span>
-            <h3>Explorer l’Algérie</h3>
-            <p>Villes, activités, culture, gastronomie et événements.</p>
-            <b>
-              Découvrir <Icon name="arrow" />
-            </b>
-          </Link>
-          <Link className="intent-card" href="/installation">
-            <span>
-              <Icon name="home" />
-            </span>
-            <h3>S’installer &amp; Vivre</h3>
-            <p>Logement, école, santé, transport et vie quotidienne.</p>
-            <b>
-              Préparer mon parcours <Icon name="arrow" />
-            </b>
-          </Link>
-          <Link className="intent-card" href="/demarches">
-            <span>
-              <Icon name="file" />
-            </span>
-            <h3>Faire une démarche</h3>
-            <p>Documents, coûts, délais et sources officielles.</p>
-            <b>
-              Accéder aux démarches <Icon name="arrow" />
-            </b>
-          </Link>
+          {(
+            [
+              ['/annuaire', 'pin', 'Explorer l’Algérie', 'Monuments, nature, mosquées, musées et bonnes adresses.', 'Découvrir'],
+              ['/installation', 'home', 'S’installer & Vivre', 'Logement, école, santé, transport et vie quotidienne.', 'Préparer mon parcours'],
+              ['/demarches', 'file', 'Faire une démarche', 'Documents, coûts, délais et sources officielles.', 'Accéder aux démarches'],
+            ] as const
+          ).map(([href, icon, title, copy, cta], i) => (
+            <Link key={href} className="intent-card" href={href} data-reveal style={{ ['--i' as string]: i }}>
+              <span>
+                <Icon name={icon} />
+              </span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+              <b>
+                {cta} <Icon name="arrow" />
+              </b>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="section section-tint">
+      <section className="section xp-band">
         <div className="container">
-          <div className="section-head">
+          <div className="section-head" data-reveal>
             <div>
-              <p className="eyebrow">Sélections DALIL</p>
+              <p className="eyebrow">Les incontournables</p>
               <h2>Des lieux qui méritent votre temps.</h2>
-              <p>Des informations claires, datées et vérifiables.</p>
+              <p>{total} lieux référencés, avec leurs sources et leur statut de vérification.</p>
             </div>
             <Link className="button outline" href="/annuaire">
               Voir tout l’annuaire
             </Link>
           </div>
-          <div className="destination-grid">
-            {(
-              [
-                ['Alger', 'La Méditerranée au quotidien', 'algiers'],
-                ['Constantine', 'Ponts, histoire et caractère', 'constantine'],
-                ['Oran', 'Mer, culture et énergie', 'oran'],
-                ['Tassili n’Ajjer', 'Le Sahara monumental', 'tassili'],
-              ] as const
-            ).map(([name, copy, img]) => (
-              <Link key={name} className="destination-card" href={`/recherche?q=${encodeURIComponent(name)}`}>
-                <div className={`photo photo-${img}`} role="img" aria-label={name}></div>
-                <div>
-                  <h3>{name}</h3>
-                  <p>{copy}</p>
+        </div>
+        <Carousel label="Lieux incontournables">
+          {top.map((p, i) => (
+            <PlaceTile key={p.slug} p={p} i={i} />
+          ))}
+        </Carousel>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">Par ville</p>
+              <h2>Choisissez votre point de départ.</h2>
+            </div>
+          </div>
+        </div>
+        <Carousel label="Villes et wilayas" variant="tiles">
+          {cities.map((c, i) => (
+            <Link key={c.slug} href={`/villes/${c.slug}`} className="city-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+              <div className="city-tile-img" style={{ backgroundImage: `url(${c.cover})` }} />
+              <div className="city-tile-body">
+                <h3>{c.name}</h3>
+                <p>
+                  {c.count} lieu{c.count > 1 ? 'x' : ''} · {c.highlight}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </Carousel>
+      </section>
+
+      {sahara && (
+        <section className="xp-parallax" aria-label={sahara.name}>
+          <div className="xp-parallax-img" data-parallax="0.18" style={{ backgroundImage: `url(${sahara.cover})` }} />
+          <div className="xp-parallax-shade" />
+          <div className="container xp-parallax-content" data-reveal>
+            <p className="eyebrow inverse">Le grand Sud</p>
+            <h2>Le Sahara, comme nulle part ailleurs.</h2>
+            <p>Canyons de grès, peintures rupestres millénaires et oasis : préparez votre voyage avec des repères fiables.</p>
+            <Link className="button light" href={`/adresses/${sahara.slug}`}>
+              Découvrir {sahara.name}
+            </Link>
+          </div>
+          {sahara.credit && <small className="xp-credit">{sahara.credit}</small>}
+        </section>
+      )}
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">Par envie</p>
+              <h2>Ce qui vous inspire aujourd’hui.</h2>
+            </div>
+          </div>
+        </div>
+        <Carousel label="Catégories" variant="tiles">
+          {ENVIES.map(([category, label, sector], i) => {
+            const p = byCategory(category)
+            return (
+              <Link key={category} href={`/annuaire/${sector}?category=${encodeURIComponent(category)}`} className="city-tile envie-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+                <div className="city-tile-img" style={p ? { backgroundImage: `url(${p.photo})` } : undefined} />
+                <div className="city-tile-body">
+                  <h3>{label}</h3>
+                  {p && <p>Ex. {p.name}</p>}
                 </div>
               </Link>
-            ))}
+            )
+          })}
+        </Carousel>
+      </section>
+
+      <section className="section section-tint">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">Guides pratiques</p>
+              <h2>Les repères pour avancer à votre rythme.</h2>
+            </div>
+            <Link className="button outline" href="/guides">
+              Tous les guides
+            </Link>
+          </div>
+        </div>
+        <Carousel label="Guides" variant="wide">
+          {GUIDES.map((g, i) => (
+            <Link key={g.slug} href={`/guides/${g.slug}`} className="guide-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+              <span className="chip">{g.category}</span>
+              <h3>{g.title}</h3>
+              <p>{g.summary}</p>
+              <b>
+                Lire le guide <Icon name="arrow" />
+              </b>
+            </Link>
+          ))}
+        </Carousel>
+      </section>
+
+      <section className="section container xp-split" data-reveal>
+        <div>
+          <p className="eyebrow">Portail d’installation</p>
+          <h2>Votre installation, étape par étape.</h2>
+          <p>Repérez les démarches utiles, préparez votre arrivée et retrouvez les guides adaptés à votre situation, que vous partiez seul ou en famille.</p>
+          <div className="xp-actions">
+            <Link className="button primary" href="/installation">
+              Commencer
+            </Link>
+            <Link className="button outline" href="/diagnostic">
+              Créer mon parcours
+            </Link>
+          </div>
+        </div>
+        <div>
+          <p className="eyebrow">Professionnels</p>
+          <h2>Présentez votre établissement.</h2>
+          <p>Revendiquez votre fiche, répondez aux demandes et aux avis. La vérification DALIL reste indépendante de tout abonnement.</p>
+          <div className="xp-actions">
+            <Link className="button primary" href="/professionnels/rejoindre">
+              Rejoindre l’annuaire
+            </Link>
+            <Link className="button outline" href="/label">
+              Le label DALIL
+            </Link>
           </div>
         </div>
       </section>
 
-      <div className="legacy">
-        <Tree nodes={legacy} />
-      </div>
-    </>
+      <section className="xp-community">
+        <div className="container" data-reveal>
+          <div>
+            <p className="eyebrow inverse">Communauté DALIL</p>
+            <h2>Recevez les nouveaux lieux et les guides du mois.</h2>
+          </div>
+          <NewsletterForm />
+        </div>
+      </section>
+    </div>
   )
 }
