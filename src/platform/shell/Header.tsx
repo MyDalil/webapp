@@ -136,6 +136,11 @@ export function Header() {
                   ))}
                 </div>
               ))}
+              <Link className="mega-feature" href="/annuaire">
+                <span className="menu-kicker">À la une</span>
+                <strong>Des lieux qui méritent votre temps</strong>
+                <small>Monuments, nature, mosquées et bonnes adresses</small>
+              </Link>
             </div>
           </div>
         </nav>

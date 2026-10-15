@@ -15,6 +15,7 @@ import { Assistant } from '@/modules/recherche/ui'
 import { LoginDialog } from '@/platform/shell/LoginDialog'
 import { Toast } from '@/platform/shell/Toast'
 import { Motion } from '@/platform/ui/Motion'
+import { JoinCircle } from '@/platform/shell/JoinCircle'
 import { Tree } from '@/modules/contenus/ui'
 import { SHELL } from '@/modules/contenus'
 
@@ -59,6 +60,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <Assistant />
         <Toast />
         <Motion />
+        <JoinCircle />
         <LoginDialog />
       </body>
     </html>
