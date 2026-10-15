@@ -4,6 +4,7 @@ import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
+import { LANGUAGES } from '@/platform/referentiel/languages'
 
 const slugify = (s: string) =>
   s
@@ -168,6 +169,7 @@ export const Places: CollectionConfig = {
                 { name: 'facebook', type: 'text', label: 'Facebook' },
               ],
             },
+            { name: 'languages', type: 'select', hasMany: true, label: 'Langues parlées sur place', options: LANGUAGES.map((l) => ({ ...l })) },
             {
               name: 'hours',
               type: 'array',

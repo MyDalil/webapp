@@ -295,6 +295,7 @@ export interface Place {
   website?: string | null;
   instagram?: string | null;
   facebook?: string | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en' | 'es' | 'it' | 'de' | 'tr')[] | null;
   hours?:
     | {
         /**
@@ -432,7 +433,7 @@ export interface Practitioner {
   )[];
   photo?: (number | null) | Media;
   bio?: string | null;
-  languages?: ('ar' | 'fr' | 'kab' | 'en')[] | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en' | 'es' | 'it' | 'de' | 'tr')[] | null;
   cabinetName?: string | null;
   address?: string | null;
   city: string;
@@ -569,6 +570,10 @@ export interface Practitioner {
    * Publication uniquement après vérification de l’identité et du droit d’exercer.
    */
   status: 'pending' | 'published' | 'suspended';
+  /**
+   * Affiche un bandeau « Démo » : aucun vrai praticien derrière.
+   */
+  demo?: boolean | null;
   owner?: (number | null) | Member;
   /**
    * /praticiens/…
@@ -922,6 +927,7 @@ export interface PlacesSelect<T extends boolean = true> {
   website?: T;
   instagram?: T;
   facebook?: T;
+  languages?: T;
   hours?:
     | T
     | {
@@ -1021,6 +1027,7 @@ export interface PractitionersSelect<T extends boolean = true> {
       };
   internalNote?: T;
   status?: T;
+  demo?: T;
   owner?: T;
   slug?: T;
   updatedAt?: T;

@@ -26,11 +26,6 @@ export type Specialty = (typeof SPECIALTIES)[number]['value']
 export const specialtyLabel = (v: string) => SPECIALTIES.find((s) => s.value === v)?.label ?? v
 export const isComplementary = (v: string) => SPECIALTIES.find((s) => s.value === v)?.group === 'Pratiques complémentaires'
 
-export const LANGUAGES = [
-  { value: 'ar', label: 'Arabe' },
-  { value: 'fr', label: 'Français' },
-  { value: 'kab', label: 'Tamazight' },
-  { value: 'en', label: 'Anglais' },
-] as const
+export { LANGUAGES, languageLabel } from '@/platform/referentiel/languages'
 
 export const DAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] as const

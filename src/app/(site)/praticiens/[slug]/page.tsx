@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import { LANGUAGES, bookableModes, getPractitioner, isComplementary, specialtyLabel, toCard } from '@/modules/sante'
+import { bookableModes, languageLabel, getPractitioner, isComplementary, specialtyLabel, toCard } from '@/modules/sante'
 import { SlotPicker } from '@/modules/sante/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { videoEnabled } from '@/platform/video'
@@ -41,6 +41,7 @@ export default async function Practitioner({ params }: Props) {
               </div>
             </div>
           </header>
+          {p.demo && <p className="praticien-notice">Fiche de démonstration : réservez librement pour tester, aucune consultation n’aura lieu.</p>}
           {complementary && <p className="praticien-notice">Pratique complémentaire : elle ne remplace pas un avis médical. DALIL vérifie l’identité et les diplômes déclarés, pas l’efficacité d’une méthode.</p>}
           {p.bio && (
             <section className="account-block">
@@ -75,7 +76,7 @@ export default async function Practitioner({ params }: Props) {
               {!!p.languages?.length && (
                 <>
                   <dt>Langues</dt>
-                  <dd>{p.languages.map((l) => LANGUAGES.find((x) => x.value === l)?.label ?? l).join(', ')}</dd>
+                  <dd>{p.languages.map(languageLabel).join(', ')}</dd>
                 </>
               )}
               {!!p.specialties?.length && (

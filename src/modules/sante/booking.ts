@@ -33,6 +33,7 @@ export type PractitionerCard = {
   fee: string | null
   photo: string | null
   verified: boolean
+  demo: boolean
   next: string | null
 }
 
@@ -49,6 +50,7 @@ const card = (p: Practitioner, next: string | null): PractitionerCard => ({
   fee: p.fee ?? null,
   photo: photoUrl(p.photo),
   verified: Boolean(p.identityVerified) && (p.diplomas ?? []).some((d) => d.verified),
+  demo: Boolean(p.demo),
   next,
 })
 

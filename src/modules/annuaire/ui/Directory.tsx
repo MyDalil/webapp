@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Icon } from '@/platform/ui/Icon'
 import { SaveButton } from '@/modules/membres/ui'
 import type { PlaceCard } from '../queries'
+import { LANGUAGES } from '@/platform/referentiel/languages'
 
 const DirectoryMap = dynamic(() => import('./DirectoryMap').then((m) => m.DirectoryMap), { ssr: false })
 
@@ -27,6 +28,7 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
   const [category, setCategory] = useState('')
   const [city, setCity] = useState('')
   const [status, setStatus] = useState('')
+  const [language, setLanguage] = useState('')
   const [order, setOrder] = useState<'relevance' | 'recent'>('relevance')
 
   // Liens « catégorie » des cartes secteurs : /annuaire/<secteur>?category=…
@@ -48,11 +50,12 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
       (p) =>
         (!needle || norm(`${p.name} ${p.category} ${p.city} ${p.place} ${p.sectorTitle} ${p.wilaya ?? ''}`).includes(needle)) &&
         (!category || p.category === category) &&
+        (!language || p.languages.includes(language)) &&
         (!city || p.city === city) &&
         (!status || p.status === status),
     )
     return order === 'recent' ? [...list].sort((a, b) => b.updated.localeCompare(a.updated)) : list
-  }, [scoped, q, category, city, status, order])
+  }, [scoped, q, category, city, status, order, language])
 
   const verified = results.filter((p) => p.status === 'verified' || p.status === 'labelled').length
 
@@ -103,6 +106,17 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
             <option value="">Toutes les villes</option>
             {cities.map((c) => (
               <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Langue parlée
+          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+            <option value="">Toutes les langues</option>
+            {LANGUAGES.map((l) => (
+              <option key={l.value} value={l.value}>
+                {l.label}
+              </option>
             ))}
           </select>
         </label>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { LANGUAGES, SPECIALTIES, isComplementary, searchPractitioners, specialtyLabel } from '@/modules/sante'
+import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitioners, specialtyLabel } from '@/modules/sante'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 export const metadata: Metadata = { title: 'Trouver un praticien · DALIL', description: 'Prenez rendez-vous en ligne avec un médecin ou un praticien vérifié par DALIL, au cabinet ou en visio.' }
@@ -93,9 +93,11 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
                   <p>{p.specialties.map(specialtyLabel).join(' · ')}{p.specialties.some(isComplementary) ? ' (pratique complémentaire)' : ''}</p>
                   <p className="muted-line">{[p.address, p.city].filter(Boolean).join(', ')}</p>
                   <div className="praticien-tags">
+                    {p.demo && <span className="chip chip-plain">Démo</span>}
                     {p.verified && <span className="chip">Identité et diplôme vérifiés</span>}
                     {p.modes.includes('visio') && <span className="chip">Visio</span>}
                     {p.fee && <span className="chip chip-plain">{p.fee}</span>}
+                    {!!p.languages.length && <span className="chip chip-plain">{p.languages.map(languageLabel).join(' · ')}</span>}
                   </div>
                 </div>
                 <div className="praticien-next">

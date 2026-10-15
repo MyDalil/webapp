@@ -102,6 +102,7 @@ export const Practitioners: CollectionConfig = {
       ],
     },
     { name: 'status', type: 'select', required: true, defaultValue: 'pending', label: 'Statut', options: [{ label: 'En attente de vérification', value: 'pending' }, { label: 'Publié', value: 'published' }, { label: 'Suspendu', value: 'suspended' }], admin: { position: 'sidebar', description: 'Publication uniquement après vérification de l’identité et du droit d’exercer.' } },
+    { name: 'demo', type: 'checkbox', label: 'Fiche de démonstration', defaultValue: false, admin: { position: 'sidebar', description: 'Affiche un bandeau « Démo » : aucun vrai praticien derrière.' } },
     { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', admin: { position: 'sidebar' } },
     { name: 'slug', type: 'text', unique: true, index: true, label: 'Adresse de la page', admin: { position: 'sidebar', description: '/praticiens/…' } },
   ],

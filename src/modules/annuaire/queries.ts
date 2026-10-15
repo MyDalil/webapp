@@ -46,6 +46,7 @@ export type PlaceCard = {
   cover: string
   credit: string | null
   score: number
+  languages: string[]
   pos: [number, number] | null
   exact: boolean
   updated: string
@@ -79,6 +80,7 @@ export function toCard(p: Place): PlaceCard {
     cover: coverOf(p),
     credit: coverCredit(p)?.text ?? null,
     score: p.score ?? 0,
+    languages: (p.languages ?? []) as string[],
     pos,
     exact,
     updated: p.updatedAt,

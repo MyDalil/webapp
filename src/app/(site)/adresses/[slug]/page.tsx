@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { formatDate } from '@/modules/annuaire'
 import { Icon } from '@/platform/ui/Icon'
 import { Carousel } from '@/platform/ui/Carousel'
+import { languageLabel } from '@/platform/referentiel/languages'
 import { SaveButton } from '@/modules/membres/ui'
 import { PlaceActions } from '@/modules/annuaire/ui'
 import { PlaceMap } from '@/modules/annuaire/ui'
@@ -139,6 +140,12 @@ export default async function PlacePage({ params }: Props) {
                     <strong>À confirmer</strong>
                   )}
                 </li>
+                {!!p.languages?.length && (
+                  <li>
+                    <span>Langues parlées</span>
+                    <strong>{p.languages.map(languageLabel).join(', ')}</strong>
+                  </li>
+                )}
                 {p.showContacts && contacts.length > 0 && (
                   <li>
                     <span>Contacts</span>

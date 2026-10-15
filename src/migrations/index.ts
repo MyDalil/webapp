@@ -6,6 +6,8 @@ import * as migration_20261006_104343_emails from './20261006_104343_emails';
 import * as migration_20261008_070412_places_open_data from './20261008_070412_places_open_data';
 import * as migration_20261008_100000_import_open_places from './20261008_100000_import_open_places';
 import * as migration_20261015_230401_sante_rendez_vous from './20261015_230401_sante_rendez_vous';
+import * as migration_20261015_233450_langues_demo from './20261015_233450_langues_demo';
+import * as migration_20261016_120000_demo_praticien from './20261016_120000_demo_praticien';
 
 export const migrations = [
   {
@@ -48,4 +50,14 @@ export const migrations = [
     down: migration_20261015_230401_sante_rendez_vous.down,
     name: '20261015_230401_sante_rendez_vous'
   },
+  {
+    up: migration_20261015_233450_langues_demo.up,
+    down: migration_20261015_233450_langues_demo.down,
+    name: '20261015_233450_langues_demo',
+  },
+  {
+    up: migration_20261016_120000_demo_praticien.up,
+    down: migration_20261016_120000_demo_praticien.down,
+    name: '20261016_120000_demo_praticien',
+  }
 ];
