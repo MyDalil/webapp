@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { openLogin } from './LoginDialog'
 import { toast } from './toast'
 
 const PRIMARY = [
@@ -17,6 +16,7 @@ const MEGA: { kicker: string; links: [string, string, string][] }[] = [
     kicker: 'Découvrir',
     links: [
       ['/annuaire', 'Annuaire & Adresses', 'Trouver un lieu fiable'],
+      ['/praticiens', 'Trouver un praticien', 'Rendez-vous en ligne'],
       ['/guides', 'Guides', 'Comprendre et préparer'],
       ['/actualites', 'Actualités', 'Ce qui change'],
     ],
@@ -35,14 +35,6 @@ const MEGA: { kicker: string; links: [string, string, string][] }[] = [
       ['/label', 'Label DALIL Excellence', 'Notre exigence de qualité'],
       ['/proposer', 'Contribuer', 'Partager une information'],
       ['/boutique', 'Accompagnements', 'Avancer avec un parcours clair'],
-    ],
-  },
-  {
-    kicker: 'Espaces',
-    links: [
-      ['/espace', 'Espace Particulier', 'Favoris et contributions'],
-      ['/professionnels/espace', 'Espace Professionnel', 'Gérer son établissement'],
-      ['/professionnels/rejoindre', 'Rejoindre l’annuaire', 'Présenter son activité'],
     ],
   },
 ]
@@ -66,9 +58,9 @@ export function Header() {
   useEffect(() => {
     setMenu(null)
     setMobile(false)
-    fetch('/api/me')
+    fetch('/api/compte', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
-      .then((j) => setWho(j?.profile?.nickname ?? null))
+      .then((j) => setWho(j?.member ? (j.member.kind === 'pro' ? '/espace-pro' : '/mon-compte') : null))
       .catch(() => {})
   }, [path])
 
@@ -165,13 +157,13 @@ export function Header() {
             </svg>
           </button>
           {who ? (
-            <Link className="login-button" href="/espace">
+            <Link className="login-button" href={who}>
               Mon espace
             </Link>
           ) : (
-            <button className="login-button" type="button" onClick={openLogin}>
+            <Link className="login-button" href="/connexion">
               Connexion
-            </button>
+            </Link>
           )}
           <button className="hamburger" type="button" aria-label={mobile ? 'Fermer la navigation' : 'Ouvrir la navigation'} aria-expanded={mobile} onClick={() => setMobile(!mobile)}>
             <span></span>
@@ -191,8 +183,8 @@ export function Header() {
         <Link href="/label">Label DALIL Excellence</Link>
         <Link href="/proposer">Contribuer</Link>
         <div className="mobile-spaces">
-          <Link href="/espace">Espace Particulier</Link>
-          <Link href="/professionnels/espace">Espace Professionnel</Link>
+          <Link href="/connexion/particulier">Espace Particulier</Link>
+          <Link href="/connexion/professionnel">Espace Professionnel</Link>
         </div>
       </div>
     </header>

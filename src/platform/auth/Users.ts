@@ -1,5 +1,5 @@
 import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionConfig } from 'payload'
-import { isAdmin, isAdminField } from '@/platform/access'
+import { isAdmin, isAdminField, isAdminUser, isStaffUser } from '@/platform/access'
 import { SITE, esc, layout, send } from '@/platform/mail'
 
 const resetUrl = (token: string) => `${SITE}/admin/reset/${token}`
@@ -29,7 +29,7 @@ const after: CollectionAfterChangeHook = async ({ doc, req, context }) => {
         'Votre accès à l’administration DALIL',
         layout(
           `Bienvenue dans l’équipe DALIL, ${esc(doc.name)}.`,
-          `<p>${esc(req.user?.name ?? 'Un administrateur')} vous a créé un accès à l’administration de DALIL (rôle : ${doc.role === 'admin' ? 'administrateur' : 'rédacteur'}).</p><p>Choisissez votre mot de passe avec le bouton ci-dessous. Le lien est valable une heure ; passé ce délai, utilisez « Mot de passe oublié » sur la page de connexion.</p>`,
+          `<p>${esc((req.user as { name?: string } | null)?.name ?? 'Un administrateur')} vous a créé un accès à l’administration de DALIL (rôle : ${doc.role === 'admin' ? 'administrateur' : 'rédacteur'}).</p><p>Choisissez votre mot de passe avec le bouton ci-dessous. Le lien est valable une heure ; passé ce délai, utilisez « Mot de passe oublié » sur la page de connexion.</p>`,
           { label: 'Choisir mon mot de passe', href: resetUrl(token) },
         ),
       )
@@ -84,8 +84,8 @@ export const Users: CollectionConfig = {
   access: {
     create: isAdmin,
     delete: isAdmin,
-    read: ({ req: { user } }) => (user?.role === 'admin' ? true : { id: { equals: user?.id } }),
-    update: ({ req: { user } }) => (user?.role === 'admin' ? true : { id: { equals: user?.id } }),
+    read: ({ req: { user } }) => (isAdminUser(user) ? true : isStaffUser(user) ? { id: { equals: user?.id } } : false),
+    update: ({ req: { user } }) => (isAdminUser(user) ? true : isStaffUser(user) ? { id: { equals: user?.id } } : false),
   },
   fields: [
     { name: 'name', type: 'text', label: 'Nom', required: true },

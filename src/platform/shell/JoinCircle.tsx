@@ -9,14 +9,14 @@ export function JoinCircle() {
   const pathname = usePathname()
   const [hidden, setHidden] = useState(false)
   useEffect(() => {
-    fetch('/api/me', { cache: 'no-store' })
+    fetch('/api/compte', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
-      .then((me) => setHidden(Boolean(me?.profile)))
+      .then((me) => setHidden(Boolean(me?.member)))
       .catch(() => {})
   }, [])
   if (hidden || pathname?.startsWith('/connexion')) return null
   return (
-    <Link href="/connexion" className="join-circle" aria-label="Créer mon compte gratuitement">
+    <Link href="/connexion/particulier?tab=signup" className="join-circle" aria-label="Créer mon compte gratuitement">
       <span>
         Créer
         <br />

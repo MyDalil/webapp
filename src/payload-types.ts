@@ -63,15 +63,19 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
+    members: MemberAuthOperations;
     users: UserAuthOperations;
   };
   blocks: {};
   collections: {
     places: Place;
+    practitioners: Practitioner;
+    appointments: Appointment;
     media: Media;
     submissions: Submission;
     subscribers: Subscriber;
     campaigns: Campaign;
+    members: Member;
     'visitor-sessions': VisitorSession;
     users: User;
     'payload-kv': PayloadKv;
@@ -82,10 +86,13 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     places: PlacesSelect<false> | PlacesSelect<true>;
+    practitioners: PractitionersSelect<false> | PractitionersSelect<true>;
+    appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    members: MembersSelect<false> | MembersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -103,10 +110,28 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: Member | User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
+  };
+}
+export interface MemberAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
   };
 }
 export interface UserAuthOperations {
@@ -371,6 +396,247 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practitioners".
+ */
+export interface Practitioner {
+  id: number;
+  /**
+   * Ex. Dr Amina Benali
+   */
+  name: string;
+  /**
+   * Ex. Médecin généraliste
+   */
+  title?: string | null;
+  specialties: (
+    | 'medecine-generale'
+    | 'pediatrie'
+    | 'gynecologie'
+    | 'cardiologie'
+    | 'dermatologie'
+    | 'ophtalmologie'
+    | 'orl'
+    | 'psychiatrie'
+    | 'endocrinologie'
+    | 'gastro-enterologie'
+    | 'rhumatologie'
+    | 'dentiste'
+    | 'orthodontie'
+    | 'sage-femme'
+    | 'kinesitherapie'
+    | 'orthophonie'
+    | 'psychologie'
+    | 'dietetique'
+    | 'hijama'
+    | 'naturopathie'
+  )[];
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  languages?: ('ar' | 'fr' | 'kab' | 'en')[] | null;
+  cabinetName?: string | null;
+  address?: string | null;
+  city: string;
+  wilaya?:
+    | (
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12'
+        | '13'
+        | '14'
+        | '15'
+        | '16'
+        | '17'
+        | '18'
+        | '19'
+        | '20'
+        | '21'
+        | '22'
+        | '23'
+        | '24'
+        | '25'
+        | '26'
+        | '27'
+        | '28'
+        | '29'
+        | '30'
+        | '31'
+        | '32'
+        | '33'
+        | '34'
+        | '35'
+        | '36'
+        | '37'
+        | '38'
+        | '39'
+        | '40'
+        | '41'
+        | '42'
+        | '43'
+        | '44'
+        | '45'
+        | '46'
+        | '47'
+        | '48'
+        | '49'
+        | '50'
+        | '51'
+        | '52'
+        | '53'
+        | '54'
+        | '55'
+        | '56'
+        | '57'
+        | '58'
+        | '59'
+        | '60'
+        | '61'
+        | '62'
+        | '63'
+        | '64'
+        | '65'
+        | '66'
+        | '67'
+        | '68'
+        | '69'
+      )
+    | null;
+  lat?: number | null;
+  lng?: number | null;
+  phone?: string | null;
+  modes: ('cabinet' | 'visio')[];
+  /**
+   * Ex. 2 500 DA
+   */
+  fee?: string | null;
+  /**
+   * Ex. Espèces au cabinet, BaridiMob
+   */
+  payment?: string | null;
+  /**
+   * DALIL n’encaisse rien : le patient paie directement le praticien.
+   */
+  paymentLink?: string | null;
+  slotMinutes?: number | null;
+  minNoticeHours?: number | null;
+  horizonDays?: number | null;
+  cancelNoticeHours?: number | null;
+  weekly?:
+    | {
+        day: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        /**
+         * HH:MM
+         */
+        start: string;
+        /**
+         * HH:MM
+         */
+        end: string;
+        mode?: ('both' | 'cabinet' | 'visio') | null;
+        id?: string | null;
+      }[]
+    | null;
+  closures?:
+    | {
+        from: string;
+        to: string;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  identityVerified?: boolean | null;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  diplomas?:
+    | {
+        title: string;
+        institution?: string | null;
+        year?: number | null;
+        verified?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  internalNote?: string | null;
+  /**
+   * Publication uniquement après vérification de l’identité et du droit d’exercer.
+   */
+  status: 'pending' | 'published' | 'suspended';
+  owner?: (number | null) | Member;
+  /**
+   * /praticiens/…
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members".
+ */
+export interface Member {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  kind: 'particulier' | 'pro';
+  termsAcceptedAt: string;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'members';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments".
+ */
+export interface Appointment {
+  id: number;
+  practitioner: number | Practitioner;
+  patient: number | Member;
+  start: string;
+  end: string;
+  mode: 'cabinet' | 'visio';
+  status: 'confirmed' | 'cancelled' | 'completed' | 'no_show';
+  reason?: string | null;
+  cancelledBy?: ('patient' | 'practitioner' | 'staff') | null;
+  cancelReason?: string | null;
+  /**
+   * Généré par le service visio (non choisi pour l’instant).
+   */
+  videoUrl?: string | null;
+  consentAt: string;
+  reminderSentAt?: string | null;
+  slotKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
@@ -530,6 +796,14 @@ export interface PayloadLockedDocument {
         value: number | Place;
       } | null)
     | ({
+        relationTo: 'practitioners';
+        value: number | Practitioner;
+      } | null)
+    | ({
+        relationTo: 'appointments';
+        value: number | Appointment;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -546,6 +820,10 @@ export interface PayloadLockedDocument {
         value: number | Campaign;
       } | null)
     | ({
+        relationTo: 'members';
+        value: number | Member;
+      } | null)
+    | ({
         relationTo: 'visitor-sessions';
         value: number | VisitorSession;
       } | null)
@@ -554,10 +832,15 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -567,10 +850,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      };
   key?: string | null;
   value?:
     | {
@@ -678,6 +966,89 @@ export interface PlacesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practitioners_select".
+ */
+export interface PractitionersSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  specialties?: T;
+  photo?: T;
+  bio?: T;
+  languages?: T;
+  cabinetName?: T;
+  address?: T;
+  city?: T;
+  wilaya?: T;
+  lat?: T;
+  lng?: T;
+  phone?: T;
+  modes?: T;
+  fee?: T;
+  payment?: T;
+  paymentLink?: T;
+  slotMinutes?: T;
+  minNoticeHours?: T;
+  horizonDays?: T;
+  cancelNoticeHours?: T;
+  weekly?:
+    | T
+    | {
+        day?: T;
+        start?: T;
+        end?: T;
+        mode?: T;
+        id?: T;
+      };
+  closures?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        note?: T;
+        id?: T;
+      };
+  identityVerified?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  diplomas?:
+    | T
+    | {
+        title?: T;
+        institution?: T;
+        year?: T;
+        verified?: T;
+        id?: T;
+      };
+  internalNote?: T;
+  status?: T;
+  owner?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments_select".
+ */
+export interface AppointmentsSelect<T extends boolean = true> {
+  practitioner?: T;
+  patient?: T;
+  start?: T;
+  end?: T;
+  mode?: T;
+  status?: T;
+  reason?: T;
+  cancelledBy?: T;
+  cancelReason?: T;
+  videoUrl?: T;
+  consentAt?: T;
+  reminderSentAt?: T;
+  slotKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -765,6 +1136,36 @@ export interface CampaignsSelect<T extends boolean = true> {
   recipients?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members_select".
+ */
+export interface MembersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  phone?: T;
+  kind?: T;
+  termsAcceptedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  resetPasswordRequestedAt?: T;
+  _verified?: T;
+  _verificationToken?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

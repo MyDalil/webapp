@@ -8,7 +8,9 @@ L’espace personnel du visiteur : profil test, favoris, listes, checklist, parc
 ## Contenu du module
 - `session.ts` : session visiteur (cookie httpOnly `dalil_sid`, 7 jours) stockée dans la collection `visitor-sessions`.
 - Routes `/api/test-session`, `/api/me`, `/api/favorites`, `/api/collections`, `/api/checklist`, `/api/diagnostics`.
-- `ui/` : MemberSpace (/espace), SaveButton, FavoriteButton, TestExperience.
+- `Members.ts` : comptes publics (auth Payload, email vérifié, mot de passe oublié). Inscription uniquement via `/api/compte` ; `kind` = particulier ou pro (l’espace pro s’active sur le même compte).
+- Pages `/connexion`, `/connexion/[particulier|professionnel]`, `/connexion/verifier`, `/connexion/nouveau-mot-de-passe`, `/mon-compte`.
+- `ui/` : AuthPanel, AccountActions, MemberSpace (/espace, profil test du prototype), SaveButton, FavoriteButton, TestExperience.
 
 ## Dépend de
 `messages` (parcours, contacts), `platform`.

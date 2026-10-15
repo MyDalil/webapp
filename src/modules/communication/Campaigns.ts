@@ -1,5 +1,5 @@
 import type { CollectionAfterChangeHook, CollectionConfig } from 'payload'
-import { isAdmin, isStaff } from '@/platform/access'
+import { isAdmin, isAdminUser, isStaff } from '@/platform/access'
 import { SITE, TEAM, esc, layout, paragraphs, send, sendBatch, unsubscribe } from '@/platform/mail'
 
 const render = (doc: { title: string; body: string; ctaLabel?: string | null; ctaUrl?: string | null }, footer?: string) =>
@@ -72,7 +72,7 @@ export const Campaigns: CollectionConfig = {
       name: 'sendNow',
       type: 'checkbox',
       label: 'Envoyer aux abonnés à l’enregistrement',
-      access: { update: ({ req }) => req.user?.role === 'admin', create: ({ req }) => req.user?.role === 'admin' },
+      access: { update: ({ req }) => isAdminUser(req.user), create: ({ req }) => isAdminUser(req.user) },
       admin: { position: 'sidebar', description: 'Réservé aux administrateurs. Envoi unique et définitif.', condition: (data) => !data?.sentAt },
     },
     { name: 'sentAt', type: 'date', label: 'Envoyée le', admin: { position: 'sidebar', readOnly: true, date: { displayFormat: 'd MMMM yyyy HH:mm' } } },

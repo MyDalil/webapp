@@ -1,0 +1,145 @@
+/* Comptes, connexion et prise de rendez-vous — mêmes couleurs et typographies que la maquette. */
+
+.auth-page { padding-block: 64px 120px; }
+.auth-page h1 { margin: 0 0 12px; font-size: clamp(2rem, 4.6vw, 3.2rem); letter-spacing: -.035em; line-height: 1.05; }
+.auth-narrow { max-width: 560px; }
+.auth-lead { max-width: 58ch; margin: 0 0 32px; font-size: 1.08rem; }
+.auth-choice { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.auth-card { display: grid; gap: 10px; padding: 32px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: inherit; text-decoration: none; transition: transform .4s var(--ease-out, ease), box-shadow .4s var(--ease-out, ease), border-color .3s; }
+.auth-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--green) 40%, var(--line)); box-shadow: 0 24px 60px -32px rgba(0, 0, 0, .35); }
+.auth-card-kicker { color: var(--muted); font: 500 .8rem/1 Inter, sans-serif; }
+.auth-card h2 { margin: 0; font-size: 1.6rem; letter-spacing: -.02em; }
+.auth-card p { margin: 0; }
+.auth-card b { margin-top: 12px; color: var(--green); }
+
+.auth-panel { padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+.auth-tabs { display: flex; gap: 4px; margin-bottom: 22px; padding: 4px; border-radius: 14px; background: var(--surface-2); }
+.auth-tabs button { flex: 1; min-height: 42px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-weight: 650; cursor: pointer; transition: background .2s, color .2s; }
+.auth-tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
+.auth-form { display: grid; gap: 16px; }
+.auth-form label { display: grid; gap: 6px; font-weight: 600; font-size: .92rem; }
+.auth-form small { color: var(--muted); font-weight: 400; }
+.auth-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.auth-check { display: flex !important; grid-template-columns: none; align-items: flex-start; gap: 10px !important; font-weight: 400 !important; }
+.auth-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--green); flex: 0 0 auto; }
+.auth-submit { min-height: 50px; font-size: 1rem; }
+.auth-link { justify-self: start; padding: 0; border: 0; background: none; color: var(--green); font-weight: 600; cursor: pointer; text-decoration: none; }
+.auth-link:hover { text-decoration: underline; }
+.auth-link.danger { color: #b3261e; }
+.auth-msg { margin: 0 0 16px; padding: 12px 14px; border-radius: 12px; font-size: .92rem; }
+.auth-msg.error { background: #fdecea; color: #8c1d18; }
+.auth-msg.ok { background: var(--green-soft); color: var(--green); }
+fieldset { margin: 0; padding: 0; border: 0; }
+legend { margin-bottom: 8px; font-weight: 650; font-size: .92rem; }
+.check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px 16px; }
+
+.account-page .account-shortcuts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.account-block { margin-top: 28px; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+.account-block h2 { margin: 0 0 16px; font-size: 1.3rem; letter-spacing: -.02em; }
+.account-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 16px; }
+.muted-line { color: var(--muted); }
+.rdv-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.rdv-item { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(220px, 1.4fr) auto; gap: 16px; align-items: center; padding: 18px; border: 1px solid var(--line); border-radius: 18px; }
+.rdv-item.rdv-cancelled { opacity: .6; }
+.rdv-when { display: grid; gap: 6px; }
+.rdv-when b::first-letter { text-transform: uppercase; }
+.rdv-who { display: grid; gap: 4px; }
+.rdv-who small { color: var(--muted); }
+.rdv-status { color: var(--muted); font-size: .82rem; }
+.rdv-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.pro-status { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; padding: 14px 18px; border-radius: 14px; background: var(--surface-2); }
+.pro-status.pro-published { background: var(--green-soft); }
+.pro-tabs { max-width: 520px; }
+.pro-form { margin-top: 8px; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+.pro-form h2 { margin: 12px 0 0; font-size: 1.2rem; }
+.hours-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.3fr auto; gap: 10px; align-items: center; }
+
+/* ——— Recherche de praticiens ——— */
+.praticiens-hero { padding: 72px 0 40px; background: var(--surface-2); }
+.praticiens-hero h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -.04em; line-height: 1; }
+.praticiens-search { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 10px; align-items: end; padding: 14px; border-radius: 22px; background: var(--surface); box-shadow: 0 20px 60px -34px rgba(0, 0, 0, .35); }
+.praticiens-search label { display: grid; gap: 6px; font-size: .78rem; color: var(--muted); }
+.praticiens-search select { min-height: 46px; }
+.praticiens-search .button { min-height: 46px; }
+.praticiens-count { margin: 0 0 18px; color: var(--muted); }
+.praticien-list { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.praticien-card { display: grid; grid-template-columns: 84px 1fr 260px; gap: 22px; align-items: center; padding: 22px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); transition: box-shadow .4s ease; }
+.praticien-card:hover { box-shadow: 0 24px 60px -36px rgba(0, 0, 0, .35); }
+.praticien-photo { display: grid; place-items: center; width: 84px; aspect-ratio: 1; border-radius: 50%; background: var(--green-soft) center / cover; color: var(--green); font: 700 1.6rem/1 Manrope, sans-serif; }
+.praticien-photo.large { width: 112px; font-size: 2.2rem; }
+.praticien-body h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.praticien-body a { color: inherit; text-decoration: none; }
+.praticien-body p { margin: 0 0 4px; }
+.praticien-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip-plain { background: var(--surface-2); color: var(--muted); }
+.praticien-next { display: grid; gap: 6px; justify-items: start; padding-left: 22px; border-left: 1px solid var(--line); }
+.praticien-next b::first-letter { text-transform: uppercase; }
+.praticiens-empty { padding: 48px; border-radius: 24px; background: var(--surface-2); text-align: center; }
+.praticiens-empty h2 { margin: 0 0 8px; }
+
+/* ——— Fiche praticien et réservation ——— */
+.praticien-page { padding-block: 32px 120px; }
+.praticien-layout { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 32px; align-items: start; margin-top: 18px; }
+.praticien-head { display: flex; gap: 22px; align-items: center; }
+.praticien-head h1 { margin: 0 0 6px; font-size: clamp(1.8rem, 3.6vw, 2.6rem); letter-spacing: -.03em; }
+.praticien-head p { margin: 0; }
+.praticien-notice { margin-top: 22px; padding: 14px 18px; border-radius: 14px; background: #fff7e0; color: #6b4e00; font-size: .92rem; }
+.praticien-bio { white-space: pre-line; }
+.praticien-facts dl { display: grid; grid-template-columns: 160px 1fr; gap: 14px 18px; margin: 0; }
+.praticien-facts dt { color: var(--muted); font-weight: 600; }
+.praticien-facts dd { margin: 0; }
+.diploma small { color: var(--muted); }
+.diploma small.ok { color: var(--green); font-weight: 600; }
+.praticien-aside { position: sticky; top: calc(var(--header, 75px) + 20px); }
+
+.booking-card { display: grid; gap: 16px; padding: 24px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: 0 30px 80px -50px rgba(0, 0, 0, .45); }
+.booking-card h3 { margin: 0; font-size: 1.25rem; letter-spacing: -.02em; }
+.booking-modes { display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: var(--surface-2); }
+.booking-modes button { flex: 1; display: grid; gap: 2px; min-height: 44px; border: 0; border-radius: 10px; background: none; color: var(--muted); font-weight: 650; cursor: pointer; }
+.booking-modes button[aria-checked="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
+.booking-modes button:disabled { cursor: not-allowed; opacity: .55; }
+.booking-modes small { font-size: .68rem; font-weight: 500; }
+.slot-nav { display: grid; grid-template-columns: 32px 1fr 32px; gap: 6px; align-items: center; }
+.slot-nav > button { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); font-size: 1.1rem; cursor: pointer; }
+.slot-nav > button:disabled { opacity: .3; cursor: default; }
+.slot-days, .slot-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.slot-grid { margin-inline: 38px; }
+.slot-day { display: grid; text-align: center; font-size: .78rem; }
+.slot-day b { text-transform: capitalize; }
+.slot-day span { color: var(--muted); }
+.slot-col { display: grid; gap: 6px; align-content: start; }
+.slot { min-height: 38px; border: 0; border-radius: 10px; background: var(--green-soft); color: var(--green); font: 650 .86rem/1 Inter, sans-serif; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.slot:hover { background: var(--green); color: #fff; transform: translateY(-1px); }
+.slot-none { display: grid; place-items: center; background: none; color: var(--line); cursor: default; }
+.slot-skeleton { height: 38px; border-radius: 10px; background: linear-gradient(90deg, var(--surface-2), var(--surface-3), var(--surface-2)); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.slot-more { justify-self: center; }
+.slot-empty { display: grid; gap: 10px; justify-items: center; padding: 22px; border-radius: 16px; background: var(--surface-2); text-align: center; }
+.slot-empty p { margin: 0; }
+.booking-note { margin: 0; color: var(--muted); font-size: .8rem; }
+.booking-confirm { display: grid; gap: 14px; }
+.booking-picked { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; padding: 14px; border-radius: 14px; background: var(--green-soft); }
+.booking-picked::first-letter { text-transform: uppercase; }
+.booking-field { display: grid; gap: 6px; font-weight: 600; font-size: .9rem; }
+.booking-field small { color: var(--muted); font-weight: 400; }
+.booking-submit { min-height: 50px; }
+.booking-submit:disabled { opacity: .5; cursor: not-allowed; }
+.booking-done { justify-items: center; text-align: center; }
+.booking-check { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #fff; font-size: 1.6rem; animation: join-in .6s cubic-bezier(.22, 1, .36, 1); }
+.booking-done p::first-letter { text-transform: uppercase; }
+
+@media (max-width: 980px) {
+  .praticiens-search { grid-template-columns: 1fr 1fr; }
+  .praticiens-search .button { grid-column: 1 / -1; }
+  .praticien-card { grid-template-columns: 64px 1fr; }
+  .praticien-photo { width: 64px; }
+  .praticien-next { grid-column: 1 / -1; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .praticien-layout { grid-template-columns: 1fr; }
+  .praticien-aside { position: static; }
+  .rdv-item { grid-template-columns: 1fr; }
+  .rdv-actions { justify-content: flex-start; }
+  .hours-row { grid-template-columns: 1fr 1fr; }
+  .praticien-facts dl { grid-template-columns: 1fr; gap: 4px; }
+  .praticien-facts dd { margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .slot-skeleton, .booking-check { animation: none; } }

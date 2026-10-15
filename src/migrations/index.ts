@@ -5,6 +5,7 @@ import * as migration_20261006_102828_newsletter_confirm from './20261006_102828
 import * as migration_20261006_104343_emails from './20261006_104343_emails';
 import * as migration_20261008_070412_places_open_data from './20261008_070412_places_open_data';
 import * as migration_20261008_100000_import_open_places from './20261008_100000_import_open_places';
+import * as migration_20261015_230401_sante_rendez_vous from './20261015_230401_sante_rendez_vous';
 
 export const migrations = [
   {
@@ -35,11 +36,16 @@ export const migrations = [
   {
     up: migration_20261008_070412_places_open_data.up,
     down: migration_20261008_070412_places_open_data.down,
-    name: '20261008_070412_places_open_data'
+    name: '20261008_070412_places_open_data',
   },
   {
     up: migration_20261008_100000_import_open_places.up,
     down: migration_20261008_100000_import_open_places.down,
     name: '20261008_100000_import_open_places',
+  },
+  {
+    up: migration_20261015_230401_sante_rendez_vous.up,
+    down: migration_20261015_230401_sante_rendez_vous.down,
+    name: '20261015_230401_sante_rendez_vous'
   },
 ];

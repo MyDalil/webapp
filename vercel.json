@@ -1,0 +1,1 @@
+{ "crons": [{ "path": "/api/rdv/rappels", "schedule": "0 16 * * *" }] }
