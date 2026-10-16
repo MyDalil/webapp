@@ -568,3 +568,23 @@ export async function providerDocuments(providerId: number) {
   const { docs } = await p.find({ collection: 'provider-documents', where: { provider: { equals: providerId } }, depth: 0, limit: 10, overrideAccess: true, select: { kind: true, createdAt: true } })
   return docs.map((d) => ({ kind: d.kind, at: d.createdAt }))
 }
+
+/** Export des données du compte (RGPD / loi 18-07) : demandes, messages, avis, fiche prestataire, pièces et photos envoyées. */
+export async function exportServicesData(member: Member) {
+  const p = await getPayload()
+  const missions = await p.find({ collection: 'missions', where: { client: { equals: member.id } }, depth: 1, limit: 1000, sort: '-start', overrideAccess: true })
+  const ids = missions.docs.map((m) => m.id)
+  const messages = ids.length ? (await p.find({ collection: 'mission-messages', where: { and: [{ mission: { in: ids } }, { from: { equals: 'client' } }] }, depth: 0, limit: 5000, overrideAccess: true })).docs : []
+  const reviews = await p.find({ collection: 'provider-reviews', where: { author: { equals: member.id } }, depth: 1, limit: 1000, overrideAccess: true })
+  const media = await p.find({ collection: 'media', where: { uploadedBy: { equals: member.id } }, depth: 0, limit: 1000, overrideAccess: true })
+  const pr = await myProvider(member)
+  const fiche = pr ? (({ internalNote: _n, verifiedBy: _v, ...rest }) => rest)(pr as unknown as Record<string, unknown>) : null
+  return {
+    demandesDeService: missions.docs.map((m) => ({ id: m.id, prestataire: (m.provider as Provider)?.displayName, activite: activityLabel(m.activity), debut: m.start, heures: m.hours, commune: m.communeName, adresse: m.address, besoin: m.details ?? null, estimation: m.estimate ?? null, statut: m.status, consentementLe: m.consentAt, creeLe: m.createdAt })),
+    messagesEnvoyes: messages.map((x) => ({ demande: typeof x.mission === 'object' ? x.mission.id : x.mission, texte: x.body, envoyeLe: x.createdAt })),
+    avisPublies: reviews.docs.map((r) => ({ prestataire: (r.provider as Provider)?.displayName, note: r.rating, commentaire: r.comment ?? null, publieLe: r.createdAt, statut: r.status })),
+    photosEnvoyees: media.docs.map((m) => ({ fichier: m.url, description: m.alt, envoyeeLe: m.createdAt })),
+    fichePrestataire: fiche,
+    piecesJustificatives: pr ? (await providerDocuments(pr.id)).map((d) => ({ type: d.kind, envoyeeLe: d.at, note: 'Contenu non exporté : consulté par l’équipe puis supprimé.' })) : [],
+  }
+}

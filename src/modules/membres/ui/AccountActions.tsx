@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-/** Déconnexion et suppression définitive du compte (droit à l’effacement). */
+/** Déconnexion, export des données (droit d’accès) et suppression définitive du compte (droit à l’effacement). */
 export function AccountActions() {
   const router = useRouter()
   const [busy, setBusy] = useState(false)
@@ -24,6 +24,9 @@ export function AccountActions() {
       <button className="button outline" onClick={logout}>
         Se déconnecter
       </button>
+      <a className="button outline" href="/api/compte/export" download>
+        Télécharger mes données
+      </a>
       <button className="auth-link danger" disabled={busy} onClick={remove}>
         Supprimer mon compte
       </button>

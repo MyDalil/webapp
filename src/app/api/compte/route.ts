@@ -1,6 +1,7 @@
 import { currentMember, deleteMyAccount } from '@/modules/sante'
 import { deleteServicesData } from '@/modules/services'
 import { clean, fail, isEmail, json, payload } from '@/platform/http'
+import { guard } from '@/platform/security/rateLimit'
 
 /** Compte connecté (pour l’en-tête et le cercle d’inscription). */
 export async function GET() {
@@ -10,6 +11,8 @@ export async function GET() {
 
 /** Inscription : champs contrôlés, email de confirmation envoyé automatiquement. */
 export async function POST(req: Request) {
+  const limited = await guard('signup', 5, 3600)
+  if (limited) return limited
   const b = await req.json().catch(() => ({}))
   const email = clean(b.email, 200).toLowerCase()
   const password = typeof b.password === 'string' ? b.password : ''

@@ -1,5 +1,6 @@
 import { book, currentMember, myAppointments } from '@/modules/sante'
 import { fail, json } from '@/platform/http'
+import { guard } from '@/platform/security/rateLimit'
 
 export async function GET() {
   const member = await currentMember()
@@ -8,6 +9,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('rdv', 20, 3600)
+  if (limited) return limited
   const body = await req.json().catch(() => ({}))
   const r = await book({
     slug: String(body.praticien ?? ''),

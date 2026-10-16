@@ -11,6 +11,7 @@ import * as migration_20261016_120000_demo_praticien from './20261016_120000_dem
 import * as migration_20261016_173803_services_prestataires from './20261016_173803_services_prestataires';
 import * as migration_20261016_180000_demo_prestataire from './20261016_180000_demo_prestataire';
 import * as migration_20261016_183051_services_photos_pieces from './20261016_183051_services_photos_pieces';
+import * as migration_20261016_200000_rate_limits from './20261016_200000_rate_limits';
 
 export const migrations = [
   {
@@ -76,6 +77,11 @@ export const migrations = [
   {
     up: migration_20261016_183051_services_photos_pieces.up,
     down: migration_20261016_183051_services_photos_pieces.down,
-    name: '20261016_183051_services_photos_pieces'
+    name: '20261016_183051_services_photos_pieces',
+  },
+  {
+    up: migration_20261016_200000_rate_limits.up,
+    down: migration_20261016_200000_rate_limits.down,
+    name: '20261016_200000_rate_limits',
   },
 ];

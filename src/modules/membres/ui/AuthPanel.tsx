@@ -31,7 +31,8 @@ export function AuthPanel({ kind }: { kind: Kind }) {
     try {
       if (tab === 'login') {
         const r = await api('/api/members/login', { email: f.email, password: f.password })
-        if (!r.ok) return setMsg({ type: 'error', text: /v[ée]rifi/i.test(errorOf(r.data)) ? 'Confirmez d’abord votre adresse email : un lien vous a été envoyé à l’inscription.' : 'Email ou mot de passe incorrect.' })
+        const why = errorOf(r.data)
+        if (!r.ok) return setMsg({ type: 'error', text: /v[ée]rifi/i.test(why) ? 'Confirmez d’abord votre adresse email : un lien vous a été envoyé à l’inscription.' : /trop de tentatives|verrouill/i.test(why) ? why : 'Email ou mot de passe incorrect.' })
         router.push(next)
         router.refresh()
       } else if (tab === 'signup') {
@@ -40,7 +41,8 @@ export function AuthPanel({ kind }: { kind: Kind }) {
         setMsg({ type: 'ok', text: `Compte créé. Ouvrez l’email envoyé à ${f.email} et confirmez votre adresse pour vous connecter.` })
         setTab('login')
       } else {
-        await api('/api/members/forgot-password', { email: f.email })
+        const r = await api('/api/members/forgot-password', { email: f.email })
+        if (!r.ok) return setMsg({ type: 'error', text: errorOf(r.data) })
         setMsg({ type: 'ok', text: 'Si un compte existe avec cet email, vous allez recevoir un lien pour choisir un nouveau mot de passe.' })
       }
     } finally {

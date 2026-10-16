@@ -299,3 +299,15 @@ export async function deleteMyAccount(member: Member) {
   if (pr) await p.update({ collection: 'practitioners', id: pr.id, data: { status: 'suspended', owner: null }, overrideAccess: true })
   await p.delete({ collection: 'members', id: member.id, overrideAccess: true })
 }
+
+/** Export des données du compte (RGPD / loi 18-07) : rendez-vous pris et fiche praticien, sans notes internes. */
+export async function exportSanteData(member: Member) {
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'appointments', where: { patient: { equals: member.id } }, depth: 1, limit: 1000, sort: '-start', overrideAccess: true })
+  const pr = await myPractitioner(member)
+  const safe = pr ? (({ internalNote: _n, verifiedBy: _v, ...rest }) => rest)(pr as unknown as Record<string, unknown>) : null
+  return {
+    rendezVous: docs.map((a) => ({ praticien: (a.practitioner as Practitioner)?.name, debut: a.start, fin: a.end, mode: a.mode, statut: a.status, motif: a.reason ?? null, annulePar: a.cancelledBy ?? null, consentementLe: a.consentAt, creeLe: a.createdAt })),
+    fichePraticien: safe,
+  }
+}
