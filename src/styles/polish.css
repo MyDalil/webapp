@@ -1,0 +1,32 @@
+/* Retouches finales, chargées en dernier : elles l’emportent sur les feuilles des modules. */
+/* ——— Revue générale (oct. 2026) : boutons, cases et mobile ——— */
+.button { text-align: center; line-height: 1.25; text-wrap: balance; }
+.muted-line a, .account-block .muted-line a { color: var(--green); font-weight: 600; text-decoration: none; }
+.muted-line a:hover { text-decoration: underline; }
+.pro-status b + span { flex: 1 1 260px; }
+.booking-modes button { align-content: center; justify-items: center; text-align: center; }
+.praticien-layout > * { min-width: 0; }
+.praticien-facts dd, .mission-facts dd { overflow-wrap: anywhere; }
+.provider-card .provider-offers { max-width: 440px; }
+.smart-text.is-multi > textarea { padding-right: 14px; }
+@media (max-width: 980px) { .praticien-layout { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) {
+  .pro-tabs { overflow: visible; }
+  .pro-tabs button, .pro-tabs a { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 8px 8px; white-space: normal; line-height: 1.2; text-align: center; font-size: .86rem; }
+  .account-page .account-shortcuts .button { flex: 1 1 100%; }
+  .chat .chat-form { grid-template-columns: 1fr; }
+  .chat .chat-form .button { width: 100%; }
+  .praticiens-search { grid-template-columns: 1fr; }
+  .praticiens-empty { padding: 32px 20px; }
+  .praticiens-empty h2 { font-size: 1.45rem; line-height: 1.15; }
+  .place-row .place-type { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+}
+.booking-card { grid-template-columns: minmax(0, 1fr); }
+.slot-nav { grid-template-columns: 32px minmax(0, 1fr) 32px; }
+.slot-days, .slot-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 560px) {
+  .booking-card { padding: 18px; }
+  /* Plus de trois onglets : barre qui défile, comme sur iOS, sans couper les libellés */
+  .pro-tabs:has(> :nth-child(4)) { overflow-x: auto; scroll-snap-type: x proximity; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+  .pro-tabs:has(> :nth-child(4)) > * { flex: 0 0 auto; padding: 8px 14px; white-space: nowrap; scroll-snap-align: start; }
+}

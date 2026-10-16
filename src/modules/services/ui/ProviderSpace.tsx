@@ -95,7 +95,8 @@ export function ProviderSpace({ wilayas }: { wilayas: Wilaya[] }) {
   return (
     <>
       <div className={`pro-status pro-${pr.status}`}>
-        <b>Votre fiche</b> — {STATUS[pr.status ?? 'pending']}
+        <b>Votre fiche</b>
+        <span>{STATUS[pr.status ?? 'pending']}</span>
         {pr.status === 'published' && pr.slug && (
           <Link href={`/prestataires/${pr.slug}`} className="auth-link">
             Voir ma page publique

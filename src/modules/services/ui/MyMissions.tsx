@@ -64,7 +64,7 @@ export function MyMissions() {
       </section>
       {!!past.length && (
         <section className="account-block">
-          <h2>Services passés</h2>
+          <h2>Historique</h2>
           <MissionList items={past} />
         </section>
       )}

@@ -18,7 +18,9 @@ const errorOf = (d: { error?: string; errors?: { message?: string }[]; message?:
 export function AuthPanel({ kind }: { kind: Kind }) {
   const router = useRouter()
   const params = useSearchParams()
-  const next = params.get('next') || (kind === 'pro' ? '/espace-pro' : '/mon-compte')
+  // Retour après connexion : uniquement une page de DALIL (jamais un autre site).
+  const asked = params.get('next') ?? ''
+  const next = /^\/(?![\/\\])/.test(asked) ? asked : kind === 'pro' ? '/espace-pro' : '/mon-compte'
   const [tab, setTab] = useState<Tab>(params.get('tab') === 'signup' ? 'signup' : 'login')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<{ type: 'error' | 'ok'; text: string } | null>(null)

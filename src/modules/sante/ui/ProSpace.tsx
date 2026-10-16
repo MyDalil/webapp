@@ -58,7 +58,8 @@ export function ProSpace({ wilayas }: { wilayas: { code: number; name: string }[
   return (
     <>
       <div className={`pro-status pro-${pr.status}`}>
-        <b>Votre fiche</b> — {STATUS[pr.status ?? 'pending']}
+        <b>Votre fiche</b>
+        <span>{STATUS[pr.status ?? 'pending']}</span>
         {pr.status === 'published' && pr.slug && (
           <Link href={`/praticiens/${pr.slug}`} className="auth-link">
             Voir ma page publique

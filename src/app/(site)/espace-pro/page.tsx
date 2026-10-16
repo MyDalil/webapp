@@ -17,9 +17,10 @@ const SPACES = {
 
 export default async function ProPage({ searchParams }: { searchParams: Promise<{ espace?: string }> }) {
   const m = await currentMember()
-  if (!m) redirect('/connexion/professionnel?next=/espace-pro')
-  const [practitioner, provider] = m._verified ? await Promise.all([myPractitioner(m), myProvider(m)]) : [null, null]
   const asked = (await searchParams).espace
+  // Après connexion, retour sur l’espace demandé (services ou praticien), pas sur le choix.
+  if (!m) redirect(`/connexion/professionnel?next=${encodeURIComponent(asked ? `/espace-pro?espace=${asked}` : '/espace-pro')}`)
+  const [practitioner, provider] = m._verified ? await Promise.all([myPractitioner(m), myProvider(m)]) : [null, null]
   const space = asked === 'services' || asked === 'praticien' ? asked : provider ? 'services' : practitioner ? 'praticien' : null
   const wilayas = WILAYAS.filter((w) => !w.transition).map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   return (
