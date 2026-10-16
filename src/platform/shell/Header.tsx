@@ -17,6 +17,7 @@ const MEGA: { kicker: string; links: [string, string, string][] }[] = [
     links: [
       ['/annuaire', 'Annuaire & Adresses', 'Trouver un lieu fiable'],
       ['/praticiens', 'Trouver un praticien', 'Rendez-vous en ligne'],
+      ['/services', 'Services à domicile', 'Prestataires vérifiés'],
       ['/guides', 'Guides', 'Comprendre et préparer'],
       ['/actualites', 'Actualités', 'Ce qui change'],
     ],

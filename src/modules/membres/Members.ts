@@ -70,6 +70,16 @@ export const Members: CollectionConfig = {
       ],
       access: { update: ({ req }) => Boolean(isStaff({ req } as never)) },
     },
+    {
+      name: 'gender',
+      type: 'select',
+      label: 'Genre (facultatif)',
+      admin: { description: 'Déclaré par la personne, seulement pour les prestataires qui réservent leurs services aux clientes ou aux clients.' },
+      options: [
+        { label: 'Femme', value: 'femme' },
+        { label: 'Homme', value: 'homme' },
+      ],
+    },
     { name: 'termsAcceptedAt', type: 'date', label: 'Conditions acceptées le', required: true, admin: { readOnly: true } },
   ],
 }

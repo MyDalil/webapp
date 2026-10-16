@@ -12,7 +12,7 @@ Prise de rendez-vous avec les praticiens, sur le modèle Doctolib : le praticien
 - `booking.ts` — recherche, créneaux libres, réservation/déplacement, annulation (délai du praticien), agenda pro, champs modifiables par le pro, rappels, suppression de compte.
 - `emails.ts` — confirmation patient, notification praticien, annulation, rappel J-1.
 - `ui/` — SlotPicker (réservation), MyAppointments (patient), ProSpace (fiche, horaires, agenda).
-- Routes : `/api/rdv` (GET mes rendez-vous, POST réserver), `/api/rdv/creneaux`, `/api/rdv/[id]/annuler`, `/api/rdv/rappels` (tâche quotidienne `vercel.json`, protégée par `CRON_SECRET`), `/api/pro/praticien`.
+- Routes : `/api/rdv` (GET mes rendez-vous, POST réserver), `/api/rdv/creneaux`, `/api/rdv/[id]/annuler`, `/api/taches` (tâche quotidienne commune `vercel.json`, protégée par `CRON_SECRET`), `/api/pro/praticien`.
 - Pages : `/praticiens`, `/praticiens/[slug]`, `/mon-compte`, `/espace-pro`.
 
 ## Règles propres

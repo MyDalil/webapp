@@ -1,10 +1,11 @@
 import { currentMember, deleteMyAccount } from '@/modules/sante'
+import { deleteServicesData } from '@/modules/services'
 import { clean, fail, isEmail, json, payload } from '@/platform/http'
 
 /** Compte connecté (pour l’en-tête et le cercle d’inscription). */
 export async function GET() {
   const m = await currentMember()
-  return json({ member: m ? { firstName: m.firstName, kind: m.kind, verified: Boolean(m._verified) } : null })
+  return json({ member: m ? { firstName: m.firstName, kind: m.kind, verified: Boolean(m._verified), gender: m.gender ?? null } : null })
 }
 
 /** Inscription : champs contrôlés, email de confirmation envoyé automatiquement. */
@@ -27,10 +28,11 @@ export async function POST(req: Request) {
   return json({ ok: true }, 201)
 }
 
-/** Suppression définitive du compte et de ses rendez-vous. */
+/** Suppression définitive du compte, de ses rendez-vous, demandes de service, messages et avis. */
 export async function DELETE() {
   const m = await currentMember()
   if (!m) return fail('Non connecté.', 401)
+  await deleteServicesData(m)
   await deleteMyAccount(m)
   return json({ ok: true })
 }

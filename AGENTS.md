@@ -38,7 +38,7 @@ src/
   styles/           legacy.css (prototype, scopé .legacy) → mockup.css (maquette, prioritaire) → site.css (raccords)
   migrations/       historique du schéma, jamais modifié après coup
 ```
-Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `messages`, `communication`, `recherche`, `pilotage`.
+Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `services`, `messages`, `communication`, `recherche`, `pilotage`.
 
 **Frontières (vérifiées automatiquement à chaque build par `scripts/check-boundaries.mjs`) :**
 - hors d’un module, on n’y entre que par `@/modules/<m>`, `@/modules/<m>/ui` ou `@/modules/<m>/collections` ;

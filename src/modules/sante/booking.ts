@@ -1,8 +1,8 @@
 import 'server-only'
-import { headers as nextHeaders } from 'next/headers'
 import type { Payload } from 'payload'
 import type { Appointment, Media, Member, Practitioner } from '@/payload-types'
 import { payload as getPayload } from '@/platform/http'
+import { currentMember } from '@/modules/membres'
 import { createVideoRoom, videoEnabled } from '@/platform/video'
 import { algiersDate, isBookable, slotsBetween, type Mode } from './availability'
 import { bookingCancelled, bookingConfirmed, bookingReminder, bookingToPractitioner } from './emails'
@@ -11,12 +11,7 @@ import { specialtyLabel } from './specialties'
 export type BookingError = { error: string; status: number }
 const fail = (error: string, status = 400): BookingError => ({ error, status })
 
-/** Compte public connecté (null sinon). */
-export async function currentMember(): Promise<Member | null> {
-  const p = await getPayload()
-  const { user } = await p.auth({ headers: await nextHeaders() })
-  return user && (user as { collection?: string }).collection === 'members' ? (user as unknown as Member) : null
-}
+export { currentMember }
 
 const photoUrl = (m: number | Media | null | undefined) => (m && typeof m === 'object' ? (m.sizes?.thumb?.url ?? m.url ?? null) : null)
 

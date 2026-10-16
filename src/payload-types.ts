@@ -71,6 +71,11 @@ export interface Config {
     places: Place;
     practitioners: Practitioner;
     appointments: Appointment;
+    providers: Provider;
+    missions: Mission;
+    'mission-messages': MissionMessage;
+    'provider-reviews': ProviderReview;
+    'provider-documents': ProviderDocument;
     media: Media;
     submissions: Submission;
     subscribers: Subscriber;
@@ -88,6 +93,11 @@ export interface Config {
     places: PlacesSelect<false> | PlacesSelect<true>;
     practitioners: PractitionersSelect<false> | PractitionersSelect<true>;
     appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
+    providers: ProvidersSelect<false> | ProvidersSelect<true>;
+    missions: MissionsSelect<false> | MissionsSelect<true>;
+    'mission-messages': MissionMessagesSelect<false> | MissionMessagesSelect<true>;
+    'provider-reviews': ProviderReviewsSelect<false> | ProviderReviewsSelect<true>;
+    'provider-documents': ProviderDocumentsSelect<false> | ProviderDocumentsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
@@ -295,7 +305,7 @@ export interface Place {
   website?: string | null;
   instagram?: string | null;
   facebook?: string | null;
-  languages?: ('ar' | 'kab' | 'fr' | 'en' | 'es' | 'it' | 'de' | 'tr')[] | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
   hours?:
     | {
         /**
@@ -365,6 +375,11 @@ export interface Media {
    * Auteur ou source, affiché sous la photo.
    */
   credit?: string | null;
+  /**
+   * Photo envoyée par un compte : déjà en ligne. Supprimez-la si elle pose problème.
+   */
+  moderation?: ('ok' | 'to-check') | null;
+  uploadedBy?: (number | null) | Member;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -394,6 +409,43 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members".
+ */
+export interface Member {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  kind: 'particulier' | 'pro';
+  /**
+   * Déclaré par la personne, seulement pour les prestataires qui réservent leurs services aux clientes ou aux clients.
+   */
+  gender?: ('femme' | 'homme') | null;
+  termsAcceptedAt: string;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'members';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -433,7 +485,7 @@ export interface Practitioner {
   )[];
   photo?: (number | null) | Media;
   bio?: string | null;
-  languages?: ('ar' | 'kab' | 'fr' | 'en' | 'es' | 'it' | 'de' | 'tr')[] | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
   cabinetName?: string | null;
   address?: string | null;
   city: string;
@@ -584,39 +636,6 @@ export interface Practitioner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "members".
- */
-export interface Member {
-  id: number;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  kind: 'particulier' | 'pro';
-  termsAcceptedAt: string;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'members';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "appointments".
  */
 export interface Appointment {
@@ -637,6 +656,459 @@ export interface Appointment {
   consentAt: string;
   reminderSentAt?: string | null;
   slotKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "providers".
+ */
+export interface Provider {
+  id: number;
+  /**
+   * Prénom et initiale du nom, ex. « Karim B. »
+   */
+  displayName: string;
+  gender?: ('femme' | 'homme') | null;
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
+  clientele: 'all' | 'women' | 'men';
+  experienceYears?: number | null;
+  offers?:
+    | {
+        activity:
+          | 'montage-meubles'
+          | 'petits-travaux'
+          | 'plomberie'
+          | 'electricite'
+          | 'peinture'
+          | 'fixations'
+          | 'climatisation'
+          | 'serrurerie'
+          | 'carrelage'
+          | 'menage-regulier'
+          | 'grand-menage'
+          | 'fin-de-chantier'
+          | 'repassage'
+          | 'vitres'
+          | 'tapis-canapes'
+          | 'nettoyage-voiture'
+          | 'aide-demenagement'
+          | 'transport-fourgon'
+          | 'debarras'
+          | 'tonte'
+          | 'taille'
+          | 'entretien-jardin'
+          | 'arrosage'
+          | 'piscine'
+          | 'baby-sitting'
+          | 'sortie-ecole'
+          | 'aide-devoirs'
+          | 'garde-animal-domicile'
+          | 'promenade'
+          | 'visites-nourrissage'
+          | 'depannage-pc'
+          | 'internet-wifi'
+          | 'smartphone'
+          | 'cameras'
+          | 'initiation-informatique'
+          | 'compagnie-seniors'
+          | 'courses'
+          | 'repas'
+          | 'accompagnement-rdv'
+          | 'auxiliaire-vie'
+          | 'soutien-primaire'
+          | 'soutien-cem'
+          | 'soutien-lycee'
+          | 'prepa-bem-bac'
+          | 'cours-langues'
+          | 'musique'
+          | 'lecture-coran'
+          | 'tajwid'
+          | 'hifz'
+          | 'arabe-coranique'
+          | 'remise-en-forme'
+          | 'musculation'
+          | 'yoga-pilates'
+          | 'arts-martiaux'
+          | 'sport-exterieur';
+        pricing: 'hour' | 'flat';
+        price?: number | null;
+        /**
+         * Ex. « la séance », « par meuble »
+         */
+        unit?: string | null;
+        /**
+         * Bloque l’agenda pour un forfait.
+         */
+        hours?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Calculé depuis les prestations.
+   */
+  categories?:
+    | (
+        | 'bricolage'
+        | 'menage'
+        | 'demenagement'
+        | 'jardinage'
+        | 'garde-enfants'
+        | 'garde-animaux'
+        | 'informatique'
+        | 'aide-domicile'
+        | 'cours-particuliers'
+        | 'cours-coraniques'
+        | 'coach-sportif'
+      )[]
+    | null;
+  /**
+   * Calculé depuis les prestations.
+   */
+  activities?:
+    | (
+        | 'montage-meubles'
+        | 'petits-travaux'
+        | 'plomberie'
+        | 'electricite'
+        | 'peinture'
+        | 'fixations'
+        | 'climatisation'
+        | 'serrurerie'
+        | 'carrelage'
+        | 'menage-regulier'
+        | 'grand-menage'
+        | 'fin-de-chantier'
+        | 'repassage'
+        | 'vitres'
+        | 'tapis-canapes'
+        | 'nettoyage-voiture'
+        | 'aide-demenagement'
+        | 'transport-fourgon'
+        | 'debarras'
+        | 'tonte'
+        | 'taille'
+        | 'entretien-jardin'
+        | 'arrosage'
+        | 'piscine'
+        | 'baby-sitting'
+        | 'sortie-ecole'
+        | 'aide-devoirs'
+        | 'garde-animal-domicile'
+        | 'promenade'
+        | 'visites-nourrissage'
+        | 'depannage-pc'
+        | 'internet-wifi'
+        | 'smartphone'
+        | 'cameras'
+        | 'initiation-informatique'
+        | 'compagnie-seniors'
+        | 'courses'
+        | 'repas'
+        | 'accompagnement-rdv'
+        | 'auxiliaire-vie'
+        | 'soutien-primaire'
+        | 'soutien-cem'
+        | 'soutien-lycee'
+        | 'prepa-bem-bac'
+        | 'cours-langues'
+        | 'musique'
+        | 'lecture-coran'
+        | 'tajwid'
+        | 'hifz'
+        | 'arabe-coranique'
+        | 'remise-en-forme'
+        | 'musculation'
+        | 'yoga-pilates'
+        | 'arts-martiaux'
+        | 'sport-exterieur'
+      )[]
+    | null;
+  /**
+   * Ex. Espèces, BaridiMob, CIB/Edahabia. DALIL n’encaisse rien.
+   */
+  payment?: string | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58';
+  /**
+   * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
+   */
+  baseCommune?: string | null;
+  wholeWilaya?: boolean | null;
+  /**
+   * Identifiants du référentiel des communes.
+   */
+  communes?: string[] | null;
+  /**
+   * Calcul interne à partir du centre des communes, sans service tiers. Pas encore utilisé pour la recherche.
+   */
+  radiusKm?: number | null;
+  minNoticeHours?: number | null;
+  horizonDays?: number | null;
+  cancelNoticeHours?: number | null;
+  weekly?:
+    | {
+        day: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        /**
+         * HH:MM
+         */
+        start: string;
+        /**
+         * HH:MM
+         */
+        end: string;
+        id?: string | null;
+      }[]
+    | null;
+  closures?:
+    | {
+        from: string;
+        to: string;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  identityVerified?: boolean | null;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  legalForm?: ('auto-entrepreneur' | 'registre-commerce') | null;
+  legalNumber?: string | null;
+  legalVerified?: boolean | null;
+  /**
+   * Obligatoire pour garde d’enfants, aide à domicile, cours particuliers et coraniques. Le document est consulté puis supprimé : seule cette date est conservée.
+   */
+  backgroundCheckedAt?: string | null;
+  internalNote?: string | null;
+  /**
+   * Publication uniquement après les vérifications exigées (contrôlées automatiquement).
+   */
+  status: 'pending' | 'published' | 'suspended';
+  demo?: boolean | null;
+  owner?: (number | null) | Member;
+  /**
+   * /prestataires/…
+   */
+  slug?: string | null;
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
+  missionsDone?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "missions".
+ */
+export interface Mission {
+  id: number;
+  provider: number | Provider;
+  client: number | Member;
+  activity:
+    | 'montage-meubles'
+    | 'petits-travaux'
+    | 'plomberie'
+    | 'electricite'
+    | 'peinture'
+    | 'fixations'
+    | 'climatisation'
+    | 'serrurerie'
+    | 'carrelage'
+    | 'menage-regulier'
+    | 'grand-menage'
+    | 'fin-de-chantier'
+    | 'repassage'
+    | 'vitres'
+    | 'tapis-canapes'
+    | 'nettoyage-voiture'
+    | 'aide-demenagement'
+    | 'transport-fourgon'
+    | 'debarras'
+    | 'tonte'
+    | 'taille'
+    | 'entretien-jardin'
+    | 'arrosage'
+    | 'piscine'
+    | 'baby-sitting'
+    | 'sortie-ecole'
+    | 'aide-devoirs'
+    | 'garde-animal-domicile'
+    | 'promenade'
+    | 'visites-nourrissage'
+    | 'depannage-pc'
+    | 'internet-wifi'
+    | 'smartphone'
+    | 'cameras'
+    | 'initiation-informatique'
+    | 'compagnie-seniors'
+    | 'courses'
+    | 'repas'
+    | 'accompagnement-rdv'
+    | 'auxiliaire-vie'
+    | 'soutien-primaire'
+    | 'soutien-cem'
+    | 'soutien-lycee'
+    | 'prepa-bem-bac'
+    | 'cours-langues'
+    | 'musique'
+    | 'lecture-coran'
+    | 'tajwid'
+    | 'hifz'
+    | 'arabe-coranique'
+    | 'remise-en-forme'
+    | 'musculation'
+    | 'yoga-pilates'
+    | 'arts-martiaux'
+    | 'sport-exterieur';
+  category?:
+    | (
+        | 'bricolage'
+        | 'menage'
+        | 'demenagement'
+        | 'jardinage'
+        | 'garde-enfants'
+        | 'garde-animaux'
+        | 'informatique'
+        | 'aide-domicile'
+        | 'cours-particuliers'
+        | 'cours-coraniques'
+        | 'coach-sportif'
+      )
+    | null;
+  start: string;
+  end: string;
+  hours: number;
+  pricing: 'hour' | 'flat';
+  unitPrice?: number | null;
+  estimate?: number | null;
+  commune: string;
+  communeName?: string | null;
+  address: string;
+  details?: string | null;
+  status: 'requested' | 'accepted' | 'declined' | 'expired' | 'cancelled' | 'completed';
+  respondBy: string;
+  respondedAt?: string | null;
+  completedAt?: string | null;
+  cancelledBy?: ('client' | 'provider' | 'staff') | null;
+  cancelReason?: string | null;
+  consentAt: string;
+  reminderSentAt?: string | null;
+  reviewInviteSentAt?: string | null;
+  clientNotifiedAt?: string | null;
+  providerNotifiedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mission-messages".
+ */
+export interface MissionMessage {
+  id: number;
+  mission: number | Mission;
+  from: 'client' | 'provider' | 'system';
+  readAt?: string | null;
+  body: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-reviews".
+ */
+export interface ProviderReview {
+  id: number;
+  mission: number | Mission;
+  provider: number | Provider;
+  author: number | Member;
+  /**
+   * Prénom et initiale.
+   */
+  authorName?: string | null;
+  rating: number;
+  activity?: string | null;
+  comment?: string | null;
+  /**
+   * Publiées tout de suite, contrôlées ensuite par l’équipe (collection Photos, filtre « À contrôler »).
+   */
+  photos?: (number | Media)[] | null;
+  reply?: string | null;
+  status: 'published' | 'hidden';
+  moderationNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-documents".
+ */
+export interface ProviderDocument {
+  id: number;
+  provider: number | Provider;
+  kind: 'identity' | 'legal' | 'background';
+  filename?: string | null;
+  mimetype?: string | null;
+  size?: number | null;
+  expiresAt: string;
+  data: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -807,6 +1279,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'appointments';
         value: number | Appointment;
+      } | null)
+    | ({
+        relationTo: 'providers';
+        value: number | Provider;
+      } | null)
+    | ({
+        relationTo: 'missions';
+        value: number | Mission;
+      } | null)
+    | ({
+        relationTo: 'mission-messages';
+        value: number | MissionMessage;
+      } | null)
+    | ({
+        relationTo: 'provider-reviews';
+        value: number | ProviderReview;
+      } | null)
+    | ({
+        relationTo: 'provider-documents';
+        value: number | ProviderDocument;
       } | null)
     | ({
         relationTo: 'media';
@@ -1056,11 +1548,159 @@ export interface AppointmentsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "providers_select".
+ */
+export interface ProvidersSelect<T extends boolean = true> {
+  displayName?: T;
+  gender?: T;
+  photo?: T;
+  bio?: T;
+  languages?: T;
+  clientele?: T;
+  experienceYears?: T;
+  offers?:
+    | T
+    | {
+        activity?: T;
+        pricing?: T;
+        price?: T;
+        unit?: T;
+        hours?: T;
+        id?: T;
+      };
+  categories?: T;
+  activities?: T;
+  payment?: T;
+  wilaya?: T;
+  baseCommune?: T;
+  wholeWilaya?: T;
+  communes?: T;
+  radiusKm?: T;
+  minNoticeHours?: T;
+  horizonDays?: T;
+  cancelNoticeHours?: T;
+  weekly?:
+    | T
+    | {
+        day?: T;
+        start?: T;
+        end?: T;
+        id?: T;
+      };
+  closures?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        note?: T;
+        id?: T;
+      };
+  identityVerified?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  legalForm?: T;
+  legalNumber?: T;
+  legalVerified?: T;
+  backgroundCheckedAt?: T;
+  internalNote?: T;
+  status?: T;
+  demo?: T;
+  owner?: T;
+  slug?: T;
+  ratingAvg?: T;
+  ratingCount?: T;
+  missionsDone?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "missions_select".
+ */
+export interface MissionsSelect<T extends boolean = true> {
+  provider?: T;
+  client?: T;
+  activity?: T;
+  category?: T;
+  start?: T;
+  end?: T;
+  hours?: T;
+  pricing?: T;
+  unitPrice?: T;
+  estimate?: T;
+  commune?: T;
+  communeName?: T;
+  address?: T;
+  details?: T;
+  status?: T;
+  respondBy?: T;
+  respondedAt?: T;
+  completedAt?: T;
+  cancelledBy?: T;
+  cancelReason?: T;
+  consentAt?: T;
+  reminderSentAt?: T;
+  reviewInviteSentAt?: T;
+  clientNotifiedAt?: T;
+  providerNotifiedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mission-messages_select".
+ */
+export interface MissionMessagesSelect<T extends boolean = true> {
+  mission?: T;
+  from?: T;
+  readAt?: T;
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-reviews_select".
+ */
+export interface ProviderReviewsSelect<T extends boolean = true> {
+  mission?: T;
+  provider?: T;
+  author?: T;
+  authorName?: T;
+  rating?: T;
+  activity?: T;
+  comment?: T;
+  photos?: T;
+  reply?: T;
+  status?: T;
+  moderationNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-documents_select".
+ */
+export interface ProviderDocumentsSelect<T extends boolean = true> {
+  provider?: T;
+  kind?: T;
+  filename?: T;
+  mimetype?: T;
+  size?: T;
+  expiresAt?: T;
+  data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   credit?: T;
+  moderation?: T;
+  uploadedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1153,6 +1793,7 @@ export interface MembersSelect<T extends boolean = true> {
   lastName?: T;
   phone?: T;
   kind?: T;
+  gender?: T;
   termsAcceptedAt?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -15,6 +15,7 @@ import { Submissions } from '@/modules/messages/collections'
 import { Campaigns, Subscribers } from '@/modules/communication/collections'
 import { Members, VisitorSessions } from '@/modules/membres/collections'
 import { Appointments, Practitioners } from '@/modules/sante/collections'
+import { MissionMessages, Missions, ProviderDocuments, ProviderReviews, Providers } from '@/modules/services/collections'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -34,7 +35,7 @@ export default buildConfig({
     meta: { titleSuffix: ' — DALIL Admin' },
   },
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
-  collections: [Places, Practitioners, Appointments, Media, Submissions, Subscribers, Campaigns, Members, VisitorSessions, Users],
+  collections: [Places, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Media, Submissions, Subscribers, Campaigns, Members, VisitorSessions, Users],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY
