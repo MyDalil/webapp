@@ -15,7 +15,7 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
   - `descriptions-*.json` : textes DALIL rédigés à partir des faits (jamais copiés) ;
   - `open-places-selected.json` : lot publiable (`node scripts/import/select-places.mjs`) = photo libre + texte DALIL, doublons retirés, corrections manuelles ;
   - importé par migration, mise à jour par identifiant Wikidata.
-- `ui/` : Directory (filtres + liste + carte), DirectoryMap (Leaflet, CARTO/OSM), PlaceMap, PlaceActions ; `admin/CoordsHelp`.
+- `ui/` : Directory (filtres + liste + carte), DirectoryMap (MapLibre + OpenFreeMap, regroupement des repères), PlaceMap, PlaceActions ; `admin/CoordsHelp`.
 
 ## Dépend de
 `confiance` (vérification), `membres/ui` (SaveButton), `platform` (référentiel, accès, stockage).

@@ -70,7 +70,7 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
           Recherche
           <div className="field-icon">
             <Icon name="search" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="École, restaurant, médecin…" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nom, lieu, métier…" />
           </div>
         </label>
         {!lockSector && (

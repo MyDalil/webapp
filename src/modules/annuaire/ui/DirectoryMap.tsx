@@ -1,41 +1,107 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import maplibregl, { type GeoJSONSource, type Map as MLMap } from 'maplibre-gl'
+import 'maplibre-gl/dist/maplibre-gl.css'
 
 type Pin = { slug: string; name: string; category: string; city: string; pos: [number, number] | null; exact: boolean }
 
-const ALGERIA: L.LatLngBoundsExpression = [
-  [19, -8.7],
-  [37.2, 12],
+/**
+ * Carte des adresses : fond OpenFreeMap (libre, sans clé ni compte, données OpenStreetMap), moteur MapLibre.
+ * Les adresses proches se regroupent en bulles chiffrées qui s’ouvrent au zoom ; repère plein = position exacte,
+ * repère clair = centre de la ville (en attente de vérification sur place).
+ */
+const ALGERIA: [[number, number], [number, number]] = [
+  [-8.7, 19],
+  [12, 37.2],
 ]
-
-const tiles = () =>
-  document.documentElement.dataset.theme === 'dark'
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-
+const GREEN = '#006b3c'
+const dark = () => document.documentElement.dataset.theme === 'dark'
+const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark() ? 'dark' : 'positron'}`
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 
-/** Carte OpenStreetMap des adresses ; repère plein = position exacte, repère clair = centre de la ville. */
+const toGeoJSON = (places: Pin[]): GeoJSON.FeatureCollection => ({
+  type: 'FeatureCollection',
+  features: places
+    .filter((p) => p.pos)
+    .map((p) => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [p.pos![1], p.pos![0]] },
+      properties: { slug: p.slug, name: p.name, category: p.category, city: p.city, exact: p.exact },
+    })),
+})
+
+function addLayers(m: MLMap, data: GeoJSON.FeatureCollection) {
+  if (m.getSource('places')) return
+  m.addSource('places', { type: 'geojson', data, cluster: true, clusterRadius: 46, clusterMaxZoom: 13 })
+  m.addLayer({
+    id: 'clusters',
+    type: 'circle',
+    source: 'places',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': GREEN,
+      'circle-opacity': 0.92,
+      'circle-radius': ['step', ['get', 'point_count'], 16, 10, 20, 50, 25, 150, 31],
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#ffffff',
+    },
+  })
+  m.addLayer({
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'places',
+    filter: ['has', 'point_count'],
+    layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-font': ['Noto Sans Bold'], 'text-size': 13, 'text-allow-overlap': true },
+    paint: { 'text-color': '#ffffff' },
+  })
+  m.addLayer({
+    id: 'place',
+    type: 'circle',
+    source: 'places',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+      'circle-color': ['case', ['get', 'exact'], GREEN, '#7fb89a'],
+      'circle-radius': 8,
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#ffffff',
+    },
+  })
+}
+
 export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number }) {
   const box = useRef<HTMLDivElement>(null)
-  const map = useRef<L.Map | null>(null)
-  const layer = useRef<L.LayerGroup | null>(null)
+  const map = useRef<MLMap | null>(null)
+  const data = useRef<GeoJSON.FeatureCollection>(toGeoJSON(places))
 
   useEffect(() => {
     if (!box.current || map.current) return
-    const m = L.map(box.current, { scrollWheelZoom: false, attributionControl: true, zoomControl: true })
-    const base = L.tileLayer(tiles(), {
-      subdomains: 'abcd',
-      maxZoom: 19,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
-    }).addTo(m)
-    m.fitBounds(ALGERIA)
-    layer.current = L.layerGroup().addTo(m)
+    const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, attributionControl: { compact: true } })
+    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
+    m.on('style.load', () => addLayers(m, data.current))
+    m.on('click', 'clusters', async (e) => {
+      const f = e.features?.[0]
+      if (!f) return
+      const z = await (m.getSource('places') as GeoJSONSource).getClusterExpansionZoom(f.properties.cluster_id as number)
+      m.easeTo({ center: (f.geometry as GeoJSON.Point).coordinates as [number, number], zoom: z })
+    })
+    m.on('click', 'place', (e) => {
+      const f = e.features?.[0]
+      if (!f) return
+      const p = f.properties as { slug: string; name: string; category: string; city: string; exact: boolean | string }
+      const exact = p.exact === true || p.exact === 'true'
+      new maplibregl.Popup({ offset: 14, closeButton: false })
+        .setLngLat((f.geometry as GeoJSON.Point).coordinates as [number, number])
+        .setHTML(`<a class="map-popup" href="/adresses/${encodeURIComponent(p.slug)}"><small>${escape(p.category)} · ${escape(p.city)}</small><strong>${escape(p.name)}</strong>${exact ? '' : '<em>Position approximative</em>'}</a>`)
+        .addTo(m)
+    })
+    for (const id of ['clusters', 'place']) {
+      m.on('mouseenter', id, () => (m.getCanvas().style.cursor = 'pointer'))
+      m.on('mouseleave', id, () => (m.getCanvas().style.cursor = ''))
+    }
     map.current = m
-    const obs = new MutationObserver(() => base.setUrl(tiles()))
+    // Thème clair / sombre : nouveau fond, mêmes repères.
+    const obs = new MutationObserver(() => m.setStyle(styleUrl()))
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
     return () => {
       obs.disconnect()
@@ -46,34 +112,20 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
 
   useEffect(() => {
     const m = map.current
-    const g = layer.current
-    if (!m || !g) return
-    g.clearLayers()
-    const located = places.filter((p) => p.pos)
-    // Plusieurs adresses au même centre de ville : léger décalage pour qu’elles restent cliquables.
-    const seen = new Map<string, number>()
-    located.forEach((p, i) => {
-      const key = p.pos!.join(',')
-      const n = seen.get(key) ?? 0
-      seen.set(key, n + 1)
-      const r = p.exact || n === 0 ? 0 : Math.sqrt(n)
-      const shift = [Math.sin(n * 2.4) * 0.01 * r, Math.cos(n * 2.4) * 0.013 * r]
-      const icon = L.divIcon({
-        className: 'dalil-marker',
-        html: `<span class="map-pin${p.exact ? '' : ' approx'}"><span>${i + 1}</span></span>`,
-        iconSize: [38, 38],
-        iconAnchor: [19, 38],
-        popupAnchor: [0, -36],
-      })
-      L.marker([p.pos![0] + shift[0], p.pos![1] + shift[1]], { icon, title: p.name, keyboard: true })
-        .bindPopup(
-          `<a class="map-popup" href="/adresses/${encodeURIComponent(p.slug)}"><small>${escape(p.category)} · ${escape(p.city)}</small><strong>${escape(p.name)}</strong>${p.exact ? '' : '<em>Position approximative</em>'}</a>`,
-        )
-        .addTo(g)
-    })
-    if (located.length === 1) m.setView(located[0].pos!, zoom ?? (located[0].exact ? 16 : 12))
-    else if (located.length > 1) m.fitBounds(L.latLngBounds(located.map((p) => p.pos!)).pad(0.25), { maxZoom: 13 })
-    else m.fitBounds(ALGERIA)
+    data.current = toGeoJSON(places)
+    if (!m) return
+    const apply = () => {
+      ;(m.getSource('places') as GeoJSONSource | undefined)?.setData(data.current)
+      const located = places.filter((p) => p.pos)
+      if (located.length === 1) m.jumpTo({ center: [located[0].pos![1], located[0].pos![0]], zoom: zoom ?? (located[0].exact ? 15 : 11) })
+      else if (located.length > 1) {
+        const b = new maplibregl.LngLatBounds()
+        for (const p of located) b.extend([p.pos![1], p.pos![0]])
+        m.fitBounds(b, { padding: 48, maxZoom: 12, duration: 0 })
+      } else m.fitBounds(ALGERIA, { duration: 0 })
+    }
+    if (m.isStyleLoaded() && m.getSource('places')) apply()
+    else m.once('idle', apply)
   }, [places, zoom])
 
   return <div ref={box} className="leaflet-box" />

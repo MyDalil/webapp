@@ -53,18 +53,24 @@ a.login-button { display: inline-flex; align-items: center; }
 .map-panel .leaflet-box { position: absolute; inset: 0; z-index: 0; }
 .map-panel .map-card { z-index: 500; }
 .map-panel::before, .map-panel::after { display: none; }
-.leaflet-container { font: inherit; background: var(--surface-2); }
-.dalil-marker { background: none; border: 0; }
-.dalil-marker .map-pin { position: relative; top: auto; left: auto; display: grid; }
-.dalil-marker .map-pin.approx { background: color-mix(in srgb, var(--green) 45%, #fff); border-style: dashed; }
-.leaflet-popup-content-wrapper { border-radius: 12px; background: var(--surface); color: var(--text); box-shadow: 0 12px 30px rgba(0,0,0,.18); }
-.leaflet-popup-tip { background: var(--surface); }
-.leaflet-popup-content { margin: 12px 14px; }
+.maplibregl-map { font: inherit; background: var(--surface-2); }
+.maplibregl-popup-content { border-radius: 12px; padding: 12px 14px; background: var(--surface); color: var(--text); box-shadow: 0 12px 30px rgba(0,0,0,.18); }
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip { border-top-color: var(--surface); }
+.maplibregl-popup-anchor-top .maplibregl-popup-tip { border-bottom-color: var(--surface); }
+.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--surface); }
+.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--surface); }
 .map-popup { display: grid; gap: 2px; color: var(--text); text-decoration: none; }
 .map-popup small { color: var(--muted); font-size: .72rem; }
 .map-popup strong { font-family: Manrope, Inter, sans-serif; font-size: .95rem; }
 .map-popup em { color: var(--gold); font-size: .72rem; font-style: normal; }
-.leaflet-control-attribution { font-size: 10px; }
+.maplibregl-ctrl-attrib { font-size: 10px; }
+
+/* Liste de l’annuaire : texte centré verticalement sur la vignette, lignes régulières */
+.place-row .place-main { display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; min-height: 74px; }
+.place-row .place-main h3 { margin: 0; line-height: 1.25; overflow-wrap: anywhere; }
+.place-row .place-main p { line-height: 1.35; }
+.place-row .place-type { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; line-height: 1.3; }
+.place-row > :last-child { align-self: center; justify-self: center; }
 
 /* Statuts de vérification */
 .place-main b.status-checking { color: var(--gold); }
@@ -95,3 +101,13 @@ a.login-button { display: inline-flex; align-items: center; }
 .photo-caption .photo-credit { display: block; margin-top: 4px; font-size: .68rem; opacity: .75; color: #fff; text-decoration: none; }
 .photo-caption .photo-credit:hover { opacity: 1; text-decoration: underline; }
 .place-gallery figcaption a { color: inherit; }
+
+/* Listes déroulantes : même retrait que les champs, flèche dessinée (identique sur Safari, Chrome, Firefox) */
+select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: none; padding-right: 42px; line-height: 1.3; text-overflow: ellipsis; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238a918b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; cursor: pointer; }
+
+/* Filtres de l’annuaire : libellés nets, valeurs en graisse normale, bouton centré sur une ligne */
+.filter-panel label { color: var(--text); letter-spacing: .01em; }
+.filter-panel input, .filter-panel select { font-size: .9rem; font-weight: 500; line-height: 1.3; text-overflow: ellipsis; }
+.filter-panel select { padding-left: 13px; padding-right: 34px; background-position: right 11px center; }
+.filter-panel input::placeholder { color: var(--muted); font-weight: 500; }
+.filter-panel .button.wide { margin-top: 6px; padding-inline: 12px; text-align: center; white-space: nowrap; font-size: .95rem; }
