@@ -83,6 +83,7 @@ export interface Config {
     members: Member;
     'visitor-sessions': VisitorSession;
     users: User;
+    'ai-usage': AiUsage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -105,6 +106,7 @@ export interface Config {
     members: MembersSelect<false> | MembersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -1245,6 +1247,23 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Claude Haiku 4.5 : 1 $ par million de jetons en entrée, 5 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-usage".
+ */
+export interface AiUsage {
+  id: number;
+  feature: 'reformulate' | 'understand';
+  member?: (number | null) | Member;
+  inputTokens?: number | null;
+  outputTokens?: number | null;
+  costMicros?: number | null;
+  model?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1327,6 +1346,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'ai-usage';
+        value: number | AiUsage;
       } | null);
   globalSlug?: string | null;
   user:
@@ -1851,6 +1874,20 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-usage_select".
+ */
+export interface AiUsageSelect<T extends boolean = true> {
+  feature?: T;
+  member?: T;
+  inputTokens?: T;
+  outputTokens?: T;
+  costMicros?: T;
+  model?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MissionView } from '../marketplace'
 import { shrinkImage } from './shrink'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type Msg = { id: number; mine: boolean; from: string; body: string; at: string }
 
@@ -172,7 +173,7 @@ export function MissionThread({ initial }: { initial: MissionView }) {
         </div>
         {!closed && (
           <form className="chat-form" onSubmit={send}>
-            <textarea value={text} onChange={(e) => setText(e.target.value)} maxLength={2000} rows={2} placeholder="Votre message…" aria-label="Votre message" onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), (e.currentTarget.form as HTMLFormElement).requestSubmit())} />
+            <SmartText multiline sentence value={text} onChange={setText} maxLength={2000} rows={2} placeholder="Votre message…" ariaLabel="Votre message" onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), (e.currentTarget.form as HTMLFormElement).requestSubmit())} />
             <button className="button primary" disabled={busy || !text.trim()}>
               Envoyer
             </button>
@@ -214,7 +215,7 @@ function ReviewForm({ id, name, onDone }: { id: number; name: string; onDone: (m
           </button>
         ))}
       </div>
-      <textarea value={comment} onChange={(e) => setComment(e.target.value)} maxLength={1000} rows={3} placeholder="Ponctualité, qualité du travail, communication…" aria-label="Commentaire" />
+      <SmartText multiline sentence value={comment} onChange={setComment} maxLength={1000} rows={3} placeholder="Ponctualité, qualité du travail, communication…" ariaLabel="Commentaire" />
       <div className="review-photos">
         {files.map((f, i) => (
           <button key={`${f.name}-${i}`} type="button" className="review-thumb" style={{ backgroundImage: `url(${previews.current[i]})` }} aria-label="Retirer la photo" onClick={() => setFiles(files.filter((_, k) => k !== i))}>

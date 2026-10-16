@@ -12,6 +12,8 @@ import * as migration_20261016_173803_services_prestataires from './20261016_173
 import * as migration_20261016_180000_demo_prestataire from './20261016_180000_demo_prestataire';
 import * as migration_20261016_183051_services_photos_pieces from './20261016_183051_services_photos_pieces';
 import * as migration_20261016_200000_rate_limits from './20261016_200000_rate_limits';
+import * as migration_20261016_221333_ia_consommation from './20261016_221333_ia_consommation';
+import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
 
 export const migrations = [
   {
@@ -83,5 +85,15 @@ export const migrations = [
     up: migration_20261016_200000_rate_limits.up,
     down: migration_20261016_200000_rate_limits.down,
     name: '20261016_200000_rate_limits',
+  },
+  {
+    up: migration_20261016_221333_ia_consommation.up,
+    down: migration_20261016_221333_ia_consommation.down,
+    name: '20261016_221333_ia_consommation',
+  },
+  {
+    up: migration_20261017_090000_ai_budget_alerts.up,
+    down: migration_20261017_090000_ai_budget_alerts.down,
+    name: '20261017_090000_ai_budget_alerts'
   },
 ];

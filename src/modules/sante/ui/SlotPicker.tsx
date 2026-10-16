@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type Mode = 'cabinet' | 'visio'
 type Day = { date: string; slots: { start: string; modes: Mode[] }[] }
@@ -122,7 +123,7 @@ export function SlotPicker({ slug, name, modes, visioSoon, cancelNoticeHours }: 
           {member && !member.verified && <p className="auth-msg error">Confirmez d’abord votre adresse email : le lien vous a été envoyé à l’inscription.</p>}
           <label className="booking-field">
             Motif (facultatif)
-            <input value={reason} onChange={(e) => setReason(e.target.value)} maxLength={300} placeholder="Ex. première consultation, suivi…" />
+            <SmartText value={reason} onChange={setReason} maxLength={300} placeholder="Ex. première consultation, suivi…" ariaLabel="Motif" />
             <small>N’indiquez pas d’informations médicales détaillées.</small>
           </label>
           <label className="auth-check">

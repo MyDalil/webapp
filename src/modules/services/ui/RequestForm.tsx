@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type Offer = { activity: string; label: string; pricing: 'hour' | 'flat'; price: number | null; hours: number; priceLabel: string }
 type Day = { date: string; starts: string[] }
@@ -179,7 +180,7 @@ export function RequestForm({ slug, name, offers, communes, clientele, initialAc
           </label>
           <label className="booking-field">
             Votre besoin
-            <textarea name="details" maxLength={1000} rows={3} placeholder="Ex. 3 pièces, matériel fourni ; montage d’une armoire 2 portes…" />
+            <SmartText multiline sentence name="details" maxLength={1000} rows={3} placeholder="Ex. 3 pièces, matériel fourni ; montage d’une armoire 2 portes…" />
           </label>
           {needGender && (
             <fieldset className="req-step">

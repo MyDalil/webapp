@@ -1,63 +1,17 @@
 'use client'
 
-import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { SECTORS } from '@/platform/referentiel/catalog'
+import { SmartText } from '@/platform/ui/SmartText'
 
-type Rec = { lang: string; continuous: boolean; interimResults: boolean; onresult: (e: { results: { 0: { 0: { transcript: string } } } }) => void; onerror: () => void; onend: () => void; start: () => void; stop: () => void }
 
-function Mic() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="9" y="2" width="6" height="13" rx="3" />
-      <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" />
-    </svg>
-  )
-}
 
 export function ContributionForm({ initialSector = '' }: { initialSector?: string }) {
   const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [msg, setMsg] = useState('Aucune publication automatique : l’équipe DALIL vérifie chaque envoi.')
   const [sector, setSector] = useState(initialSector)
-  const [listening, setListening] = useState(false)
-  const textRef = useRef<HTMLTextAreaElement>(null)
-  const recRef = useRef<Rec | null>(null)
   const categories = useMemo(() => SECTORS.find((s) => s.slug === sector)?.categories ?? [], [sector])
 
-  function dictate() {
-    if (listening) return recRef.current?.stop()
-    const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec }
-    const Ctor = w.SpeechRecognition || w.webkitSpeechRecognition
-    if (!Ctor) {
-      setState('error')
-      return setMsg('La dictée n’est pas disponible dans ce navigateur. Utilisez le microphone du clavier ou joignez un enregistrement audio.')
-    }
-    const rec = new Ctor()
-    recRef.current = rec
-    const lang = document.documentElement.lang
-    rec.lang = lang === 'ar' ? 'ar-DZ' : lang === 'en' ? 'en-GB' : 'fr-FR'
-    rec.continuous = false
-    rec.interimResults = false
-    rec.onresult = (e) => {
-      if (textRef.current) {
-        textRef.current.value = `${textRef.current.value} ${e.results[0][0].transcript}`.trim().slice(0, 3000)
-        textRef.current.focus()
-      }
-    }
-    rec.onerror = () => {
-      setState('error')
-      setMsg('La dictée n’a pas abouti. Réessayez ou écrivez votre message.')
-    }
-    rec.onend = () => setListening(false)
-    try {
-      rec.start()
-      setListening(true)
-      setState('idle')
-      setMsg('Je vous écoute… Relisez le texte avant l’envoi.')
-    } catch {
-      setState('error')
-      setMsg('Le microphone est indisponible pour le moment.')
-    }
-  }
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -151,11 +105,8 @@ export function ContributionForm({ initialSector = '' }: { initialSector?: strin
       </div>
       <label className="contribution-description">
         <span>Ce que DALIL doit savoir *</span>
-        <textarea ref={textRef} name="description" required minLength={20} maxLength={3000} rows={7} placeholder="Décrivez ce que vous avez vu, testé ou souhaitez signaler…" />
+        <SmartText multiline sentence name="description" required minLength={20} maxLength={3000} rows={7} placeholder="Décrivez ce que vous avez vu, testé ou souhaitez signaler…" />
       </label>
-      <button className={`voice-input-button ${listening ? 'is-listening' : ''}`} type="button" onClick={dictate} aria-pressed={listening}>
-        <Mic /> {listening ? 'Arrêter la dictée' : 'Dicter mon message'}
-      </button>
       <label className="contribution-files">
         <span>Photos, document, audio ou vidéo</span>
         <input name="files" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,text/plain,text/csv,audio/mpeg,audio/mp4,audio/wav,audio/webm,video/mp4,video/webm" />

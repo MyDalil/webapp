@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { WILAYAS } from '@/platform/referentiel/catalog'
+import { SmartText } from '@/platform/ui/SmartText'
 
 export function ApplicationForm() {
   const [msg, setMsg] = useState('')
@@ -48,7 +49,7 @@ export function ApplicationForm() {
       </div>
       <label>
         <span>Activité et services *</span>
-        <textarea name="description" required minLength={30} maxLength={1200} />
+        <SmartText multiline sentence name="description" required minLength={30} maxLength={1200} rows={5} />
       </label>
       <button className="green-button" type="submit">
         Déposer ma candidature

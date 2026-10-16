@@ -7,6 +7,7 @@ import { CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from '../activities
 import type { MissionView } from '../marketplace'
 import { MissionList } from './MyMissions'
 import { shrinkImage } from './shrink'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type OfferRow = { activity: string; pricing: 'hour' | 'flat'; price?: number | null; unit?: string | null; hours?: number | null }
 type Rule = { day: string; start: string; end: string }
@@ -377,7 +378,7 @@ function CreateForm({ wilayas, onSubmit }: { wilayas: Wilaya[]; onSubmit: (b: un
       </label>
       <label>
         Présentation
-        <textarea name="bio" maxLength={1500} rows={4} placeholder="Votre expérience, votre façon de travailler, votre matériel…" />
+        <SmartText multiline sentence name="bio" maxLength={1500} rows={4} placeholder="Votre expérience, votre façon de travailler, votre matériel…" />
       </label>
       <p className="muted-line">Disponibilités préremplies (samedi–mercredi, 9 h–13 h et 14 h–18 h) : ajustez-les ensuite. Zone : toute la wilaya, à préciser par commune ensuite.</p>
       <button className="button primary auth-submit">Envoyer ma fiche pour vérification</button>
@@ -398,7 +399,7 @@ function ProfileForm({ pr, onSubmit }: { pr: P; onSubmit: (b: unknown) => void }
       </p>
       <label>
         Présentation
-        <textarea name="bio" defaultValue={pr.bio ?? ''} maxLength={1500} rows={4} />
+        <SmartText multiline sentence name="bio" defaultValue={pr.bio ?? ''} maxLength={1500} rows={4} />
       </label>
       <div className="auth-row">
         <label>

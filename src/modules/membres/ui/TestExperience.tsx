@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react'
 import Link from 'next/link'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type Session = { profile: null | { nickname: string; role: string; territory: string; interest: string; businessName: string; tracking: boolean }; favorites: { path: string; label: string }[] }
 
@@ -236,7 +237,7 @@ function TestFeedback() {
       </div>
       <label>
         Ce qui est clair, ce qui bloque, ce qui manque
-        <textarea name="feedback" minLength={10} maxLength={1600} rows={4} required placeholder="Expliquez ce que vous vouliez faire et ce qui s’est passé, sans données personnelles." />
+        <SmartText multiline sentence name="feedback" minLength={10} maxLength={1600} rows={4} required placeholder="Expliquez ce que vous vouliez faire et ce qui s’est passé, sans données personnelles." />
       </label>
       <button className="green-button" disabled={busy}>
         {busy ? 'Enregistrement…' : 'Envoyer mon retour'}

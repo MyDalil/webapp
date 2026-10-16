@@ -1,0 +1,33 @@
+/* Champ de message commun : dictée en direct, brouillon nettoyé, ✦ Améliorer. */
+.smart-text { position: relative; display: grid; gap: 4px; }
+.smart-text > textarea, .smart-text > input { width: 100%; padding-right: 112px; }
+.smart-text.is-multi > textarea { padding-bottom: 40px; }
+.smart-tools { position: absolute; right: 8px; display: flex; gap: 4px; align-items: center; }
+.smart-text.is-single .smart-tools { top: 50%; transform: translateY(-50%); }
+.smart-text.is-multi .smart-tools { top: auto; bottom: 8px; }
+.smart-text.is-multi:has(.smart-status) .smart-tools { bottom: 34px; }
+.smart-lang { height: 30px; padding: 0 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font: 600 .72rem/1 Inter, sans-serif; cursor: pointer; }
+.smart-btn { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--surface-2); color: var(--text); font-size: .95rem; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.smart-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.smart-btn:hover:not(:disabled) { transform: scale(1.06); }
+.smart-btn:disabled { opacity: .4; cursor: default; }
+.smart-mic.on { background: var(--danger); color: #fff; animation: smart-pulse 1.4s ease-in-out infinite; }
+.smart-improve { color: var(--green); }
+.smart-text.is-listening > textarea, .smart-text.is-listening > input { border-color: var(--danger); }
+.smart-text.is-busy > textarea, .smart-text.is-busy > input { opacity: .7; }
+.smart-status { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; color: var(--muted); font-size: .78rem; }
+@keyframes smart-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(178, 59, 51, .45); } 50% { box-shadow: 0 0 0 7px rgba(178, 59, 51, 0); } }
+@media (prefers-reduced-motion: reduce) { .smart-mic.on { animation: none; } }
+
+/* Barre « Demandez à DALIL » : brouillon et carte de compréhension */
+.assistant-card { position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; display: grid; gap: 10px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--text); box-shadow: var(--shadow); text-align: left; }
+.assistant-card p { margin: 0; }
+.assistant-card .assistant-q { font-weight: 650; }
+.assistant-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.assistant-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-actions .button { min-height: 38px; padding: 0 16px; }
+.assistant-card small { color: var(--muted); }
+.assistant-bar.has-lang { position: relative; grid-template-columns: 1fr auto auto auto auto; }
+.assistant-card { pointer-events: auto; }
+.dock-lang { min-width: 32px; height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--muted); font: 650 .72rem/1 Inter, sans-serif; cursor: pointer; }
+.dock-lang:disabled { opacity: .5; }

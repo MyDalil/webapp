@@ -33,8 +33,12 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
 
   // Liens « catégorie » des cartes secteurs : /annuaire/<secteur>?category=…
   useEffect(() => {
-    const c = new URLSearchParams(window.location.search).get('category')
+    const params = new URLSearchParams(window.location.search)
+    const c = params.get('category')
     if (c) setCategory(c)
+    // Barre « Demandez à DALIL » : ville ou commune comprise dans la demande.
+    const v = params.get('ville')
+    if (v) setQ(v)
   }, [])
 
   const scoped = useMemo(() => places.filter((p) => !sector || p.sector === sector), [places, sector])

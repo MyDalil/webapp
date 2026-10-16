@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState, type FormEvent } from 'react'
 import { AppointmentList } from './MyAppointments'
 import { DAYS, LANGUAGES, SPECIALTIES } from '../specialties'
+import { SmartText } from '@/platform/ui/SmartText'
 
 type Rule = { day: string; start: string; end: string; mode: 'both' | 'cabinet' | 'visio' }
 type Closure = { from: string; to: string; note?: string }
@@ -170,7 +171,7 @@ function ProfileForm({ initial, wilayas, creating, onSubmit }: { initial: P; wil
       </div>
       <label>
         Présentation
-        <textarea name="bio" defaultValue={v('bio')} maxLength={1500} rows={4} />
+        <SmartText multiline sentence name="bio" defaultValue={v('bio')} maxLength={1500} rows={4} />
       </label>
       <div className="auth-row">
         <label>
