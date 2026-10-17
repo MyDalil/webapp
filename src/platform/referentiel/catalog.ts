@@ -270,7 +270,8 @@ export const SECTORS: Sector[] = [
    "Transporteurs",
    "Location de véhicules",
    "Déménagement",
-   "Services automobiles"
+   "Services automobiles",
+    "Gares et stations"
   ],
   "criteria": [
    "Zone couverte",
@@ -341,7 +342,8 @@ export const SECTORS: Sector[] = [
    "Ambassades",
    "Consulats",
    "Services municipaux",
-   "Contacts utiles et urgences"
+   "Offices du tourisme",
+    "Contacts utiles et urgences"
   ],
   "criteria": [
    "Compétence territoriale",

@@ -143,10 +143,11 @@ export async function getPlace(slug: string): Promise<Place | null> {
   return docs[0] ?? null
 }
 
+/** Fiches générées au build : les 400 plus consultées ; les autres sont générées à la première visite (dynamicParams). */
 export async function getPlaceSlugs(): Promise<string[]> {
   try {
     const payload = await client()
-    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, limit: 2000, depth: 0, select: { slug: true }, overrideAccess: false })
+    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, limit: 400, sort: '-score', depth: 0, select: { slug: true }, overrideAccess: false })
     return docs.flatMap((d) => (d.slug ? [d.slug] : []))
   } catch {
     return []
