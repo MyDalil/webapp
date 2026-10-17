@@ -140,7 +140,7 @@
 /* ——— Accueil : huit entrées au format des tuiles « Par ville » (texte sur la photo, nombre et exemple) ——— */
 .entry-tile { position: relative; }
 .entry-tile .city-tile { height: 100%; }
-.entry-action { position: absolute; left: 14px; top: 14px; z-index: 2; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--green); font: 650 .84rem Inter, sans-serif; cursor: pointer; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .4); }
+.entry-action { position: absolute; left: 14px; bottom: 76px; z-index: 2; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--green); font: 650 .84rem Inter, sans-serif; cursor: pointer; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .4); }
 .entry-action:hover { background: #fff; }
 .entry-action:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .entry-credit { position: absolute; top: 12px; right: 12px; z-index: 2; max-width: 62%; overflow: hidden; color: rgba(255, 255, 255, .85); font-size: .62rem; white-space: nowrap; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); pointer-events: none; }
@@ -213,7 +213,6 @@ html[data-theme="dark"] .we-when button[aria-checked="true"], html[data-theme="d
 .contribution-credit { margin: 6px 0 14px; color: var(--muted); font-size: .9rem; }
 /* Très petits écrans (320 px) : la signature passe sous le seuil de lisibilité, on garde le logo seul. */
 @media (max-width: 340px) { .brand-tagline { display: none !important; } }
-.entry-tile.has-action .entry-credit { max-width: 38%; }
 /* « Que faire ce week-end ? » : titre et ligne sur une seule ligne, pour aligner les titres des vignettes */
 /* Huit vignettes de l’accueil : même taille de titre et une ligne chacune, pour que tous les titres soient alignés */
 .entry-tile .city-tile-body h3 { font-size: 1.12rem; line-height: 1.458rem; white-space: nowrap; }

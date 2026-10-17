@@ -30,7 +30,7 @@ export const RUBRICS: Rubric[] = [
     href: '/explorer',
     match: ['/explorer', '/villes', '/que-faire-ce-week-end', '/annuaire/culture-nature-loisirs', '/annuaire/restaurants-gastronomie'],
     entries: [
-      ['/explorer', 'pin', 'Villes & Wilayas', 'Découvrir chaque région, leurs atouts et particularités'],
+      ['/explorer#territoires', 'pin', 'Villes & Wilayas', 'Découvrir chaque région, leurs atouts et particularités'],
       ['/annuaire/culture-nature-loisirs', 'camera', 'Tourisme', 'Sites incontournables, nature, circuits et activités'],
       [cat('culture-nature-loisirs', 'Monuments et sites historiques'), 'landmark', 'Culture & Histoire', 'Patrimoine, musées, sites historiques'],
       ['/annuaire/restaurants-gastronomie', 'utensils', 'Gastronomie', 'Restaurants, spécialités locales, produits du terroir'],
@@ -107,7 +107,7 @@ export const RUBRICS: Rubric[] = [
       ['/actualites', 'news', 'Actualités', 'Ce qui change'],
       ['/guides', 'book', 'Guides', 'Comprendre et préparer'],
       ['/business-emploi', 'briefcase', 'Business & Emploi', 'Investir, créer, travailler'],
-      ['/label', 'shield', 'Critères de vérification', 'Notre exigence de qualité'],
+      ['/label#methode', 'shield', 'Critères de vérification', 'Notre exigence de qualité'],
       ['/proposer', 'upload', 'Contribuer', 'Partager une information'],
       ['/boutique', 'compass', 'Accompagnements', 'Avancer avec un parcours clair'],
     ],

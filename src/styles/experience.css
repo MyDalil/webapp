@@ -148,3 +148,9 @@
 .slideshow-meta { right: max(184px, calc((100vw - 1240px) / 2 + 160px)); }
 @media (max-width: 900px) { .slideshow-meta { display: none; } }
 .mega-menu.mega-menu-4[hidden] { display: none; }
+
+/* Incontournables : même format que les autres vignettes de l’accueil (portrait, photo pleine, texte sur la photo). */
+.top-tile .city-tile-body { display: grid; gap: 4px; }
+.top-tile .city-tile-body .chip { margin-bottom: 4px; background: rgba(255, 255, 255, .92); color: var(--green); }
+.top-tile .city-tile-body h3 { margin: 0; font-size: 1.12rem; line-height: 1.3; }
+.top-tile .status-dot { color: rgba(255, 255, 255, .82); }

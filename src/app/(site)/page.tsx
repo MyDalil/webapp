@@ -25,9 +25,9 @@ const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En 
 
 function PlaceTile({ p, i }: { p: PlaceCard; i: number }) {
   return (
-    <Link href={`/adresses/${p.slug}`} className="place-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
-      <div className="place-tile-img" style={{ backgroundImage: `url(${p.photo})` }} />
-      <div className="place-tile-body">
+    <Link href={`/adresses/${p.slug}`} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+      <div className="city-tile-img" style={{ backgroundImage: `url(${p.photo})` }} />
+      <div className="city-tile-body">
         <span className="chip">{p.category}</span>
         <h3>{p.name}</h3>
         <p>
@@ -106,7 +106,7 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-        <Carousel label="Lieux incontournables">
+        <Carousel label="Lieux incontournables" variant="tiles">
           {top.map((p, i) => (
             <PlaceTile key={p.slug} p={p} i={i} />
           ))}

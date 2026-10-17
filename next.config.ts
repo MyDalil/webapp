@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   turbopack: { root: path.resolve(dirname) },
+  // 404 du site avec son en-tête et son pied de page (le site et /admin ont chacun leur racine).
+  experimental: { globalNotFound: true },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

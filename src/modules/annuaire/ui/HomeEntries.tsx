@@ -39,7 +39,7 @@ export function HomeEntries({ stats, cities, total }: { stats: EntryPhotos; citi
       line: city ? undefined : shown ? `${shown.name} · ${lieux(shown.count)}` : undefined,
     },
     { key: 'adresses', href: '/annuaire', title: 'Les bonnes adresses', stat: stats.adresses },
-    { key: 'quotidien', href: '/services', title: 'Facilitez votre quotidien', stat: stats.quotidien },
+    { key: 'quotidien', href: '/services', title: 'Facilitez votre quotidien', stat: stats.quotidien, line: 'Prestataires vérifiés, demande sous 24 h' },
     { key: 'coeur', href: '/annuaire?coeur=1', title: 'Nos coups de cœur', stat: stats.coeur, line: stats.coeur.count ? undefined : 'Sélection de l’équipe en préparation' },
   ]
 
