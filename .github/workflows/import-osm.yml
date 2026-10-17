@@ -1,0 +1,26 @@
+name: Import des lieux (OpenStreetMap)
+on:
+  workflow_dispatch:
+  push:
+    branches: [preview]
+    paths: [scripts/import/fetch-osm.mjs]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: preview }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-osm.mjs
+      - name: Commit du jeu de données
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
+          git commit -m "Données : lieux OpenStreetMap (ODbL) [skip ci]" || echo "rien de nouveau"
+          git pull --rebase origin preview
+          git push origin HEAD:preview
