@@ -16,7 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: node scripts/import/fetch-osm.mjs
+        continue-on-error: true
       - name: Commit du jeu de données
+        if: always()
         run: |
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"

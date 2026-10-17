@@ -9,6 +9,13 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']
 const OUT = 'src/modules/annuaire/data'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+const LOG = []
+const log = (...a) => { const line = a.join(' '); LOG.push(`${new Date().toISOString()} ${line}`); console.log(line) }
+const flush = (places, stats) => {
+  mkdirSync(OUT, { recursive: true })
+  writeFileSync(`${OUT}/osm-places.json`, JSON.stringify(places))
+  writeFileSync(`${OUT}/osm-stats.json`, JSON.stringify({ fetchedAt: new Date().toISOString(), total: places.length, stats, log: LOG }, null, 1))
+}
 
 // Catégorie DALIL ← filtres OSM (nœuds, chemins et relations nommés).
 const GROUPS = [
@@ -52,15 +59,15 @@ const GROUPS = [
   ['logement-immobilier', 'Agences immobilières', ['["office"="estate_agent"]']],
 ]
 
-async function overpass(q, tries = 4) {
+async function overpass(q, tries = 3) {
   for (let i = 0; i < tries; i++) {
     const url = ENDPOINTS[i % ENDPOINTS.length]
     try {
       const res = await fetch(url, { method: 'POST', headers: { 'user-agent': UA, 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ data: q }) })
       if (res.ok) return (await res.json()).elements
-      console.warn('Overpass', res.status, 'essai', i + 1)
+      log('Overpass', url, res.status, (await res.text()).slice(0, 200).replace(/\s+/g, ' '), 'essai', i + 1)
     } catch (e) {
-      console.warn('Overpass', e.message, 'essai', i + 1)
+      log('Overpass', url, e.message, 'essai', i + 1)
     }
     await sleep(20000 * (i + 1))
   }
@@ -68,7 +75,12 @@ async function overpass(q, tries = 4) {
 }
 
 // Limites des wilayas (admin_level 4) : polygones extérieurs.
-const rels = await overpass(`[out:json][timeout:600];area["ISO3166-1"="DZ"][admin_level=2]->.dz;rel(area.dz)["boundary"="administrative"]["admin_level"="4"];out geom;`)
+let rels = []
+try {
+  rels = await overpass(`[out:json][timeout:300];area["ISO3166-1"="DZ"][admin_level=2]->.dz;rel(area.dz)["boundary"="administrative"]["admin_level"="4"];out geom;`)
+} catch (e) {
+  log('limites des wilayas indisponibles :', e.message)
+}
 const wilayas = rels.map((r) => {
   const rings = []
   let cur = []
@@ -83,7 +95,7 @@ const wilayas = rels.map((r) => {
   if (cur.length) rings.push(cur)
   return { name: r.tags['name:fr'] || r.tags.name, ref: r.tags.ref || r.tags['ISO3166-2'], rings }
 })
-console.log('wilayas', wilayas.length)
+log('wilayas', wilayas.length)
 const inside = (x, y, ring) => {
   let c = false
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
@@ -98,7 +110,12 @@ const places = []
 const stats = {}
 for (const [sector, category, filters] of GROUPS) {
   const body = filters.map((f) => `nwr${f}["name"](area.dz);`).join('')
-  const els = await overpass(`[out:json][timeout:900];area["ISO3166-1"="DZ"][admin_level=2]->.dz;(${body});out center tags;`)
+  let els = []
+  try {
+    els = await overpass(`[out:json][timeout:300][maxsize:1073741824];area["ISO3166-1"="DZ"][admin_level=2]->.dz;(${body});out center tags;`)
+  } catch (e) {
+    log('échec', sector, category, e.message)
+  }
   let n = 0
   for (const e of els) {
     const t = e.tags || {}
@@ -129,10 +146,9 @@ for (const [sector, category, filters] of GROUPS) {
     n++
   }
   stats[`${sector} › ${category}`] = n
-  console.log(sector, category, n)
+  log(sector, category, n)
+  flush(places, stats)
   await sleep(4000)
 }
-mkdirSync(OUT, { recursive: true })
-writeFileSync(`${OUT}/osm-places.json`, JSON.stringify(places))
-writeFileSync(`${OUT}/osm-stats.json`, JSON.stringify({ fetchedAt: new Date().toISOString(), total: places.length, stats }, null, 1))
-console.log('total', places.length)
+flush(places, stats)
+log('total', places.length)
