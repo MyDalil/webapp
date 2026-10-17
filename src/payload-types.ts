@@ -65,6 +65,7 @@ export interface Config {
   auth: {
     members: MemberAuthOperations;
     users: UserAuthOperations;
+    agents: AgentAuthOperations;
   };
   blocks: {};
   collections: {
@@ -82,10 +83,15 @@ export interface Config {
     'contribution-photos': ContributionPhoto;
     subscribers: Subscriber;
     campaigns: Campaign;
+    'telegram-posts': TelegramPost;
     members: Member;
     'visitor-sessions': VisitorSession;
     users: User;
+    agents: Agent;
+    'agent-tasks': AgentTask;
+    'agent-messages': AgentMessage;
     'ai-usage': AiUsage;
+    'audit-log': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -107,10 +113,15 @@ export interface Config {
     'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    'telegram-posts': TelegramPostsSelect<false> | TelegramPostsSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    agents: AgentsSelect<false> | AgentsSelect<true>;
+    'agent-tasks': AgentTasksSelect<false> | AgentTasksSelect<true>;
+    'agent-messages': AgentMessagesSelect<false> | AgentMessagesSelect<true>;
     'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
+    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -122,15 +133,17 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'featured-destination': FeaturedDestination;
+    controls: Control;
   };
   globalsSelect: {
     'featured-destination': FeaturedDestinationSelect<false> | FeaturedDestinationSelect<true>;
+    controls: ControlsSelect<false> | ControlsSelect<true>;
   };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
-  user: Member | User;
+  user: Member | User | Agent;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -155,6 +168,24 @@ export interface MemberAuthOperations {
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface AgentAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -1355,6 +1386,72 @@ export interface Campaign {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "telegram-posts".
+ */
+export interface TelegramPost {
+  id: number;
+  title: string;
+  /**
+   * Programmer, publier et retirer : Saïd seul.
+   */
+  status: 'draft' | 'scheduled' | 'publishing' | 'published' | 'failed' | 'deleted';
+  text: string;
+  textAr?: string | null;
+  photo?: (number | null) | Media;
+  buttons?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  scheduledAt?: string | null;
+  silent?: boolean | null;
+  pin?: boolean | null;
+  preparedBy?: string | null;
+  decidedBy?: (number | null) | User;
+  decidedAt?: string | null;
+  messageId?: number | null;
+  publishedAt?: string | null;
+  views?: number | null;
+  error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  /**
+   * Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.
+   */
+  telegramId?: string | null;
+  role: 'patron' | 'admin' | 'editor';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "visitor-sessions".
  */
 export interface VisitorSession {
@@ -1384,31 +1481,138 @@ export interface VisitorSession {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "agents".
  */
-export interface User {
+export interface Agent {
   id: number;
   name: string;
-  role: 'admin' | 'editor';
+  /**
+   * ceo, editorial, trust…
+   */
+  slug: string;
+  status: 'active' | 'paused' | 'disabled';
+  mission: string;
+  provider: 'anthropic' | 'openai';
+  model: string;
+  monthlyBudgetUsd?: number | null;
+  maxStepsPerTask?: number | null;
+  scopes?:
+    | (
+        | 'decouvrir'
+        | 'vivre'
+        | 'demarches'
+        | 'services'
+        | 'annuaire'
+        | 'sante'
+        | 'communaute'
+        | 'communication'
+        | 'technique'
+        | 'pilotage'
+      )[]
+    | null;
+  tools?:
+    | (
+        | 'read-content'
+        | 'draft-content'
+        | 'web-search'
+        | 'message-agents'
+        | 'create-tasks'
+        | 'draft-email'
+        | 'draft-telegram'
+        | 'read-inbox'
+        | 'read-health'
+      )[]
+    | null;
+  triggers?: ('any-task' | 'assigned' | 'draft-ready' | 'inbox' | 'report' | 'application' | 'cron')[] | null;
+  /**
+   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (src/modules/agents/equipe/<agent>/).
+   */
+  memory?: string | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  hasAPIKey?: boolean | null;
+  collection: 'agents';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-tasks".
+ */
+export interface AgentTask {
+  id: number;
+  title: string;
+  instructions: string;
+  /**
+   * Vide = le CEO décide.
+   */
+  agent?: (number | null) | Agent;
+  status: 'new' | 'running' | 'paused' | 'review' | 'done' | 'cancelled' | 'failed';
+  priority?: ('low' | 'normal' | 'high' | 'urgent') | null;
+  rubrique?:
+    | (
+        | 'decouvrir'
+        | 'vivre'
+        | 'demarches'
+        | 'services'
+        | 'annuaire'
+        | 'sante'
+        | 'communaute'
+        | 'communication'
+        | 'technique'
+        | 'pilotage'
+      )
     | null;
-  password?: string | null;
-  collection: 'users';
+  /**
+   * Une nouvelle consigne pendant le travail. L’agent la lit avant chaque étape.
+   */
+  directive?: string | null;
+  origin?: ('patron' | 'equipe' | 'agent' | 'cron' | 'evenement' | 'telegram') | null;
+  issuedByUser?: (number | null) | User;
+  issuedByAgent?: (number | null) | Agent;
+  parent?: (number | null) | AgentTask;
+  budgetUsd?: number | null;
+  spentMicros?: number | null;
+  steps?: number | null;
+  maxSteps?: number | null;
+  result?: string | null;
+  /**
+   * Ce que l’agent propose de publier ou d’envoyer. Rien n’est appliqué sans validation humaine.
+   */
+  proposal?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  reviewedBy?: (number | null) | User;
+  reviewedAt?: string | null;
+  error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-messages".
+ */
+export interface AgentMessage {
+  id: number;
+  task?: (number | null) | AgentTask;
+  toAgent?: (number | null) | Agent;
+  toHuman?: ('patron' | 'equipe') | null;
+  kind?: ('directive' | 'rapport' | 'question' | 'reponse' | 'note') | null;
+  body: string;
+  fromKind?: ('humain' | 'agent' | 'systeme' | 'membre') | null;
+  fromLabel?: string | null;
+  fromUser?: (number | null) | User;
+  fromAgent?: (number | null) | Agent;
+  channel?: ('admin' | 'telegram' | 'agent') | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * Claude Haiku 4.5 : 1 $ par million de jetons en entrée, 5 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.
@@ -1424,6 +1628,34 @@ export interface AiUsage {
   outputTokens?: number | null;
   costMicros?: number | null;
   model?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Ajout seul : aucune ligne ne peut être modifiée ni supprimée.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log".
+ */
+export interface AuditLog {
+  id: number;
+  actorKind: 'humain' | 'agent' | 'membre' | 'systeme';
+  actorLabel: string;
+  actorId?: number | null;
+  action: string;
+  target?: string | null;
+  targetId?: string | null;
+  summary: string;
+  changes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  channel?: ('admin' | 'telegram' | 'api' | 'agent' | 'cron') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1508,6 +1740,10 @@ export interface PayloadLockedDocument {
         value: number | Campaign;
       } | null)
     | ({
+        relationTo: 'telegram-posts';
+        value: number | TelegramPost;
+      } | null)
+    | ({
         relationTo: 'members';
         value: number | Member;
       } | null)
@@ -1520,8 +1756,24 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'agents';
+        value: number | Agent;
+      } | null)
+    | ({
+        relationTo: 'agent-tasks';
+        value: number | AgentTask;
+      } | null)
+    | ({
+        relationTo: 'agent-messages';
+        value: number | AgentMessage;
+      } | null)
+    | ({
         relationTo: 'ai-usage';
         value: number | AiUsage;
+      } | null)
+    | ({
+        relationTo: 'audit-log';
+        value: number | AuditLog;
       } | null);
   globalSlug?: string | null;
   user:
@@ -1532,6 +1784,10 @@ export interface PayloadLockedDocument {
     | {
         relationTo: 'users';
         value: number | User;
+      }
+    | {
+        relationTo: 'agents';
+        value: number | Agent;
       };
   updatedAt: string;
   createdAt: string;
@@ -1550,6 +1806,10 @@ export interface PayloadPreference {
     | {
         relationTo: 'users';
         value: number | User;
+      }
+    | {
+        relationTo: 'agents';
+        value: number | Agent;
       };
   key?: string | null;
   value?:
@@ -2030,6 +2290,36 @@ export interface CampaignsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "telegram-posts_select".
+ */
+export interface TelegramPostsSelect<T extends boolean = true> {
+  title?: T;
+  status?: T;
+  text?: T;
+  textAr?: T;
+  photo?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  scheduledAt?: T;
+  silent?: T;
+  pin?: T;
+  preparedBy?: T;
+  decidedBy?: T;
+  decidedAt?: T;
+  messageId?: T;
+  publishedAt?: T;
+  views?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members_select".
  */
 export interface MembersSelect<T extends boolean = true> {
@@ -2078,6 +2368,7 @@ export interface VisitorSessionsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  telegramId?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2099,6 +2390,76 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agents_select".
+ */
+export interface AgentsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  status?: T;
+  mission?: T;
+  provider?: T;
+  model?: T;
+  monthlyBudgetUsd?: T;
+  maxStepsPerTask?: T;
+  scopes?: T;
+  tools?: T;
+  triggers?: T;
+  memory?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+  hasAPIKey?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-tasks_select".
+ */
+export interface AgentTasksSelect<T extends boolean = true> {
+  title?: T;
+  instructions?: T;
+  agent?: T;
+  status?: T;
+  priority?: T;
+  rubrique?: T;
+  directive?: T;
+  origin?: T;
+  issuedByUser?: T;
+  issuedByAgent?: T;
+  parent?: T;
+  budgetUsd?: T;
+  spentMicros?: T;
+  steps?: T;
+  maxSteps?: T;
+  result?: T;
+  proposal?: T;
+  reviewedBy?: T;
+  reviewedAt?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-messages_select".
+ */
+export interface AgentMessagesSelect<T extends boolean = true> {
+  task?: T;
+  toAgent?: T;
+  toHuman?: T;
+  kind?: T;
+  body?: T;
+  fromKind?: T;
+  fromLabel?: T;
+  fromUser?: T;
+  fromAgent?: T;
+  channel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ai-usage_select".
  */
 export interface AiUsageSelect<T extends boolean = true> {
@@ -2108,6 +2469,23 @@ export interface AiUsageSelect<T extends boolean = true> {
   outputTokens?: T;
   costMicros?: T;
   model?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log_select".
+ */
+export interface AuditLogSelect<T extends boolean = true> {
+  actorKind?: T;
+  actorLabel?: T;
+  actorId?: T;
+  action?: T;
+  target?: T;
+  targetId?: T;
+  summary?: T;
+  changes?: T;
+  channel?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2175,6 +2553,30 @@ export interface FeaturedDestination {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "controls".
+ */
+export interface Control {
+  id: number;
+  killSwitch: 'off' | 'drain' | 'stop' | 'cut';
+  killSwitchAt?: string | null;
+  killSwitchBy?: string | null;
+  killSwitchReason?: string | null;
+  agentsEnabled?: boolean | null;
+  telegramEnabled?: boolean | null;
+  maintenance?: boolean | null;
+  /**
+   * Vide = aucun agent ne travaille. Chaque agent a aussi son propre plafond.
+   */
+  agentsMonthlyBudgetUsd?: number | null;
+  /**
+   * Modifiable par le patron seulement. Le bot doit être administrateur du canal.
+   */
+  telegramChannelId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "featured-destination_select".
  */
 export interface FeaturedDestinationSelect<T extends boolean = true> {
@@ -2183,6 +2585,24 @@ export interface FeaturedDestinationSelect<T extends boolean = true> {
   title?: T;
   text?: T;
   cta?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "controls_select".
+ */
+export interface ControlsSelect<T extends boolean = true> {
+  killSwitch?: T;
+  killSwitchAt?: T;
+  killSwitchBy?: T;
+  killSwitchReason?: T;
+  agentsEnabled?: T;
+  telegramEnabled?: T;
+  maintenance?: T;
+  agentsMonthlyBudgetUsd?: T;
+  telegramChannelId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

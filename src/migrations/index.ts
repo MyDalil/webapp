@@ -19,6 +19,7 @@ import * as migration_20261017_082546_evenements from './20261017_082546_eveneme
 import * as migration_20261017_083000_criteres_socle_commun from './20261017_083000_criteres_socle_commun';
 import * as migration_20261017_083727_contributions_photos from './20261017_083727_contributions_photos';
 import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
+import * as migration_20261017_141435_tableau_de_bord_socle from './20261017_141435_tableau_de_bord_socle';
 
 export const migrations = [
   {
@@ -124,6 +125,11 @@ export const migrations = [
   {
     up: migration_20261017_090000_ai_budget_alerts.up,
     down: migration_20261017_090000_ai_budget_alerts.down,
-    name: '20261017_090000_ai_budget_alerts'
+    name: '20261017_090000_ai_budget_alerts',
+  },
+  {
+    up: migration_20261017_141435_tableau_de_bord_socle.up,
+    down: migration_20261017_141435_tableau_de_bord_socle.down,
+    name: '20261017_141435_tableau_de_bord_socle'
   },
 ];

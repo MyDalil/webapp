@@ -1,5 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionConfig } from 'payload'
-import { isAdmin, isAdminField, isAdminUser, isStaffUser } from '@/platform/access'
+import { APIError } from 'payload'
+import { isAdmin, isAdminField, isAdminUser, isPatronUser, isStaffUser } from '@/platform/access'
 import { SITE, esc, layout, send } from '@/platform/mail'
 
 const resetUrl = (token: string) => `${SITE}/admin/reset/${token}`
@@ -10,6 +11,12 @@ const before: CollectionBeforeChangeHook = async ({ data, operation, req, origin
     const { totalDocs } = await req.payload.count({ collection: 'users', overrideAccess: true })
     if (totalDocs === 0) return { ...data, role: 'admin' }
     context.invite = true
+  }
+  // Le rôle patron ne se donne et ne se retire que par un patron (sauf s’il n’en existe encore aucun).
+  const touchesPatron = data.role === 'patron' ? originalDoc?.role !== 'patron' : originalDoc?.role === 'patron' && data.role !== undefined && data.role !== 'patron'
+  if (touchesPatron && !isPatronUser(req.user)) {
+    const { totalDocs } = await req.payload.count({ collection: 'users', where: { role: { equals: 'patron' } }, overrideAccess: true })
+    if (totalDocs > 0) throw new APIError('Seul le patron peut donner ou retirer le rôle patron.', 403)
   }
   if (operation === 'update') {
     if (data.password) context.passwordChanged = true
@@ -29,7 +36,7 @@ const after: CollectionAfterChangeHook = async ({ doc, req, context }) => {
         'Votre accès à l’administration DALIL',
         layout(
           `Bienvenue dans l’équipe DALIL, ${esc(doc.name)}.`,
-          `<p>${esc((req.user as { name?: string } | null)?.name ?? 'Un administrateur')} vous a créé un accès à l’administration de DALIL (rôle : ${doc.role === 'admin' ? 'administrateur' : 'rédacteur'}).</p><p>Choisissez votre mot de passe avec le bouton ci-dessous. Le lien est valable une heure ; passé ce délai, utilisez « Mot de passe oublié » sur la page de connexion.</p>`,
+          `<p>${esc((req.user as { name?: string } | null)?.name ?? 'Un administrateur')} vous a créé un accès à l’administration de DALIL (rôle : ${doc.role === 'patron' ? 'patron' : doc.role === 'admin' ? 'administrateur' : 'rédacteur'}).</p><p>Choisissez votre mot de passe avec le bouton ci-dessous. Le lien est valable une heure ; passé ce délai, utilisez « Mot de passe oublié » sur la page de connexion.</p>`,
           { label: 'Choisir mon mot de passe', href: resetUrl(token) },
         ),
       )
@@ -90,6 +97,14 @@ export const Users: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', label: 'Nom', required: true },
     {
+      name: 'telegramId',
+      type: 'text',
+      label: 'Identifiant Telegram',
+      access: { update: isAdminField, create: isAdminField },
+      admin: { description: 'Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.' },
+      validate: (v: unknown) => (!v || /^\d{4,15}$/.test(String(v)) ? true : 'Uniquement des chiffres.'),
+    },
+    {
       name: 'role',
       type: 'select',
       label: 'Rôle',
@@ -98,6 +113,7 @@ export const Users: CollectionConfig = {
       saveToJWT: true,
       access: { update: isAdminField, create: isAdminField },
       options: [
+        { label: 'Patron — tous les droits, publie sur le canal Telegram, gère Vie musulmane', value: 'patron' },
         { label: 'Administrateur — publie et gère tout', value: 'admin' },
         { label: 'Rédacteur — prépare, ne publie pas', value: 'editor' },
       ],

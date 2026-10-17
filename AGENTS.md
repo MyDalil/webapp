@@ -19,7 +19,9 @@ Stack : Next.js 16 + Payload CMS 3 + Neon Postgres + Vercel (Blob pour les photo
 src/
   app/              routage Next.js uniquement (pages publiques, /api, /admin) — fin, il appelle les modules
   platform/         socle partagé, ne dépend d’aucun métier
-    access.ts         rôles et droits (admin, editor) ; un compte public n’est jamais staff
+    access.ts         rôles et droits (patron, admin, editor) ; agents IA à part ; un compte public n’est jamais staff
+    audit/            journal d’audit en ajout seul (toutes collections)
+    controls/         commandes : arrêt général, agents, Telegram, maintenance, budgets
     video.ts          visio des consultations (fournisseur à brancher)
     http.ts           réponses /api, validation, accès Payload
     mail.ts           emails Resend (gabarit, envoi, désinscription)
@@ -38,7 +40,7 @@ src/
   styles/           legacy.css (prototype, scopé .legacy) → mockup.css (maquette, prioritaire) → site.css (raccords)
   migrations/       historique du schéma, jamais modifié après coup
 ```
-Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `services`, `messages`, `communication`, `recherche`, `pilotage`.
+Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `services`, `messages`, `communication`, `recherche`, `pilotage`, `agents` (équipe IA).
 
 **Frontières (vérifiées automatiquement à chaque build par `scripts/check-boundaries.mjs`) :**
 - hors d’un module, on n’y entre que par `@/modules/<m>`, `@/modules/<m>/ui` ou `@/modules/<m>/collections` ;

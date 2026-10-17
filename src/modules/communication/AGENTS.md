@@ -8,6 +8,7 @@ Newsletter et campagnes : inscription, confirmation, bienvenue, envois, désinsc
 ## Contenu du module
 - Collection `subscribers` : double confirmation (CNIL), jetons de confirmation et de désinscription.
 - Collection `campaigns` : envoi test à l’équipe, puis envoi unique aux abonnés confirmés (lots de 100, en-têtes List-Unsubscribe).
+- Collection `telegram-posts` : publications du canal DALIL (7 900 abonnés). Brouillons par l’équipe et les agents ; programmer, publier, retirer : Saïd seul (contrôle serveur).
 - Routes `/api/subscribers`, `/confirm`, `/unsubscribe` (RFC 8058) ; pages /newsletter/confirmation et /newsletter/desinscription.
 - `ui/NewsletterForm`.
 

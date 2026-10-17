@@ -4,7 +4,9 @@ Département responsable : **Engineering & Platform**. Lire aussi `AGENTS.md` à
 
 Le socle est partagé par tous les métiers et **n’importe jamais un module** (vérifié au build).
 
-- `access.ts` — rôles admin/editor, `isStaff`, `isAdmin`, `publishedOrStaff`.
+- `access.ts` — rôles patron/admin/editor (patron = Saïd : canal Telegram, Vie musulmane, rôle patron), agents IA (`isAgent`), `actorOf`, `publishedOrStaff`.
+- `audit/` — journal d’audit greffé sur toutes les collections et réglages ; ajout seul (accès Payload + déclencheur Postgres).
+- `controls/Controls.ts` — global « Commandes et sécurité » : arrêt général à 3 niveaux, agents, Telegram, maintenance, budget agents ; `agentsMayRun()`.
 - `http.ts` — accès Payload, réponses JSON `no-store`, `isEmail`, `clean`.
 - `mail.ts` — expéditeur `DALIL <salam@mydalil.com>`, gabarit, envoi unitaire et par lots, liens et en-têtes de désinscription. Pas de `server-only` ici : la CLI Payload doit pouvoir le charger.
 - `auth/Users.ts` — comptes équipe /admin : premier compte admin, invitation, alertes mot de passe et email, 8 essais max.
@@ -19,6 +21,6 @@ Le socle est partagé par tous les métiers et **n’importe jamais un module** 
 
 ## Règles
 - Toute nouvelle dépendance partagée arrive ici seulement si au moins deux métiers en ont besoin.
-- Sécurité (Fondation 2) : limitation de débit et contrôle des envois faits ; restent MFA équipe, journal d’audit, sauvegardes testées, `CRON_SECRET` avant l’ouverture.
+- Sécurité (Fondation 2) : limitation de débit et contrôle des envois faits ; restent MFA équipe, sauvegardes testées, `CRON_SECRET` avant l’ouverture.
 
 Décisions : `DECISIONS.md`.
