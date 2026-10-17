@@ -140,9 +140,6 @@
 /* ——— Accueil : huit entrées au format des tuiles « Par ville » (texte sur la photo, nombre et exemple) ——— */
 .entry-tile { position: relative; }
 .entry-tile .city-tile { height: 100%; }
-.entry-action { position: absolute; left: 14px; bottom: 76px; z-index: 2; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--green); font: 650 .84rem Inter, sans-serif; cursor: pointer; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .4); }
-.entry-action:hover { background: #fff; }
-.entry-action:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .entry-credit { position: absolute; top: 12px; right: 12px; z-index: 2; max-width: 62%; overflow: hidden; color: rgba(255, 255, 255, .85); font-size: .62rem; white-space: nowrap; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); pointer-events: none; }
 /* Lieux à visiter (page week-end) : vignettes simples */
 .we-places .entry-link { display: grid; gap: 6px; color: var(--text); text-decoration: none; }
@@ -192,7 +189,7 @@ html[data-theme="dark"] .we-when button[aria-checked="true"], html[data-theme="d
 }
 
 /* Fiche : critères essentiels visibles, les autres à la demande */
-.criteria-more { margin: -10px 0 28px; }
+.criteria-more { margin: 18px 0 28px; }
 .criteria-more > summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--green); font-weight: 650; cursor: pointer; list-style: none; }
 .criteria-more > summary::-webkit-details-marker { display: none; }
 .criteria-more > summary::after { content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .2s ease; }

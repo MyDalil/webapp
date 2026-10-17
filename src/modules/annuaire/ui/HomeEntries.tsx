@@ -46,19 +46,19 @@ export function HomeEntries({ stats, cities, total }: { stats: EntryPhotos; citi
   return (
     <Carousel label="Que souhaitez-vous faire aujourd’hui ?" variant="tiles">
       {cards.map((c, i) => (
-        <div key={c.key} className={`entry-tile entry-${c.key} ${c.action ? 'has-action' : ''}`} data-reveal style={{ ['--i' as string]: i % 6 }}>
-          <Link href={c.href} className="city-tile">
+        <div key={c.key} className={`entry-tile entry-${c.key}`} data-reveal style={{ ['--i' as string]: i % 6 }}>
+          <Link
+            href={c.href}
+            className="city-tile"
+            // Sans wilaya choisie, « Près de chez vous » ouvre le choix de la wilaya (pas de bouton en plus sur la photo).
+            onClick={c.action ? (e) => (e.preventDefault(), pickWilaya()) : undefined}
+          >
             <div className="city-tile-img" style={c.stat.photo ? { backgroundImage: `url(${c.stat.photo.src})` } : undefined} />
             <div className="city-tile-body">
               <h3>{c.title}</h3>
               <p>{c.line ?? [lieux(c.stat.count), c.stat.example].filter(Boolean).join(' · ')}</p>
             </div>
           </Link>
-          {c.action && (
-            <button type="button" className="entry-action" onClick={pickWilaya}>
-              {c.action}
-            </button>
-          )}
           {c.stat.photo?.credit && <small className="entry-credit">{c.stat.photo.credit}</small>}
         </div>
       ))}

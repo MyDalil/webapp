@@ -47,7 +47,6 @@ export const RUBRICS: Rubric[] = [
     entries: [
       ['/guides/logement', 'home', 'Logement', 'Louer, acheter, choisir son quartier'],
       ['/guides/ecole-et-famille', 'school', 'École & famille', 'Inscriptions, crèches, activités'],
-      ['/guides/sante', 'health', 'Santé', 'Médecins, pharmacies, rendez-vous'],
       ['/guides/transport', 'bus', 'Transports', 'Se déplacer au quotidien'],
       ['/guides/budget-et-banque', 'wallet', 'Budget & banque', 'Comptes, paiements, devises'],
       ['/guides/internet-et-telecoms', 'wifi', 'Internet & téléphone', 'Forfaits, fibre, couverture'],
