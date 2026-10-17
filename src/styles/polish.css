@@ -61,3 +61,20 @@
 .assistant-dock.is-tucked * { pointer-events: none; }
 @media (max-width: 760px) { .assistant-dock.is-tucked { transform: translateY(18px); } }
 @media (prefers-reduced-motion: reduce) { .assistant-dock, .assistant-dock.is-tucked { transition: none; } }
+
+/* Mobile : cercle « Créer mon compte » plus discret, masqué pendant la lecture */
+@media (max-width: 900px) {
+  .join-circle { width: 76px; right: 14px; bottom: 14px; font-size: .5rem; letter-spacing: .06em; line-height: 1.2; transition: transform .35s ease, opacity .35s ease; }
+  .join-circle small { font-size: .44rem; letter-spacing: .1em; }
+  .join-circle.is-away { opacity: 0; transform: translateY(24px) scale(.9); pointer-events: none; }
+  .assistant-dock.expanded { right: 104px; }
+}
+
+/* Fiche adresse : la galerie défile dans sa colonne sans élargir la page (mobile) */
+.place-main-column { min-width: 0; }
+@media (max-width: 920px) { .place-content { grid-template-columns: minmax(0, 1fr); } }
+
+/* Micro de la recherche d’accueil : même pictogramme que la barre « Demandez à DALIL » */
+.search-mic svg { width: 20px; height: 20px; }
+.search-mic.recording, .dock-icon.recording { background: var(--danger); color: #fff; animation: smart-pulse 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .search-mic.recording, .dock-icon.recording { animation: none; } }

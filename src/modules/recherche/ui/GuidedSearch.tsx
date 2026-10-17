@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { takePendingDoc } from './pendingDoc'
 import Link from 'next/link'
 
 type Guide = { slug: string; title: string; category: string; summary: string; keywords: string[] }
@@ -100,6 +101,12 @@ export function GuidedSearch({ guides, initialQuery = '', compact = false }: { g
     setQuery(initialQuery)
     setResult(initialQuery ? orient(initialQuery, guides) : null)
   }, [initialQuery, guides])
+
+  useEffect(() => {
+    const f = takePendingDoc()
+    if (f) void readFile(f)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const s = seq

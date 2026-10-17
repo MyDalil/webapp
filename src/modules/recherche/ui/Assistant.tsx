@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { toast } from '@/platform/shell/toast'
+import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
 import { DICTATION_LANGS, preferredLang, rememberLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
 
@@ -23,6 +24,12 @@ export function Assistant() {
   const [context, setContext] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
+  const docRef = useRef<HTMLInputElement>(null)
+  const pickDoc = (f?: File) => {
+    if (!f) return
+    setPendingDoc(f)
+    router.push('/recherche')
+  }
   // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
   const [tucked, setTucked] = useState(false)
   useEffect(() => {
@@ -178,7 +185,8 @@ export function Assistant() {
         <button className="dock-lang" type="button" aria-label="Langue de la dictée" title="Langue de la dictée" onClick={cycleLang} disabled={listening}>
           {DICTATION_LANGS.find((l) => l.value === lang)?.label}
         </button>
-        <button className="dock-icon" type="button" aria-label="Ajouter un document" onClick={() => router.push('/recherche')}>
+        <input ref={docRef} type="file" accept={ACCEPT_DOC} hidden onChange={(e) => pickDoc(e.target.files?.[0])} />
+        <button className="dock-icon" type="button" aria-label="Ajouter un document" title="PDF ou fichier texte, 5 Mo maximum" onClick={() => docRef.current?.click()}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 1 1-2.8-2.8l8.5-8.5" />
           </svg>
