@@ -42,7 +42,8 @@ export async function audit(payload: Payload, req: PayloadRequest | undefined, e
     await payload.create({
       collection: 'audit-log',
       overrideAccess: true,
-      req: req ? ({ ...req, context: { ...req.context, skipAudit: true } } as PayloadRequest) : undefined,
+      // Hors de la transaction de l’action observée : un échec du journal ne doit jamais l’annuler.
+      context: { skipAudit: true },
       data: {
         actorKind: actor.kind,
         actorLabel: actor.label,

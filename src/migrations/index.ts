@@ -16,10 +16,10 @@ import * as migration_20261016_221333_ia_consommation from './20261016_221333_ia
 import * as migration_20261016_234359_membres_espace from './20261016_234359_membres_espace';
 import * as migration_20261017_082119_accueil_coups_de_coeur_destination from './20261017_082119_accueil_coups_de_coeur_destination';
 import * as migration_20261017_082546_evenements from './20261017_082546_evenements';
-import * as migration_20261017_083000_criteres_socle_commun from './20261017_083000_criteres_socle_commun';
 import * as migration_20261017_083727_contributions_photos from './20261017_083727_contributions_photos';
 import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
 import * as migration_20261017_141435_tableau_de_bord_socle from './20261017_141435_tableau_de_bord_socle';
+import * as migration_20261017_141500_criteres_socle_commun from './20261017_141500_criteres_socle_commun';
 
 export const migrations = [
   {
@@ -113,11 +113,6 @@ export const migrations = [
     name: '20261017_082546_evenements',
   },
   {
-    up: migration_20261017_083000_criteres_socle_commun.up,
-    down: migration_20261017_083000_criteres_socle_commun.down,
-    name: '20261017_083000_criteres_socle_commun',
-  },
-  {
     up: migration_20261017_083727_contributions_photos.up,
     down: migration_20261017_083727_contributions_photos.down,
     name: '20261017_083727_contributions_photos',
@@ -131,5 +126,10 @@ export const migrations = [
     up: migration_20261017_141435_tableau_de_bord_socle.up,
     down: migration_20261017_141435_tableau_de_bord_socle.down,
     name: '20261017_141435_tableau_de_bord_socle'
+  },
+  {
+    up: migration_20261017_141500_criteres_socle_commun.up,
+    down: migration_20261017_141500_criteres_socle_commun.down,
+    name: '20261017_141500_criteres_socle_commun',
   },
 ];
