@@ -78,3 +78,13 @@
 .search-mic svg { width: 20px; height: 20px; }
 .search-mic.recording, .dock-icon.recording { background: var(--danger); color: #fff; animation: smart-pulse 1.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .search-mic.recording, .dock-icon.recording { animation: none; } }
+
+/* Annuaire : filtres actifs (wilaya, thème) retirables d’un geste */
+.results-toolbar { flex-wrap: wrap; gap: 10px; }
+.active-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-remove { min-height: 32px; border: 0; cursor: pointer; }
+.chip-remove:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 45%, transparent); outline-offset: 2px; }
+
+/* Contribuer : cases à cocher à leur taille, texte à côté (les styles du prototype élargissent tous les champs) */
+.contribution-form .contribution-check { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 10px; }
+.contribution-form .contribution-check input[type="checkbox"] { width: 20px !important; height: 20px !important; min-height: 0 !important; margin: 2px 0 0 !important; padding: 0 !important; flex: 0 0 20px; accent-color: var(--green); }

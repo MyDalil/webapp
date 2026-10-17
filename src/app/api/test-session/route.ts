@@ -1,3 +1,4 @@
+import { WILAYAS } from '@/platform/referentiel/catalog'
 import { clean, fail, json } from '@/platform/http'
 import { deleteSession, ensureSession, readSession, saveSession } from '@/modules/membres'
 import { record } from '@/modules/messages'
@@ -20,9 +21,15 @@ export async function POST(req: Request) {
 
   if (body.action === 'profile') {
     const p = body.profile ?? {}
-    const profile = { nickname: s.profile.nickname, territory: clean(p.territory, 120), interest: clean(p.interest, 160) }
+    const profile = { territory: clean(p.territory, 120), interest: clean(p.interest, 160) }
     await saveSession(s.id, { profile })
-    return json(view({ ...s, profile }))
+    return json(view({ ...s, profile: { ...s.profile, ...profile } }))
+  }
+
+  if (body.action === 'wilaya') {
+    const code = Number(body.code)
+    await saveSession(s.id, { profile: { wilaya: WILAYAS.some((w) => w.code === code) ? code : null } })
+    return json({ ok: true })
   }
 
   if (body.action === 'favorite') {

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MissionView } from '../marketplace'
-import { shrinkImage } from './shrink'
+import { shrinkImage } from '@/platform/ui/shrink'
 import { SmartText } from '@/platform/ui/SmartText'
 
 type Msg = { id: number; mine: boolean; from: string; body: string; at: string }

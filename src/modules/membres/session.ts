@@ -22,7 +22,7 @@ export type State = {
   applications: Record<string, unknown>[]
   seq: number
 }
-export type Profile = { nickname: string; territory: string; interest: string }
+export type Profile = { nickname: string; territory: string; interest: string; wilaya: number | null }
 type Space = { profile?: Partial<Profile>; state?: Partial<State> }
 
 const emptyState = (): State => ({ favorites: [], collections: [], items: [], checklist: {}, diagnostics: [], contacts: [], applications: [], seq: 0 })
@@ -43,7 +43,7 @@ export async function readSession() {
   const m = await currentMember()
   if (!m) return null
   const space = ((m as { space?: Space }).space ?? {}) as Space
-  const profile: Profile = { nickname: m.firstName, territory: String(space.profile?.territory ?? ''), interest: String(space.profile?.interest ?? '') }
+  const profile: Profile = { nickname: m.firstName, territory: String(space.profile?.territory ?? ''), interest: String(space.profile?.interest ?? ''), wilaya: Number(space.profile?.wilaya) || null }
   return { id: m.id, sid: `member:${m.id}`, profile, state: { ...emptyState(), ...(space.state ?? {}) } as State }
 }
 
@@ -55,7 +55,8 @@ export async function saveSession(id: number, patch: { profile?: Partial<Profile
   const doc = await p.findByID({ collection: 'members', id, depth: 0, overrideAccess: true })
   const space = ((doc as { space?: Space }).space ?? {}) as Space
   const next: Space = {
-    profile: patch.profile ? { territory: patch.profile.territory ?? '', interest: patch.profile.interest ?? '' } : space.profile,
+    // Fusion : modifier la ville ou les intérêts ne retire pas la wilaya, et inversement.
+    profile: patch.profile ? { ...space.profile, ...Object.fromEntries(Object.entries(patch.profile).filter(([k, v]) => k !== 'nickname' && v !== undefined)) } : space.profile,
     state: patch.state ? capped(patch.state) : space.state,
   }
   await p.update({ collection: 'members', id, data: { space: next } as never, overrideAccess: true, context: { spaceOnly: true } })

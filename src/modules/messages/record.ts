@@ -35,4 +35,5 @@ export async function record(kind: keyof typeof KIND_LABEL, subject: string, dat
       ),
     )
   }
+  return doc.id
 }

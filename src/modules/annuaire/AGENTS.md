@@ -15,7 +15,11 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
   - `descriptions-*.json` : textes DALIL rédigés à partir des faits (jamais copiés) ;
   - `open-places-selected.json` : lot publiable (`node scripts/import/select-places.mjs`) = photo libre + texte DALIL, doublons retirés, corrections manuelles ;
   - importé par migration, mise à jour par identifiant Wikidata.
-- `ui/` : Directory (filtres + liste + carte), DirectoryMap (MapLibre + OpenFreeMap, regroupement des repères), PlaceMap, PlaceActions ; `admin/CoordsHelp`.
+- `filters.ts` : règle unique des filtres de l’annuaire (wilaya, thème nature, coups de cœur, critères vérifiés…), testée (`filters.test.ts`).
+- `Events.ts` (Événements) + `weekend.ts` : page « Que faire ce week-end ? » — week-end algérien (vendredi-samedi, heure d’Alger), jamais d’événement terminé, confirmés séparés des incomplets, un filtre n’est jamais satisfait par une information inconnue ; testé (`weekend.test.ts`).
+- `FeaturedDestination.ts` : réglage /admin « Destination à l’honneur » (bloc panoramique de l’accueil, repli Sahara).
+- Champ `favorite` (Coup de cœur DALIL, sélection éditoriale) et `contributor` (habitant cité) sur les fiches.
+- `ui/` : Directory (filtres + liste + carte), DirectoryMap (MapLibre + OpenFreeMap, regroupement des repères), PlaceMap, PlaceActions, HomeEntries (8 entrées photo de l’accueil), WeekendExplorer ; `admin/CoordsHelp`.
 
 ## Dépend de
 `confiance` (vérification), `membres/ui` (SaveButton), `platform` (référentiel, accès, stockage).
@@ -30,6 +34,8 @@ Enregistrer une fiche rafraîchit /annuaire, le secteur et la fiche (revalidateP
 - Aucune copie de Tripadvisor, Google ou autre site : uniquement des sources ouvertes ou nos propres contenus.
 - Pas de publication sans photo sous licence ; auteur et licence toujours affichés (couverture comprise).
 - Un lieu importé est publié « Repérée — à vérifier », avec ses sources.
+- Un événement « confirmé » cite sa source (validation dans /admin) ; sinon il s’affiche « À confirmer ».
+- Coup de cœur, destination à l’honneur et classement : jamais liés à un paiement.
 
 ## Accès
 Neon (lecture), Vercel Blob (photos).

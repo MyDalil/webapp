@@ -14,6 +14,10 @@ import * as migration_20261016_183051_services_photos_pieces from './20261016_18
 import * as migration_20261016_200000_rate_limits from './20261016_200000_rate_limits';
 import * as migration_20261016_221333_ia_consommation from './20261016_221333_ia_consommation';
 import * as migration_20261016_234359_membres_espace from './20261016_234359_membres_espace';
+import * as migration_20261017_082119_accueil_coups_de_coeur_destination from './20261017_082119_accueil_coups_de_coeur_destination';
+import * as migration_20261017_082546_evenements from './20261017_082546_evenements';
+import * as migration_20261017_083000_criteres_socle_commun from './20261017_083000_criteres_socle_commun';
+import * as migration_20261017_083727_contributions_photos from './20261017_083727_contributions_photos';
 import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
 
 export const migrations = [
@@ -96,6 +100,26 @@ export const migrations = [
     up: migration_20261016_234359_membres_espace.up,
     down: migration_20261016_234359_membres_espace.down,
     name: '20261016_234359_membres_espace',
+  },
+  {
+    up: migration_20261017_082119_accueil_coups_de_coeur_destination.up,
+    down: migration_20261017_082119_accueil_coups_de_coeur_destination.down,
+    name: '20261017_082119_accueil_coups_de_coeur_destination',
+  },
+  {
+    up: migration_20261017_082546_evenements.up,
+    down: migration_20261017_082546_evenements.down,
+    name: '20261017_082546_evenements',
+  },
+  {
+    up: migration_20261017_083000_criteres_socle_commun.up,
+    down: migration_20261017_083000_criteres_socle_commun.down,
+    name: '20261017_083000_criteres_socle_commun',
+  },
+  {
+    up: migration_20261017_083727_contributions_photos.up,
+    down: migration_20261017_083727_contributions_photos.down,
+    name: '20261017_083727_contributions_photos',
   },
   {
     up: migration_20261017_090000_ai_budget_alerts.up,

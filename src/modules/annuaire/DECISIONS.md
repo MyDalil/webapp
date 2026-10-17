@@ -14,3 +14,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Décision** : fond de carte OpenFreeMap (positron, dark en thème sombre), moteur MapLibre, repères regroupés en bulles chiffrées qui s’ouvrent au clic.
 - **Raison** : CARTO exige désormais une clé (« API KEY REQUIRED ») ; 314 repères Leaflet empilés étaient illisibles. OpenFreeMap : gratuit, sans clé ni compte, données OpenStreetMap. Leaflet retiré.
 - **À ne pas refaire** : dépendre d’un fond de carte tiers « gratuit » sans vérifier ses conditions d’accès.
+
+## 2026-10-17 — Document maître UI/UX (décisions de Rad)
+- Accueil : 8 entrées photo (week-end, à découvrir, près de chez vous, nature & bien-être, vivre dans ma ville, bonnes adresses, quotidien, coups de cœur) à la place des 3 cartes ; photos des fiches publiées uniquement.
+- « Que faire ce week-end ? » : collection Événements + lieux à visiter en attendant ; filtres wilaya, dates, distance (depuis la wilaya choisie, jamais de géolocalisation), budget, famille, accessibilité, type.
+- Coups de cœur : case cochée par l’équipe. Destination à l’honneur : réglage /admin, une seule à la fois, pas de carrousel.
+- À ne pas refaire : nommer un champ `status` dans une collection avec brouillons (conflit d’énumération avec `_status`) → `reliability`.

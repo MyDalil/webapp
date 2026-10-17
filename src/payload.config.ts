@@ -11,8 +11,8 @@ import { buildConfig } from 'payload'
 import { Users } from '@/platform/auth/Users'
 import { Media } from '@/platform/storage/Media'
 import { AiUsage } from '@/platform/ai/AiUsage'
-import { Places } from '@/modules/annuaire/collections'
-import { Submissions } from '@/modules/messages/collections'
+import { Events, FeaturedDestination, Places } from '@/modules/annuaire/collections'
+import { ContributionPhotos, Submissions } from '@/modules/messages/collections'
 import { Campaigns, Subscribers } from '@/modules/communication/collections'
 import { Members, VisitorSessions } from '@/modules/membres/collections'
 import { Appointments, Practitioners } from '@/modules/sante/collections'
@@ -36,7 +36,8 @@ export default buildConfig({
     meta: { titleSuffix: ' — DALIL Admin' },
   },
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
-  collections: [Places, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Media, Submissions, Subscribers, Campaigns, Members, VisitorSessions, Users, AiUsage],
+  globals: [FeaturedDestination],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, Members, VisitorSessions, Users, AiUsage],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY

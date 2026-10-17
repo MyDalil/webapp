@@ -197,6 +197,8 @@ export const Places: CollectionConfig = {
         verificationTab,
       ],
     },
+    { name: 'contributor', type: 'text', label: 'Proposée par', admin: { position: 'sidebar', description: 'Habitant à l’origine de la fiche, s’il souhaite être cité (contribution validée).' } },
+    { name: 'favorite', type: 'checkbox', label: 'Coup de cœur DALIL', defaultValue: false, index: true, admin: { position: 'sidebar', description: 'Sélection de l’équipe (carte « Nos coups de cœur »). Jamais liée à un paiement ni à un abonnement.' } },
     { name: 'score', type: 'number', label: 'Score de classement', index: true, admin: { position: 'sidebar', readOnly: true, description: 'Calculé à l’enregistrement (règle écrite dans le module annuaire). Jamais lié à un paiement.' } },
     {
       name: 'source',

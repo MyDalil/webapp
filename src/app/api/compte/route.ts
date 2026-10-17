@@ -6,7 +6,8 @@ import { guard } from '@/platform/security/rateLimit'
 /** Compte connecté (pour l’en-tête et le cercle d’inscription). */
 export async function GET() {
   const m = await currentMember()
-  return json({ member: m ? { firstName: m.firstName, kind: m.kind, verified: Boolean(m._verified), gender: m.gender ?? null } : null })
+  const wilaya = Number((m as { space?: { profile?: { wilaya?: unknown } } } | null)?.space?.profile?.wilaya) || null
+  return json({ member: m ? { firstName: m.firstName, kind: m.kind, verified: Boolean(m._verified), gender: m.gender ?? null, wilaya } : null })
 }
 
 /** Inscription : champs contrôlés, email de confirmation envoyé automatiquement. */

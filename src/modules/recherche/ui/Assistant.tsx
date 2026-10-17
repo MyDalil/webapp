@@ -6,6 +6,9 @@ import { toast } from '@/platform/shell/toast'
 import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
 import { DICTATION_LANGS, preferredLang, rememberLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
+import { useWilaya } from '@/platform/shell/wilaya'
+
+type Turn = { q: string; intent: Intent }
 
 /**
  * Barre « Demandez à DALIL » : une seule barre, texte ou voix. La dictée devient un brouillon propre et modifiable ;
@@ -21,6 +24,11 @@ export function Assistant() {
   const [listening, setListening] = useState(false)
   const [busy, setBusy] = useState(false)
   const [intent, setIntent] = useState<Intent | null>(null)
+  // Conversation guidée : l’échange reste affiché jusqu’à ce que la personne ouvre une page ou recommence.
+  const [turns, setTurns] = useState<Turn[]>([])
+  const [panel, setPanel] = useState(false)
+  const wilaya = useWilaya()
+  const logRef = useRef<HTMLDivElement>(null)
   const [context, setContext] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
@@ -54,7 +62,26 @@ export function Assistant() {
     setExpanded(false)
     setIntent(null)
     setContext('')
+    setTurns([])
+    setPanel(false)
   }, [path])
+  useEffect(() => {
+    logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' })
+  }, [turns.length])
+  // Échap ferme le panneau : la page et la position de lecture ne bougent pas.
+  useEffect(() => {
+    if (!panel) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && (setPanel(false), inputRef.current?.focus())
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [panel])
+  const reset = () => {
+    setTurns([])
+    setIntent(null)
+    setContext('')
+    setText('')
+    inputRef.current?.focus()
+  }
   useEffect(() => setLang(preferredLang()), [])
   useEffect(() => () => dictation.current?.stop(), [])
 
@@ -65,26 +92,27 @@ export function Assistant() {
     // Réponse à une question de DALIL : on la joint à la demande précédente.
     const full = context ? `${context} ${q}` : q
     setBusy(true)
-    const r = await fetch('/api/ia/demande', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text: full }) })
+    const page = document.title.replace(/ · DALIL$/, '').slice(0, 120)
+    const r = await fetch('/api/ia/demande', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text: full, page, wilaya: wilaya?.code ?? null }) })
     const d = await r.json().catch(() => ({}))
     setBusy(false)
     if (!r.ok) return toast(d.error ?? 'DALIL n’a pas pu traiter la demande.')
     const it = d.intent as Intent | null
     if (!it) return
     setIntent(it)
+    setTurns((t) => [...t, { q, intent: it }])
+    setPanel(true)
+    setText('')
     if (it.question) {
       setContext(it.text)
-      setText('')
       inputRef.current?.focus()
-    } else {
-      setContext('')
-      setText(it.text)
-    }
+    } else setContext('')
   }
 
-  function go() {
-    if (!intent) return
-    const url = intent.url
+  function go(target?: Intent) {
+    const it = target ?? intent
+    if (!it) return
+    const url = it.url
     setIntent(null)
     setText('')
     setContext('')
@@ -128,40 +156,62 @@ export function Assistant() {
         <span aria-hidden="true">✦</span>
       </button>
       <form className="assistant-bar has-lang" onSubmit={submit}>
-        {intent && (
-          <div className="assistant-card" role="dialog" aria-label="Ce que DALIL a compris">
-            {intent.question ? (
-              <>
-                <p className="assistant-q">{intent.question}</p>
-                <small>Répondez dans la barre, puis envoyez.</small>
-              </>
-            ) : (
-              <>
-                <small>DALIL a compris :</small>
-                <div className="assistant-chips">
-                  {intent.chips.map((c) => (
-                    <span key={c} className="chip">
-                      {c}
-                    </span>
-                  ))}
+        {panel && turns.length > 0 && (
+          <div className="assistant-card assistant-panel" role="dialog" aria-label="Conversation avec DALIL">
+            <div className="assistant-panel-head">
+              <strong>DALIL</strong>
+              <small>
+                Contexte : {document.title.replace(/ · DALIL$/, '')}
+                {wilaya ? ` · ${wilaya.name}` : ''}
+              </small>
+              <button type="button" className="assistant-link" onClick={reset}>
+                Nouvelle demande
+              </button>
+              <button type="button" className="assistant-close" aria-label="Fermer la conversation" onClick={() => setPanel(false)}>
+                ×
+              </button>
+            </div>
+            <div className="assistant-log" ref={logRef} aria-live="polite">
+              {turns.map((t, i) => (
+                <div key={i} className="assistant-turn">
+                  <p className="assistant-me">{t.q}</p>
+                  {t.intent.question ? (
+                    <div className="assistant-reply">
+                      <p className="assistant-q">{t.intent.question}</p>
+                      {i === turns.length - 1 && <small>Répondez dans la barre, puis envoyez.</small>}
+                    </div>
+                  ) : (
+                    <div className="assistant-reply">
+                      <small>DALIL a compris :</small>
+                      <div className="assistant-chips">
+                        {t.intent.chips.map((c) => (
+                          <span key={c} className="chip">
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="assistant-actions">
+                        <button type="button" className="button primary" onClick={() => go(t.intent)}>
+                          Voir les résultats
+                        </button>
+                        {i === turns.length - 1 && (
+                          <button
+                            type="button"
+                            className="button outline"
+                            onClick={() => {
+                              setText(t.q)
+                              inputRef.current?.focus()
+                            }}
+                          >
+                            Modifier
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="assistant-actions">
-                  <button type="button" className="button primary" onClick={go}>
-                    Voir les résultats
-                  </button>
-                  <button
-                    type="button"
-                    className="button outline"
-                    onClick={() => {
-                      setIntent(null)
-                      inputRef.current?.focus()
-                    }}
-                  >
-                    Modifier
-                  </button>
-                </div>
-              </>
-            )}
+              ))}
+            </div>
           </div>
         )}
         <label className="sr-only" htmlFor="assistant-input">
@@ -175,10 +225,8 @@ export function Assistant() {
           dir="auto"
           readOnly={busy}
           maxLength={600}
-          onChange={(e) => {
-            setText(e.target.value)
-            if (intent && !intent.question) setIntent(null)
-          }}
+          onChange={(e) => setText(e.target.value)}
+          onFocus={() => turns.length && setPanel(true)}
           placeholder={listening ? 'Je vous écoute…' : busy ? 'DALIL réfléchit…' : intent?.question ? 'Votre réponse…' : 'Demandez à DALIL…'}
           autoComplete="off"
         />

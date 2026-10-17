@@ -50,6 +50,10 @@ export type PlaceCard = {
   pos: [number, number] | null
   exact: boolean
   updated: string
+  /** Coup de cœur de l’équipe (sélection éditoriale, jamais liée à un paiement). */
+  favorite: boolean
+  /** Critères vérifiés « conforme » par DALIL. */
+  verified: string[]
 }
 
 const mediaUrl = (m: number | Media | undefined, size: 'thumb' | 'cover') =>
@@ -84,6 +88,8 @@ export function toCard(p: Place): PlaceCard {
     pos,
     exact,
     updated: p.updatedAt,
+    favorite: Boolean((p as { favorite?: boolean }).favorite),
+    verified: (p.criteria ?? []).filter((c) => c.result === 'ok').map((c) => c.criterion),
   }
 }
 
@@ -168,4 +174,73 @@ export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTil
 /** Lieux d’une wilaya, déjà classés par score. */
 export async function getWilayaPlaces(name: string): Promise<PlaceCard[]> {
   return (await getPlaces()).filter((p) => p.wilaya === name)
+}
+
+/** Destination à l’honneur (réglage /admin), avec repli sur le Sahara. */
+export async function getFeaturedDestination(): Promise<{ place: PlaceCard; eyebrow: string; title: string; text: string; cta: string } | null> {
+  const p = await getPayload({ config })
+  const g = (await p.findGlobal({ slug: 'featured-destination', depth: 1, overrideAccess: false }).catch(() => null)) as { place?: number | { slug?: string | null } | null; eyebrow?: string | null; title?: string | null; text?: string | null; cta?: string | null } | null
+  const all = await getPlaces()
+  const slug = g?.place && typeof g.place === 'object' ? g.place.slug : null
+  const chosen = slug ? all.find((x) => x.slug === slug) : undefined
+  const place = chosen ?? all.find((x) => /tassili|djanet/i.test(x.name + x.city) && x.cover && !x.cover.startsWith('/mockup')) ?? all[0]
+  if (!place) return null
+  return {
+    place,
+    eyebrow: g?.eyebrow || 'Le grand Sud',
+    title: g?.title || 'Le Sahara, comme nulle part ailleurs.',
+    text: g?.text || 'Canyons de grès, peintures rupestres millénaires et oasis : préparez votre voyage avec des repères fiables.',
+    cta: g?.cta || `Découvrir ${place.name}`,
+  }
+}
+
+export type EventCard = import('./weekend').WeekendEvent & {
+  intro: string
+  address: string
+  priceNote: string
+  bookingUrl: string | null
+  sourceUrl: string | null
+  organizer: string
+  contributor: string
+  photo: string | null
+  credit: string | null
+  placeSlug: string | null
+}
+
+/** Événements publiés, encore en cours ou à venir (les terminés sont écartés dès la requête). */
+export async function getUpcomingEvents(): Promise<EventCard[]> {
+  const payload = await getPayload({ config })
+  const since = new Date(Date.now() - 60 * 864e5).toISOString()
+  const { docs } = await payload.find({ collection: 'events', where: { and: [{ _status: { equals: 'published' } }, { startsAt: { greater_than_equal: since } }] }, depth: 1, limit: 500, sort: 'startsAt', overrideAccess: false })
+  const now = Date.now()
+  return docs
+    .filter((e) => new Date(e.endsAt ?? e.startsAt).getTime() >= now)
+    .map((e) => {
+      const place = e.place && typeof e.place === 'object' ? (e.place as Place) : null
+      const media = e.photo && typeof e.photo === 'object' ? (e.photo as Media) : null
+      return {
+        slug: e.slug ?? String(e.id),
+        title: e.title,
+        type: e.type,
+        startsAt: e.startsAt,
+        endsAt: e.endsAt ?? null,
+        wilaya: Number(e.wilaya),
+        city: e.city,
+        free: Boolean(e.free),
+        priceMin: e.free ? null : (e.priceMin ?? null),
+        family: Boolean(e.family),
+        accessible: (e.accessible ?? 'unknown') as 'yes' | 'no' | 'unknown',
+        status: e.reliability === 'confirmed' ? 'confirmed' : 'incomplete',
+        intro: e.intro ?? '',
+        address: e.address ?? '',
+        priceNote: e.priceNote ?? '',
+        bookingUrl: e.bookingUrl || null,
+        sourceUrl: e.sourceUrl || null,
+        organizer: e.organizer ?? '',
+        contributor: e.contributor ?? '',
+        photo: media ? (media.sizes?.cover?.url ?? media.url ?? null) : place ? coverOf(place) : null,
+        credit: media ? ((media as { credit?: string }).credit ?? null) : place ? (coverCredit(place)?.text ?? null) : null,
+        placeSlug: place?.slug ?? null,
+      }
+    })
 }

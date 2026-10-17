@@ -8,3 +8,4 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - 2026-10-17 — dictée du navigateur avec choix de langue (FR, عربي, EN) maintenant, moteur spécialisé (type Whisper) plus tard — décision de Rad.
 - 2026-10-17 — la barre comprend et ouvre la page pré-remplie, sans préparer de réservation — décision de Rad (option A).
 - 2026-10-17 — texte tapé : bouton ✦ « Améliorer » facultatif et annulable, jamais de reformulation automatique — décision de Rad.
+- 2026-10-17 — « Demandez à DALIL » : conversation guidée dans un panneau (échanges gardés, question de précision, page proposée), contexte autorisé = titre de la page + wilaya choisie ; fermer (× ou Échap) ne déplace pas la page ; pas de réponses rédigées librement — décision de Rad.

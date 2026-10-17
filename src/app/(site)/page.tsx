@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { getShowcase, type PlaceCard } from '@/modules/annuaire'
+import { getFeaturedDestination, getPlaces, getShowcase, NATURE_CATEGORIES, PLACE_TYPES, type PlaceCard } from '@/modules/annuaire'
+import { HomeEntries, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
 import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
 import { Carousel } from '@/platform/ui/Carousel'
@@ -40,10 +41,33 @@ function PlaceTile({ p, i }: { p: PlaceCard; i: number }) {
 }
 
 export default async function Home() {
-  const { top, cities, total } = await getShowcase()
+  const [{ top, cities, total }, all, destination] = await Promise.all([getShowcase(), getPlaces(), getFeaturedDestination()])
+  const lit = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
+  // Nombre de lieux publiés et un exemple illustré (photo de la fiche, avec son crédit) ; jamais deux fois le même exemple.
+  const used = new Set<string>()
+  const stat = (ok: (p: PlaceCard) => boolean, prefer: (p: PlaceCard) => boolean = () => true): EntryStat => {
+    const list = all.filter(ok)
+    const first = list.find((p) => lit.includes(p) && prefer(p) && !used.has(p.slug)) ?? list.find((p) => lit.includes(p) && !used.has(p.slug))
+    if (first) used.add(first.slug)
+    return { photo: first ? { src: first.cover, credit: first.credit } : null, count: list.length, example: first?.name ?? null }
+  }
+  const WEEKEND = new Set([...PLACE_TYPES.famille, ...PLACE_TYPES.nature, ...PLACE_TYPES.culture])
+  const photos: EntryPhotos = {
+    coeur: stat((p) => p.favorite),
+    // Mêmes photos qu’avant pour chaque entrée (jardins et activités familiales, monuments, plages et parcs…).
+    weekend: stat((p) => WEEKEND.has(p.category), (p) => p.category === 'Jardins' || p.category === 'Activités familiales'),
+    decouvrir: stat((p) => p.sector === 'culture-nature-loisirs', (p) => p.category === 'Monuments et sites historiques'),
+    nature: stat((p) => (NATURE_CATEGORIES as readonly string[]).includes(p.category), (p) => p.category === 'Plages' || p.category === 'Parcs naturels et réserves'),
+    adresses: stat(() => true, (p) => p.sector === 'restaurants-gastronomie'),
+    quotidien: stat((p) => ['sante-soins', 'administrations-services-publics', 'commerces-achats', 'transports-mobilite'].includes(p.sector), (p) => p.sector === 'commerces-achats' || p.category === 'Marchés'),
+  }
+  // Pas encore de coup de cœur : la vignette garde une photo (un lieu à l’affiche, non utilisé ailleurs).
+  if (!photos.coeur.photo) {
+    const p = top.find((x) => !used.has(x.slug)) ?? top[0]
+    if (p) photos.coeur = { ...photos.coeur, photo: { src: p.cover, credit: p.credit } }
+  }
   const slides = top.slice(0, 6).map((p) => ({ src: p.cover, title: p.name, place: `${p.city} · ${p.category}`, href: `/adresses/${p.slug}`, credit: p.credit }))
   const byCategory = (c: string) => top.concat([]).find((p) => p.category === c)
-  const sahara = top.find((p) => /tassili|djanet/i.test(p.name + p.city)) ?? top[0]
   return (
     <div className="xp">
       <section className="xp-hero">
@@ -57,33 +81,16 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section container">
-        <div className="section-head" data-reveal>
-          <div>
-            <p className="eyebrow">À votre rythme</p>
-            <h2>Que souhaitez-vous faire aujourd’hui ?</h2>
+      <section className="section">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">À votre rythme</p>
+              <h2>Que souhaitez-vous faire aujourd’hui ?</h2>
+            </div>
           </div>
         </div>
-        <div className="intent-grid">
-          {(
-            [
-              ['/annuaire', 'pin', 'Explorer l’Algérie', 'Monuments, nature, mosquées, musées et bonnes adresses.', 'Découvrir'],
-              ['/installation', 'home', 'S’installer & Vivre', 'Logement, école, santé, transport et vie quotidienne.', 'Préparer mon parcours'],
-              ['/demarches', 'file', 'Faire une démarche', 'Documents, coûts, délais et sources officielles.', 'Accéder aux démarches'],
-            ] as const
-          ).map(([href, icon, title, copy, cta], i) => (
-            <Link key={href} className="intent-card" href={href} data-reveal style={{ ['--i' as string]: i }}>
-              <span>
-                <Icon name={icon} />
-              </span>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-              <b>
-                {cta} <Icon name="arrow" />
-              </b>
-            </Link>
-          ))}
-        </div>
+        <HomeEntries stats={photos} total={total} cities={cities.map(({ name, slug, cover, credit, count, highlight }) => ({ name, slug, cover, credit, count, highlight }))} />
       </section>
 
       <section className="section xp-band">
@@ -130,19 +137,19 @@ export default async function Home() {
         </Carousel>
       </section>
 
-      {sahara && (
-        <section className="xp-parallax" aria-label={sahara.name}>
-          <div className="xp-parallax-img" data-parallax="0.18" style={{ backgroundImage: `url(${sahara.cover})` }} />
+      {destination && (
+        <section className="xp-parallax" aria-label={destination.place.name}>
+          <div className="xp-parallax-img" data-parallax="0.18" style={{ backgroundImage: `url(${destination.place.cover})` }} />
           <div className="xp-parallax-shade" />
           <div className="container xp-parallax-content" data-reveal>
-            <p className="eyebrow inverse">Le grand Sud</p>
-            <h2>Le Sahara, comme nulle part ailleurs.</h2>
-            <p>Canyons de grès, peintures rupestres millénaires et oasis : préparez votre voyage avec des repères fiables.</p>
-            <Link className="button light" href={`/adresses/${sahara.slug}`}>
-              Découvrir {sahara.name}
+            <p className="eyebrow inverse">{destination.eyebrow}</p>
+            <h2>{destination.title}</h2>
+            <p>{destination.text}</p>
+            <Link className="button light" href={`/adresses/${destination.place.slug}`}>
+              {destination.cta}
             </Link>
           </div>
-          {sahara.credit && <small className="xp-credit">{sahara.credit}</small>}
+          {destination.place.credit && <small className="xp-credit">{destination.place.credit}</small>}
         </section>
       )}
 

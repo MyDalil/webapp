@@ -69,6 +69,7 @@ export interface Config {
   blocks: {};
   collections: {
     places: Place;
+    events: Event;
     practitioners: Practitioner;
     appointments: Appointment;
     providers: Provider;
@@ -78,6 +79,7 @@ export interface Config {
     'provider-documents': ProviderDocument;
     media: Media;
     submissions: Submission;
+    'contribution-photos': ContributionPhoto;
     subscribers: Subscriber;
     campaigns: Campaign;
     members: Member;
@@ -92,6 +94,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     places: PlacesSelect<false> | PlacesSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     practitioners: PractitionersSelect<false> | PractitionersSelect<true>;
     appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
     providers: ProvidersSelect<false> | ProvidersSelect<true>;
@@ -101,6 +104,7 @@ export interface Config {
     'provider-documents': ProviderDocumentsSelect<false> | ProviderDocumentsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
+    'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
@@ -116,8 +120,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'featured-destination': FeaturedDestination;
+  };
+  globalsSelect: {
+    'featured-destination': FeaturedDestinationSelect<false> | FeaturedDestinationSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -348,6 +356,14 @@ export interface Place {
     | null;
   internalNote?: string | null;
   /**
+   * Habitant à l’origine de la fiche, s’il souhaite être cité (contribution validée).
+   */
+  contributor?: string | null;
+  /**
+   * Sélection de l’équipe (carte « Nos coups de cœur »). Jamais liée à un paiement ni à un abonnement.
+   */
+  favorite?: boolean | null;
+  /**
    * Calculé à l’enregistrement (règle écrite dans le module annuaire). Jamais lié à un paiement.
    */
   score?: number | null;
@@ -460,6 +476,124 @@ export interface Member {
     | null;
   password?: string | null;
   collection: 'members';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  type: 'culture' | 'festival' | 'exposition' | 'sport' | 'nature' | 'gastronomie' | 'atelier' | 'religieux';
+  reliability: 'confirmed' | 'incomplete';
+  /**
+   * Deux ou trois phrases factuelles.
+   */
+  intro?: string | null;
+  startsAt: string;
+  /**
+   * Vide : le jour même.
+   */
+  endsAt?: string | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58'
+    | '59'
+    | '60'
+    | '61'
+    | '62'
+    | '63'
+    | '64'
+    | '65'
+    | '66'
+    | '67'
+    | '68'
+    | '69';
+  city: string;
+  /**
+   * Facultatif : la fiche DALIL du lieu.
+   */
+  place?: (number | null) | Place;
+  address?: string | null;
+  free?: boolean | null;
+  priceMin?: number | null;
+  priceNote?: string | null;
+  family?: boolean | null;
+  accessible?: ('yes' | 'no' | 'unknown') | null;
+  bookingUrl?: string | null;
+  organizer?: string | null;
+  /**
+   * Obligatoire pour un événement confirmé.
+   */
+  sourceUrl?: string | null;
+  /**
+   * Sous licence, auteur affiché. Vide : la photo du lieu lié.
+   */
+  photo?: (number | null) | Media;
+  /**
+   * Nom ou pseudonyme du contributeur, s’il souhaite être cité.
+   */
+  contributor?: string | null;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1156,6 +1290,24 @@ export interface Submission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contribution-photos".
+ */
+export interface ContributionPhoto {
+  id: number;
+  submission: number | Submission;
+  author: string;
+  license: string;
+  certifiedAt: string;
+  filename?: string | null;
+  mimetype?: string | null;
+  size?: number | null;
+  expiresAt: string;
+  data: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "subscribers".
  */
 export interface Subscriber {
@@ -1304,6 +1456,10 @@ export interface PayloadLockedDocument {
         value: number | Place;
       } | null)
     | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
         relationTo: 'practitioners';
         value: number | Practitioner;
       } | null)
@@ -1338,6 +1494,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'submissions';
         value: number | Submission;
+      } | null)
+    | ({
+        relationTo: 'contribution-photos';
+        value: number | ContributionPhoto;
       } | null)
     | ({
         relationTo: 'subscribers';
@@ -1482,6 +1642,8 @@ export interface PlacesSelect<T extends boolean = true> {
         id?: T;
       };
   internalNote?: T;
+  contributor?: T;
+  favorite?: T;
   score?: T;
   source?:
     | T
@@ -1492,6 +1654,36 @@ export interface PlacesSelect<T extends boolean = true> {
         notoriety?: T;
         notes?: T;
       };
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  type?: T;
+  reliability?: T;
+  intro?: T;
+  startsAt?: T;
+  endsAt?: T;
+  wilaya?: T;
+  city?: T;
+  place?: T;
+  address?: T;
+  free?: T;
+  priceMin?: T;
+  priceNote?: T;
+  family?: T;
+  accessible?: T;
+  bookingUrl?: T;
+  organizer?: T;
+  sourceUrl?: T;
+  photo?: T;
+  contributor?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1790,6 +1982,23 @@ export interface SubmissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contribution-photos_select".
+ */
+export interface ContributionPhotosSelect<T extends boolean = true> {
+  submission?: T;
+  author?: T;
+  license?: T;
+  certifiedAt?: T;
+  filename?: T;
+  mimetype?: T;
+  size?: T;
+  expiresAt?: T;
+  data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "subscribers_select".
  */
 export interface SubscribersSelect<T extends boolean = true> {
@@ -1941,6 +2150,42 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * Bloc panoramique de l’accueil. Une destination à la fois, choisie par l’équipe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-destination".
+ */
+export interface FeaturedDestination {
+  id: number;
+  /**
+   * Sa photo de couverture et son lien sont repris. Vide : le Sahara (Tassili n’Ajjer).
+   */
+  place?: (number | null) | Place;
+  eyebrow?: string | null;
+  title?: string | null;
+  text?: string | null;
+  /**
+   * Vide : « Découvrir » + nom du lieu.
+   */
+  cta?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-destination_select".
+ */
+export interface FeaturedDestinationSelect<T extends boolean = true> {
+  place?: T;
+  eyebrow?: T;
+  title?: T;
+  text?: T;
+  cta?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

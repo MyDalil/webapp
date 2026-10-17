@@ -108,15 +108,32 @@ export default async function PlacePage({ params }: Props) {
             </Carousel>
           )}
           {!!p.criteria?.length && (
-            <div className="feature-grid">
-              {p.criteria.map((c) => (
-                <div key={c.id ?? c.criterion} className={`result-${c.result}`}>
-                  <span>{c.criterion}</span>
-                  <strong>{RESULT_LABEL[c.result] ?? c.result}</strong>
-                  {c.note && <small>{c.note}</small>}
-                </div>
-              ))}
-            </div>
+            <>
+              {/* Les critères essentiels d’abord ; les critères propres au lieu restent accessibles d’un geste. */}
+              <div className="feature-grid">
+                {p.criteria.slice(0, 6).map((c) => (
+                  <div key={c.id ?? c.criterion} className={`result-${c.result}`}>
+                    <span>{c.criterion}</span>
+                    <strong>{RESULT_LABEL[c.result] ?? c.result}</strong>
+                    {c.note && <small>{c.note}</small>}
+                  </div>
+                ))}
+              </div>
+              {p.criteria.length > 6 && (
+                <details className="criteria-more">
+                  <summary>Voir les autres critères ({p.criteria.length - 6})</summary>
+                  <div className="feature-grid">
+                    {p.criteria.slice(6).map((c) => (
+                      <div key={c.id ?? c.criterion} className={`result-${c.result}`}>
+                        <span>{c.criterion}</span>
+                        <strong>{RESULT_LABEL[c.result] ?? c.result}</strong>
+                        {c.note && <small>{c.note}</small>}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
+            </>
           )}
           <div className="reviews-card place-practical">
             <div>
@@ -180,12 +197,17 @@ export default async function PlacePage({ params }: Props) {
                 {updated ? `Dernière vérification le ${updated}. ` : ''}
                 {status === 'labelled' ? 'Le label Excellence a été attribué après vérification des critères DALIL.' : 'La publication ne vaut pas attribution du label Excellence.'}
               </p>
+              {/* Contribution communautaire, distincte du contenu éditorial et de la vérification. */}
+              {(p as { contributor?: string | null }).contributor && <p className="contribution-credit">Lieu proposé par {(p as { contributor?: string }).contributor}, habitant contributeur. Fiche relue par l’équipe DALIL.</p>}
               <div className="button-row">
                 {p.sources?.map((s) => (
                   <a key={s.id ?? s.url} className="button outline" href={link(s.url)} target="_blank" rel="noreferrer">
                     {s.label || 'Consulter la source'} ↗
                   </a>
                 ))}
+                <Link className="button text" href={`/proposer?type=ferme&fiche=${p.slug ?? slug}`}>
+                  Signaler un lieu fermé <Icon name="arrow" />
+                </Link>
                 <Link className="button text" href={`/proposer?fiche=${p.slug ?? slug}`}>
                   Signaler une information à corriger <Icon name="arrow" />
                 </Link>

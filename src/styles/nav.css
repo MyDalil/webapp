@@ -1,0 +1,221 @@
+/* ——— En-tête : « Guide & Services », six rubriques, méga-menus (validé par Rad, 2026-10-17) ——— */
+.brand-text { display: grid; gap: 3px; }
+.brand-tagline { color: var(--muted); font: 600 .62rem/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.header-inner { gap: 16px; }
+.primary-nav { gap: 2px; }
+.primary-nav .nav-more { padding-inline: 10px; }
+.primary-nav .nav-more { white-space: nowrap; }
+.primary-nav .nav-more svg { transition: transform .2s ease; }
+.primary-nav .nav-more[aria-expanded="true"] svg { transform: rotate(180deg); }
+.primary-nav .nav-more.is-current { color: var(--text); }
+/* Barre de menu sans gris (demande de Rad) : textes en couleur du texte, aucun fond au survol ni à l’ouverture ; le vert signale la rubrique. */
+.primary-nav .nav-more, .primary-nav .nav-more:hover, .primary-nav .nav-more[aria-expanded="true"] { background: transparent; color: var(--text); }
+.primary-nav .nav-more:hover, .primary-nav .nav-more[aria-expanded="true"] { color: var(--green); }
+.primary-nav .nav-more[aria-expanded="true"]::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -16px; height: 2px; background: var(--green); }
+.brand-tagline { color: var(--green) !important; }
+.wilaya-pill { border-color: color-mix(in srgb, var(--green) 30%, var(--line)); }
+.primary-nav .nav-more.is-current::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -16px; height: 2px; background: var(--green); }
+.nav-more:focus-visible, .wilaya-pill:focus-visible, .mega2-entry:focus-visible, .drawer-head:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 45%, transparent); outline-offset: 2px; }
+
+/* Méga-menu au format de la capture validée */
+.mega2 { position: fixed; top: var(--header, 75px); left: 0; right: 0; z-index: 99; padding: 28px max(24px, calc((100vw - 1240px) / 2)) 26px; border-bottom: 1px solid var(--line); border-radius: 0 0 28px 28px; background: var(--surface); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .3); animation: mega-in .22s ease both; }
+.mega2[hidden] { display: none; }
+.mega2-inner { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); gap: 32px; align-items: stretch; }
+.mega2-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; margin: 0; padding: 0 32px 0 0; list-style: none; border-right: 1px solid var(--line); }
+.mega2-entry { display: flex; gap: 16px; align-items: center; min-height: 72px; padding: 10px 12px; border-radius: 16px; color: var(--text); text-decoration: none; transition: background .2s ease; }
+.mega2-entry:hover { background: var(--surface-2); }
+.mega2-ico { display: grid; place-items: center; flex: 0 0 auto; width: 52px; height: 52px; border-radius: 16px; background: color-mix(in srgb, var(--green) 9%, var(--surface)); color: var(--green); }
+.mega2-ico svg { width: 24px; height: 24px; stroke-width: 1.7; }
+.mega2-text { display: grid; gap: 4px; min-width: 0; }
+.mega2-text strong { display: inline-flex; align-items: center; gap: 6px; font: 650 1.02rem/1.25 Manrope, Inter, sans-serif; letter-spacing: -.01em; }
+.mega2-text strong svg { width: 13px; height: 13px; stroke-width: 2.2; transition: transform .2s ease; }
+.mega2-entry:hover strong svg { transform: translateX(3px); }
+.mega2-text small { color: var(--muted); font-size: .86rem; line-height: 1.4; }
+
+.mega2-feature { position: relative; isolation: isolate; display: flex; align-items: flex-end; min-height: 236px; padding: 24px; overflow: hidden; border-radius: 22px; background: var(--green) center / cover no-repeat; color: #fff; }
+.mega2-feature::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 25%, rgba(5, 12, 9, .82)); }
+.mega2-feature.no-photo { background: linear-gradient(135deg, var(--green), color-mix(in srgb, var(--green) 55%, #0b2a1c)); }
+.mega2-feature-copy { display: grid; gap: 8px; max-width: calc(100% - 70px); }
+.mega2-place { display: inline-flex; align-items: center; gap: 6px; font-size: .9rem; color: rgba(255, 255, 255, .92); }
+.mega2-place svg { width: 16px; height: 16px; }
+.mega2-feature-link { color: #fff; text-decoration: none; }
+.mega2-feature-link::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.mega2-feature-link:focus-visible::after { outline: 3px solid #fff; outline-offset: -5px; }
+.mega2-feature strong { font: 700 clamp(1.25rem, 1.9vw, 1.7rem)/1.18 Manrope, sans-serif; letter-spacing: -.02em; }
+.mega2-dots { position: relative; z-index: 2; display: flex; gap: 6px; margin-top: 6px; }
+.mega2-dots button { width: 28px; height: 24px; padding: 10px 0; border: 0; background: none; cursor: pointer; }
+.mega2-dots button::before { content: ""; display: block; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .45); }
+.mega2-dots button[aria-pressed="true"] { width: 44px; }
+.mega2-dots button[aria-pressed="true"]::before { background: #fff; }
+.mega2-arrow { position: absolute; right: 22px; bottom: 26px; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: rgba(255, 255, 255, .16); backdrop-filter: blur(8px); }
+.mega2-arrow svg { width: 22px; height: 22px; stroke: #fff; }
+.mega2-credit { position: absolute; top: 12px; right: 14px; z-index: 2; max-width: 70%; overflow: hidden; color: rgba(255, 255, 255, .75); font-size: .66rem; white-space: nowrap; text-overflow: ellipsis; }
+
+.mega2-foot { display: grid; gap: 10px; margin-top: 22px; }
+.mega2-extra { justify-self: end; color: var(--muted); font-size: .84rem; text-decoration: none; }
+.mega2-extra:hover { color: var(--green); }
+
+/* Trouvez rapidement */
+.quick-find { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, 1.4fr) auto; gap: 14px; align-items: center; padding: 16px 18px 16px 26px; border-radius: 20px; background: color-mix(in srgb, var(--green) 5%, var(--surface-2)); }
+.quick-find-title { display: inline-flex; align-items: center; gap: 12px; margin: 0; color: var(--text); font: 700 1.08rem/1.2 Manrope, sans-serif; white-space: nowrap; }
+.quick-find-title svg { width: 24px; height: 24px; stroke-width: 2; }
+.quick-field { position: relative; display: block; margin: 0; }
+.quick-field > svg { position: absolute; left: 15px; top: 50%; width: 19px; height: 19px; transform: translateY(-50%); color: var(--text); pointer-events: none; }
+.quick-field select, .quick-field input { min-height: 52px; padding-left: 44px; border-radius: 14px; background-color: var(--surface); font-size: .93rem; font-weight: 500; }
+.quick-field select { padding-right: 34px; background-position: right 12px center; }
+.quick-query > svg { color: var(--muted); }
+.quick-submit { min-height: 52px; padding-inline: 22px; border-radius: 14px; white-space: nowrap; }
+.quick-submit svg { width: 18px; height: 18px; stroke: currentColor; }
+
+/* Wilaya */
+.wilaya-wrap { position: relative; }
+.wilaya-pill { display: inline-flex; align-items: center; gap: 7px; height: 40px; max-width: 190px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font: 600 .86rem/1 Inter, sans-serif; cursor: pointer; }
+.wilaya-pill > svg:first-child { width: 17px; height: 17px; color: var(--green); flex: 0 0 auto; }
+.wilaya-pill span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.wilaya-pill .chev { width: 12px; height: 12px; flex: 0 0 auto; }
+.wilaya-menu { width: 300px; right: 0; left: auto; padding: 14px; }
+.wilaya-help { margin: 0 0 10px; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+.wilaya-menu input { min-height: 44px; margin-bottom: 8px; }
+.wilaya-list { display: grid; max-height: 320px; overflow-y: auto; }
+.wilaya-list button { display: flex; align-items: center; gap: 10px; min-height: 40px; width: 100%; padding: 8px 10px; border: 0; border-radius: 10px; background: none; color: var(--text); font: 500 .92rem Inter, sans-serif; text-align: left; cursor: pointer; }
+.wilaya-list button:hover, .wilaya-list button:focus-visible { background: var(--surface-2); outline: none; }
+.wilaya-list button[aria-selected="true"] { font-weight: 700; }
+.wilaya-list small { width: 22px; color: var(--muted); font-size: .74rem; }
+.wilaya-list b { margin-left: auto; color: var(--green); }
+.wilaya-empty { margin: 8px 10px; color: var(--muted); font-size: .86rem; }
+
+/* Écrans moyens : on resserre avant de passer au menu mobile */
+@media (max-width: 1440px) {
+  .header-inner { gap: 14px; width: calc(100% - 32px); }
+  .primary-nav .nav-more { padding-inline: 8px; font-size: .9rem; }
+}
+@media (max-width: 1320px) {
+  .wilaya-pill { max-width: 150px; }
+  .quick-find { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr) minmax(0, 1.6fr) auto; padding-left: 18px; }
+  .quick-find-title { display: none; }
+}
+@media (max-width: 1160px) {
+  .brand-tagline { display: none; }
+  .wilaya-pill span { display: none; }
+  .wilaya-pill { padding: 0 10px; }
+  .mega2-inner { grid-template-columns: minmax(0, 1fr) 280px; }
+  .mega2-grid { grid-template-columns: 1fr 1fr; gap: 4px 12px; padding-right: 18px; }
+  .mega2-ico { width: 44px; height: 44px; border-radius: 13px; }
+}
+
+/* Menu mobile : rubriques en accordéon */
+.mobile-menu .wilaya-wrap { margin-bottom: 10px; }
+.mobile-menu .wilaya-pill { max-width: none; width: 100%; height: 48px; justify-content: flex-start; }
+.mobile-menu .wilaya-pill span { display: inline; }
+.mobile-menu .wilaya-pill .chev { margin-left: auto; }
+.mobile-menu .wilaya-menu { position: static; width: auto; margin-top: 8px; box-shadow: none; }
+.drawer-rubric { border-bottom: 1px solid var(--line); }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 54px; padding: 0 2px; border: 0; background: none; color: var(--text); font: 650 1.05rem Manrope, sans-serif; cursor: pointer; }
+.drawer-head svg { width: 16px; height: 16px; transition: transform .2s ease; }
+.drawer-head[aria-expanded="true"] svg { transform: rotate(180deg); }
+.drawer-body { display: grid; gap: 2px; padding: 0 0 12px; }
+.drawer-body[hidden] { display: none; }
+.drawer-body a { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 4px 6px; border-radius: 12px; color: var(--text); font-weight: 600; text-decoration: none; }
+.drawer-body a:active { background: var(--surface-2); }
+.drawer-body .mega2-ico { width: 38px; height: 38px; border-radius: 11px; }
+.drawer-body .mega2-ico svg { width: 19px; height: 19px; }
+.drawer-body .drawer-all { color: var(--green); }
+/* Six rubriques : le menu mobile prend le relais dès 1100 px (au lieu de 920) pour ne jamais rogner l’en-tête. */
+@media (max-width: 1100px) {
+  .primary-nav { display: none; }
+  .header-inner { width: min(100% - 28px, 1340px); }
+  .header-actions { margin-left: auto; }
+  .hamburger { display: block; }
+  .mega2 { display: none !important; }
+  .header-actions > .wilaya-wrap { display: none; }
+}
+@media (max-width: 1100px) { .brand-tagline { display: block; } }
+@media (max-width: 400px) {
+  .brand-tagline { font-size: .54rem; letter-spacing: .08em; }
+  .brand { gap: 8px; }
+  .login-button { padding-inline: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .mega2 { animation: none; } }
+
+/* ——— Accueil : huit entrées au format des tuiles « Par ville » (texte sur la photo, nombre et exemple) ——— */
+.entry-tile { position: relative; }
+.entry-tile .city-tile { height: 100%; }
+.entry-action { position: absolute; left: 14px; top: 14px; z-index: 2; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--green); font: 650 .84rem Inter, sans-serif; cursor: pointer; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .4); }
+.entry-action:hover { background: #fff; }
+.entry-action:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.entry-credit { position: absolute; top: 12px; right: 12px; z-index: 2; max-width: 62%; overflow: hidden; color: rgba(255, 255, 255, .85); font-size: .62rem; white-space: nowrap; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); pointer-events: none; }
+/* Lieux à visiter (page week-end) : vignettes simples */
+.we-places .entry-link { display: grid; gap: 6px; color: var(--text); text-decoration: none; }
+.we-places .entry-img { display: block; aspect-ratio: 4 / 3; margin-bottom: 6px; border-radius: 16px; background: var(--surface-3) center / cover no-repeat; }
+.we-places .entry-link strong { font: 700 1rem/1.25 Manrope, sans-serif; }
+.we-places .entry-sub { color: var(--muted); font-size: .86rem; }
+
+/* ——— Que faire ce week-end ? ——— */
+.we-filters { display: grid; gap: 14px; margin-bottom: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); }
+.we-when { display: flex; flex-wrap: wrap; gap: 6px; }
+.we-when button, .we-toggles button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font: 600 .9rem Inter, sans-serif; cursor: pointer; }
+.we-when button[aria-checked="true"], .we-toggles button[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fff; }
+html[data-theme="dark"] .we-when button[aria-checked="true"], html[data-theme="dark"] .we-toggles button[aria-pressed="true"] { color: #05140d; }
+.we-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 12px; align-items: end; }
+.we-row label { display: grid; gap: 6px; color: var(--muted); font-size: .8rem; font-weight: 600; }
+.we-row select { min-height: 46px; font-size: .92rem; font-weight: 500; color: var(--text); }
+.we-row select:disabled { opacity: .55; cursor: not-allowed; }
+.we-toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.we-count { margin: 0 0 22px; color: var(--muted); }
+.we-count::first-letter { text-transform: uppercase; }
+.we-section { margin-top: 34px; }
+.we-section h2 { margin: 0 0 8px; font-size: 1.5rem; letter-spacing: -.02em; }
+.we-list { display: grid; gap: 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.we-event { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; padding: 16px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); }
+.we-event.is-incomplete { border-style: dashed; }
+.we-event-img { aspect-ratio: 4 / 3; border-radius: 16px; background: var(--surface-3) center / cover no-repeat; }
+.we-event-body { display: grid; align-content: start; gap: 6px; min-width: 0; }
+.we-event-when { margin: 0; color: var(--green); font-weight: 700; font-size: .88rem; }
+.we-event-when::first-letter { text-transform: uppercase; }
+.we-event h3 { margin: 0; font-size: 1.2rem; }
+.we-event-where, .we-event-intro { margin: 0; color: var(--muted); }
+.we-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; padding: 0; list-style: none; }
+.chip-warn { background: color-mix(in srgb, var(--gold) 18%, var(--surface)); color: var(--text); }
+.we-event-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; }
+.we-event-links .button { min-height: 40px; }
+.we-event-meta { color: var(--muted); }
+.we-places { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin: 16px 0 0; padding: 0; list-style: none; }
+.we-places li { position: relative; }
+.we-empty { margin-top: 10px; }
+@media (max-width: 1100px) { .we-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } .we-toggles { grid-column: 1 / -1; } .we-places { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .we-filters { padding: 14px; }
+  .we-when button { flex: 1 1 auto; min-height: 44px; }
+  .we-row { grid-template-columns: 1fr 1fr; }
+  .we-event { grid-template-columns: 1fr; gap: 12px; }
+  .we-places { gap: 18px 14px; }
+}
+
+/* Fiche : critères essentiels visibles, les autres à la demande */
+.criteria-more { margin: -10px 0 28px; }
+.criteria-more > summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--green); font-weight: 650; cursor: pointer; list-style: none; }
+.criteria-more > summary::-webkit-details-marker { display: none; }
+.criteria-more > summary::after { content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .2s ease; }
+.criteria-more[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
+.criteria-more > summary:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 45%, transparent); outline-offset: 2px; }
+.criteria-more .feature-grid { margin-top: 14px; }
+.criteria-filter { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; padding: 0; border: 0; }
+.criteria-filter legend { margin-bottom: 7px; font-size: .82rem; font-weight: 650; }
+.chip-toggle { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font: 500 .84rem Inter, sans-serif; cursor: pointer; }
+.chip-toggle[aria-pressed="true"] { border-color: var(--green); background: var(--green-soft); color: var(--green); font-weight: 650; }
+
+/* Contribuer : dates de l’événement, droits des photos, mention du contributeur */
+.contribution-dates, .contribution-license { margin: 18px 0 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; }
+.contribution-dates legend, .contribution-license legend { padding: 0 6px; font-weight: 700; }
+.contribution-check { display: flex !important; align-items: flex-start; gap: 10px; font-weight: 500 !important; line-height: 1.45; }
+.contribution-check input { width: 20px; height: 20px; margin-top: 2px; flex: 0 0 auto; accent-color: var(--green); }
+.contribution-cite { display: grid; gap: 6px; margin-top: 18px; }
+.contribution-credit { margin: 6px 0 14px; color: var(--muted); font-size: .9rem; }
+/* Très petits écrans (320 px) : la signature passe sous le seuil de lisibilité, on garde le logo seul. */
+@media (max-width: 340px) { .brand-tagline { display: none !important; } }
+.entry-tile.has-action .entry-credit { max-width: 38%; }
+/* « Que faire ce week-end ? » : titre et ligne sur une seule ligne, pour aligner les titres des vignettes */
+/* Huit vignettes de l’accueil : même taille de titre et une ligne chacune, pour que tous les titres soient alignés */
+.entry-tile .city-tile-body h3 { font-size: 1.12rem; line-height: 1.458rem; white-space: nowrap; }
+.entry-tile .city-tile-body p { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: .76rem; line-height: 1.271rem; }
+@media (max-width: 360px) { .entry-tile .city-tile-body h3 { font-size: .9rem; } }

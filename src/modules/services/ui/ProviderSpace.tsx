@@ -6,7 +6,7 @@ import { LANGUAGES } from '@/platform/referentiel/languages'
 import { CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from '../activities'
 import type { MissionView } from '../marketplace'
 import { MissionList } from './MyMissions'
-import { shrinkImage } from './shrink'
+import { shrinkImage } from '@/platform/ui/shrink'
 import { SmartText } from '@/platform/ui/SmartText'
 
 type OfferRow = { activity: string; pricing: 'hour' | 'flat'; price?: number | null; unit?: string | null; hours?: number | null }
