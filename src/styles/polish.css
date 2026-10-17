@@ -54,3 +54,10 @@
   .space-profile { grid-template-columns: 1fr; }
   .space-next .button.text { margin-left: 0; }
 }
+
+/* Accueil : barre « Demandez à DALIL » masquée tant que la grande recherche est visible */
+.assistant-dock { transition: opacity .35s ease, transform .35s ease, visibility 0s linear 0s; }
+.assistant-dock.is-tucked { opacity: 0; visibility: hidden; transform: translate(-50%, 18px); transition: opacity .35s ease, transform .35s ease, visibility 0s linear .35s; }
+.assistant-dock.is-tucked * { pointer-events: none; }
+@media (max-width: 760px) { .assistant-dock.is-tucked { transform: translateY(18px); } }
+@media (prefers-reduced-motion: reduce) { .assistant-dock, .assistant-dock.is-tucked { transition: none; } }

@@ -23,6 +23,25 @@ export function Assistant() {
   const [context, setContext] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
+  // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
+  const [tucked, setTucked] = useState(false)
+  useEffect(() => {
+    setTucked(false)
+    if (path !== '/') return
+    let obs: IntersectionObserver | null = null
+    let raf = 0
+    const watch = () => {
+      const hero = document.querySelector('.search-bar')
+      if (!hero) return void (raf = requestAnimationFrame(watch))
+      obs = new IntersectionObserver(([e]) => setTucked(e.isIntersecting), { threshold: 0.01 })
+      obs.observe(hero)
+    }
+    watch()
+    return () => {
+      cancelAnimationFrame(raf)
+      obs?.disconnect()
+    }
+  }, [path])
 
   useEffect(() => {
     setExpanded(false)
@@ -97,7 +116,7 @@ export function Assistant() {
   if (path === '/recherche') return null
 
   return (
-    <div className={`assistant-dock ${expanded ? 'expanded' : ''}`}>
+    <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
       <button className="assistant-orb" type="button" aria-label="Ouvrir l’assistant DALIL" onClick={() => setExpanded(!expanded)}>
         <span aria-hidden="true">✦</span>
       </button>
