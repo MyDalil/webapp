@@ -10,7 +10,7 @@ const routeOf = (slug: string[]) => '/' + slug.map(decodeURIComponent).join('/')
 export const dynamicParams = false
 
 /** Routes ayant une page dédiée au format de la maquette. */
-const DEDICATED = ['/', '/recherche', '/annuaire', '/label', '/proposer', '/installation', '/espace']
+const DEDICATED = ['/', '/recherche', '/annuaire', '/label', '/proposer', '/installation']
 
 export function generateStaticParams() {
   return ROUTES.filter((r) => !DEDICATED.includes(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/')).map((r) => ({ slug: r.slice(1).split('/') }))

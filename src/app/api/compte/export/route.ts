@@ -13,6 +13,7 @@ export async function GET() {
     exporteLe: new Date().toISOString(),
     source: 'DALIL — mydalil.com',
     compte: { email: member.email, prenom: member.firstName, nom: member.lastName, telephone: member.phone, type: member.kind, genre: member.gender ?? null, emailVerifie: Boolean(member._verified), conditionsAccepteesLe: member.termsAcceptedAt, creeLe: member.createdAt },
+    espacePersonnel: (member as { space?: unknown }).space ?? null,
     sante: await exportSanteData(member),
     services: await exportServicesData(member),
   }

@@ -427,6 +427,18 @@ export interface Member {
    */
   gender?: ('femme' | 'homme') | null;
   termsAcceptedAt: string;
+  /**
+   * Profil, favoris, listes, préparation et parcours du membre.
+   */
+  space?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1818,6 +1830,7 @@ export interface MembersSelect<T extends boolean = true> {
   kind?: T;
   gender?: T;
   termsAcceptedAt?: T;
+  space?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

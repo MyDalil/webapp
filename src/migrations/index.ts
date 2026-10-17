@@ -13,6 +13,7 @@ import * as migration_20261016_180000_demo_prestataire from './20261016_180000_d
 import * as migration_20261016_183051_services_photos_pieces from './20261016_183051_services_photos_pieces';
 import * as migration_20261016_200000_rate_limits from './20261016_200000_rate_limits';
 import * as migration_20261016_221333_ia_consommation from './20261016_221333_ia_consommation';
+import * as migration_20261016_234359_membres_espace from './20261016_234359_membres_espace';
 import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
 
 export const migrations = [
@@ -90,6 +91,11 @@ export const migrations = [
     up: migration_20261016_221333_ia_consommation.up,
     down: migration_20261016_221333_ia_consommation.down,
     name: '20261016_221333_ia_consommation',
+  },
+  {
+    up: migration_20261016_234359_membres_espace.up,
+    down: migration_20261016_234359_membres_espace.down,
+    name: '20261016_234359_membres_espace',
   },
   {
     up: migration_20261017_090000_ai_budget_alerts.up,

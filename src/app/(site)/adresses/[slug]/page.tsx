@@ -227,11 +227,6 @@ export default async function PlacePage({ params }: Props) {
             )}
           </ul>
           <small>{updated ? `Dernière vérification : ${updated}` : 'Vérification en cours'}</small>
-          {!(p.showContacts && contacts.length) && (
-            <Link className="button primary wide" href="/onboarding">
-              Voir les coordonnées
-            </Link>
-          )}
           <Link className="button text" href="/label">
             Voir nos critères <Icon name="arrow" />
           </Link>

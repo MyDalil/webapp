@@ -81,5 +81,13 @@ export const Members: CollectionConfig = {
       ],
     },
     { name: 'termsAcceptedAt', type: 'date', label: 'Conditions acceptées le', required: true, admin: { readOnly: true } },
+    {
+      // Profil (ville, intérêts), favoris, listes, préparation, parcours, demandes : écrit seulement par le serveur.
+      name: 'space',
+      type: 'json',
+      label: 'Espace personnel',
+      admin: { readOnly: true, description: 'Profil, favoris, listes, préparation et parcours du membre.' },
+      access: { create: () => false, update: () => false },
+    },
   ],
 }

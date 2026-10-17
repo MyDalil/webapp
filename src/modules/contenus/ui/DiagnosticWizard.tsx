@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { openLogin } from '@/platform/shell/LoginDialog'
 import Link from 'next/link'
 import { GUIDES } from '@/platform/referentiel/catalog'
 
@@ -25,6 +26,7 @@ export function DiagnosticWizard() {
     try {
       const r = await fetch('/api/diagnostics', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ answers }) })
       const j = await r.json()
+      if (r.status === 401) openLogin()
       setMsg(r.ok ? 'Votre parcours est enregistré dans votre espace.' : (j.error ?? 'Enregistrement indisponible.'))
     } catch {
       setMsg('Connexion interrompue. Vos réponses restent dans cette page.')

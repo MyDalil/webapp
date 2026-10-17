@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { currentMember } from '@/modules/sante'
 import { MyAppointments } from '@/modules/sante/ui'
-import { AccountActions } from '@/modules/membres/ui'
+import { AccountActions, MySpace } from '@/modules/membres/ui'
+import { readSession } from '@/modules/membres'
 import { MyMissions } from '@/modules/services/ui'
 
 export const metadata: Metadata = { title: 'Mon compte · DALIL', robots: { index: false } }
@@ -12,6 +13,8 @@ export const dynamic = 'force-dynamic'
 export default async function Account() {
   const m = await currentMember()
   if (!m) redirect('/connexion/particulier?next=/mon-compte')
+  const s = await readSession()
+  const st = s?.state
   return (
     <section className="auth-page container account-page">
       <p className="eyebrow">Mon compte</p>
@@ -30,6 +33,16 @@ export default async function Account() {
       </div>
       <MyAppointments />
       <MyMissions />
+      <MySpace
+        initial={{
+          profile: { territory: s?.profile.territory ?? '', interest: s?.profile.interest ?? '' },
+          favorites: st?.favorites ?? [],
+          collections: st?.collections ?? [],
+          items: st?.items ?? [],
+          routes: st?.diagnostics.length ?? 0,
+          applications: st?.applications.length ?? 0,
+        }}
+      />
       <section className="account-block">
         <h2>Mes informations</h2>
         <p>

@@ -15,25 +15,15 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null)
   if (!body?.action) return fail('Requête invalide.')
 
+  const s = await ensureSession()
+  if (!s) return fail('Connectez-vous pour continuer.', 401)
+
   if (body.action === 'profile') {
     const p = body.profile ?? {}
-    const nickname = clean(p.nickname, 60)
-    if (!nickname) return fail('Indiquez un prénom ou un pseudo.')
-    const s = await ensureSession()
-    const profile = {
-      nickname,
-      role: clean(p.role, 60),
-      territory: clean(p.territory, 120),
-      interest: clean(p.interest, 120),
-      businessName: clean(p.businessName, 200),
-      tracking: !!p.tracking,
-    }
+    const profile = { nickname: s.profile.nickname, territory: clean(p.territory, 120), interest: clean(p.interest, 160) }
     await saveSession(s.id, { profile })
     return json(view({ ...s, profile }))
   }
-
-  const s = await readSession()
-  if (!s) return fail('Créez votre profil test pour continuer.', 401)
 
   if (body.action === 'favorite') {
     const path = clean(body.path, 300)
