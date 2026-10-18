@@ -7,7 +7,7 @@ import research from '@/modules/annuaire/data/research-places.json'
  * Faits vérifiés à la source, textes rédigés par DALIL, statut « Repérée — à vérifier ».
  * Complète les fiches existantes sans rien écraser.
  */
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   const PUBLIC = new Set(['administrations-services-publics', 'education-formation', 'sante-soins'])
   const records: ImportRecord[] = (research as Record<string, unknown>[]).map((r) => ({
     ...(r as unknown as ImportRecord),
@@ -15,7 +15,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
     note: `Vérifié sur ${r.sourceUrl} le ${r.checkedAt ?? '2026-10-17'} — confiance ${r.confidence ?? 'moyenne'}.`,
     publicBody: PUBLIC.has(String(r.sector)) && String(r.category) !== 'Cliniques',
   }))
-  await importPlaces(payload, req, records)
+  await importPlaces(payload, req, records, db as never)
 }
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {

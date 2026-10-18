@@ -84,7 +84,7 @@ for (const p of raw) {
   if (taken.has(k)) continue
   taken.set(k, { lat: p.lat, lng: p.lng })
   const city = p.city || c?.name || wName
-  const bits = [`${SINGULAR[p.category] ?? p.category} à ${city} (wilaya de ${wName}).`]
+  const bits = [`${SINGULAR[p.category] ?? p.category} à ${city} (wilaya ${/^[AEIOUÉÈÂÎÏ]/i.test(wName) ? 'd’' : 'de '}${wName}).`]
   if (p.operator && key(p.operator) !== key(p.name)) bits.push(`Géré par ${p.operator}.`)
   if (p.wheelchair === 'yes') bits.push('Accès en fauteuil roulant signalé.')
   bits.push('Informations issues d’OpenStreetMap, à vérifier par DALIL.')

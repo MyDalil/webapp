@@ -8,7 +8,7 @@ import path from 'node:path'
  * Faits seulement (nom, position, contacts, horaires), présentation factuelle rédigée par DALIL, statut « Repérée — à vérifier ».
  * Ne remplace jamais une fiche existante : la complète seulement.
  */
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Lu sur disque (pas importé) : le jeu (~15 Mo) reste hors des fonctions serveur. Migration appliquée au build (vercel-build).
   const osm = JSON.parse(readFileSync(path.resolve(process.cwd(), 'src/modules/annuaire/data/osm-selected.json'), 'utf8')) as unknown[]
   const PUBLIC = new Set(['administrations-services-publics', 'education-formation', 'transports-mobilite'])
@@ -17,7 +17,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
     provider: 'osm',
     publicBody: PUBLIC.has(r.sector) || r.category === 'Hôpitaux',
   }))
-  await importPlaces(payload, req, records)
+  await importPlaces(payload, req, records, db as never)
 }
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
