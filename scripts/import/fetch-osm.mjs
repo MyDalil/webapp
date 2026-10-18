@@ -57,6 +57,22 @@ const GROUPS = [
   ['commerces-achats', 'Librairies', ['["shop"="books"]']],
   ['commerces-achats', 'Habillement', ['["shop"="clothes"]']],
   ['logement-immobilier', 'Agences immobilières', ['["office"="estate_agent"]']],
+  ['restaurants-gastronomie', 'Salons de thé', ['["amenity"="cafe"]["cuisine"~"tea"]', '["shop"="tea"]']],
+  ['restaurants-gastronomie', 'Traiteurs', ['["craft"="caterer"]', '["shop"="caterer"]']],
+  ['bien-etre-sport', 'Spas', ['["leisure"="spa"]', '["amenity"="spa"]', '["shop"="massage"]']],
+  ['bien-etre-sport', 'Soins esthétiques', ['["shop"="beauty"]', '["shop"="hairdresser"]']],
+  ['bien-etre-sport', 'Clubs sportifs', ['["club"="sport"]', '["sport"]["leisure"="sports_club"]']],
+  ['mosquees-priere', 'Salles de prière', ['["amenity"="place_of_worship"]["religion"="muslim"]["building"!="mosque"]["place_of_worship"="musalla"]', '["amenity"="prayer_room"]']],
+  ['mosquees-priere', 'Associations caritatives et entraide', ['["office"="charity"]', '["office"="ngo"]', '["social_facility"]']],
+  ['mosquees-priere', 'Pompes funèbres musulmanes et toilette mortuaire', ['["shop"="funeral_directors"]', '["amenity"="funeral_hall"]']],
+  ['commerces-achats', 'Équipement de la maison', ['["shop"="furniture"]', '["shop"="hardware"]', '["shop"="appliance"]', '["shop"="houseware"]', '["shop"="doityourself"]']],
+  ['transports-mobilite', 'Transporteurs', ['["office"="logistics"]', '["office"="courier"]', '["amenity"="courier"]']],
+  ['transports-mobilite', 'Déménagement', ['["office"="moving_company"]']],
+  ['maison-travaux', 'Architectes', ['["office"="architect"]']],
+  ['maison-travaux', 'Artisans', ['["craft"]["craft"!="caterer"]']],
+  ['maison-travaux', 'Construction', ['["office"="construction_company"]', '["craft"="builder"]', '["shop"="trade"]']],
+  ['droit-finance-conseil', 'Comptables', ['["office"="accountant"]', '["office"="tax_advisor"]']],
+  ['droit-finance-conseil', 'Conseil aux entreprises', ['["office"="consulting"]', '["office"="company"]["company"="consulting"]']],
 ]
 
 async function overpass(q, tries = 8) {
