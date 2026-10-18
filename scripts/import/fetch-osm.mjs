@@ -3,10 +3,10 @@
 // Chaque lieu est rattaché à sa wilaya par les limites administratives OSM (admin_level 4).
 // Sortie : src/modules/annuaire/data/osm-places.json + osm-stats.json (versionnés, sélectionnés puis importés par migration).
 // Lancé par .github/workflows/import-osm.yml (le conteneur de développement n’a pas accès à Overpass).
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs'
 
 const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
-const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']
+const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'https://overpass.kumi.systems/api/interpreter']
 const OUT = 'src/modules/annuaire/data'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const LOG = []
@@ -57,9 +57,25 @@ const GROUPS = [
   ['commerces-achats', 'Librairies', ['["shop"="books"]']],
   ['commerces-achats', 'Habillement', ['["shop"="clothes"]']],
   ['logement-immobilier', 'Agences immobilières', ['["office"="estate_agent"]']],
+  ['restaurants-gastronomie', 'Salons de thé', ['["amenity"="cafe"]["cuisine"~"tea"]', '["shop"="tea"]']],
+  ['restaurants-gastronomie', 'Traiteurs', ['["craft"="caterer"]', '["shop"="caterer"]']],
+  ['bien-etre-sport', 'Spas', ['["leisure"="spa"]', '["amenity"="spa"]', '["shop"="massage"]']],
+  ['bien-etre-sport', 'Soins esthétiques', ['["shop"="beauty"]', '["shop"="hairdresser"]']],
+  ['bien-etre-sport', 'Clubs sportifs', ['["club"="sport"]', '["sport"]["leisure"="sports_club"]']],
+  ['mosquees-priere', 'Salles de prière', ['["amenity"="place_of_worship"]["religion"="muslim"]["building"!="mosque"]["place_of_worship"="musalla"]', '["amenity"="prayer_room"]']],
+  ['mosquees-priere', 'Associations caritatives et entraide', ['["office"="charity"]', '["office"="ngo"]', '["social_facility"]']],
+  ['mosquees-priere', 'Pompes funèbres musulmanes et toilette mortuaire', ['["shop"="funeral_directors"]', '["amenity"="funeral_hall"]']],
+  ['commerces-achats', 'Équipement de la maison', ['["shop"="furniture"]', '["shop"="hardware"]', '["shop"="appliance"]', '["shop"="houseware"]', '["shop"="doityourself"]']],
+  ['transports-mobilite', 'Transporteurs', ['["office"="logistics"]', '["office"="courier"]', '["amenity"="courier"]']],
+  ['transports-mobilite', 'Déménagement', ['["office"="moving_company"]']],
+  ['maison-travaux', 'Architectes', ['["office"="architect"]']],
+  ['maison-travaux', 'Artisans', ['["craft"]["craft"!="caterer"]']],
+  ['maison-travaux', 'Construction', ['["office"="construction_company"]', '["craft"="builder"]', '["shop"="trade"]']],
+  ['droit-finance-conseil', 'Comptables', ['["office"="accountant"]', '["office"="tax_advisor"]']],
+  ['droit-finance-conseil', 'Conseil aux entreprises', ['["office"="consulting"]', '["office"="company"]["company"="consulting"]']],
 ]
 
-async function overpass(q, tries = 3) {
+async function overpass(q, tries = 8) {
   for (let i = 0; i < tries; i++) {
     const url = ENDPOINTS[i % ENDPOINTS.length]
     try {
@@ -69,7 +85,7 @@ async function overpass(q, tries = 3) {
     } catch (e) {
       log('Overpass', url, e.message, 'essai', i + 1)
     }
-    await sleep(20000 * (i + 1))
+    await sleep(Math.min(30000 * (i + 1), 180000))
   }
   throw new Error('Overpass indisponible')
 }
@@ -106,9 +122,12 @@ const inside = (x, y, ring) => {
 }
 const wilayaOf = (lat, lng) => wilayas.find((w) => w.rings.some((r) => inside(lng, lat, r)))
 
-const places = []
-const stats = {}
+const previous = existsSync(`${OUT}/osm-places.json`) ? JSON.parse(readFileSync(`${OUT}/osm-places.json`, 'utf8')) : []
+const prevStats = existsSync(`${OUT}/osm-stats.json`) ? JSON.parse(readFileSync(`${OUT}/osm-stats.json`, 'utf8')).stats ?? {} : {}
+const places = [...previous]
+const stats = { ...prevStats }
 for (const [sector, category, filters] of GROUPS) {
+  if (stats[`${sector} › ${category}`] > 0) continue // déjà récupéré
   const body = filters.map((f) => `nwr${f}["name"](area.dz);`).join('')
   let els = []
   try {

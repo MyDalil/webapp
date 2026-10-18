@@ -1,5 +1,7 @@
 import 'server-only'
-import { getPayload } from 'payload'
+import { cache } from 'react'
+import { getPayload, type Where } from 'payload'
+import { sql } from '@payloadcms/db-postgres'
 import config from '@payload-config'
 import { draftMode } from 'next/headers'
 import type { Media, Place } from '@/payload-types'
@@ -118,15 +120,65 @@ async function client() {
 }
 
 /** Adresses publiées (le site public ne voit jamais les brouillons). */
-export async function getPlaces(): Promise<PlaceCard[]> {
+/**
+ * Vivier des fiches les mieux classées (accueil, vitrines, week-end). Plafonné : l’annuaire complet passe par searchPlaces.
+ * Mis en cache pour la durée d’une requête (plusieurs blocs de la même page le lisent).
+ */
+export const getPlaces = cache(async (): Promise<PlaceCard[]> => {
   try {
     const payload = await client()
-    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, depth: 1, limit: 5000, sort: '-score', overrideAccess: false })
+    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, depth: 1, limit: 1500, sort: '-score', overrideAccess: false })
     return docs.map(toCard)
   } catch {
     return []
   }
+})
+
+export type PlaceSearch = { sector?: string; category?: string; wilaya?: string; q?: string; favorite?: boolean }
+
+/** Recherche dans tout l’annuaire (côté serveur), classée par score : la page ne reçoit que ce qu’elle affiche. */
+export async function searchPlaces(f: PlaceSearch, limit = 400): Promise<{ places: PlaceCard[]; total: number }> {
+  try {
+    const payload = await client()
+    const and: Where[] = [{ _status: { equals: 'published' } }]
+    if (f.sector) and.push({ sector: { equals: f.sector } })
+    if (f.category) and.push({ category: { equals: f.category } })
+    const w = f.wilaya ? WILAYAS.find((x) => x.name === f.wilaya || String(x.code) === f.wilaya) : undefined
+    if (w) and.push({ wilaya: { equals: String(w.code) } })
+    if (f.favorite) and.push({ favorite: { equals: true } })
+    const q = f.q?.trim()
+    if (q) and.push({ or: [{ name: { like: q } }, { city: { like: q } }, { category: { like: q } }, { place: { like: q } }] })
+    const { docs, totalDocs } = await payload.find({ collection: 'places', where: { and }, depth: 1, limit: Math.min(limit, 600), sort: '-score', overrideAccess: false })
+    return { places: docs.map(toCard), total: totalDocs }
+  } catch {
+    return { places: [], total: 0 }
+  }
 }
+
+/** Nombre de fiches publiées par secteur et par catégorie (une seule requête), pour les compteurs de l’accueil. */
+export const getPlaceCounts = cache(async (): Promise<{ total: number; favorite: number; sector: Record<string, number>; category: Record<string, number>; wilaya: Record<string, number> }> => {
+  const out = { total: 0, favorite: 0, sector: {} as Record<string, number>, category: {} as Record<string, number>, wilaya: {} as Record<string, number> }
+  try {
+    const payload = await client()
+    const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
+    const { rows } = await db.execute(sql`SELECT sector, category, COUNT(*)::int AS n, COUNT(*) FILTER (WHERE favorite)::int AS fav FROM places WHERE _status = 'published' GROUP BY sector, category`)
+    for (const r of rows) {
+      const n = Number(r.n)
+      out.total += n
+      out.favorite += Number(r.fav)
+      out.sector[String(r.sector)] = (out.sector[String(r.sector)] ?? 0) + n
+      out.category[String(r.category)] = (out.category[String(r.category)] ?? 0) + n
+    }
+    const byW = await db.execute(sql`SELECT wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' GROUP BY wilaya`)
+    for (const r of byW.rows) {
+      const name = wilayaName(r.wilaya as string)
+      if (name) out.wilaya[name] = Number(r.n)
+    }
+  } catch {
+    /* compteurs à zéro : l’accueil reste affichable */
+  }
+  return out
+})
 
 /** Une fiche ; en mode aperçu depuis /admin, la dernière version enregistrée (brouillon compris). */
 export async function getPlace(slug: string): Promise<Place | null> {
@@ -166,15 +218,16 @@ export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTil
   const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
   const byWilaya = new Map<string, PlaceCard[]>()
   for (const p of illustrated) if (p.wilaya) byWilaya.set(p.wilaya, [...(byWilaya.get(p.wilaya) ?? []), p])
+  const counts = await getPlaceCounts()
   const cities = [...byWilaya.entries()]
-    .map(([name, list]) => ({ code: '', name, slug: wilayaSlug(name), cover: list[0].cover, credit: list[0].credit, count: list.length, highlight: list[0].name }))
+    .map(([name, list]) => ({ code: '', name, slug: wilayaSlug(name), cover: list[0].cover, credit: list[0].credit, count: counts.wilaya[name] ?? list.length, highlight: list[0].name }))
     .sort((a, b) => b.count - a.count)
-  return { top: illustrated.slice(0, 14), cities, total: all.length }
+  return { top: illustrated.slice(0, 14), cities, total: counts.total || all.length }
 }
 
 /** Lieux d’une wilaya, déjà classés par score. */
 export async function getWilayaPlaces(name: string): Promise<PlaceCard[]> {
-  return (await getPlaces()).filter((p) => p.wilaya === name)
+  return (await searchPlaces({ wilaya: name }, 600)).places
 }
 
 /** Destination à l’honneur (réglage /admin), avec repli sur le Sahara. */

@@ -20,6 +20,8 @@ import * as migration_20261017_083727_contributions_photos from './20261017_0837
 import * as migration_20261017_090000_ai_budget_alerts from './20261017_090000_ai_budget_alerts';
 import * as migration_20261017_141435_tableau_de_bord_socle from './20261017_141435_tableau_de_bord_socle';
 import * as migration_20261017_141500_criteres_socle_commun from './20261017_141500_criteres_socle_commun';
+import * as migration_20261017_220000_import_fiches_documentees from './20261017_220000_import_fiches_documentees';
+import * as migration_20261017_230000_import_osm from './20261017_230000_import_osm';
 
 export const migrations = [
   {
@@ -131,5 +133,15 @@ export const migrations = [
     up: migration_20261017_141500_criteres_socle_commun.up,
     down: migration_20261017_141500_criteres_socle_commun.down,
     name: '20261017_141500_criteres_socle_commun',
+  },
+  {
+    up: migration_20261017_220000_import_fiches_documentees.up,
+    down: migration_20261017_220000_import_fiches_documentees.down,
+    name: '20261017_220000_import_fiches_documentees',
+  },
+  {
+    up: migration_20261017_230000_import_osm.up,
+    down: migration_20261017_230000_import_osm.down,
+    name: '20261017_230000_import_osm',
   },
 ];

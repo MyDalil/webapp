@@ -15,6 +15,10 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
   - `descriptions-*.json` : textes DALIL rédigés à partir des faits (jamais copiés) ;
   - `open-places-selected.json` : lot publiable (`node scripts/import/select-places.mjs`) = photo libre + texte DALIL, doublons retirés, corrections manuelles ;
   - importé par migration, mise à jour par identifiant Wikidata.
+  - `research-places.json` : fiches documentées sur les sites officiels (`scripts/import/select-research.mjs`) ;
+  - `osm-places.json` (brut, action « Import OSM ») → `osm-selected.json` (`scripts/import/select-osm.mjs`), ODbL ;
+  - `importPlaces.ts` : import idempotent, complète sans écraser.
+- `searchPlaces` / `getPlaceCounts` + `/api/annuaire` : recherche et compteurs côté serveur.
 - `filters.ts` : règle unique des filtres de l’annuaire (wilaya, thème nature, coups de cœur, critères vérifiés…), testée (`filters.test.ts`).
 - `Events.ts` (Événements) + `weekend.ts` : page « Que faire ce week-end ? » — week-end algérien (vendredi-samedi, heure d’Alger), jamais d’événement terminé, confirmés séparés des incomplets, un filtre n’est jamais satisfait par une information inconnue ; testé (`weekend.test.ts`).
 - `FeaturedDestination.ts` : réglage /admin « Destination à l’honneur » (bloc panoramique de l’accueil, repli Sahara).
@@ -32,7 +36,8 @@ Enregistrer une fiche rafraîchit /annuaire, le secteur et la fiche (revalidateP
 - Sans coordonnées GPS, la carte montre une position approximative, signalée comme telle.
 - Les coordonnées ne s’affichent à tous que si `showContacts` est coché.
 - Aucune copie de Tripadvisor, Google ou autre site : uniquement des sources ouvertes ou nos propres contenus.
-- Pas de publication sans photo sous licence ; auteur et licence toujours affichés (couverture comprise).
+- Pas de publication sans photo sous licence ; auteur et licence toujours affichés (couverture comprise). Exception : repères pratiques importés (photo de la ville, créditée).
+- Fiche OpenStreetMap : attribution « © les contributeurs OpenStreetMap (ODbL) » toujours visible.
 - Un lieu importé est publié « Repérée — à vérifier », avec ses sources.
 - Un événement « confirmé » cite sa source (validation dans /admin) ; sinon il s’affiche « À confirmer ».
 - Coup de cœur, destination à l’honneur et classement : jamais liés à un paiement.

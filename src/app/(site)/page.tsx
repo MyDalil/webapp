@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getFeaturedDestination, getPlaces, getShowcase, NATURE_CATEGORIES, PLACE_TYPES, type PlaceCard } from '@/modules/annuaire'
+import { getFeaturedDestination, getPlaceCounts, getPlaces, getShowcase, NATURE_CATEGORIES, PLACE_TYPES, type PlaceCard } from '@/modules/annuaire'
 import { HomeEntries, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
 import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
@@ -41,25 +41,28 @@ function PlaceTile({ p, i }: { p: PlaceCard; i: number }) {
 }
 
 export default async function Home() {
-  const [{ top, cities, total }, all, destination] = await Promise.all([getShowcase(), getPlaces(), getFeaturedDestination()])
+  const [{ top, cities, total }, all, destination, counts] = await Promise.all([getShowcase(), getPlaces(), getFeaturedDestination(), getPlaceCounts()])
+  const inCats = (cats: Iterable<string>) => [...new Set(cats)].reduce((n, c) => n + (counts.category[c] ?? 0), 0)
+  const inSectors = (sectors: string[]) => sectors.reduce((n, x) => n + (counts.sector[x] ?? 0), 0)
   const lit = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
   // Nombre de lieux publiés et un exemple illustré (photo de la fiche, avec son crédit) ; jamais deux fois le même exemple.
   const used = new Set<string>()
-  const stat = (ok: (p: PlaceCard) => boolean, prefer: (p: PlaceCard) => boolean = () => true): EntryStat => {
+  // Exemple illustré tiré du vivier ; nombre réel compté dans la base.
+  const stat = (ok: (p: PlaceCard) => boolean, prefer: (p: PlaceCard) => boolean = () => true, count?: number): EntryStat => {
     const list = all.filter(ok)
     const first = list.find((p) => lit.includes(p) && prefer(p) && !used.has(p.slug)) ?? list.find((p) => lit.includes(p) && !used.has(p.slug))
     if (first) used.add(first.slug)
-    return { photo: first ? { src: first.cover, credit: first.credit } : null, count: list.length, example: first?.name ?? null }
+    return { photo: first ? { src: first.cover, credit: first.credit } : null, count: count ?? list.length, example: first?.name ?? null }
   }
   const WEEKEND = new Set([...PLACE_TYPES.famille, ...PLACE_TYPES.nature, ...PLACE_TYPES.culture])
   const photos: EntryPhotos = {
-    coeur: stat((p) => p.favorite),
+    coeur: stat((p) => p.favorite, undefined, counts.favorite),
     // Mêmes photos qu’avant pour chaque entrée (jardins et activités familiales, monuments, plages et parcs…).
-    weekend: stat((p) => WEEKEND.has(p.category), (p) => p.category === 'Jardins' || p.category === 'Activités familiales'),
-    decouvrir: stat((p) => p.sector === 'culture-nature-loisirs', (p) => p.category === 'Monuments et sites historiques'),
-    nature: stat((p) => (NATURE_CATEGORIES as readonly string[]).includes(p.category), (p) => p.category === 'Plages' || p.category === 'Parcs naturels et réserves'),
-    adresses: stat(() => true, (p) => p.sector === 'restaurants-gastronomie'),
-    quotidien: stat((p) => ['sante-soins', 'administrations-services-publics', 'commerces-achats', 'transports-mobilite'].includes(p.sector), (p) => p.sector === 'commerces-achats' || p.category === 'Marchés'),
+    weekend: stat((p) => WEEKEND.has(p.category), (p) => p.category === 'Jardins' || p.category === 'Activités familiales', inCats(WEEKEND)),
+    decouvrir: stat((p) => p.sector === 'culture-nature-loisirs', (p) => p.category === 'Monuments et sites historiques', inSectors(['culture-nature-loisirs'])),
+    nature: stat((p) => (NATURE_CATEGORIES as readonly string[]).includes(p.category), (p) => p.category === 'Plages' || p.category === 'Parcs naturels et réserves', inCats(NATURE_CATEGORIES)),
+    adresses: stat(() => true, (p) => p.sector === 'restaurants-gastronomie', counts.total),
+    quotidien: stat((p) => ['sante-soins', 'administrations-services-publics', 'commerces-achats', 'transports-mobilite'].includes(p.sector), (p) => p.sector === 'commerces-achats' || p.category === 'Marchés', inSectors(['sante-soins', 'administrations-services-publics', 'commerces-achats', 'transports-mobilite'])),
   }
   // Pas encore de coup de cœur : la vignette garde une photo (un lieu à l’affiche, non utilisé ailleurs).
   if (!photos.coeur.photo) {

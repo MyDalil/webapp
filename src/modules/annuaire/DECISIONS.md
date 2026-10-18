@@ -20,3 +20,12 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - « Que faire ce week-end ? » : collection Événements + lieux à visiter en attendant ; filtres wilaya, dates, distance (depuis la wilaya choisie, jamais de géolocalisation), budget, famille, accessibilité, type.
 - Coups de cœur : case cochée par l’équipe. Destination à l’honneur : réglage /admin, une seule à la fois, pas de carrousel.
 - À ne pas refaire : nommer un champ `status` dans une collection avec brouillons (conflit d’énumération avec `_status`) → `reliability`.
+
+## 2026-10-17 — Remplir toutes les catégories (demande de Rad)
+- **Décision** : trois sources de fiches, jamais Google ni Tripadvisor : (1) recherche documentaire sur les sites officiels (ministères, wilayas, universités, CHU, offices du tourisme) → `data/research-places.json` ; (2) OpenStreetMap (ODbL) via l’action « Import OSM » → `osm-places.json`, filtré par `scripts/import/select-osm.mjs` → `osm-selected.json` ; (3) Wikidata existant. Import par migration (`importPlaces`), idempotent, statut « Repérée — à vérifier ».
+- **Photos** : une fiche importée sans photo libre est publiée avec la photo de sa ville (crédit affiché) — exception assumée à « pas de publication sans photo » pour les repères pratiques (écoles, mosquées, mairies, bureaux de poste, gares).
+- **Licence OSM** : chaque fiche OSM cite « OpenStreetMap — © les contributeurs OpenStreetMap (ODbL) » avec lien vers l’objet ; seuls les faits sont repris ; présentation rédigée par DALIL.
+- **Qualité** : un lieu OSM est retenu s’il est un repère essentiel (hôpital, université, école, mosquée, mairie, bureau de poste, gare, ambassade, office du tourisme, secours) ou s’il porte au moins un fait pratique (téléphone, site, adresse, horaires, email). Doublons retirés (nom + wilaya).
+- **Échelle** : l’annuaire cherche côté serveur (`searchPlaces`, `/api/annuaire`) ; les compteurs viennent de `getPlaceCounts` ; les pages statiques sont limitées aux 400 fiches les mieux classées (les autres sont rendues à la demande).
+- **Nouvelle catégorie** « Bureaux de poste » (repérés au nom ou à l’opérateur Algérie Poste).
+- **À ne pas refaire** : charger toutes les fiches dans le navigateur ; copier un texte ou une photo d’un annuaire commercial.
