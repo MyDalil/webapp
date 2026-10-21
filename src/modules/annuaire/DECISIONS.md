@@ -29,3 +29,10 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Échelle** : l’annuaire cherche côté serveur (`searchPlaces`, `/api/annuaire`) ; les compteurs viennent de `getPlaceCounts` ; les pages statiques sont limitées aux 400 fiches les mieux classées (les autres sont rendues à la demande).
 - **Nouvelle catégorie** « Bureaux de poste » (repérés au nom ou à l’opérateur Algérie Poste).
 - **À ne pas refaire** : charger toutes les fiches dans le navigateur ; copier un texte ou une photo d’un annuaire commercial.
+
+## 2026-10-21 — Accueil : toutes les rubriques, pas seulement le voyage (décision de Rad)
+- **Constat** : l’accueil montrait surtout des lieux touristiques ; santé, services, démarches et Vie musulmane étaient absents. Les recherches des Algériens portent d’abord sur l’emploi, la santé, les études et les démarches.
+- **Décision** : ordre unique partout (menu, portes, sections) : Vie musulmane, Services — Santé en tête —, Découvrir (tourisme, sorties, divertissement), Démarches, Vivre en Algérie. Annonces (immobilier, emploi, véhicules, objets) arrive au lot 2, avec sa porte et sa section.
+- **Accueil** : diaporama mixte (mosquée, santé, sortie, bureau officiel) avec photos propres aux fiches uniquement ; portes = rubriques du menu, mêmes mots ; incontournables, envies et villes regroupés dans un seul bloc Découvrir ; trois guides pour Démarches et pour Vivre.
+- **Recherche** : suggestions directes hors tourisme (dentiste à Alger, pédiatre, plombier, pharmacie, papiers, mosquée).
+- **À ne pas refaire** : afficher une porte vers une rubrique vide ; laisser un seul module (annuaire) composer seul l’accueil.

@@ -23,7 +23,7 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
 - `Events.ts` (Événements) + `weekend.ts` : page « Que faire ce week-end ? » — week-end algérien (vendredi-samedi, heure d’Alger), jamais d’événement terminé, confirmés séparés des incomplets, un filtre n’est jamais satisfait par une information inconnue ; testé (`weekend.test.ts`).
 - `FeaturedDestination.ts` : réglage /admin « Destination à l’honneur » (bloc panoramique de l’accueil, repli Sahara).
 - Champ `favorite` (Coup de cœur DALIL, sélection éditoriale) et `contributor` (habitant cité) sur les fiches.
-- `ui/` : Directory (filtres + liste + carte), DirectoryMap (MapLibre + OpenFreeMap, regroupement des repères), PlaceMap, PlaceActions, HomeEntries (8 entrées photo de l’accueil), WeekendExplorer ; `admin/CoordsHelp`.
+- `ui/` : Directory (filtres + liste + carte), DirectoryMap (MapLibre + OpenFreeMap, regroupement des repères), PlaceMap, PlaceActions, HomeEntries (portes de l’accueil, une par rubrique du menu), WeekendExplorer ; `admin/CoordsHelp`.
 
 ## Dépend de
 `confiance` (vérification), `membres/ui` (SaveButton), `platform` (référentiel, accès, stockage).

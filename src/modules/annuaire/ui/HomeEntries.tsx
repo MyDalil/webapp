@@ -2,66 +2,66 @@
 
 import Link from 'next/link'
 import { Carousel } from '@/platform/ui/Carousel'
-import { useWilaya } from '@/platform/shell/wilaya'
 
 type Photo = { src: string; credit: string | null } | null
-/** Une entrée : photo d’une fiche DALIL publiée, nombre de lieux et un exemple (format « Par ville »). */
+/** Une porte : photo d’une fiche DALIL publiée, nombre de fiches et un exemple (format « Par ville »). */
 export type EntryStat = { photo: Photo; count: number; example: string | null }
-export type EntryPhotos = Record<'weekend' | 'decouvrir' | 'nature' | 'adresses' | 'quotidien' | 'coeur', EntryStat>
-type City = { name: string; slug: string; cover: string; credit: string | null; count: number; highlight: string }
+export type EntryKey = 'musulmane' | 'services' | 'decouvrir' | 'demarches' | 'vivre'
+export type EntryPhotos = Record<EntryKey, EntryStat>
 
-const lieux = (n: number) => `${n} lieu${n > 1 ? 'x' : ''}`
+const fiches = (n: number) => `${n} fiche${n > 1 ? 's' : ''}`
 
 /**
- * Huit entrées sous le premier écran (validées par Rad, 2026-10-17), au format des tuiles « Par ville » :
- * texte sur la photo, nombre de lieux et un exemple. « Près de chez vous » et « Vivre dans ma ville »
- * suivent la wilaya choisie dans l’en-tête.
+ * Portes sous le premier écran (ordre validé par Rad, 2026-10-21) : une porte par rubrique du menu,
+ * même ordre, mêmes mots. La porte Annonces s’ajoute quand le module existe (lot 2).
  */
-export function HomeEntries({ stats, cities, total }: { stats: EntryPhotos; cities: City[]; total: number }) {
-  const w = useWilaya()
-  const city = (w && cities.find((c) => c.name === w.name)) || null
-  const shown = city ?? cities[0] ?? null
-  const local: EntryStat = city
-    ? { photo: { src: city.cover, credit: city.credit }, count: city.count, example: city.highlight }
-    : { photo: shown ? { src: shown.cover, credit: shown.credit } : null, count: total, example: null }
-  const pickWilaya = () => window.dispatchEvent(new Event('dalil:pick-wilaya'))
+const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
+  { key: 'musulmane', href: '/guides/vie-musulmane', title: 'Vie musulmane' },
+  {
+    key: 'services',
+    href: '/services',
+    title: 'Services',
+    line: 'Médecins, artisans et prestataires vérifiés',
+  },
+  { key: 'decouvrir', href: '/explorer', title: 'Découvrir' },
+  { key: 'demarches', href: '/demarches', title: 'Démarches' },
+  {
+    key: 'vivre',
+    href: '/installation',
+    title: 'Vivre en Algérie',
+    line: 'Logement, école, banque, transports',
+  },
+]
 
-  const cards: { key: string; href: string; title: string; stat: EntryStat; line?: string; action?: string }[] = [
-    { key: 'weekend', href: '/que-faire-ce-week-end', title: 'Que faire ce week‑end ?', stat: stats.weekend },
-    { key: 'decouvrir', href: '/annuaire/culture-nature-loisirs', title: 'À découvrir', stat: stats.decouvrir },
-    { key: 'pres', href: w ? `/annuaire?wilaya=${w.code}` : '/annuaire', title: 'Près de chez vous', stat: local, line: w ? undefined : 'Choisissez votre wilaya', action: w ? undefined : 'Choisir ma wilaya' },
-    { key: 'nature', href: '/annuaire/culture-nature-loisirs?theme=nature', title: 'Nature & Bien-être', stat: stats.nature },
-    {
-      key: 'ville',
-      href: city ? `/villes/${city.slug}` : shown ? `/villes/${shown.slug}` : '/installation',
-      title: 'Vivre dans ma ville',
-      stat: city ? local : shown ? { photo: { src: shown.cover, credit: shown.credit }, count: shown.count, example: shown.highlight } : local,
-      line: city ? undefined : shown ? `${shown.name} · ${lieux(shown.count)}` : undefined,
-    },
-    { key: 'adresses', href: '/annuaire', title: 'Les bonnes adresses', stat: stats.adresses },
-    { key: 'quotidien', href: '/services', title: 'Facilitez votre quotidien', stat: stats.quotidien, line: 'Prestataires vérifiés, demande sous 24 h' },
-    { key: 'coeur', href: '/annuaire?coeur=1', title: 'Nos coups de cœur', stat: stats.coeur, line: stats.coeur.count ? undefined : 'Sélection de l’équipe en préparation' },
-  ]
-
+export function HomeEntries({ stats }: { stats: EntryPhotos }) {
   return (
-    <Carousel label="Que souhaitez-vous faire aujourd’hui ?" variant="tiles">
-      {cards.map((c, i) => (
-        <div key={c.key} className={`entry-tile entry-${c.key}`} data-reveal style={{ ['--i' as string]: i % 6 }}>
-          <Link
-            href={c.href}
-            className="city-tile"
-            // Sans wilaya choisie, « Près de chez vous » ouvre le choix de la wilaya (pas de bouton en plus sur la photo).
-            onClick={c.action ? (e) => (e.preventDefault(), pickWilaya()) : undefined}
+    <Carousel label="Les rubriques de DALIL" variant="tiles">
+      {DOORS.map((d, i) => {
+        const s = stats[d.key]
+        return (
+          <div
+            key={d.key}
+            className={`entry-tile entry-${d.key}`}
+            data-reveal
+            style={{ ['--i' as string]: i % 6 }}
           >
-            <div className="city-tile-img" style={c.stat.photo ? { backgroundImage: `url(${c.stat.photo.src})` } : undefined} />
-            <div className="city-tile-body">
-              <h3>{c.title}</h3>
-              <p>{c.line ?? [lieux(c.stat.count), c.stat.example].filter(Boolean).join(' · ')}</p>
-            </div>
-          </Link>
-          {c.stat.photo?.credit && <small className="entry-credit">{c.stat.photo.credit}</small>}
-        </div>
-      ))}
+            <Link href={d.href} className="city-tile">
+              <div
+                className="city-tile-img"
+                style={s.photo ? { backgroundImage: `url(${s.photo.src})` } : undefined}
+              />
+              <div className="city-tile-body">
+                <h3>{d.title}</h3>
+                <p>
+                  {d.line ??
+                    [s.count ? fiches(s.count) : null, s.example].filter(Boolean).join(' · ')}
+                </p>
+              </div>
+            </Link>
+            {s.photo?.credit && <small className="entry-credit">{s.photo.credit}</small>}
+          </div>
+        )
+      })}
     </Carousel>
   )
 }
