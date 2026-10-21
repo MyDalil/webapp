@@ -19,6 +19,7 @@ const SUGGESTIONS: [href: string, label: string][] = [
   ['/services/bricolage?activite=plomberie', 'Plombier'],
   ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie'],
   ['/guides/documents-et-demarches', 'Passeport et papiers'],
+  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement'],
   ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée'],
 ]
 

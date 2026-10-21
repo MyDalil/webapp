@@ -78,6 +78,8 @@ export interface Config {
     'mission-messages': MissionMessage;
     'provider-reviews': ProviderReview;
     'provider-documents': ProviderDocument;
+    classifieds: Classified;
+    'classified-messages': ClassifiedMessage;
     media: Media;
     submissions: Submission;
     'contribution-photos': ContributionPhoto;
@@ -108,6 +110,8 @@ export interface Config {
     'mission-messages': MissionMessagesSelect<false> | MissionMessagesSelect<true>;
     'provider-reviews': ProviderReviewsSelect<false> | ProviderReviewsSelect<true>;
     'provider-documents': ProviderDocumentsSelect<false> | ProviderDocumentsSelect<true>;
+    classifieds: ClassifiedsSelect<false> | ClassifiedsSelect<true>;
+    'classified-messages': ClassifiedMessagesSelect<false> | ClassifiedMessagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
@@ -1292,12 +1296,156 @@ export interface ProviderDocument {
   createdAt: string;
 }
 /**
+ * Annonces des membres. « À contrôler » : vérifier puis publier ou refuser (motif obligatoire, envoyé à l’auteur).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classifieds".
+ */
+export interface Classified {
+  id: number;
+  title: string;
+  slug?: string | null;
+  category: 'immobilier' | 'emploi' | 'vehicules' | 'objets';
+  subcategory:
+    | 'immobilier:appartement'
+    | 'immobilier:maison'
+    | 'immobilier:terrain'
+    | 'immobilier:local'
+    | 'immobilier:chambre'
+    | 'emploi:offre'
+    | 'emploi:demande'
+    | 'emploi:stage'
+    | 'emploi:mission'
+    | 'vehicules:voiture'
+    | 'vehicules:moto'
+    | 'vehicules:utilitaire'
+    | 'vehicules:pieces'
+    | 'objets:maison'
+    | 'objets:high-tech'
+    | 'objets:mode'
+    | 'objets:enfants'
+    | 'objets:sport'
+    | 'objets:livres'
+    | 'objets:autres';
+  description: string;
+  price?: number | null;
+  priceMode: 'fixed' | 'negotiable' | 'free' | 'on-request';
+  photos?: (number | Media)[] | null;
+  deal?: ('vente' | 'location' | 'location-vacances') | null;
+  rooms?: number | null;
+  surface?: number | null;
+  furnished?: boolean | null;
+  contract?: ('cdi' | 'cdd' | 'temps-partiel' | 'saisonnier' | 'independant') | null;
+  sector?: string | null;
+  brand?: string | null;
+  model?: string | null;
+  year?: number | null;
+  mileage?: number | null;
+  fuel?: ('essence' | 'diesel' | 'gpl' | 'hybride' | 'electrique') | null;
+  gearbox?: ('manuelle' | 'automatique') | null;
+  condition?: ('neuf' | 'tres-bon' | 'bon' | 'pieces') | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58';
+  /**
+   * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
+   */
+  commune?: string | null;
+  author: number | Member;
+  authorName?: string | null;
+  authorKind?: ('particulier' | 'pro') | null;
+  status: 'pending' | 'published' | 'rejected' | 'expired' | 'closed';
+  reports?: number | null;
+  rejectionReason?: string | null;
+  moderatedBy?: string | null;
+  moderatedAt?: string | null;
+  publishedAt?: string | null;
+  expiresAt?: string | null;
+  expiryWarnedAt?: string | null;
+  agentVerdict?: ('ok' | 'doubt' | 'reject') | null;
+  agentName?: string | null;
+  agentReviewedAt?: string | null;
+  agentNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classified-messages".
+ */
+export interface ClassifiedMessage {
+  id: number;
+  classified: number | Classified;
+  buyer: number | Member;
+  from: 'buyer' | 'seller' | 'system';
+  readAt?: string | null;
+  body: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
   id: number;
-  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic';
+  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic' | 'report';
   status?: ('new' | 'processing' | 'needs_info' | 'done' | 'rejected') | null;
   subject: string;
   email?: string | null;
@@ -1502,6 +1650,7 @@ export interface Agent {
         | 'vivre'
         | 'demarches'
         | 'services'
+        | 'annonces'
         | 'annuaire'
         | 'sante'
         | 'communaute'
@@ -1521,6 +1670,7 @@ export interface Agent {
         | 'draft-telegram'
         | 'read-inbox'
         | 'read-health'
+        | 'review-classifieds'
       )[]
     | null;
   triggers?: ('any-task' | 'assigned' | 'draft-ready' | 'inbox' | 'report' | 'application' | 'cron')[] | null;
@@ -1556,6 +1706,7 @@ export interface AgentTask {
         | 'vivre'
         | 'demarches'
         | 'services'
+        | 'annonces'
         | 'annuaire'
         | 'sante'
         | 'communaute'
@@ -1718,6 +1869,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'provider-documents';
         value: number | ProviderDocument;
+      } | null)
+    | ({
+        relationTo: 'classifieds';
+        value: number | Classified;
+      } | null)
+    | ({
+        relationTo: 'classified-messages';
+        value: number | ClassifiedMessage;
       } | null)
     | ({
         relationTo: 'media';
@@ -2176,6 +2335,65 @@ export interface ProviderDocumentsSelect<T extends boolean = true> {
   size?: T;
   expiresAt?: T;
   data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classifieds_select".
+ */
+export interface ClassifiedsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  subcategory?: T;
+  description?: T;
+  price?: T;
+  priceMode?: T;
+  photos?: T;
+  deal?: T;
+  rooms?: T;
+  surface?: T;
+  furnished?: T;
+  contract?: T;
+  sector?: T;
+  brand?: T;
+  model?: T;
+  year?: T;
+  mileage?: T;
+  fuel?: T;
+  gearbox?: T;
+  condition?: T;
+  wilaya?: T;
+  commune?: T;
+  author?: T;
+  authorName?: T;
+  authorKind?: T;
+  status?: T;
+  reports?: T;
+  rejectionReason?: T;
+  moderatedBy?: T;
+  moderatedAt?: T;
+  publishedAt?: T;
+  expiresAt?: T;
+  expiryWarnedAt?: T;
+  agentVerdict?: T;
+  agentName?: T;
+  agentReviewedAt?: T;
+  agentNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classified-messages_select".
+ */
+export interface ClassifiedMessagesSelect<T extends boolean = true> {
+  classified?: T;
+  buyer?: T;
+  from?: T;
+  readAt?: T;
+  body?: T;
   updatedAt?: T;
   createdAt?: T;
 }

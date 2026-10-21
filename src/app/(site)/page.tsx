@@ -11,6 +11,7 @@ import { HomeEntries, type EntryPhotos, type EntryStat } from '@/modules/annuair
 import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as SERVICE_CATEGORIES } from '@/modules/services'
+import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon } from '@/platform/ui/Icon'
@@ -21,7 +22,7 @@ export const revalidate = 300
 
 /**
  * Accueil (ordre validé par Rad, 2026-10-21) : Vie musulmane, Services — Santé en tête —, Découvrir,
- * Démarches, Vivre en Algérie. Annonces s’ajoute au lot 2, quand le module existe.
+ * Démarches, Annonces, Vivre en Algérie.
  */
 const ENVIES = [
   ['Monuments et sites historiques', 'Monuments & histoire', 'culture-nature-loisirs'],
@@ -101,11 +102,13 @@ function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
 }
 
 export default async function Home() {
-  const [{ top, cities }, all, destination, counts] = await Promise.all([
+  const [{ top, cities }, all, destination, counts, latest, classified] = await Promise.all([
     getShowcase(),
     getPlaces(),
     getFeaturedDestination(),
     getPlaceCounts(),
+    searchClassifieds({}, 12),
+    classifiedCounts(),
   ])
   const inSectors = (sectors: string[]) => sectors.reduce((n, x) => n + (counts.sector[x] ?? 0), 0)
   // Photo propre à la fiche (pas la photo de repli de sa ville), seule admise dans le diaporama et les portes.
@@ -164,6 +167,10 @@ export default async function Home() {
     ),
     decouvrir: door(['culture-nature-loisirs', 'restaurants-gastronomie']),
     demarches: door(['administrations-services-publics']),
+    annonces: (() => {
+      const c = latest.find((x) => x.photo)
+      return { photo: c?.photo ? { src: c.photo, credit: null } : null, count: classified.total, example: null }
+    })(),
     vivre: {
       photo: city ? { src: city.cover, credit: city.credit } : null,
       count: 0,
@@ -183,7 +190,7 @@ export default async function Home() {
           <p className="eyebrow inverse">Guide & Services en Algérie</p>
           <h1>L’Algérie, plus proche de vous.</h1>
           <p className="xp-lead">
-            Mosquées, médecins, artisans, sorties, démarches : tout au même endroit.
+            Mosquées, médecins, artisans, sorties, démarches, annonces : tout au même endroit.
           </p>
           <HomeSearch />
         </div>
@@ -381,6 +388,54 @@ export default async function Home() {
           </div>
         </div>
         <GuideTiles slugs={DEMARCHES} label="Guides des démarches" />
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">Annonces</p>
+              <h2>Immobilier, emploi, véhicules, objets.</h2>
+              <p>Chaque annonce est contrôlée par l’équipe DALIL avant publication.</p>
+            </div>
+            <Link className="button primary" href="/annonces/deposer">
+              Déposer une annonce
+            </Link>
+          </div>
+          <ul className="service-tiles" data-reveal>
+            {CLASSIFIED_CATEGORIES.map((c) => (
+              <li key={c.value}>
+                <Link href={`/annonces/${c.value}`} className="service-tile">
+                  <b>{c.label}</b>
+                  <span>{c.subs.slice(0, 3).map(([, l]) => l).join(' · ')}</span>
+                  <small>{classified.byCategory[c.value] ? `${classified.byCategory[c.value]} annonce${classified.byCategory[c.value] > 1 ? 's' : ''}` : 'Soyez le premier à publier'}</small>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {!!latest.length && (
+          <>
+            <div className="container xp-subhead" data-reveal>
+              <h3>Dernières annonces</h3>
+              <Link href="/annonces">Toutes les annonces</Link>
+            </div>
+            <Carousel label="Dernières annonces" variant="tiles">
+              {latest.map((c, i) => (
+                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+                  <div className="city-tile-img" style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined} />
+                  <div className="city-tile-body">
+                    <span className="chip">{c.subLabel}</span>
+                    <h3>{c.title}</h3>
+                    <p>
+                      {c.price} · {c.place}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
+          </>
+        )}
       </section>
 
       <section className="section section-tint">

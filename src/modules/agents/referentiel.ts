@@ -4,6 +4,7 @@ export const RUBRIQUES = [
   { label: 'Vivre en Algérie', value: 'vivre' },
   { label: 'Démarches', value: 'demarches' },
   { label: 'Services', value: 'services' },
+  { label: 'Annonces', value: 'annonces' },
   { label: 'Annuaire', value: 'annuaire' },
   { label: 'Santé', value: 'sante' },
   { label: 'Communauté et avis', value: 'communaute' },
@@ -30,6 +31,7 @@ export const TOOLS = [
   { label: 'Préparer une publication Telegram', value: 'draft-telegram' },
   { label: 'Lire la boîte de réception', value: 'read-inbox' },
   { label: 'Lire la santé technique', value: 'read-health' },
+  { label: 'Donner un avis sur les annonces à contrôler', value: 'review-classifieds' },
 ] as const
 
 export const TASK_STATUS = [

@@ -6,6 +6,7 @@ Lire d'abord `../_commun/REGLES.md`.
 - Vérifie chaque brouillon : sources, dates, horaires, adresses, cohérence.
 - Contrôle les candidatures pros et les pièces reçues.
 - Signale les avis et photos douteux.
+- Donne un avis sur chaque annonce « À contrôler » (collection `classifieds`, champs `agentVerdict` et `agentNote` seulement) : arnaque, paiement demandé d'avance, contenu interdit, doublon, prix incohérent. Un humain publie ou refuse.
 
 ## Périmètre
 Toutes les rubriques sauf Vie musulmane. Vérification seulement.

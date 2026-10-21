@@ -1,11 +1,11 @@
 /**
- * Navigation principale (validée par Rad, 2026-10-17 ; ordre du 2026-10-21 : Vie musulmane, Services — Santé en tête —, Découvrir, Démarches, Vivre en Algérie) : six rubriques, chacune avec son méga-menu
+ * Navigation principale (validée par Rad, 2026-10-17 ; ordre du 2026-10-21 : Vie musulmane, Services — Santé en tête —, Découvrir, Démarches, Annonces, Vivre en Algérie) : sept rubriques, chacune avec son méga-menu
  * (six entrées, une carte à la une, la barre « Trouvez rapidement »).
  * Une entrée = [lien, pictogramme, titre, sous-titre]. Toutes les pages existent.
  */
 export type NavEntry = [href: string, icon: NavIcon, title: string, sub: string]
 export type Rubric = {
-  key: 'decouvrir' | 'vivre' | 'demarches' | 'services' | 'musulmane' | 'plus'
+  key: 'decouvrir' | 'vivre' | 'demarches' | 'services' | 'musulmane' | 'annonces' | 'plus'
   label: string
   href?: string
   match: string[]
@@ -19,7 +19,7 @@ export type NavIcon =
   | 'file' | 'building' | 'briefcase' | 'plane' | 'flag' | 'phone'
   | 'wrench' | 'hammer' | 'scale' | 'truck' | 'grid'
   | 'mosque' | 'book' | 'kaaba' | 'books' | 'heart' | 'moon'
-  | 'news' | 'shield' | 'upload' | 'compass'
+  | 'news' | 'shield' | 'upload' | 'compass' | 'car' | 'tag'
 
 const cat = (sector: string, category: string) => `/annuaire/${sector}?category=${encodeURIComponent(category)}`
 
@@ -83,6 +83,21 @@ export const RUBRICS: Rubric[] = [
       [cat('administrations-services-publics', 'Contacts utiles et urgences'), 'phone', 'Urgences & contacts utiles', 'Numéros essentiels'],
     ],
     feature: { title: 'Toutes les démarches', href: '/demarches', kicker: 'Démarches' }
+  },
+  {
+    key: 'annonces',
+    label: 'Annonces',
+    href: '/annonces',
+    match: ['/annonces'],
+    entries: [
+      ['/annonces/immobilier', 'home', 'Immobilier', 'Vendre, louer, colocation'],
+      ['/annonces/emploi', 'briefcase', 'Emploi', 'Offres, candidatures, stages'],
+      ['/annonces/vehicules', 'car', 'Véhicules', 'Voitures, motos, pièces'],
+      ['/annonces/objets', 'tag', 'Objets', 'Maison, high-tech, mode, enfants'],
+      ['/annonces/deposer', 'upload', 'Déposer une annonce', 'Gratuit, contrôlée par DALIL'],
+      ['/mon-compte#annonces', 'news', 'Mes annonces et messages', 'Suivre, renouveler, répondre'],
+    ],
+    feature: { title: 'Toutes les annonces', href: '/annonces', kicker: 'Annonces' },
   },
   {
     key: 'vivre',

@@ -6,14 +6,14 @@ import { Carousel } from '@/platform/ui/Carousel'
 type Photo = { src: string; credit: string | null } | null
 /** Une porte : photo d’une fiche DALIL publiée, nombre de fiches et un exemple (format « Par ville »). */
 export type EntryStat = { photo: Photo; count: number; example: string | null }
-export type EntryKey = 'musulmane' | 'services' | 'decouvrir' | 'demarches' | 'vivre'
+export type EntryKey = 'musulmane' | 'services' | 'decouvrir' | 'demarches' | 'annonces' | 'vivre'
 export type EntryPhotos = Record<EntryKey, EntryStat>
 
 const fiches = (n: number) => `${n} fiche${n > 1 ? 's' : ''}`
 
 /**
  * Portes sous le premier écran (ordre validé par Rad, 2026-10-21) : une porte par rubrique du menu,
- * même ordre, mêmes mots. La porte Annonces s’ajoute quand le module existe (lot 2).
+ * même ordre, mêmes mots.
  */
 const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
   { key: 'musulmane', href: '/guides/vie-musulmane', title: 'Vie musulmane' },
@@ -25,6 +25,7 @@ const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
   },
   { key: 'decouvrir', href: '/explorer', title: 'Découvrir' },
   { key: 'demarches', href: '/demarches', title: 'Démarches' },
+  { key: 'annonces', href: '/annonces', title: 'Annonces', line: 'Immobilier, emploi, véhicules, objets' },
   {
     key: 'vivre',
     href: '/installation',

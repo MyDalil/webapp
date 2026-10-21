@@ -35,6 +35,8 @@ const P: Record<Name, React.ReactNode> = {
   shield: <path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1v7ZM9 12l2 2 4-4" />,
   upload: <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />,
   compass: <><circle cx="12" cy="12" r="10" /><path d="m16.2 7.8-2.1 6.4-6.4 2.1 2.1-6.4 6.4-2.1Z" /></>,
+  car: <><path d="m5 11 2-5h10l2 5M4 11h16v7H4v-7ZM7 18v2M17 18v2" /><circle cx="7.5" cy="14.5" r="1" /><circle cx="16.5" cy="14.5" r="1" /></>,
+  tag: <><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9-9-9Z" /><circle cx="7.5" cy="7.5" r="1.5" /></>,
 }
 
 export function NavIcon({ name }: { name: Name }) {

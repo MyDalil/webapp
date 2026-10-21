@@ -1,4 +1,5 @@
 import { currentMember, deleteMyAccount } from '@/modules/sante'
+import { deleteClassifiedsData } from '@/modules/annonces'
 import { deleteServicesData } from '@/modules/services'
 import { clean, fail, isEmail, json, payload } from '@/platform/http'
 import { guard } from '@/platform/security/rateLimit'
@@ -32,11 +33,12 @@ export async function POST(req: Request) {
   return json({ ok: true }, 201)
 }
 
-/** Suppression définitive du compte, de ses rendez-vous, demandes de service, messages et avis. */
+/** Suppression définitive du compte, de ses rendez-vous, demandes de service, annonces, messages et avis. */
 export async function DELETE() {
   const m = await currentMember()
   if (!m) return fail('Non connecté.', 401)
   await deleteServicesData(m)
+  await deleteClassifiedsData(m)
   await deleteMyAccount(m)
   return json({ ok: true })
 }
