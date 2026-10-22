@@ -24,6 +24,7 @@ import * as migration_20261017_220000_import_fiches_documentees from './20261017
 import * as migration_20261017_230000_import_osm from './20261017_230000_import_osm';
 import * as migration_20261021_082159_annonces from './20261021_082159_annonces';
 import * as migration_20261023_071938_erreurs_du_site from './20261023_071938_erreurs_du_site';
+import * as migration_20261024_180000_postgis_places from './20261024_180000_postgis_places';
 
 export const migrations = [
   {
@@ -155,5 +156,10 @@ export const migrations = [
     up: migration_20261023_071938_erreurs_du_site.up,
     down: migration_20261023_071938_erreurs_du_site.down,
     name: '20261023_071938_erreurs_du_site'
+  },
+  {
+    up: migration_20261024_180000_postgis_places.up,
+    down: migration_20261024_180000_postgis_places.down,
+    name: '20261024_180000_postgis_places',
   },
 ];

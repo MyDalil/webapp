@@ -2,7 +2,7 @@ name: Import des lieux (sources ouvertes)
 on:
   workflow_dispatch:
   push:
-    branches: [preview]
+    branches: [import-data]
     paths: [scripts/import/fetch-places.mjs]
 permissions:
   contents: write
@@ -12,14 +12,23 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-        with: { ref: preview }
+        with: { ref: import-data }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: node scripts/import/fetch-places.mjs
+      - name: Archive du jeu brut (Vercel Blob)
+        if: always()
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+        run: |
+          mkdir -p /tmp/blob && cp scripts/import/archive-blob.mjs /tmp/blob/
+          (cd /tmp/blob && npm init -y >/dev/null && npm i --silent @vercel/blob@2.3.1)
+          node /tmp/blob/archive-blob.mjs wikidata src/modules/annuaire/data/open-places.json
       - name: Commit du jeu de données
         run: |
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"
           git add src/modules/annuaire/data/open-places.json
           git commit -m "Données : lieux ouverts (Wikidata, Commons) [skip ci]" || echo "rien de nouveau"
-          git push origin HEAD:preview
+          git pull --rebase origin import-data
+          git push origin HEAD:import-data
