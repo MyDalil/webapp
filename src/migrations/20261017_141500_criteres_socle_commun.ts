@@ -1,4 +1,5 @@
 import { sql, type MigrateDownArgs, type MigrateUpArgs } from '@payloadcms/db-postgres'
+import { deferred } from '@/platform/deferredData'
 import { mergeCriteria } from '@/modules/confiance'
 
 /**
@@ -9,7 +10,7 @@ import { mergeCriteria } from '@/modules/confiance'
  * Placée après toutes les migrations de schéma du 17 octobre : elle écrit avec le schéma complet de `places`
  * (première version, 083000, exécutée avant l’ajout de `contributor` → build preview en échec).
  */
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export const up = deferred('20261017_141500_criteres_socle_commun', async ({ db, payload, req }: MigrateUpArgs): Promise<void> => {
   const pending = await db.execute(sql`select distinct parent_id as id from _places_v where latest = true and version__status = 'draft'`)
   const skip = new Set((pending.rows as { id: number }[]).map((r) => r.id))
   const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, limit: 5000, depth: 0, req, overrideAccess: true })
@@ -25,7 +26,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
     }
   }
   if (skipped.length) payload.logger.warn(`Critères non appliqués à ${skipped.length} fiche(s) : ${skipped.join(' ; ')}`)
-}
+})
 
 export async function down(_: MigrateDownArgs): Promise<void> {
   // Pas de retour arrière automatique : les anciens intitulés restent lisibles dans l’historique des versions.

@@ -1,4 +1,5 @@
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-postgres'
+import { deferred } from '@/platform/deferredData'
 import listings from '@/modules/annuaire/listings.json'
 
 type Listing = (typeof listings)[number]
@@ -7,7 +8,7 @@ const fmt = (iso: string | null) =>
   iso ? new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso)) : null
 
 /** Reprend les adresses du prototype dans la collection « Adresses » (une seule fois, base vide). */
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+export const up = deferred('20261006_092318_seed_places', async ({ payload, req }: MigrateUpArgs): Promise<void> => {
   const { totalDocs } = await payload.count({ collection: 'places', req, overrideAccess: true })
   if (totalDocs > 0) return
   for (const l of listings as Listing[]) {
@@ -33,7 +34,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
       },
     })
   }
-}
+})
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
   await payload.delete({
