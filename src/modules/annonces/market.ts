@@ -106,6 +106,21 @@ export type ClassifiedView = ClassifiedCard & {
 }
 
 /** Page d’une annonce : publiée pour tous ; l’auteur voit aussi la sienne en attente ou refusée. */
+/** Plan du site : annonces en ligne seulement (publiées et non expirées). */
+export async function getClassifiedSitemap(): Promise<{ category: string; slug: string; updatedAt: string }[]> {
+  const p = await getPayload()
+  const now = new Date().toISOString()
+  const { docs } = await p.find({
+    collection: 'classifieds',
+    where: { and: [{ status: { equals: 'published' } }, { or: [{ expiresAt: { exists: false } }, { expiresAt: { greater_than: now } }] }] },
+    depth: 0,
+    pagination: false,
+    select: { slug: true, category: true, updatedAt: true },
+    overrideAccess: true,
+  })
+  return docs.flatMap((d) => (d.slug && d.category ? [{ category: d.category, slug: d.slug, updatedAt: d.updatedAt }] : []))
+}
+
 export async function getClassified(slug: string): Promise<ClassifiedView | null> {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'classifieds', where: { slug: { equals: slug } }, depth: 1, limit: 1, overrideAccess: true })

@@ -298,3 +298,28 @@ export async function getUpcomingEvents(): Promise<EventCard[]> {
       }
     })
 }
+
+/** Plan du site : fiches publiées seulement (brouillons exclus), par tranches pour rester sous la limite de 50 000 adresses par fichier. */
+export async function countPublishedPlaces(): Promise<number> {
+  try {
+    const payload = await client()
+    const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
+    const { rows } = await db.execute(sql`SELECT COUNT(*)::int AS n FROM places WHERE _status = 'published' AND slug IS NOT NULL`)
+    return Number(rows[0]?.n ?? 0)
+  } catch {
+    return 0
+  }
+}
+
+export async function getPlaceSitemap(offset: number, limit: number): Promise<{ slug: string; updatedAt: string }[]> {
+  try {
+    const payload = await client()
+    const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
+    const { rows } = await db.execute(
+      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND slug IS NOT NULL ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+    )
+    return rows.map((r) => ({ slug: String(r.slug), updatedAt: new Date(String(r.updated_at)).toISOString() }))
+  } catch {
+    return []
+  }
+}
