@@ -1,0 +1,31 @@
+name: Contrôle du déploiement
+# Après chaque déploiement Vercel réussi (preview ou production) : parcours en lecture seule sur l’adresse déployée.
+# Statut « Contrôle du déploiement » à rendre obligatoire avant la fusion preview → main.
+# Secret à créer dans GitHub : VERCEL_AUTOMATION_BYPASS_SECRET (Vercel › Settings › Deployment Protection › Protection Bypass for Automation).
+on:
+  deployment_status:
+permissions:
+  contents: read
+jobs:
+  controle:
+    name: Parcours sur le déploiement
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+      VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      E2E_EXPECT_PRODUCTION: ${{ github.event.deployment.environment == 'Production' && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ github.event.deployment.sha }}' }
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Parcours en lecture seule
+        run: pnpm test:e2e --grep-invert @ecriture
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: rapport-deploiement, path: playwright-report, retention-days: 7 }
