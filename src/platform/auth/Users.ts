@@ -5,11 +5,17 @@ import { SITE, esc, layout, send } from '@/platform/mail'
 
 const resetUrl = (token: string) => `${SITE}/admin/reset/${token}`
 
-/** Le tout premier compte devient administrateur ; on mémorise les changements sensibles pour prévenir le titulaire. */
+/** Le tout premier compte devient administrateur (en ligne : seulement avec l’email DALIL_ADMIN_EMAIL) ; on mémorise les changements sensibles pour prévenir le titulaire. */
 const before: CollectionBeforeChangeHook = async ({ data, operation, req, originalDoc, context }) => {
   if (operation === 'create') {
     const { totalDocs } = await req.payload.count({ collection: 'users', overrideAccess: true })
-    if (totalDocs === 0) return { ...data, role: 'admin' }
+    if (totalDocs === 0) {
+      // En ligne (Vercel), le premier compte doit porter l’email prévu : une base vide ne donne pas l’administration au premier venu.
+      const expected = process.env.DALIL_ADMIN_EMAIL?.trim().toLowerCase()
+      if (process.env.VERCEL && (!expected || String(data.email ?? '').trim().toLowerCase() !== expected))
+        throw new APIError('Premier compte : utilisez l’email défini dans la variable Vercel DALIL_ADMIN_EMAIL.', 403)
+      return { ...data, role: 'admin' }
+    }
     context.invite = true
   }
   // Le rôle patron ne se donne et ne se retire que par un patron (sauf s’il n’en existe encore aucun).
