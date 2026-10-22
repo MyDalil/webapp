@@ -17,10 +17,15 @@ jobs:
       VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
       E2E_EXPECT_PRODUCTION: ${{ github.event.deployment.environment == 'Production' && '1' || '' }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Secret de contournement présent
+        if: env.VERCEL_BYPASS == ''
+        run: |
+          echo "::error::Secret VERCEL_AUTOMATION_BYPASS_SECRET absent : le déploiement est protégé par la connexion Vercel, les tests verraient la page de connexion."
+          exit 1
+      - uses: actions/checkout@v5
         with: { ref: '${{ github.event.deployment.sha }}' }
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
