@@ -79,6 +79,10 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - Règles de branche GitHub : `preview` et `main` exigent les statuts « Frontières, types et tests unitaires », « Build et parcours essentiels » ; `main` exige en plus « Vercel » et « Parcours sur le déploiement ». Fusion `preview` → `main` seulement quand tout est vert **et** après le feu vert de Rad.
 - Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
 
+## Surveillance
+- `.github/workflows/surveillance.yml` (depuis `main`, toutes les 10 min) : accueil, `/api/sante` (application + base), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour.
+- Erreurs serveur : /admin › Pilotage › Erreurs du site, alerte email à la première occurrence.
+
 ## Migrations de données
 - Une migration qui écrit des données (`payload.create`, `importPlaces`…) enveloppe son `up` dans `deferred('<nom>', …)` (`src/platform/deferredData.ts`).
 - Raison : elle écrit avec le schéma d’aujourd’hui ; sur une base qui rattrape plusieurs migrations (production à la fusion, base neuve, CI), elle tournerait avant les colonnes ajoutées ensuite. Elle est notée pendant `payload migrate`, puis exécutée par `pnpm migrate:data` quand tout le schéma est en place.
