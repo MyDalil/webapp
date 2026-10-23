@@ -1,8 +1,11 @@
 import { fail, json } from '@/platform/http'
 import { readSession, saveSession } from '@/modules/membres'
 import { record } from '@/modules/messages'
+import { guard } from '@/platform/security/rateLimit'
 
 export async function POST(req: Request) {
+  const limited = await guard('diagnostic', 20, 3600)
+  if (limited) return limited
   const body = await req.json().catch(() => null)
   if (!body || typeof body.answers !== 'object') return fail('Réponses manquantes.')
   const s = await readSession()

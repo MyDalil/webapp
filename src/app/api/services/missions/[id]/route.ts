@@ -1,5 +1,6 @@
 import { actOnMission, currentMember, getMission } from '@/modules/services'
 import { fail, json } from '@/platform/http'
+import { guard } from '@/platform/security/rateLimit'
 
 type Ctx = { params: Promise<{ id: string }> }
 
@@ -12,6 +13,8 @@ export async function GET(_req: Request, { params }: Ctx) {
 
 /** Actions : accept, decline, cancel, complete. */
 export async function POST(req: Request, { params }: Ctx) {
+  const limited = await guard('mission', 60, 3600)
+  if (limited) return limited
   const member = await currentMember()
   if (!member) return fail('Non connecté.', 401)
   const b = await req.json().catch(() => ({}))

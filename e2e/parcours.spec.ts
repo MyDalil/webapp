@@ -73,3 +73,34 @@ test.describe('Administration', () => {
     await expect(page.locator('input[type="email"], input[name="email"]').first()).toBeVisible({ timeout: 20_000 })
   })
 })
+
+test.describe('Anti-robot @ecriture', () => {
+  test.beforeEach(() => test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit'))
+
+  test('un envoi sans preuve de travail est refusé', async ({ request }) => {
+    const res = await request.post('/api/subscribers', { data: { email: 'robot@example.com' } })
+    expect(res.status()).toBe(403)
+  })
+
+  test('une preuve ne sert qu’une fois', async ({ page }) => {
+    await page.goto('/')
+    const statuses = await page.evaluate(async () => {
+      const { salt, bits, sig } = await (await fetch('/api/preuve')).json()
+      const enc = new TextEncoder()
+      const zero = (b: Uint8Array) => {
+        let n = 0
+        for (const x of b) {
+          if (x === 0) { n += 8; continue }
+          return n + Math.clz32(x) - 24
+        }
+        return n
+      }
+      let i = 0
+      while (zero(new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode(`${salt}:${i}`)))) < bits) i++
+      const headers = { 'content-type': 'application/json', 'x-dalil-preuve': JSON.stringify({ salt, bits, sig, nonce: String(i) }) }
+      const send = () => fetch('/api/subscribers', { method: 'POST', headers, body: JSON.stringify({ email: `once-${Date.now()}@example.com` }) }).then((r) => r.status)
+      return [await send(), await send()]
+    })
+    expect(statuses).toEqual([200, 403])
+  })
+})

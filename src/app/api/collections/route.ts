@@ -1,5 +1,6 @@
 import { clean, fail, json } from '@/platform/http'
 import { readSession, saveSession } from '@/modules/membres'
+import { guard } from '@/platform/security/rateLimit'
 
 export async function GET() {
   const s = await readSession()
@@ -8,6 +9,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('listes', 60, 3600)
+  if (limited) return limited
   const s = await readSession()
   if (!s) return fail('Connectez-vous pour créer une liste.', 401)
   const body = await req.json().catch(() => ({}))
@@ -26,6 +29,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const limited = await guard('listes', 60, 3600)
+  if (limited) return limited
   const s = await readSession()
   if (!s) return fail('Connectez-vous pour modifier vos listes.', 401)
   const body = await req.json().catch(() => ({}))

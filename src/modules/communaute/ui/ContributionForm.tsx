@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { SmartText } from '@/platform/ui/SmartText'
 import { shrinkImage } from '@/platform/ui/shrink'
+import { proofHeaders } from '@/platform/security/proofClient'
 
 const KINDS = ['adresse', 'activite', 'evenement', 'correction', 'ferme', 'temoignage', 'media']
 const DATED = ['evenement', 'activite']
@@ -42,7 +43,7 @@ export function ContributionForm({ initialSector = '' }: { initialSector?: strin
       body.delete('photos')
       // Photos réduites dans le navigateur (envoi rapide, métadonnées GPS retirées).
       for (const f of photos) body.append('photos', await shrinkImage(f, 2000), f.name.replace(/\.[^.]+$/, '') + '.jpg')
-      const r = await fetch('/api/contributions', { method: 'POST', body })
+      const r = await fetch('/api/contributions', { method: 'POST', headers: await proofHeaders(), body })
       const j = await r.json()
       if (!r.ok) throw new Error(j.error ?? 'Envoi impossible.')
       form.reset()
