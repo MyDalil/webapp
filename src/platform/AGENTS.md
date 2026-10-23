@@ -9,7 +9,7 @@ Le socle est partagé par tous les métiers et **n’importe jamais un module** 
 - `controls/Controls.ts` — global « Commandes et sécurité » : arrêt général à 3 niveaux, agents, Telegram, maintenance, budget agents ; `agentsMayRun()`.
 - `http.ts` — accès Payload, réponses JSON `no-store`, `isEmail`, `clean`.
 - `mail.ts` — expéditeur `DALIL <salam@mydalil.com>`, gabarit, envoi unitaire et par lots, liens et en-têtes de désinscription. Pas de `server-only` ici : la CLI Payload doit pouvoir le charger.
-- `auth/Users.ts` — comptes équipe /admin : premier compte admin (en ligne, uniquement avec l’email `DALIL_ADMIN_EMAIL`), invitation, alertes mot de passe et email, 8 essais max.
+- `auth/Users.ts` — comptes équipe /admin : premier compte admin (en ligne, uniquement avec l’email `DALIL_ADMIN_EMAIL`, à défaut salam@mydalil.com), invitation, alertes mot de passe et email, 8 essais max.
 - `storage/Media.ts` — photos (vignette 480×360, couverture 1600×900, texte alternatif obligatoire) sur Vercel Blob ; `moderation` « À contrôler » pour les photos envoyées par les comptes.
 - `storage/images.ts` — contrôle des fichiers envoyés (signature, 4 Mo, retrait des métadonnées), testé ; `storage/upload.ts` — enregistrement d’une photo de compte.
 - `security/rateLimit.ts` — limitation de débit native (table `rate_limits` dans Neon, IP jamais stockée en clair) : connexion 20/15 min, mot de passe oublié 5/h par IP et 3/h par email, inscription 5/h, rendez-vous 20/h, demandes de service 10/h, messages 120/h, envois de fichiers 20/h, export 5/h. Ménage quotidien par `/api/taches`.

@@ -1,7 +1,7 @@
 import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 import { APIError } from 'payload'
 import { isAdmin, isAdminField, isAdminUser, isPatronUser, isStaffUser } from '@/platform/access'
-import { SITE, esc, layout, send } from '@/platform/mail'
+import { SITE, TEAM, esc, layout, send } from '@/platform/mail'
 
 const resetUrl = (token: string) => `${SITE}/admin/reset/${token}`
 
@@ -11,9 +11,10 @@ const before: CollectionBeforeChangeHook = async ({ data, operation, req, origin
     const { totalDocs } = await req.payload.count({ collection: 'users', overrideAccess: true })
     if (totalDocs === 0) {
       // En ligne (Vercel), le premier compte doit porter l’email prévu : une base vide ne donne pas l’administration au premier venu.
-      const expected = process.env.DALIL_ADMIN_EMAIL?.trim().toLowerCase()
-      if (process.env.VERCEL && (!expected || String(data.email ?? '').trim().toLowerCase() !== expected))
-        throw new APIError('Premier compte : utilisez l’email défini dans la variable Vercel DALIL_ADMIN_EMAIL.', 403)
+      // Sans variable : l’adresse de l’équipe (salam@mydalil.com, boîte redirigée chez Gandi).
+      const expected = (process.env.DALIL_ADMIN_EMAIL || TEAM).trim().toLowerCase()
+      if (process.env.VERCEL && String(data.email ?? '').trim().toLowerCase() !== expected)
+        throw new APIError(`Premier compte : utilisez l’adresse ${expected}.`, 403)
       return { ...data, role: 'admin' }
     }
     context.invite = true
