@@ -43,6 +43,7 @@ jobs:
       DALIL_DATABASE_URL: postgres://postgres:postgres@localhost:5432/dalil
       PAYLOAD_SECRET: ci-secret-sans-valeur
       NEXT_PUBLIC_SITE_URL: https://www.mydalil.com
+      DALIL_TEST_ERRORS: '1'
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4

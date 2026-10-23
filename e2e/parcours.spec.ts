@@ -1,5 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 
+/** IP distincte par test d’écriture (serveur local) : les limites de débit du site ne bloquent pas les relances. */
+const freshIp = () => ({ 'x-forwarded-for': `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` })
+
 /** Erreurs JavaScript de la page : un parcours essentiel n’en tolère aucune. */
 const watchErrors = (page: Page) => {
   const errors: string[] = []
@@ -46,6 +49,8 @@ test.describe('Annuaire', () => {
 
 // @ecriture : ces tests écrivent en base ; exclus des contrôles sur un déploiement (`--grep-invert @ecriture`).
 test.describe('Formulaires @ecriture', () => {
+  test.beforeEach(async ({ page }) => page.setExtraHTTPHeaders(freshIp()))
+
   test('proposer une adresse : contribution enregistrée', async ({ page }) => {
     await page.goto('/proposer')
     const form = page.locator('form:has(input[name="title"])')
@@ -75,10 +80,13 @@ test.describe('Administration', () => {
 })
 
 test.describe('Anti-robot @ecriture', () => {
-  test.beforeEach(() => test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit'))
+  test.beforeEach(async ({ page }) => {
+    test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
+    await page.setExtraHTTPHeaders(freshIp())
+  })
 
   test('un envoi sans preuve de travail est refusé', async ({ request }) => {
-    const res = await request.post('/api/subscribers', { data: { email: 'robot@example.com' } })
+    const res = await request.post('/api/subscribers', { data: { email: 'robot@example.com' }, headers: freshIp() })
     expect(res.status()).toBe(403)
   })
 

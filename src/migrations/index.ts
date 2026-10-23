@@ -23,6 +23,7 @@ import * as migration_20261017_141500_criteres_socle_commun from './20261017_141
 import * as migration_20261017_220000_import_fiches_documentees from './20261017_220000_import_fiches_documentees';
 import * as migration_20261017_230000_import_osm from './20261017_230000_import_osm';
 import * as migration_20261021_082159_annonces from './20261021_082159_annonces';
+import * as migration_20261023_071938_erreurs_du_site from './20261023_071938_erreurs_du_site';
 
 export const migrations = [
   {
@@ -148,6 +149,11 @@ export const migrations = [
   {
     up: migration_20261021_082159_annonces.up,
     down: migration_20261021_082159_annonces.down,
-    name: '20261021_082159_annonces'
+    name: '20261021_082159_annonces',
+  },
+  {
+    up: migration_20261023_071938_erreurs_du_site.up,
+    down: migration_20261023_071938_erreurs_du_site.down,
+    name: '20261023_071938_erreurs_du_site'
   },
 ];

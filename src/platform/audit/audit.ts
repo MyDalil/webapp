@@ -5,7 +5,7 @@ type Channel = 'admin' | 'telegram' | 'api' | 'agent' | 'cron'
 export type AuditEntry = { action: string; summary: string; target?: string; targetId?: string | number; changes?: Record<string, unknown>; channel?: Channel }
 
 /** Collections bruyantes ou techniques : pas de ligne d’audit automatique. */
-const SKIP = new Set(['audit-log', 'visitor-sessions', 'ai-usage', 'payload-preferences', 'payload-migrations', 'payload-locked-documents', 'payload-jobs'])
+const SKIP = new Set(['audit-log', 'visitor-sessions', 'ai-usage', 'error-logs', 'payload-preferences', 'payload-migrations', 'payload-locked-documents', 'payload-jobs'])
 /** Champs jamais recopiés dans le journal. */
 const SECRET = new Set(['password', 'hash', 'salt', 'resetPasswordToken', 'resetPasswordExpiration', 'apiKey', 'apiKeyIndex', 'enableAPIKey', 'sessions', 'loginAttempts', 'lockUntil', 'updatedAt', 'createdAt'])
 

@@ -93,6 +93,7 @@ export interface Config {
     'agent-tasks': AgentTask;
     'agent-messages': AgentMessage;
     'ai-usage': AiUsage;
+    'error-logs': ErrorLog;
     'audit-log': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -125,6 +126,7 @@ export interface Config {
     'agent-tasks': AgentTasksSelect<false> | AgentTasksSelect<true>;
     'agent-messages': AgentMessagesSelect<false> | AgentMessagesSelect<true>;
     'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
+    'error-logs': ErrorLogsSelect<false> | ErrorLogsSelect<true>;
     'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -1783,6 +1785,29 @@ export interface AiUsage {
   createdAt: string;
 }
 /**
+ * Erreurs serveur du site, regroupées. Une alerte part à l’équipe à la première occurrence. Cochez « Résolue » après correction : une nouvelle occurrence la rouvre.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "error-logs".
+ */
+export interface ErrorLog {
+  id: number;
+  fingerprint: string;
+  message: string;
+  route?: string | null;
+  path?: string | null;
+  method?: string | null;
+  routeType?: string | null;
+  count?: number | null;
+  firstSeen?: string | null;
+  lastSeen?: string | null;
+  resolved?: boolean | null;
+  digest?: string | null;
+  stack?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Ajout seul : aucune ligne ne peut être modifiée ni supprimée.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1929,6 +1954,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'ai-usage';
         value: number | AiUsage;
+      } | null)
+    | ({
+        relationTo: 'error-logs';
+        value: number | ErrorLog;
       } | null)
     | ({
         relationTo: 'audit-log';
@@ -2687,6 +2716,26 @@ export interface AiUsageSelect<T extends boolean = true> {
   outputTokens?: T;
   costMicros?: T;
   model?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "error-logs_select".
+ */
+export interface ErrorLogsSelect<T extends boolean = true> {
+  fingerprint?: T;
+  message?: T;
+  route?: T;
+  path?: T;
+  method?: T;
+  routeType?: T;
+  count?: T;
+  firstSeen?: T;
+  lastSeen?: T;
+  resolved?: T;
+  digest?: T;
+  stack?: T;
   updatedAt?: T;
   createdAt?: T;
 }

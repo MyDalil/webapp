@@ -11,6 +11,7 @@ import { buildConfig } from 'payload'
 import { Users } from '@/platform/auth/Users'
 import { Media } from '@/platform/storage/Media'
 import { AiUsage } from '@/platform/ai/AiUsage'
+import { ErrorLogs } from '@/platform/monitoring/ErrorLogs'
 import { AuditLog } from '@/platform/audit/AuditLog'
 import { auditPlugin } from '@/platform/audit/audit'
 import { Controls } from '@/platform/controls/Controls'
@@ -42,7 +43,7 @@ export default buildConfig({
   },
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
   globals: [FeaturedDestination, Controls],
-  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, AuditLog],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, AuditLog],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY
