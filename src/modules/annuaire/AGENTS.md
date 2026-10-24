@@ -49,7 +49,7 @@ Neon (lecture), Vercel Blob (photos).
 - `skills/ajouter-une-adresse` — Ajouter ou compléter une adresse de l’annuaire DALIL dans /admin (fiche, localisation, photos, publication).
 
 ## Prochaines étapes
-- Saisir coordonnées et photos des 10 adresses reprises du prototype.
+- Photos des adresses reprises du prototype ; coordonnées : absentes d’OSM (vérifié le 2026-10-24), à relever sur place.
 - Bouton carte sur mobile (à valider avec Rad).
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.
