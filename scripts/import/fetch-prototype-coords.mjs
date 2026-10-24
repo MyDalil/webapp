@@ -1,6 +1,6 @@
 // Recherche relancée à chaque modification de ce fichier (action « Coordonnées du prototype »).
 // Coordonnées des 10 adresses reprises du prototype, cherchées dans OpenStreetMap (ODbL) — faits seulement.
-// Une adresse reçoit un point seulement si OSM a UN seul lieu de restauration au même nom dans la wilaya ; sinon rien (position approximative conservée).
+// Une adresse reçoit un point seulement si OSM a UN seul lieu de restauration au nom identique dans la wilaya ; sinon rien (position approximative conservée), candidats notés pour l’équipe.
 // Lancé par l’action « Coordonnées du prototype » ; sortie : src/modules/annuaire/data/prototype-coords.json.
 import { readFileSync, writeFileSync } from 'node:fs'
 
@@ -19,14 +19,16 @@ async function overpass(q) {
   throw new Error('Overpass indisponible')
 }
 
+const norm = (s) => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[’'`]/g, '').replace(/^(restaurant|resto|pizzeria|cafe|café)\s+/, '').replace(/[^a-z0-9]+/g, ' ').trim()
 const out = {}
 for (const l of listings) {
   const iso = ISO[l.city]
-  const q = `[out:json][timeout:60];area["ISO3166-2"="${iso}"]->.w;nwr["name"~"^${esc(l.name)}$",i]["amenity"~"restaurant|fast_food|cafe"](area.w);out center tags;`
+  // Wilaya par code ISO ou par nom (étiquettes variables dans OSM) ; nom contenant le nom de l’adresse, lieux de restauration.
+  const q = `[out:json][timeout:90];(area["ISO3166-2"="${iso}"];area["name:fr"~"${esc(l.city)}",i]["admin_level"="4"];)->.w;nwr["name"~"${esc(l.name)}",i]["amenity"~"restaurant|fast_food|cafe|food_court"](area.w);out center tags;`
   const found = await overpass(q)
-  const e = found.length === 1 ? found[0] : null
-  const c = e ? (e.center ?? e) : null
-  out[l.slug] = e ? { lat: c.lat, lng: c.lon, osm: `${e.type}/${e.id}`, name: e.tags.name, street: e.tags['addr:street'] ?? null } : { candidates: found.length }
+  const candidates = found.map((e) => ({ name: e.tags.name, amenity: e.tags.amenity, lat: (e.center ?? e).lat, lng: (e.center ?? e).lon, osm: `${e.type}/${e.id}`, street: e.tags['addr:street'] ?? null }))
+  const exact = candidates.filter((c) => norm(c.name) === norm(l.name))
+  out[l.slug] = exact.length === 1 ? { ...exact[0], match: 'nom identique, seul dans la wilaya' } : { match: null, candidates }
   console.log(l.slug, '→', JSON.stringify(out[l.slug]))
   await new Promise((r) => setTimeout(r, 1500))
 }
