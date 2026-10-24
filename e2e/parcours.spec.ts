@@ -11,7 +11,7 @@ const watchErrors = (page: Page) => {
 }
 
 test.describe('Pages publiques', () => {
-  for (const path of ['/', '/annuaire', '/guides', '/que-faire-ce-week-end', '/annonces', '/services', '/praticiens', '/proposer', '/label']) {
+  for (const path of ['/', '/annuaire', '/guides', '/que-faire-ce-week-end', '/annonces', '/services', '/praticiens', '/proposer', '/label', '/en', '/ar']) {
     test(`${path} s’affiche sans erreur`, async ({ page }) => {
       const errors = watchErrors(page)
       const res = await page.goto(path)

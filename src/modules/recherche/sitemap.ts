@@ -9,15 +9,15 @@ import { SECTORS } from '@/platform/referentiel/catalog'
 
 /**
  * Plan du site dynamique : uniquement les pages publiques et les contenus publiés (annonces : en ligne et non expirées).
- * Pages privées, de compte, de formulaire interne ou d’attente exclues. Mis à jour à chaque lecture (cache 1 h), sans redéploiement.
+ * Pages privées, de compte ou de formulaire interne exclues. Mis à jour à chaque lecture (cache 1 h), sans redéploiement.
  */
 export type SitemapUrl = { loc: string; lastmod?: string }
 
 /** Tranche d’adresses par fichier (limite des moteurs : 50 000 adresses). */
 export const PLACES_PER_FILE = 40_000
 
-/** Pages du prototype à ne pas indexer : privées, outils internes, pages d’attente, fiches servies depuis Neon. */
-const EXCLUDED = new Set(['/recherche', '/professionnels/espace', '/feedback', '/ar', '/en'])
+/** Pages du prototype à ne pas indexer : privées, outils internes, fiches servies depuis Neon. */
+const EXCLUDED = new Set(['/recherche', '/professionnels/espace', '/feedback'])
 
 /** Pages dédiées hors du contenu du prototype. */
 const DEDICATED = ['/annonces', '/services', '/praticiens', '/que-faire-ce-week-end']
