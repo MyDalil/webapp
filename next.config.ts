@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   turbopack: { root: path.resolve(dirname) },
+  // Jeux d’import (osm-selected.json : 12 Mo) lus seulement par les migrations au build : hors des fonctions serveur.
+  outputFileTracingExcludes: { '*': ['./src/modules/annuaire/data/**/*'] },
   // 404 du site avec son en-tête et son pied de page (le site et /admin ont chacun leur racine).
   experimental: { globalNotFound: true },
 }

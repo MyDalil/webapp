@@ -7,10 +7,11 @@ La recherche du site, la recherche guidée (y compris lecture de PDF) et l’ass
 
 ## Contenu du module
 - `ui/HomeSearch` (accueil), `ui/GuidedSearch` (lecture PDF via pdfjs), `ui/Assistant` (barre « Demandez à DALIL ») ; page /recherche.
+- `sitemap.ts` — plan du site dynamique (`/sitemap.xml`, `/sitemaps/*.xml`) et règles de `/robots.txt` : contenus publiés seulement, pages privées exclues.
 - `intent.ts` — compréhension d’une demande : brouillon nettoyé, page à ouvrir pré-remplie (services, praticiens, annuaire, recherche), une question si une information indispensable manque. Valeurs de l’IA revérifiées contre les référentiels ; repérage par mots-clés sans IA. Route `/api/ia/demande`.
 
 ## Dépend de
-`contenus`, `annuaire` (à venir : index commun).
+`contenus`, `annuaire`, `sante`, `services`, `annonces` (plan du site) ; à venir : index commun.
 
 ## Événements
 Aucun.

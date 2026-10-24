@@ -2,6 +2,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { clean, fail, json } from '@/platform/http'
 import { deleteSession, ensureSession, readSession, saveSession } from '@/modules/membres'
 import { record } from '@/modules/messages'
+import { guard } from '@/platform/security/rateLimit'
 
 const view = (s: Awaited<ReturnType<typeof readSession>>) => ({
   profile: s?.profile ?? null,
@@ -13,6 +14,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('profil-test', 30, 3600)
+  if (limited) return limited
   const body = await req.json().catch(() => null)
   if (!body?.action) return fail('Requête invalide.')
 
@@ -55,6 +58,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE() {
+  const limited = await guard('profil-test', 30, 3600)
+  if (limited) return limited
   await deleteSession()
   return json({ ok: true })
 }

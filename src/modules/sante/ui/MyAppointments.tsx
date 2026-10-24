@@ -87,15 +87,20 @@ export function AppointmentList({ items, side, onChange }: { items: A[]; side: '
 /** Espace patient : rendez-vous à venir et passés. */
 export function MyAppointments() {
   const [items, setItems] = useState<A[] | null>(null)
+  // Heure de référence prise au chargement (pas pendant le rendu) : à venir / passés.
+  const [loadedAt, setLoadedAt] = useState(0)
   const load = () =>
     fetch('/api/rdv', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : { appointments: [] }))
-      .then((d) => setItems(d.appointments))
+      .then((d) => {
+        setLoadedAt(Date.now())
+        setItems(d.appointments)
+      })
   useEffect(() => {
     load()
   }, [])
   if (!items) return <p className="muted-line">Chargement…</p>
-  const now = Date.now()
+  const now = loadedAt
   const upcoming = items.filter((a) => a.status === 'confirmed' && Date.parse(a.start) >= now).sort((a, b) => a.start.localeCompare(b.start))
   const past = items.filter((a) => !upcoming.includes(a))
   return (

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MissionView } from '../marketplace'
 import { shrinkImage } from '@/platform/ui/shrink'
 import { SmartText } from '@/platform/ui/SmartText'
@@ -190,8 +190,9 @@ function ReviewForm({ id, name, onDone }: { id: number; name: string; onDone: (m
   const [files, setFiles] = useState<File[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const previews = useRef<string[]>([])
-  previews.current = files.map((f, i) => previews.current[i] ?? URL.createObjectURL(f))
+  // Un aperçu par photo, libéré quand la liste change (l’ancien index réutilisé montrait la mauvaise photo après un retrait).
+  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files])
+  useEffect(() => () => previews.forEach((u) => URL.revokeObjectURL(u)), [previews])
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setBusy(true)
@@ -218,7 +219,7 @@ function ReviewForm({ id, name, onDone }: { id: number; name: string; onDone: (m
       <SmartText multiline sentence value={comment} onChange={setComment} maxLength={1000} rows={3} placeholder="Ponctualité, qualité du travail, communication…" ariaLabel="Commentaire" />
       <div className="review-photos">
         {files.map((f, i) => (
-          <button key={`${f.name}-${i}`} type="button" className="review-thumb" style={{ backgroundImage: `url(${previews.current[i]})` }} aria-label="Retirer la photo" onClick={() => setFiles(files.filter((_, k) => k !== i))}>
+          <button key={`${f.name}-${i}`} type="button" className="review-thumb" style={{ backgroundImage: `url(${previews[i]})` }} aria-label="Retirer la photo" onClick={() => setFiles(files.filter((_, k) => k !== i))}>
             ×
           </button>
         ))}

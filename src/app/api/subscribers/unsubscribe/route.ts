@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
 import { payload } from '@/platform/http'
+import { guard } from '@/platform/security/rateLimit'
 
 const valid = (t: string) => /^[A-Za-z0-9_-]{20,64}$/.test(t)
 
@@ -15,6 +16,8 @@ async function unsubscribe(token: string) {
 
 /** Désinscription en un clic (RFC 8058) depuis Gmail / Yahoo, ou bouton de la page /newsletter/desinscription. */
 export async function POST(req: Request) {
+  const limited = await guard('desinscription', 20, 3600)
+  if (limited) return limited
   const token = new URL(req.url).searchParams.get('token') ?? ''
   const ok = await unsubscribe(token)
   const body = await req.text().catch(() => '')

@@ -1,4 +1,5 @@
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-postgres'
+import { deferred } from '@/platform/deferredData'
 import selected from '@/modules/annuaire/data/open-places-selected.json'
 
 type Item = (typeof selected)[number]
@@ -8,7 +9,7 @@ type Item = (typeof selected)[number]
  * sous licence libre, textes rédigés par DALIL). Idempotent : mise à jour par identifiant
  * Wikidata. Statut honnête « Repérée — à vérifier ». Calcule aussi le score des fiches existantes.
  */
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+export const up = deferred('20261008_100000_import_open_places', async ({ payload, req }: MigrateUpArgs): Promise<void> => {
   const ctx = { skipRevalidate: true }
   for (const p of selected as Item[]) {
     const data = {
@@ -51,7 +52,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   // Score des fiches déjà présentes (adresses reprises du prototype).
   const { docs: rest } = await payload.find({ collection: 'places', req, overrideAccess: true, limit: 1000, where: { score: { exists: false } } })
   for (const d of rest) await payload.update({ collection: 'places', id: d.id, req, overrideAccess: true, context: ctx, data: {} })
-}
+})
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
   await payload.delete({ collection: 'places', req, overrideAccess: true, where: { 'source.provider': { equals: 'wikidata' } } })

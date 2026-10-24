@@ -17,12 +17,20 @@ jobs:
         with: { node-version: 22 }
       - run: node scripts/import/fetch-osm.mjs
         continue-on-error: true
+      - name: Archive du jeu brut (Vercel Blob)
+        if: always()
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+        run: |
+          mkdir -p /tmp/blob && cp scripts/import/archive-blob.mjs /tmp/blob/
+          (cd /tmp/blob && npm init -y >/dev/null && npm i --silent @vercel/blob@2.3.1)
+          node /tmp/blob/archive-blob.mjs osm src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
       - name: Commit du jeu de données
         if: always()
         run: |
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"
-          git add src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
+          git add -f src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
           git commit -m "Données : lieux OpenStreetMap (ODbL) [skip ci]" || echo "rien de nouveau"
           git pull --rebase origin import-data
           git push origin HEAD:import-data

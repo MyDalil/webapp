@@ -39,7 +39,7 @@ export async function aiGate(member: { id: number; _verified?: boolean | null } 
 /** Enregistre un appel, puis prévient l’équipe une fois par mois quand 80 % du budget est atteint. */
 export async function recordAi(feature: 'reformulate' | 'understand', memberId: number, r: AiReply) {
   const p = await payload()
-  const costMicros = r.inputTokens * PRICE_MICROS.input + r.outputTokens * PRICE_MICROS.output
+  const costMicros = Math.ceil(r.inputTokens * PRICE_MICROS.input + r.outputTokens * PRICE_MICROS.output)
   await p.create({ collection: 'ai-usage', overrideAccess: true, data: { feature, member: memberId, inputTokens: r.inputTokens, outputTokens: r.outputTokens, costMicros, model: AI_MODEL } })
   const spent = await monthSpentMicros()
   if (spent < MONTHLY_BUDGET_MICROS * 0.8) return

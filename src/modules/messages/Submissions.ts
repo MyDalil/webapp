@@ -30,6 +30,7 @@ export const Submissions: CollectionConfig = {
             { label: 'Demande de contact', value: 'contact' },
             { label: 'Avis (profil test)', value: 'feedback' },
             { label: 'Parcours personnalisé', value: 'diagnostic' },
+            { label: 'Signalement d’une annonce', value: 'report' },
           ],
         },
         {

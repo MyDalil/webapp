@@ -1,5 +1,6 @@
 import { currentMember, exportSanteData } from '@/modules/sante'
 import { exportServicesData } from '@/modules/services'
+import { exportClassifiedsData } from '@/modules/annonces'
 import { fail } from '@/platform/http'
 import { guard } from '@/platform/security/rateLimit'
 
@@ -15,6 +16,7 @@ export async function GET() {
     compte: { email: member.email, prenom: member.firstName, nom: member.lastName, telephone: member.phone, type: member.kind, genre: member.gender ?? null, emailVerifie: Boolean(member._verified), conditionsAccepteesLe: member.termsAcceptedAt, creeLe: member.createdAt },
     espacePersonnel: (member as { space?: unknown }).space ?? null,
     sante: await exportSanteData(member),
+    annonces: await exportClassifiedsData(member),
     services: await exportServicesData(member),
   }
   return new Response(JSON.stringify(data, null, 2), {

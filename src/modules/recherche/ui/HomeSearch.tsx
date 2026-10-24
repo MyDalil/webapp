@@ -1,12 +1,27 @@
 'use client'
 
 import { useRef, useState, type FormEvent } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Icon } from '@/platform/ui/Icon'
 import { toast } from '@/platform/shell/toast'
 import { simpleClean } from '@/platform/ai/clean'
 import { preferredLang, startDictation, type Dictation } from '@/platform/ui/speech'
 import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
+
+/**
+ * Suggestions sous la barre (validées par Rad, 2026-10-21) : hors tourisme d’abord, selon les recherches
+ * des Algériens (santé, artisans, papiers). Chaque lien ouvre directement le bon résultat.
+ */
+const SUGGESTIONS: [href: string, label: string][] = [
+  ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger'],
+  ['/praticiens?specialite=pediatrie', 'Pédiatre'],
+  ['/services/bricolage?activite=plomberie', 'Plombier'],
+  ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie'],
+  ['/guides/documents-et-demarches', 'Passeport et papiers'],
+  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement'],
+  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée'],
+]
 
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
 export function HomeSearch() {
@@ -51,6 +66,7 @@ export function HomeSearch() {
   }
 
   return (
+    <>
     <form className="search-bar" onSubmit={submit}>
       <span>
         <Icon name="search" />
@@ -73,5 +89,14 @@ export function HomeSearch() {
         Rechercher
       </button>
     </form>
+    <p className="xp-suggest">
+      <span>Par exemple :</span>
+      {SUGGESTIONS.map(([href, label]) => (
+        <Link key={href} href={href}>
+          {label}
+        </Link>
+      ))}
+    </p>
+    </>
   )
 }

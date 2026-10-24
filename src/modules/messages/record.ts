@@ -8,6 +8,7 @@ const KIND_LABEL = {
   contact: 'Nouvelle demande de contact',
   feedback: 'Nouvel avis',
   diagnostic: 'Nouveau parcours personnalisé',
+  report: 'Annonce signalée',
 } as const
 
 /** Enregistre une demande, alerte l’équipe et accuse réception à l’expéditeur s’il a laissé son email. */

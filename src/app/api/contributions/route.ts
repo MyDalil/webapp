@@ -3,6 +3,7 @@ import { readSession } from '@/modules/membres'
 import { record, saveContributionPhotos } from '@/modules/messages'
 import { guard } from '@/platform/security/rateLimit'
 import { cleanImage, readFile, type CleanFile } from '@/platform/storage/images'
+import { proofError } from '@/platform/security/proof'
 
 const MAX_PHOTOS = 3
 
@@ -13,6 +14,8 @@ const MAX_PHOTOS = 3
 export async function POST(req: Request) {
   const limited = await guard('contribution', 10, 3600)
   if (limited) return limited
+  const robot = await proofError(req)
+  if (robot) return fail(robot, 403)
   const fd = await req.formData().catch(() => null)
   if (!fd) return fail('Formulaire invalide.')
   if (clean(fd.get('website'))) return json({ ok: true })

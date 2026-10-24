@@ -89,6 +89,13 @@ export async function getPractitioner(slug: string): Promise<Practitioner | null
   return docs[0] ?? null
 }
 
+/** Plan du site : praticiens publiés seulement (fiches de démonstration exclues). */
+export async function getPractitionerSitemap(): Promise<{ slug: string; updatedAt: string }[]> {
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'practitioners', where: { and: [{ status: { equals: 'published' } }, { demo: { not_equals: true } }] }, depth: 0, pagination: false, select: { slug: true, updatedAt: true }, overrideAccess: true })
+  return docs.flatMap((d) => (d.slug ? [{ slug: d.slug, updatedAt: d.updatedAt }] : []))
+}
+
 export async function searchPractitioners(q: { specialty?: string; wilaya?: string; mode?: string; language?: string; text?: string }): Promise<PractitionerCard[]> {
   const p = await getPayload()
   const and: Record<string, unknown>[] = [{ status: { equals: 'published' } }]

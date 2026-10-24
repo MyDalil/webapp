@@ -6,6 +6,7 @@ import { MyAppointments } from '@/modules/sante/ui'
 import { AccountActions, MySpace } from '@/modules/membres/ui'
 import { readSession } from '@/modules/membres'
 import { MyMissions } from '@/modules/services/ui'
+import { MyClassifieds } from '@/modules/annonces/ui'
 
 export const metadata: Metadata = { title: 'Mon compte · DALIL', robots: { index: false } }
 export const dynamic = 'force-dynamic'
@@ -27,12 +28,16 @@ export default async function Account() {
         <Link className="button primary" href="/services">
           Trouver un prestataire
         </Link>
+        <Link className="button primary" href="/annonces/deposer">
+          Déposer une annonce
+        </Link>
         <Link className="button outline" href="/espace-pro">
           {m.kind === 'pro' ? 'Mon espace pro' : 'Activer mon espace pro'}
         </Link>
       </div>
       <MyAppointments />
       <MyMissions />
+      <MyClassifieds />
       <MySpace
         initial={{
           profile: { territory: s?.profile.territory ?? '', interest: s?.profile.interest ?? '' },

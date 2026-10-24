@@ -23,7 +23,11 @@ const STATUS: Record<PlaceCard['status'], string> = {
 }
 
 /** Annuaire au format de la maquette : filtres, résultats, carte. Données : collection « Adresses » (Neon). */
-export function Directory({ places, sectors, initialSector = '', lockSector = false }: { places: PlaceCard[]; sectors: Sector[]; initialSector?: string; lockSector?: boolean }) {
+export function Directory({ places: initial, total: initialTotal, sectors, initialSector = '', lockSector = false }: { places: PlaceCard[]; total?: number; sectors: Sector[]; initialSector?: string; lockSector?: boolean }) {
+  // Fiches reçues du serveur pour le périmètre courant (secteur, spécialité, wilaya, texte) ; les autres filtres s’appliquent ici.
+  const [places, setPlaces] = useState(initial)
+  const [total, setTotal] = useState(initialTotal ?? initial.length)
+  const [loading, setLoading] = useState(false)
   const [q, setQ] = useState('')
   const [sector, setSector] = useState(initialSector)
   const [category, setCategory] = useState('')
@@ -60,8 +64,42 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
     if (!pinned.current) setWilayaFilter(chosen?.name ?? '')
   }, [chosen])
 
+  // Périmètre serveur : relu à chaque changement de secteur, spécialité, wilaya, coups de cœur ou recherche (après 350 ms de pause).
+  const scope = JSON.stringify({ sector, category, wilaya, q: q.trim(), favorite })
+  const firstScope = useRef(scope)
+  useEffect(() => {
+    if (scope === firstScope.current) return
+    firstScope.current = ''
+    const ctrl = new AbortController()
+    const t = window.setTimeout(async () => {
+      setLoading(true)
+      const p = new URLSearchParams()
+      if (sector) p.set('sector', sector)
+      if (category) p.set('category', category)
+      if (wilaya) p.set('wilaya', wilaya)
+      if (q.trim()) p.set('q', q.trim())
+      if (favorite) p.set('coeur', '1')
+      try {
+        const res = await fetch(`/api/annuaire?${p}`, { signal: ctrl.signal })
+        if (res.ok) {
+          const data = (await res.json()) as { places: PlaceCard[]; total: number }
+          setPlaces(data.places)
+          setTotal(data.total)
+        }
+      } catch {
+        /* recherche annulée ou hors ligne : on garde la liste affichée */
+      } finally {
+        setLoading(false)
+      }
+    }, 350)
+    return () => {
+      ctrl.abort()
+      window.clearTimeout(t)
+    }
+  }, [scope]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const scoped = useMemo(() => filterPlaces(places, { sector, wilaya }), [places, sector, wilaya])
-  const wilayas = useMemo(() => [...new Set(places.filter((p) => !sector || p.sector === sector).map((p) => p.wilaya).filter(Boolean) as string[])].sort((a, b) => a.localeCompare(b, 'fr')), [places, sector])
+  const wilayas = useMemo(() => WILAYAS.filter((w) => !w.transition).map((w) => w.name).sort((a, b) => a.localeCompare(b, 'fr')), [])
   const cities = useMemo(() => [...new Set(scoped.map((p) => p.city))].sort((a, b) => a.localeCompare(b, 'fr')), [scoped])
   const categories = useMemo(() => {
     const fromSector = sectors.find((s) => s.slug === sector)?.categories ?? []
@@ -190,9 +228,10 @@ export function Directory({ places, sectors, initialSector = '', lockSector = fa
       <div className="directory-results">
         <div className="results-toolbar">
           <div>
-            <strong>
-              {results.length} résultat{results.length > 1 ? 's' : ''}
+            <strong aria-live="polite">
+              {loading ? 'Recherche…' : `${results.length} résultat${results.length > 1 ? 's' : ''}`}
             </strong>
+            {total > places.length && <small>Les {places.length} mieux classés sur {total.toLocaleString('fr-FR')} : précisez la wilaya ou la spécialité.</small>}
             <small>{verified ? `${verified} vérifiée${verified > 1 ? 's' : ''} par DALIL` : 'Adresses repérées · critères DALIL en cours de vérification'}</small>
           </div>
           {(theme || wilaya || favorite) && (

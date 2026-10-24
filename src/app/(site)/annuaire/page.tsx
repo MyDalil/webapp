@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SECTORS } from '@/platform/referentiel/catalog'
-import { getPlaces } from '@/modules/annuaire'
+import { searchPlaces } from '@/modules/annuaire'
 import { Directory } from '@/modules/annuaire/ui'
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export const revalidate = 300
 
 export default async function AnnuairePage() {
-  const places = await getPlaces()
+  const { places, total } = await searchPlaces({})
   return (
     <>
       <section className="page-intro container compact">
@@ -21,7 +21,7 @@ export default async function AnnuairePage() {
         <h1>Trouvez une adresse qui vous correspond.</h1>
         <p>Des lieux utiles et des professionnels présentés avec des critères lisibles. Choisissez un secteur ou recherchez directement.</p>
       </section>
-      <Directory places={places} sectors={SECTORS.map(({ slug, title, categories }) => ({ slug, title, categories }))} />
+      <Directory places={places} total={total} sectors={SECTORS.map(({ slug, title, categories }) => ({ slug, title, categories }))} />
       {/* Cartes secteurs du prototype (même balisage), générées depuis le catalogue pour rester synchronisées. */}
       <div className="legacy">
         <section className="shell discovery-grid">

@@ -342,6 +342,7 @@ export const SECTORS: Sector[] = [
    "Ambassades",
    "Consulats",
    "Services municipaux",
+   "Bureaux de poste",
    "Offices du tourisme",
     "Contacts utiles et urgences"
   ],

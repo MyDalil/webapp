@@ -8,7 +8,7 @@ export const AiUsage: CollectionConfig = {
   admin: {
     group: 'Pilotage',
     defaultColumns: ['createdAt', 'feature', 'member', 'inputTokens', 'outputTokens', 'costMicros'],
-    description: 'Claude Haiku 4.5 : 1 $ par million de jetons en entrée, 5 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.',
+    description: 'Claude Haiku 5.5 : 0,10 $ par million de jetons en entrée, 0,50 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.',
   },
   access: { read: isStaff, create: () => false, update: () => false, delete: isAdmin },
   fields: [

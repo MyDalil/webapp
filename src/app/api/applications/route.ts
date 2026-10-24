@@ -1,8 +1,14 @@
 import { clean, fail, isEmail, json } from '@/platform/http'
 import { readSession, saveSession } from '@/modules/membres'
 import { record } from '@/modules/messages'
+import { guard } from '@/platform/security/rateLimit'
+import { proofError } from '@/platform/security/proof'
 
 export async function POST(req: Request) {
+  const limited = await guard('candidature', 5, 3600)
+  if (limited) return limited
+  const robot = await proofError(req)
+  if (robot) return fail(robot, 403)
   const body = await req.json().catch(() => null)
   if (!body) return fail('Formulaire invalide.')
   const businessName = clean(body.businessName, 200)

@@ -105,6 +105,13 @@ export async function getProvider(slug: string): Promise<Provider | null> {
   return docs[0] ?? null
 }
 
+/** Plan du site : prestataires publiés seulement (fiches de démonstration exclues). */
+export async function getProviderSitemap(): Promise<{ slug: string; updatedAt: string }[]> {
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'providers', where: { and: [{ status: { equals: 'published' } }, { demo: { not_equals: true } }] }, depth: 0, pagination: false, select: { slug: true, updatedAt: true }, overrideAccess: true })
+  return docs.flatMap((d) => (d.slug ? [{ slug: d.slug, updatedAt: d.updatedAt }] : []))
+}
+
 export async function providerReviews(providerId: number) {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'provider-reviews', where: { and: [{ provider: { equals: providerId } }, { status: { equals: 'published' } }] }, depth: 1, limit: 50, sort: '-createdAt', overrideAccess: true })

@@ -40,7 +40,7 @@ src/
   styles/           legacy.css (prototype, scopé .legacy) → mockup.css (maquette, prioritaire) → site.css (raccords)
   migrations/       historique du schéma, jamais modifié après coup
 ```
-Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `services`, `messages`, `communication`, `recherche`, `pilotage`, `agents` (équipe IA).
+Métiers : `annuaire`, `confiance`, `contenus`, `communaute`, `membres`, `pros`, `sante`, `services`, `annonces`, `messages`, `communication`, `recherche`, `pilotage`, `agents` (équipe IA).
 
 **Frontières (vérifiées automatiquement à chaque build par `scripts/check-boundaries.mjs`) :**
 - hors d’un module, on n’y entre que par `@/modules/<m>`, `@/modules/<m>/ui` ou `@/modules/<m>/collections` ;
@@ -51,7 +51,7 @@ Les métiers communiquent par leurs portes et par les hooks Payload (événement
 ## Avant de travailler
 1. Identifier le module propriétaire de la demande, lire son `AGENTS.md` et son `DECISIONS.md`.
 2. Lister les modules concernés et les dépendances à résoudre d’abord.
-3. Après le travail : `pnpm check` (frontières + types), `pnpm build`, test sur preview.
+3. Après le travail : `pnpm check` (frontières + types), `pnpm test`, `pnpm build`, `pnpm test:e2e`, test sur preview.
 4. Consigner toute décision durable dans le `DECISIONS.md` du module (date, décision, raison).
 
 ## Mémoire et apprentissage
@@ -73,6 +73,26 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - Vercel Blob `dalil-photos` (`BLOB_READ_WRITE_TOKEN`) ; Resend `RESEND_API_KEY` (domaine mydalil.com vérifié, eu-west-1).
 - Gandi : DNS + redirection salam@mydalil.com vers la boîte de l’équipe.
 
+## Contrôles avant fusion (CI)
+- `.github/workflows/ci.yml`, à chaque PR vers `preview` ou `main` et à chaque push sur `preview` : frontières + types, tests unitaires, **base neuve** (Postgres + PostGIS) migrée depuis zéro, build complet, parcours essentiels Playwright (`e2e/`, ordinateur + mobile).
+- `.github/workflows/deploiement.yml`, après chaque déploiement Vercel réussi : parcours en lecture seule (`--grep-invert @ecriture`) sur l’adresse déployée.
+- Règles de branche GitHub : `preview` et `main` exigent les statuts « Frontières, types et tests unitaires », « Build et parcours essentiels » ; `main` exige en plus « Vercel » et « Parcours sur le déploiement ». Fusion `preview` → `main` seulement quand tout est vert **et** après le feu vert de Rad.
+- Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
+
+## Surveillance
+- `.github/workflows/surveillance.yml` (depuis `main`, toutes les 10 min) : accueil, `/api/sante` (application + base), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour.
+- Erreurs serveur : /admin › Pilotage › Erreurs du site, alerte email à la première occurrence.
+
+## Migrations de données
+- Une migration qui écrit des données (`payload.create`, `importPlaces`…) enveloppe son `up` dans `deferred('<nom>', …)` (`src/platform/deferredData.ts`).
+- Raison : elle écrit avec le schéma d’aujourd’hui ; sur une base qui rattrape plusieurs migrations (production à la fusion, base neuve, CI), elle tournerait avant les colonnes ajoutées ensuite. Elle est notée pendant `payload migrate`, puis exécutée par `pnpm migrate:data` quand tout le schéma est en place.
+
+## Référencement
+- `/sitemap.xml` (index) → `/sitemaps/pages.xml`, `professionnels.xml`, `annonces.xml`, `adresses-N.xml` : calculé à la lecture (cache 1 h), contenus publiés seulement (`src/modules/recherche/sitemap.ts`).
+- `/robots.txt` : tout bloqué hors production ; en production, espaces privés et outils exclus.
+- Une page privée ou de compte : `robots: { index: false }` dans sa page **et** son chemin dans `ROBOTS_DISALLOW`.
+
 ## Commandes
-- `pnpm dev` / `pnpm build` (Postgres dans `.env`), `pnpm check` (frontières + types).
+- `pnpm dev` / `pnpm build` (Postgres dans `.env`), `pnpm check` (frontières + types), `pnpm test` (Vitest), `pnpm test:e2e` (Playwright, après `pnpm build`).
+- Base neuve : `pnpm payload migrate && pnpm migrate:data`.
 - Schéma modifié → `pnpm payload migrate:create <nom>` puis commit ; migrations appliquées au build Vercel (`vercel-build`) et au démarrage (`prodMigrations`).

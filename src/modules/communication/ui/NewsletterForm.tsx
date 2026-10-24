@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { proofHeaders } from '@/platform/security/proofClient'
 
 export function NewsletterForm({
   source = 'website',
@@ -23,7 +24,7 @@ export function NewsletterForm({
     try {
       const r = await fetch('/api/subscribers', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: await proofHeaders({ 'content-type': 'application/json' }),
         body: JSON.stringify({ email: fd.get('email'), website: fd.get('website'), source }),
       })
       const j = await r.json()

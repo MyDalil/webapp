@@ -1,10 +1,11 @@
 import type { MigrateDownArgs, MigrateUpArgs } from '@payloadcms/db-postgres'
+import { deferred } from '@/platform/deferredData'
 
 /**
  * Praticien de démonstration, uniquement sur les environnements de test (preview, local) :
  * permet d’essayer tout le parcours de réservation. Jamais créé en production.
  */
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+export const up = deferred('20261016_120000_demo_praticien', async ({ payload, req }: MigrateUpArgs): Promise<void> => {
   if (process.env.VERCEL_ENV === 'production') return
   const { totalDocs } = await payload.count({ collection: 'practitioners', req, overrideAccess: true, where: { slug: { equals: 'demo-praticien' } } })
   if (totalDocs) return
@@ -40,7 +41,7 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
       identityVerified: false,
     },
   })
-}
+})
 
 export async function down({ payload, req }: MigrateDownArgs): Promise<void> {
   await payload.delete({ collection: 'practitioners', req, overrideAccess: true, where: { slug: { equals: 'demo-praticien' } } })

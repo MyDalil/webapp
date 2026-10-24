@@ -154,3 +154,14 @@
 .top-tile .city-tile-body .chip { margin-bottom: 4px; background: rgba(255, 255, 255, .92); color: var(--green); }
 .top-tile .city-tile-body h3 { margin: 0; font-size: 1.12rem; line-height: 1.3; }
 .top-tile .status-dot { color: rgba(255, 255, 255, .82); }
+
+/* Accueil 2026-10-21 : liens rapides (spécialités, catégories), sous-titres du bloc Découvrir, suggestions de recherche. */
+.xp-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; }
+.xp-links a { padding: 8px 14px; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--text); font-size: .9rem; font-weight: 600; transition: border-color .2s var(--ease-out), color .2s var(--ease-out); }
+.xp-links a:hover, .xp-links a:focus-visible { border-color: var(--green); color: var(--green); }
+.xp-subhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-top: 40px; margin-bottom: 18px; }
+.xp-subhead h3 { margin: 0; font-size: clamp(1.2rem, 2vw, 1.5rem); letter-spacing: -.02em; }
+.xp-subhead a { color: var(--green); font-weight: 700; }
+.xp-suggest { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; font-size: .88rem; color: rgba(255, 255, 255, .86); }
+.xp-suggest a { padding: 5px 12px; border: 1px solid rgba(255, 255, 255, .4); border-radius: 99px; color: #fff; background: rgba(0, 0, 0, .18); backdrop-filter: blur(6px); }
+.xp-suggest a:hover, .xp-suggest a:focus-visible { background: rgba(255, 255, 255, .18); border-color: #fff; }

@@ -1,5 +1,6 @@
 import { clean, fail, json } from '@/platform/http'
 import { readSession, saveSession } from '@/modules/membres'
+import { guard } from '@/platform/security/rateLimit'
 
 const tasks = (c: Record<string, boolean>) => Object.entries(c).map(([taskKey, completed]) => ({ taskKey, completed }))
 
@@ -10,6 +11,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('checklist', 120, 3600)
+  if (limited) return limited
   const s = await readSession()
   if (!s) return fail('Connectez-vous pour suivre votre préparation.', 401)
   const body = await req.json().catch(() => ({}))
