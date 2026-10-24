@@ -1,4 +1,8 @@
-import { clean, deleteSession, ensureSession, fail, json, readSession, record, saveSession } from '@/lib/site'
+import { WILAYAS } from '@/platform/referentiel/catalog'
+import { clean, fail, json } from '@/platform/http'
+import { deleteSession, ensureSession, readSession, saveSession } from '@/modules/membres'
+import { record } from '@/modules/messages'
+import { guard } from '@/platform/security/rateLimit'
 
 const view = (s: Awaited<ReturnType<typeof readSession>>) => ({
   profile: s?.profile ?? null,
@@ -10,28 +14,26 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('profil-test', 30, 3600)
+  if (limited) return limited
   const body = await req.json().catch(() => null)
   if (!body?.action) return fail('Requête invalide.')
 
+  const s = await ensureSession()
+  if (!s) return fail('Connectez-vous pour continuer.', 401)
+
   if (body.action === 'profile') {
     const p = body.profile ?? {}
-    const nickname = clean(p.nickname, 60)
-    if (!nickname) return fail('Indiquez un prénom ou un pseudo.')
-    const s = await ensureSession()
-    const profile = {
-      nickname,
-      role: clean(p.role, 60),
-      territory: clean(p.territory, 120),
-      interest: clean(p.interest, 120),
-      businessName: clean(p.businessName, 200),
-      tracking: !!p.tracking,
-    }
+    const profile = { territory: clean(p.territory, 120), interest: clean(p.interest, 160) }
     await saveSession(s.id, { profile })
-    return json(view({ ...s, profile }))
+    return json(view({ ...s, profile: { ...s.profile, ...profile } }))
   }
 
-  const s = await readSession()
-  if (!s) return fail('Créez votre profil test pour continuer.', 401)
+  if (body.action === 'wilaya') {
+    const code = Number(body.code)
+    await saveSession(s.id, { profile: { wilaya: WILAYAS.some((w) => w.code === code) ? code : null } })
+    return json({ ok: true })
+  }
 
   if (body.action === 'favorite') {
     const path = clean(body.path, 300)
@@ -56,6 +58,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE() {
+  const limited = await guard('profil-test', 30, 3600)
+  if (limited) return limited
   await deleteSession()
   return json({ ok: true })
 }

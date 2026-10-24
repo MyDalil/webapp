@@ -1,11 +1,16 @@
-import { fail, json, readSession, record, saveSession } from '@/lib/site'
+import { fail, json } from '@/platform/http'
+import { readSession, saveSession } from '@/modules/membres'
+import { record } from '@/modules/messages'
+import { guard } from '@/platform/security/rateLimit'
 
 export async function POST(req: Request) {
+  const limited = await guard('diagnostic', 20, 3600)
+  if (limited) return limited
   const body = await req.json().catch(() => null)
   if (!body || typeof body.answers !== 'object') return fail('Réponses manquantes.')
   const s = await readSession()
   await record('diagnostic', 'Parcours personnalisé', body.answers, undefined, s?.sid)
-  if (!s) return fail('Créez votre profil pour enregistrer votre parcours.', 401)
+  if (!s) return fail('Connectez-vous pour enregistrer votre parcours.', 401)
   s.state.diagnostics.unshift({ answers: body.answers, createdAt: new Date().toISOString() })
   await saveSession(s.id, { state: s.state })
   return json({ ok: true })

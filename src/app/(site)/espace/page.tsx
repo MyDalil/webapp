@@ -1,9 +1,10 @@
-import type { Metadata } from 'next'
-import { MemberSpace } from '@/components/MemberSpace'
-import { Legacy } from '@/components/Legacy'
+import { redirect } from 'next/navigation'
+import { currentMember } from '@/modules/membres'
 
-export const metadata: Metadata = { title: 'Espace Particulier', robots: { index: false } }
+export const dynamic = 'force-dynamic'
 
-export default function EspacePage() {
-  return <MemberSpace guest={<Legacy route="/espace" />} />
+/** Ancienne page du prototype (profil test) : tout passe désormais par le compte membre. */
+export default async function Page() {
+  if (await currentMember()) redirect('/mon-compte')
+  redirect('/connexion/particulier?tab=signup&next=%2Fmon-compte')
 }

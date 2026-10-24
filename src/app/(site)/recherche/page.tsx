@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { getPage } from '@/content'
-import { Tree } from '@/components/Tree'
+import { getPage } from '@/modules/contenus'
+import { Tree } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = { title: 'Que cherchez-vous en Algérie ?', robots: { index: false } }
 

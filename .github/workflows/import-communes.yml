@@ -1,0 +1,25 @@
+name: Import des communes (Wikidata)
+on:
+  workflow_dispatch:
+  push:
+    branches: [preview]
+    paths: [scripts/import/fetch-communes.mjs]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: preview }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-communes.mjs
+      - name: Commit du référentiel
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add src/platform/referentiel/communes.json
+          git commit -m "Référentiel : communes d’Algérie (Wikidata, CC0)" || echo "rien de nouveau"
+          git push origin HEAD:preview

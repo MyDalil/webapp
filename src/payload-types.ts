@@ -63,14 +63,38 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
+    members: MemberAuthOperations;
     users: UserAuthOperations;
+    agents: AgentAuthOperations;
   };
   blocks: {};
   collections: {
+    places: Place;
+    events: Event;
+    practitioners: Practitioner;
+    appointments: Appointment;
+    providers: Provider;
+    missions: Mission;
+    'mission-messages': MissionMessage;
+    'provider-reviews': ProviderReview;
+    'provider-documents': ProviderDocument;
+    classifieds: Classified;
+    'classified-messages': ClassifiedMessage;
+    media: Media;
     submissions: Submission;
+    'contribution-photos': ContributionPhoto;
     subscribers: Subscriber;
+    campaigns: Campaign;
+    'telegram-posts': TelegramPost;
+    members: Member;
     'visitor-sessions': VisitorSession;
     users: User;
+    agents: Agent;
+    'agent-tasks': AgentTask;
+    'agent-messages': AgentMessage;
+    'ai-usage': AiUsage;
+    'error-logs': ErrorLog;
+    'audit-log': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,10 +102,32 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    places: PlacesSelect<false> | PlacesSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    practitioners: PractitionersSelect<false> | PractitionersSelect<true>;
+    appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
+    providers: ProvidersSelect<false> | ProvidersSelect<true>;
+    missions: MissionsSelect<false> | MissionsSelect<true>;
+    'mission-messages': MissionMessagesSelect<false> | MissionMessagesSelect<true>;
+    'provider-reviews': ProviderReviewsSelect<false> | ProviderReviewsSelect<true>;
+    'provider-documents': ProviderDocumentsSelect<false> | ProviderDocumentsSelect<true>;
+    classifieds: ClassifiedsSelect<false> | ClassifiedsSelect<true>;
+    'classified-messages': ClassifiedMessagesSelect<false> | ClassifiedMessagesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
+    'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    'telegram-posts': TelegramPostsSelect<false> | TelegramPostsSelect<true>;
+    members: MembersSelect<false> | MembersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    agents: AgentsSelect<false> | AgentsSelect<true>;
+    'agent-tasks': AgentTasksSelect<false> | AgentTasksSelect<true>;
+    'agent-messages': AgentMessagesSelect<false> | AgentMessagesSelect<true>;
+    'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
+    'error-logs': ErrorLogsSelect<false> | ErrorLogsSelect<true>;
+    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -91,16 +137,40 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'featured-destination': FeaturedDestination;
+    controls: Control;
+  };
+  globalsSelect: {
+    'featured-destination': FeaturedDestinationSelect<false> | FeaturedDestinationSelect<true>;
+    controls: ControlsSelect<false> | ControlsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: Member | User | Agent;
   jobs: {
     tasks: unknown;
     workflows: unknown;
+  };
+}
+export interface MemberAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
   };
 }
 export interface UserAuthOperations {
@@ -121,14 +191,1264 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface AgentAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places".
+ */
+export interface Place {
+  id: number;
+  name: string;
+  sector:
+    | 'restaurants-gastronomie'
+    | 'education-formation'
+    | 'sante-soins'
+    | 'bien-etre-sport'
+    | 'logement-immobilier'
+    | 'hebergement-sejours'
+    | 'culture-nature-loisirs'
+    | 'mosquees-priere'
+    | 'commerces-achats'
+    | 'transports-mobilite'
+    | 'maison-travaux'
+    | 'droit-finance-conseil'
+    | 'administrations-services-publics';
+  /**
+   * Ex. Restaurants, Cafés, Écoles, Cliniques…
+   */
+  category: string;
+  /**
+   * Deux ou trois phrases factuelles.
+   */
+  intro?: string | null;
+  /**
+   * La première sert de couverture.
+   */
+  photos?: (number | Media)[] | null;
+  /**
+   * Wikimedia Commons ou autre source libre : auteur et licence obligatoires, affichés sous la photo. Utilisées après les photos DALIL.
+   */
+  externalPhotos?:
+    | {
+        url: string;
+        author: string;
+        license: string;
+        licenseUrl?: string | null;
+        page: string;
+        width?: number | null;
+        height?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  nameAr?: string | null;
+  nameEn?: string | null;
+  /**
+   * Ex. Patrimoine mondial de l’UNESCO, monument classé.
+   */
+  heritage?: string | null;
+  inception?: string | null;
+  wikipedia?: string | null;
+  wilaya?:
+    | (
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12'
+        | '13'
+        | '14'
+        | '15'
+        | '16'
+        | '17'
+        | '18'
+        | '19'
+        | '20'
+        | '21'
+        | '22'
+        | '23'
+        | '24'
+        | '25'
+        | '26'
+        | '27'
+        | '28'
+        | '29'
+        | '30'
+        | '31'
+        | '32'
+        | '33'
+        | '34'
+        | '35'
+        | '36'
+        | '37'
+        | '38'
+        | '39'
+        | '40'
+        | '41'
+        | '42'
+        | '43'
+        | '44'
+        | '45'
+        | '46'
+        | '47'
+        | '48'
+        | '49'
+        | '50'
+        | '51'
+        | '52'
+        | '53'
+        | '54'
+        | '55'
+        | '56'
+        | '57'
+        | '58'
+        | '59'
+        | '60'
+        | '61'
+        | '62'
+        | '63'
+        | '64'
+        | '65'
+        | '66'
+        | '67'
+        | '68'
+        | '69'
+      )
+    | null;
+  city: string;
+  /**
+   * Affiché sous la photo. Ex. Saïd Hamdine, Alger.
+   */
+  place?: string | null;
+  address?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  phone?: string | null;
+  whatsapp?: string | null;
+  email?: string | null;
+  website?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
+  hours?:
+    | {
+        /**
+         * Ex. Samedi – jeudi
+         */
+        days: string;
+        /**
+         * Ex. 12h – 23h, ou Fermé
+         */
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Sinon, les coordonnées sont réservées aux visiteurs ayant un profil.
+   */
+  showContacts?: boolean | null;
+  verification: 'spotted' | 'checking' | 'verified' | 'labelled';
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  /**
+   * Pré-remplis selon le secteur. Mettez à jour après chaque visite.
+   */
+  criteria?:
+    | {
+        criterion: string;
+        result: 'pending' | 'ok' | 'partial' | 'ko' | 'na';
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        label?: string | null;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  internalNote?: string | null;
+  /**
+   * Habitant à l’origine de la fiche, s’il souhaite être cité (contribution validée).
+   */
+  contributor?: string | null;
+  /**
+   * Sélection de l’équipe (carte « Nos coups de cœur »). Jamais liée à un paiement ni à un abonnement.
+   */
+  favorite?: boolean | null;
+  /**
+   * Calculé à l’enregistrement (règle écrite dans le module annuaire). Jamais lié à un paiement.
+   */
+  score?: number | null;
+  source?: {
+    provider?: ('dalil' | 'wikidata' | 'osm' | 'pro') | null;
+    externalId?: string | null;
+    url?: string | null;
+    notoriety?: number | null;
+    notes?: string | null;
+  };
+  /**
+   * Généré depuis le nom. /adresses/…
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  /**
+   * Auteur ou source, affiché sous la photo.
+   */
+  credit?: string | null;
+  /**
+   * Photo envoyée par un compte : déjà en ligne. Supprimez-la si elle pose problème.
+   */
+  moderation?: ('ok' | 'to-check') | null;
+  uploadedBy?: (number | null) | Member;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumb?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    cover?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members".
+ */
+export interface Member {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  kind: 'particulier' | 'pro';
+  /**
+   * Déclaré par la personne, seulement pour les prestataires qui réservent leurs services aux clientes ou aux clients.
+   */
+  gender?: ('femme' | 'homme') | null;
+  termsAcceptedAt: string;
+  /**
+   * Profil, favoris, listes, préparation et parcours du membre.
+   */
+  space?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'members';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  type: 'culture' | 'festival' | 'exposition' | 'sport' | 'nature' | 'gastronomie' | 'atelier' | 'religieux';
+  reliability: 'confirmed' | 'incomplete';
+  /**
+   * Deux ou trois phrases factuelles.
+   */
+  intro?: string | null;
+  startsAt: string;
+  /**
+   * Vide : le jour même.
+   */
+  endsAt?: string | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58'
+    | '59'
+    | '60'
+    | '61'
+    | '62'
+    | '63'
+    | '64'
+    | '65'
+    | '66'
+    | '67'
+    | '68'
+    | '69';
+  city: string;
+  /**
+   * Facultatif : la fiche DALIL du lieu.
+   */
+  place?: (number | null) | Place;
+  address?: string | null;
+  free?: boolean | null;
+  priceMin?: number | null;
+  priceNote?: string | null;
+  family?: boolean | null;
+  accessible?: ('yes' | 'no' | 'unknown') | null;
+  bookingUrl?: string | null;
+  organizer?: string | null;
+  /**
+   * Obligatoire pour un événement confirmé.
+   */
+  sourceUrl?: string | null;
+  /**
+   * Sous licence, auteur affiché. Vide : la photo du lieu lié.
+   */
+  photo?: (number | null) | Media;
+  /**
+   * Nom ou pseudonyme du contributeur, s’il souhaite être cité.
+   */
+  contributor?: string | null;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practitioners".
+ */
+export interface Practitioner {
+  id: number;
+  /**
+   * Ex. Dr Amina Benali
+   */
+  name: string;
+  /**
+   * Ex. Médecin généraliste
+   */
+  title?: string | null;
+  specialties: (
+    | 'medecine-generale'
+    | 'pediatrie'
+    | 'gynecologie'
+    | 'cardiologie'
+    | 'dermatologie'
+    | 'ophtalmologie'
+    | 'orl'
+    | 'psychiatrie'
+    | 'endocrinologie'
+    | 'gastro-enterologie'
+    | 'rhumatologie'
+    | 'dentiste'
+    | 'orthodontie'
+    | 'sage-femme'
+    | 'kinesitherapie'
+    | 'orthophonie'
+    | 'psychologie'
+    | 'dietetique'
+    | 'hijama'
+    | 'naturopathie'
+  )[];
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
+  cabinetName?: string | null;
+  address?: string | null;
+  city: string;
+  wilaya?:
+    | (
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12'
+        | '13'
+        | '14'
+        | '15'
+        | '16'
+        | '17'
+        | '18'
+        | '19'
+        | '20'
+        | '21'
+        | '22'
+        | '23'
+        | '24'
+        | '25'
+        | '26'
+        | '27'
+        | '28'
+        | '29'
+        | '30'
+        | '31'
+        | '32'
+        | '33'
+        | '34'
+        | '35'
+        | '36'
+        | '37'
+        | '38'
+        | '39'
+        | '40'
+        | '41'
+        | '42'
+        | '43'
+        | '44'
+        | '45'
+        | '46'
+        | '47'
+        | '48'
+        | '49'
+        | '50'
+        | '51'
+        | '52'
+        | '53'
+        | '54'
+        | '55'
+        | '56'
+        | '57'
+        | '58'
+        | '59'
+        | '60'
+        | '61'
+        | '62'
+        | '63'
+        | '64'
+        | '65'
+        | '66'
+        | '67'
+        | '68'
+        | '69'
+      )
+    | null;
+  lat?: number | null;
+  lng?: number | null;
+  phone?: string | null;
+  modes: ('cabinet' | 'visio')[];
+  /**
+   * Ex. 2 500 DA
+   */
+  fee?: string | null;
+  /**
+   * Ex. Espèces au cabinet, BaridiMob
+   */
+  payment?: string | null;
+  /**
+   * DALIL n’encaisse rien : le patient paie directement le praticien.
+   */
+  paymentLink?: string | null;
+  slotMinutes?: number | null;
+  minNoticeHours?: number | null;
+  horizonDays?: number | null;
+  cancelNoticeHours?: number | null;
+  weekly?:
+    | {
+        day: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        /**
+         * HH:MM
+         */
+        start: string;
+        /**
+         * HH:MM
+         */
+        end: string;
+        mode?: ('both' | 'cabinet' | 'visio') | null;
+        id?: string | null;
+      }[]
+    | null;
+  closures?:
+    | {
+        from: string;
+        to: string;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  identityVerified?: boolean | null;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  diplomas?:
+    | {
+        title: string;
+        institution?: string | null;
+        year?: number | null;
+        verified?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  internalNote?: string | null;
+  /**
+   * Publication uniquement après vérification de l’identité et du droit d’exercer.
+   */
+  status: 'pending' | 'published' | 'suspended';
+  /**
+   * Affiche un bandeau « Démo » : aucun vrai praticien derrière.
+   */
+  demo?: boolean | null;
+  owner?: (number | null) | Member;
+  /**
+   * /praticiens/…
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments".
+ */
+export interface Appointment {
+  id: number;
+  practitioner: number | Practitioner;
+  patient: number | Member;
+  start: string;
+  end: string;
+  mode: 'cabinet' | 'visio';
+  status: 'confirmed' | 'cancelled' | 'completed' | 'no_show';
+  reason?: string | null;
+  cancelledBy?: ('patient' | 'practitioner' | 'staff') | null;
+  cancelReason?: string | null;
+  /**
+   * Généré par le service visio (non choisi pour l’instant).
+   */
+  videoUrl?: string | null;
+  consentAt: string;
+  reminderSentAt?: string | null;
+  slotKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "providers".
+ */
+export interface Provider {
+  id: number;
+  /**
+   * Prénom et initiale du nom, ex. « Karim B. »
+   */
+  displayName: string;
+  gender?: ('femme' | 'homme') | null;
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  languages?: ('ar' | 'kab' | 'fr' | 'en')[] | null;
+  clientele: 'all' | 'women' | 'men';
+  experienceYears?: number | null;
+  offers?:
+    | {
+        activity:
+          | 'montage-meubles'
+          | 'petits-travaux'
+          | 'plomberie'
+          | 'electricite'
+          | 'peinture'
+          | 'fixations'
+          | 'climatisation'
+          | 'serrurerie'
+          | 'carrelage'
+          | 'menage-regulier'
+          | 'grand-menage'
+          | 'fin-de-chantier'
+          | 'repassage'
+          | 'vitres'
+          | 'tapis-canapes'
+          | 'nettoyage-voiture'
+          | 'aide-demenagement'
+          | 'transport-fourgon'
+          | 'debarras'
+          | 'tonte'
+          | 'taille'
+          | 'entretien-jardin'
+          | 'arrosage'
+          | 'piscine'
+          | 'baby-sitting'
+          | 'sortie-ecole'
+          | 'aide-devoirs'
+          | 'garde-animal-domicile'
+          | 'promenade'
+          | 'visites-nourrissage'
+          | 'depannage-pc'
+          | 'internet-wifi'
+          | 'smartphone'
+          | 'cameras'
+          | 'initiation-informatique'
+          | 'compagnie-seniors'
+          | 'courses'
+          | 'repas'
+          | 'accompagnement-rdv'
+          | 'auxiliaire-vie'
+          | 'soutien-primaire'
+          | 'soutien-cem'
+          | 'soutien-lycee'
+          | 'prepa-bem-bac'
+          | 'cours-langues'
+          | 'musique'
+          | 'lecture-coran'
+          | 'tajwid'
+          | 'hifz'
+          | 'arabe-coranique'
+          | 'remise-en-forme'
+          | 'musculation'
+          | 'yoga-pilates'
+          | 'arts-martiaux'
+          | 'sport-exterieur';
+        pricing: 'hour' | 'flat';
+        price?: number | null;
+        /**
+         * Ex. « la séance », « par meuble »
+         */
+        unit?: string | null;
+        /**
+         * Bloque l’agenda pour un forfait.
+         */
+        hours?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Calculé depuis les prestations.
+   */
+  categories?:
+    | (
+        | 'bricolage'
+        | 'menage'
+        | 'demenagement'
+        | 'jardinage'
+        | 'garde-enfants'
+        | 'garde-animaux'
+        | 'informatique'
+        | 'aide-domicile'
+        | 'cours-particuliers'
+        | 'cours-coraniques'
+        | 'coach-sportif'
+      )[]
+    | null;
+  /**
+   * Calculé depuis les prestations.
+   */
+  activities?:
+    | (
+        | 'montage-meubles'
+        | 'petits-travaux'
+        | 'plomberie'
+        | 'electricite'
+        | 'peinture'
+        | 'fixations'
+        | 'climatisation'
+        | 'serrurerie'
+        | 'carrelage'
+        | 'menage-regulier'
+        | 'grand-menage'
+        | 'fin-de-chantier'
+        | 'repassage'
+        | 'vitres'
+        | 'tapis-canapes'
+        | 'nettoyage-voiture'
+        | 'aide-demenagement'
+        | 'transport-fourgon'
+        | 'debarras'
+        | 'tonte'
+        | 'taille'
+        | 'entretien-jardin'
+        | 'arrosage'
+        | 'piscine'
+        | 'baby-sitting'
+        | 'sortie-ecole'
+        | 'aide-devoirs'
+        | 'garde-animal-domicile'
+        | 'promenade'
+        | 'visites-nourrissage'
+        | 'depannage-pc'
+        | 'internet-wifi'
+        | 'smartphone'
+        | 'cameras'
+        | 'initiation-informatique'
+        | 'compagnie-seniors'
+        | 'courses'
+        | 'repas'
+        | 'accompagnement-rdv'
+        | 'auxiliaire-vie'
+        | 'soutien-primaire'
+        | 'soutien-cem'
+        | 'soutien-lycee'
+        | 'prepa-bem-bac'
+        | 'cours-langues'
+        | 'musique'
+        | 'lecture-coran'
+        | 'tajwid'
+        | 'hifz'
+        | 'arabe-coranique'
+        | 'remise-en-forme'
+        | 'musculation'
+        | 'yoga-pilates'
+        | 'arts-martiaux'
+        | 'sport-exterieur'
+      )[]
+    | null;
+  /**
+   * Ex. Espèces, BaridiMob, CIB/Edahabia. DALIL n’encaisse rien.
+   */
+  payment?: string | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58';
+  /**
+   * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
+   */
+  baseCommune?: string | null;
+  wholeWilaya?: boolean | null;
+  /**
+   * Identifiants du référentiel des communes.
+   */
+  communes?: string[] | null;
+  /**
+   * Calcul interne à partir du centre des communes, sans service tiers. Pas encore utilisé pour la recherche.
+   */
+  radiusKm?: number | null;
+  minNoticeHours?: number | null;
+  horizonDays?: number | null;
+  cancelNoticeHours?: number | null;
+  weekly?:
+    | {
+        day: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        /**
+         * HH:MM
+         */
+        start: string;
+        /**
+         * HH:MM
+         */
+        end: string;
+        id?: string | null;
+      }[]
+    | null;
+  closures?:
+    | {
+        from: string;
+        to: string;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  identityVerified?: boolean | null;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  legalForm?: ('auto-entrepreneur' | 'registre-commerce') | null;
+  legalNumber?: string | null;
+  legalVerified?: boolean | null;
+  /**
+   * Obligatoire pour garde d’enfants, aide à domicile, cours particuliers et coraniques. Le document est consulté puis supprimé : seule cette date est conservée.
+   */
+  backgroundCheckedAt?: string | null;
+  internalNote?: string | null;
+  /**
+   * Publication uniquement après les vérifications exigées (contrôlées automatiquement).
+   */
+  status: 'pending' | 'published' | 'suspended';
+  demo?: boolean | null;
+  owner?: (number | null) | Member;
+  /**
+   * /prestataires/…
+   */
+  slug?: string | null;
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
+  missionsDone?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "missions".
+ */
+export interface Mission {
+  id: number;
+  provider: number | Provider;
+  client: number | Member;
+  activity:
+    | 'montage-meubles'
+    | 'petits-travaux'
+    | 'plomberie'
+    | 'electricite'
+    | 'peinture'
+    | 'fixations'
+    | 'climatisation'
+    | 'serrurerie'
+    | 'carrelage'
+    | 'menage-regulier'
+    | 'grand-menage'
+    | 'fin-de-chantier'
+    | 'repassage'
+    | 'vitres'
+    | 'tapis-canapes'
+    | 'nettoyage-voiture'
+    | 'aide-demenagement'
+    | 'transport-fourgon'
+    | 'debarras'
+    | 'tonte'
+    | 'taille'
+    | 'entretien-jardin'
+    | 'arrosage'
+    | 'piscine'
+    | 'baby-sitting'
+    | 'sortie-ecole'
+    | 'aide-devoirs'
+    | 'garde-animal-domicile'
+    | 'promenade'
+    | 'visites-nourrissage'
+    | 'depannage-pc'
+    | 'internet-wifi'
+    | 'smartphone'
+    | 'cameras'
+    | 'initiation-informatique'
+    | 'compagnie-seniors'
+    | 'courses'
+    | 'repas'
+    | 'accompagnement-rdv'
+    | 'auxiliaire-vie'
+    | 'soutien-primaire'
+    | 'soutien-cem'
+    | 'soutien-lycee'
+    | 'prepa-bem-bac'
+    | 'cours-langues'
+    | 'musique'
+    | 'lecture-coran'
+    | 'tajwid'
+    | 'hifz'
+    | 'arabe-coranique'
+    | 'remise-en-forme'
+    | 'musculation'
+    | 'yoga-pilates'
+    | 'arts-martiaux'
+    | 'sport-exterieur';
+  category?:
+    | (
+        | 'bricolage'
+        | 'menage'
+        | 'demenagement'
+        | 'jardinage'
+        | 'garde-enfants'
+        | 'garde-animaux'
+        | 'informatique'
+        | 'aide-domicile'
+        | 'cours-particuliers'
+        | 'cours-coraniques'
+        | 'coach-sportif'
+      )
+    | null;
+  start: string;
+  end: string;
+  hours: number;
+  pricing: 'hour' | 'flat';
+  unitPrice?: number | null;
+  estimate?: number | null;
+  commune: string;
+  communeName?: string | null;
+  address: string;
+  details?: string | null;
+  status: 'requested' | 'accepted' | 'declined' | 'expired' | 'cancelled' | 'completed';
+  respondBy: string;
+  respondedAt?: string | null;
+  completedAt?: string | null;
+  cancelledBy?: ('client' | 'provider' | 'staff') | null;
+  cancelReason?: string | null;
+  consentAt: string;
+  reminderSentAt?: string | null;
+  reviewInviteSentAt?: string | null;
+  clientNotifiedAt?: string | null;
+  providerNotifiedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mission-messages".
+ */
+export interface MissionMessage {
+  id: number;
+  mission: number | Mission;
+  from: 'client' | 'provider' | 'system';
+  readAt?: string | null;
+  body: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-reviews".
+ */
+export interface ProviderReview {
+  id: number;
+  mission: number | Mission;
+  provider: number | Provider;
+  author: number | Member;
+  /**
+   * Prénom et initiale.
+   */
+  authorName?: string | null;
+  rating: number;
+  activity?: string | null;
+  comment?: string | null;
+  /**
+   * Publiées tout de suite, contrôlées ensuite par l’équipe (collection Photos, filtre « À contrôler »).
+   */
+  photos?: (number | Media)[] | null;
+  reply?: string | null;
+  status: 'published' | 'hidden';
+  moderationNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-documents".
+ */
+export interface ProviderDocument {
+  id: number;
+  provider: number | Provider;
+  kind: 'identity' | 'legal' | 'background';
+  filename?: string | null;
+  mimetype?: string | null;
+  size?: number | null;
+  expiresAt: string;
+  data: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Annonces des membres. « À contrôler » : vérifier puis publier ou refuser (motif obligatoire, envoyé à l’auteur).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classifieds".
+ */
+export interface Classified {
+  id: number;
+  title: string;
+  slug?: string | null;
+  category: 'immobilier' | 'emploi' | 'vehicules' | 'objets';
+  subcategory:
+    | 'immobilier:appartement'
+    | 'immobilier:maison'
+    | 'immobilier:terrain'
+    | 'immobilier:local'
+    | 'immobilier:chambre'
+    | 'emploi:offre'
+    | 'emploi:demande'
+    | 'emploi:stage'
+    | 'emploi:mission'
+    | 'vehicules:voiture'
+    | 'vehicules:moto'
+    | 'vehicules:utilitaire'
+    | 'vehicules:pieces'
+    | 'objets:maison'
+    | 'objets:high-tech'
+    | 'objets:mode'
+    | 'objets:enfants'
+    | 'objets:sport'
+    | 'objets:livres'
+    | 'objets:autres';
+  description: string;
+  price?: number | null;
+  priceMode: 'fixed' | 'negotiable' | 'free' | 'on-request';
+  photos?: (number | Media)[] | null;
+  deal?: ('vente' | 'location' | 'location-vacances') | null;
+  rooms?: number | null;
+  surface?: number | null;
+  furnished?: boolean | null;
+  contract?: ('cdi' | 'cdd' | 'temps-partiel' | 'saisonnier' | 'independant') | null;
+  sector?: string | null;
+  brand?: string | null;
+  model?: string | null;
+  year?: number | null;
+  mileage?: number | null;
+  fuel?: ('essence' | 'diesel' | 'gpl' | 'hybride' | 'electrique') | null;
+  gearbox?: ('manuelle' | 'automatique') | null;
+  condition?: ('neuf' | 'tres-bon' | 'bon' | 'pieces') | null;
+  wilaya:
+    | '1'
+    | '2'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '13'
+    | '14'
+    | '15'
+    | '16'
+    | '17'
+    | '18'
+    | '19'
+    | '20'
+    | '21'
+    | '22'
+    | '23'
+    | '24'
+    | '25'
+    | '26'
+    | '27'
+    | '28'
+    | '29'
+    | '30'
+    | '31'
+    | '32'
+    | '33'
+    | '34'
+    | '35'
+    | '36'
+    | '37'
+    | '38'
+    | '39'
+    | '40'
+    | '41'
+    | '42'
+    | '43'
+    | '44'
+    | '45'
+    | '46'
+    | '47'
+    | '48'
+    | '49'
+    | '50'
+    | '51'
+    | '52'
+    | '53'
+    | '54'
+    | '55'
+    | '56'
+    | '57'
+    | '58';
+  /**
+   * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
+   */
+  commune?: string | null;
+  author: number | Member;
+  authorName?: string | null;
+  authorKind?: ('particulier' | 'pro') | null;
+  status: 'pending' | 'published' | 'rejected' | 'expired' | 'closed';
+  reports?: number | null;
+  rejectionReason?: string | null;
+  moderatedBy?: string | null;
+  moderatedAt?: string | null;
+  publishedAt?: string | null;
+  expiresAt?: string | null;
+  expiryWarnedAt?: string | null;
+  agentVerdict?: ('ok' | 'doubt' | 'reject') | null;
+  agentName?: string | null;
+  agentReviewedAt?: string | null;
+  agentNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classified-messages".
+ */
+export interface ClassifiedMessage {
+  id: number;
+  classified: number | Classified;
+  buyer: number | Member;
+  from: 'buyer' | 'seller' | 'system';
+  readAt?: string | null;
+  body: string;
+  updatedAt: string;
+  createdAt: string;
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
   id: number;
-  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic';
-  status?: ('new' | 'processing' | 'done' | 'rejected') | null;
+  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic' | 'report';
+  status?: ('new' | 'processing' | 'needs_info' | 'done' | 'rejected') | null;
   subject: string;
   email?: string | null;
   data?:
@@ -141,7 +1461,29 @@ export interface Submission {
     | boolean
     | null;
   session?: string | null;
+  /**
+   * Envoyé par email avec le changement de statut (contributions et candidatures avec email). Obligatoire pour « Informations manquantes » et « Refusé ».
+   */
+  reply?: string | null;
   internalNote?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contribution-photos".
+ */
+export interface ContributionPhoto {
+  id: number;
+  submission: number | Submission;
+  author: string;
+  license: string;
+  certifiedAt: string;
+  filename?: string | null;
+  mimetype?: string | null;
+  size?: number | null;
+  expiresAt: string;
+  data: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -153,8 +1495,110 @@ export interface Subscriber {
   id: number;
   email: string;
   source?: string | null;
+  /**
+   * Vide = lien de confirmation pas encore cliqué (ne pas lui écrire).
+   */
+  confirmedAt?: string | null;
+  unsubscribedAt?: string | null;
+  token?: string | null;
+  unsubToken?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * Rédigez, envoyez-vous un test, puis envoyez aux abonnés confirmés. Offre Resend gratuite : 100 emails par jour au maximum.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+  id: number;
+  subject: string;
+  title: string;
+  /**
+   * Une ligne vide sépare les paragraphes.
+   */
+  body: string;
+  ctaLabel?: string | null;
+  /**
+   * Ex. /annuaire ou https://…
+   */
+  ctaUrl?: string | null;
+  sendTest?: boolean | null;
+  /**
+   * Réservé aux administrateurs. Envoi unique et définitif.
+   */
+  sendNow?: boolean | null;
+  sentAt?: string | null;
+  recipients?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "telegram-posts".
+ */
+export interface TelegramPost {
+  id: number;
+  title: string;
+  /**
+   * Programmer, publier et retirer : Saïd seul.
+   */
+  status: 'draft' | 'scheduled' | 'publishing' | 'published' | 'failed' | 'deleted';
+  text: string;
+  textAr?: string | null;
+  photo?: (number | null) | Media;
+  buttons?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  scheduledAt?: string | null;
+  silent?: boolean | null;
+  pin?: boolean | null;
+  preparedBy?: string | null;
+  decidedBy?: (number | null) | User;
+  decidedAt?: string | null;
+  messageId?: number | null;
+  publishedAt?: string | null;
+  views?: number | null;
+  error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  /**
+   * Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.
+   */
+  telegramId?: string | null;
+  role: 'patron' | 'admin' | 'editor';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -187,31 +1631,209 @@ export interface VisitorSession {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "agents".
  */
-export interface User {
+export interface Agent {
   id: number;
   name: string;
-  role: 'admin' | 'editor';
+  /**
+   * ceo, editorial, trust…
+   */
+  slug: string;
+  status: 'active' | 'paused' | 'disabled';
+  mission: string;
+  provider: 'anthropic' | 'openai';
+  model: string;
+  monthlyBudgetUsd?: number | null;
+  maxStepsPerTask?: number | null;
+  scopes?:
+    | (
+        | 'decouvrir'
+        | 'vivre'
+        | 'demarches'
+        | 'services'
+        | 'annonces'
+        | 'annuaire'
+        | 'sante'
+        | 'communaute'
+        | 'communication'
+        | 'technique'
+        | 'pilotage'
+      )[]
+    | null;
+  tools?:
+    | (
+        | 'read-content'
+        | 'draft-content'
+        | 'web-search'
+        | 'message-agents'
+        | 'create-tasks'
+        | 'draft-email'
+        | 'draft-telegram'
+        | 'read-inbox'
+        | 'read-health'
+        | 'review-classifieds'
+      )[]
+    | null;
+  triggers?: ('any-task' | 'assigned' | 'draft-ready' | 'inbox' | 'report' | 'application' | 'cron')[] | null;
+  /**
+   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (src/modules/agents/equipe/<agent>/).
+   */
+  memory?: string | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  hasAPIKey?: boolean | null;
+  collection: 'agents';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-tasks".
+ */
+export interface AgentTask {
+  id: number;
+  title: string;
+  instructions: string;
+  /**
+   * Vide = le CEO décide.
+   */
+  agent?: (number | null) | Agent;
+  status: 'new' | 'running' | 'paused' | 'review' | 'done' | 'cancelled' | 'failed';
+  priority?: ('low' | 'normal' | 'high' | 'urgent') | null;
+  rubrique?:
+    | (
+        | 'decouvrir'
+        | 'vivre'
+        | 'demarches'
+        | 'services'
+        | 'annonces'
+        | 'annuaire'
+        | 'sante'
+        | 'communaute'
+        | 'communication'
+        | 'technique'
+        | 'pilotage'
+      )
     | null;
-  password?: string | null;
-  collection: 'users';
+  /**
+   * Une nouvelle consigne pendant le travail. L’agent la lit avant chaque étape.
+   */
+  directive?: string | null;
+  origin?: ('patron' | 'equipe' | 'agent' | 'cron' | 'evenement' | 'telegram') | null;
+  issuedByUser?: (number | null) | User;
+  issuedByAgent?: (number | null) | Agent;
+  parent?: (number | null) | AgentTask;
+  budgetUsd?: number | null;
+  spentMicros?: number | null;
+  steps?: number | null;
+  maxSteps?: number | null;
+  result?: string | null;
+  /**
+   * Ce que l’agent propose de publier ou d’envoyer. Rien n’est appliqué sans validation humaine.
+   */
+  proposal?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  reviewedBy?: (number | null) | User;
+  reviewedAt?: string | null;
+  error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-messages".
+ */
+export interface AgentMessage {
+  id: number;
+  task?: (number | null) | AgentTask;
+  toAgent?: (number | null) | Agent;
+  toHuman?: ('patron' | 'equipe') | null;
+  kind?: ('directive' | 'rapport' | 'question' | 'reponse' | 'note') | null;
+  body: string;
+  fromKind?: ('humain' | 'agent' | 'systeme' | 'membre') | null;
+  fromLabel?: string | null;
+  fromUser?: (number | null) | User;
+  fromAgent?: (number | null) | Agent;
+  channel?: ('admin' | 'telegram' | 'agent') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Claude Haiku 5.5 : 0,10 $ par million de jetons en entrée, 0,50 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-usage".
+ */
+export interface AiUsage {
+  id: number;
+  feature: 'reformulate' | 'understand';
+  member?: (number | null) | Member;
+  inputTokens?: number | null;
+  outputTokens?: number | null;
+  costMicros?: number | null;
+  model?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Erreurs serveur du site, regroupées. Une alerte part à l’équipe à la première occurrence. Cochez « Résolue » après correction : une nouvelle occurrence la rouvre.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "error-logs".
+ */
+export interface ErrorLog {
+  id: number;
+  fingerprint: string;
+  message: string;
+  route?: string | null;
+  path?: string | null;
+  method?: string | null;
+  routeType?: string | null;
+  count?: number | null;
+  firstSeen?: string | null;
+  lastSeen?: string | null;
+  resolved?: boolean | null;
+  digest?: string | null;
+  stack?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Ajout seul : aucune ligne ne peut être modifiée ni supprimée.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log".
+ */
+export interface AuditLog {
+  id: number;
+  actorKind: 'humain' | 'agent' | 'membre' | 'systeme';
+  actorLabel: string;
+  actorId?: number | null;
+  action: string;
+  target?: string | null;
+  targetId?: string | null;
+  summary: string;
+  changes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  channel?: ('admin' | 'telegram' | 'api' | 'agent' | 'cron') | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -238,12 +1860,76 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'places';
+        value: number | Place;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'practitioners';
+        value: number | Practitioner;
+      } | null)
+    | ({
+        relationTo: 'appointments';
+        value: number | Appointment;
+      } | null)
+    | ({
+        relationTo: 'providers';
+        value: number | Provider;
+      } | null)
+    | ({
+        relationTo: 'missions';
+        value: number | Mission;
+      } | null)
+    | ({
+        relationTo: 'mission-messages';
+        value: number | MissionMessage;
+      } | null)
+    | ({
+        relationTo: 'provider-reviews';
+        value: number | ProviderReview;
+      } | null)
+    | ({
+        relationTo: 'provider-documents';
+        value: number | ProviderDocument;
+      } | null)
+    | ({
+        relationTo: 'classifieds';
+        value: number | Classified;
+      } | null)
+    | ({
+        relationTo: 'classified-messages';
+        value: number | ClassifiedMessage;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
         relationTo: 'submissions';
         value: number | Submission;
       } | null)
     | ({
+        relationTo: 'contribution-photos';
+        value: number | ContributionPhoto;
+      } | null)
+    | ({
         relationTo: 'subscribers';
         value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'campaigns';
+        value: number | Campaign;
+      } | null)
+    | ({
+        relationTo: 'telegram-posts';
+        value: number | TelegramPost;
+      } | null)
+    | ({
+        relationTo: 'members';
+        value: number | Member;
       } | null)
     | ({
         relationTo: 'visitor-sessions';
@@ -252,12 +1938,45 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'agents';
+        value: number | Agent;
+      } | null)
+    | ({
+        relationTo: 'agent-tasks';
+        value: number | AgentTask;
+      } | null)
+    | ({
+        relationTo: 'agent-messages';
+        value: number | AgentMessage;
+      } | null)
+    | ({
+        relationTo: 'ai-usage';
+        value: number | AiUsage;
+      } | null)
+    | ({
+        relationTo: 'error-logs';
+        value: number | ErrorLog;
+      } | null)
+    | ({
+        relationTo: 'audit-log';
+        value: number | AuditLog;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'agents';
+        value: number | Agent;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -267,10 +1986,19 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'agents';
+        value: number | Agent;
+      };
   key?: string | null;
   value?:
     | {
@@ -297,6 +2025,454 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "places_select".
+ */
+export interface PlacesSelect<T extends boolean = true> {
+  name?: T;
+  sector?: T;
+  category?: T;
+  intro?: T;
+  photos?: T;
+  externalPhotos?:
+    | T
+    | {
+        url?: T;
+        author?: T;
+        license?: T;
+        licenseUrl?: T;
+        page?: T;
+        width?: T;
+        height?: T;
+        id?: T;
+      };
+  nameAr?: T;
+  nameEn?: T;
+  heritage?: T;
+  inception?: T;
+  wikipedia?: T;
+  wilaya?: T;
+  city?: T;
+  place?: T;
+  address?: T;
+  lat?: T;
+  lng?: T;
+  phone?: T;
+  whatsapp?: T;
+  email?: T;
+  website?: T;
+  instagram?: T;
+  facebook?: T;
+  languages?: T;
+  hours?:
+    | T
+    | {
+        days?: T;
+        time?: T;
+        id?: T;
+      };
+  showContacts?: T;
+  verification?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  criteria?:
+    | T
+    | {
+        criterion?: T;
+        result?: T;
+        note?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  internalNote?: T;
+  contributor?: T;
+  favorite?: T;
+  score?: T;
+  source?:
+    | T
+    | {
+        provider?: T;
+        externalId?: T;
+        url?: T;
+        notoriety?: T;
+        notes?: T;
+      };
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  type?: T;
+  reliability?: T;
+  intro?: T;
+  startsAt?: T;
+  endsAt?: T;
+  wilaya?: T;
+  city?: T;
+  place?: T;
+  address?: T;
+  free?: T;
+  priceMin?: T;
+  priceNote?: T;
+  family?: T;
+  accessible?: T;
+  bookingUrl?: T;
+  organizer?: T;
+  sourceUrl?: T;
+  photo?: T;
+  contributor?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practitioners_select".
+ */
+export interface PractitionersSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  specialties?: T;
+  photo?: T;
+  bio?: T;
+  languages?: T;
+  cabinetName?: T;
+  address?: T;
+  city?: T;
+  wilaya?: T;
+  lat?: T;
+  lng?: T;
+  phone?: T;
+  modes?: T;
+  fee?: T;
+  payment?: T;
+  paymentLink?: T;
+  slotMinutes?: T;
+  minNoticeHours?: T;
+  horizonDays?: T;
+  cancelNoticeHours?: T;
+  weekly?:
+    | T
+    | {
+        day?: T;
+        start?: T;
+        end?: T;
+        mode?: T;
+        id?: T;
+      };
+  closures?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        note?: T;
+        id?: T;
+      };
+  identityVerified?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  diplomas?:
+    | T
+    | {
+        title?: T;
+        institution?: T;
+        year?: T;
+        verified?: T;
+        id?: T;
+      };
+  internalNote?: T;
+  status?: T;
+  demo?: T;
+  owner?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments_select".
+ */
+export interface AppointmentsSelect<T extends boolean = true> {
+  practitioner?: T;
+  patient?: T;
+  start?: T;
+  end?: T;
+  mode?: T;
+  status?: T;
+  reason?: T;
+  cancelledBy?: T;
+  cancelReason?: T;
+  videoUrl?: T;
+  consentAt?: T;
+  reminderSentAt?: T;
+  slotKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "providers_select".
+ */
+export interface ProvidersSelect<T extends boolean = true> {
+  displayName?: T;
+  gender?: T;
+  photo?: T;
+  bio?: T;
+  languages?: T;
+  clientele?: T;
+  experienceYears?: T;
+  offers?:
+    | T
+    | {
+        activity?: T;
+        pricing?: T;
+        price?: T;
+        unit?: T;
+        hours?: T;
+        id?: T;
+      };
+  categories?: T;
+  activities?: T;
+  payment?: T;
+  wilaya?: T;
+  baseCommune?: T;
+  wholeWilaya?: T;
+  communes?: T;
+  radiusKm?: T;
+  minNoticeHours?: T;
+  horizonDays?: T;
+  cancelNoticeHours?: T;
+  weekly?:
+    | T
+    | {
+        day?: T;
+        start?: T;
+        end?: T;
+        id?: T;
+      };
+  closures?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        note?: T;
+        id?: T;
+      };
+  identityVerified?: T;
+  verifiedAt?: T;
+  verifiedBy?: T;
+  legalForm?: T;
+  legalNumber?: T;
+  legalVerified?: T;
+  backgroundCheckedAt?: T;
+  internalNote?: T;
+  status?: T;
+  demo?: T;
+  owner?: T;
+  slug?: T;
+  ratingAvg?: T;
+  ratingCount?: T;
+  missionsDone?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "missions_select".
+ */
+export interface MissionsSelect<T extends boolean = true> {
+  provider?: T;
+  client?: T;
+  activity?: T;
+  category?: T;
+  start?: T;
+  end?: T;
+  hours?: T;
+  pricing?: T;
+  unitPrice?: T;
+  estimate?: T;
+  commune?: T;
+  communeName?: T;
+  address?: T;
+  details?: T;
+  status?: T;
+  respondBy?: T;
+  respondedAt?: T;
+  completedAt?: T;
+  cancelledBy?: T;
+  cancelReason?: T;
+  consentAt?: T;
+  reminderSentAt?: T;
+  reviewInviteSentAt?: T;
+  clientNotifiedAt?: T;
+  providerNotifiedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mission-messages_select".
+ */
+export interface MissionMessagesSelect<T extends boolean = true> {
+  mission?: T;
+  from?: T;
+  readAt?: T;
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-reviews_select".
+ */
+export interface ProviderReviewsSelect<T extends boolean = true> {
+  mission?: T;
+  provider?: T;
+  author?: T;
+  authorName?: T;
+  rating?: T;
+  activity?: T;
+  comment?: T;
+  photos?: T;
+  reply?: T;
+  status?: T;
+  moderationNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "provider-documents_select".
+ */
+export interface ProviderDocumentsSelect<T extends boolean = true> {
+  provider?: T;
+  kind?: T;
+  filename?: T;
+  mimetype?: T;
+  size?: T;
+  expiresAt?: T;
+  data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classifieds_select".
+ */
+export interface ClassifiedsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  subcategory?: T;
+  description?: T;
+  price?: T;
+  priceMode?: T;
+  photos?: T;
+  deal?: T;
+  rooms?: T;
+  surface?: T;
+  furnished?: T;
+  contract?: T;
+  sector?: T;
+  brand?: T;
+  model?: T;
+  year?: T;
+  mileage?: T;
+  fuel?: T;
+  gearbox?: T;
+  condition?: T;
+  wilaya?: T;
+  commune?: T;
+  author?: T;
+  authorName?: T;
+  authorKind?: T;
+  status?: T;
+  reports?: T;
+  rejectionReason?: T;
+  moderatedBy?: T;
+  moderatedAt?: T;
+  publishedAt?: T;
+  expiresAt?: T;
+  expiryWarnedAt?: T;
+  agentVerdict?: T;
+  agentName?: T;
+  agentReviewedAt?: T;
+  agentNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classified-messages_select".
+ */
+export interface ClassifiedMessagesSelect<T extends boolean = true> {
+  classified?: T;
+  buyer?: T;
+  from?: T;
+  readAt?: T;
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  credit?: T;
+  moderation?: T;
+  uploadedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumb?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        cover?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions_select".
  */
 export interface SubmissionsSelect<T extends boolean = true> {
@@ -306,7 +2482,25 @@ export interface SubmissionsSelect<T extends boolean = true> {
   email?: T;
   data?: T;
   session?: T;
+  reply?: T;
   internalNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contribution-photos_select".
+ */
+export interface ContributionPhotosSelect<T extends boolean = true> {
+  submission?: T;
+  author?: T;
+  license?: T;
+  certifiedAt?: T;
+  filename?: T;
+  mimetype?: T;
+  size?: T;
+  expiresAt?: T;
+  data?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -317,8 +2511,91 @@ export interface SubmissionsSelect<T extends boolean = true> {
 export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
   source?: T;
+  confirmedAt?: T;
+  unsubscribedAt?: T;
+  token?: T;
+  unsubToken?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+  subject?: T;
+  title?: T;
+  body?: T;
+  ctaLabel?: T;
+  ctaUrl?: T;
+  sendTest?: T;
+  sendNow?: T;
+  sentAt?: T;
+  recipients?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "telegram-posts_select".
+ */
+export interface TelegramPostsSelect<T extends boolean = true> {
+  title?: T;
+  status?: T;
+  text?: T;
+  textAr?: T;
+  photo?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  scheduledAt?: T;
+  silent?: T;
+  pin?: T;
+  preparedBy?: T;
+  decidedBy?: T;
+  decidedAt?: T;
+  messageId?: T;
+  publishedAt?: T;
+  views?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members_select".
+ */
+export interface MembersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  phone?: T;
+  kind?: T;
+  gender?: T;
+  termsAcceptedAt?: T;
+  space?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  resetPasswordRequestedAt?: T;
+  _verified?: T;
+  _verificationToken?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -338,6 +2615,7 @@ export interface VisitorSessionsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  telegramId?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -356,6 +2634,127 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agents_select".
+ */
+export interface AgentsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  status?: T;
+  mission?: T;
+  provider?: T;
+  model?: T;
+  monthlyBudgetUsd?: T;
+  maxStepsPerTask?: T;
+  scopes?: T;
+  tools?: T;
+  triggers?: T;
+  memory?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+  hasAPIKey?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-tasks_select".
+ */
+export interface AgentTasksSelect<T extends boolean = true> {
+  title?: T;
+  instructions?: T;
+  agent?: T;
+  status?: T;
+  priority?: T;
+  rubrique?: T;
+  directive?: T;
+  origin?: T;
+  issuedByUser?: T;
+  issuedByAgent?: T;
+  parent?: T;
+  budgetUsd?: T;
+  spentMicros?: T;
+  steps?: T;
+  maxSteps?: T;
+  result?: T;
+  proposal?: T;
+  reviewedBy?: T;
+  reviewedAt?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-messages_select".
+ */
+export interface AgentMessagesSelect<T extends boolean = true> {
+  task?: T;
+  toAgent?: T;
+  toHuman?: T;
+  kind?: T;
+  body?: T;
+  fromKind?: T;
+  fromLabel?: T;
+  fromUser?: T;
+  fromAgent?: T;
+  channel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-usage_select".
+ */
+export interface AiUsageSelect<T extends boolean = true> {
+  feature?: T;
+  member?: T;
+  inputTokens?: T;
+  outputTokens?: T;
+  costMicros?: T;
+  model?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "error-logs_select".
+ */
+export interface ErrorLogsSelect<T extends boolean = true> {
+  fingerprint?: T;
+  message?: T;
+  route?: T;
+  path?: T;
+  method?: T;
+  routeType?: T;
+  count?: T;
+  firstSeen?: T;
+  lastSeen?: T;
+  resolved?: T;
+  digest?: T;
+  stack?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log_select".
+ */
+export interface AuditLogSelect<T extends boolean = true> {
+  actorKind?: T;
+  actorLabel?: T;
+  actorId?: T;
+  action?: T;
+  target?: T;
+  targetId?: T;
+  summary?: T;
+  changes?: T;
+  channel?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -396,6 +2795,84 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * Bloc panoramique de l’accueil. Une destination à la fois, choisie par l’équipe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-destination".
+ */
+export interface FeaturedDestination {
+  id: number;
+  /**
+   * Sa photo de couverture et son lien sont repris. Vide : le Sahara (Tassili n’Ajjer).
+   */
+  place?: (number | null) | Place;
+  eyebrow?: string | null;
+  title?: string | null;
+  text?: string | null;
+  /**
+   * Vide : « Découvrir » + nom du lieu.
+   */
+  cta?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "controls".
+ */
+export interface Control {
+  id: number;
+  killSwitch: 'off' | 'drain' | 'stop' | 'cut';
+  killSwitchAt?: string | null;
+  killSwitchBy?: string | null;
+  killSwitchReason?: string | null;
+  agentsEnabled?: boolean | null;
+  telegramEnabled?: boolean | null;
+  maintenance?: boolean | null;
+  /**
+   * Vide = aucun agent ne travaille. Chaque agent a aussi son propre plafond.
+   */
+  agentsMonthlyBudgetUsd?: number | null;
+  /**
+   * Modifiable par le patron seulement. Le bot doit être administrateur du canal.
+   */
+  telegramChannelId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-destination_select".
+ */
+export interface FeaturedDestinationSelect<T extends boolean = true> {
+  place?: T;
+  eyebrow?: T;
+  title?: T;
+  text?: T;
+  cta?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "controls_select".
+ */
+export interface ControlsSelect<T extends boolean = true> {
+  killSwitch?: T;
+  killSwitchAt?: T;
+  killSwitchBy?: T;
+  killSwitchReason?: T;
+  agentsEnabled?: T;
+  telegramEnabled?: T;
+  maintenance?: T;
+  agentsMonthlyBudgetUsd?: T;
+  telegramChannelId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
