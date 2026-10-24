@@ -1,36 +1,63 @@
 {
- "fetchedAt": "2026-10-24T17:19:34.615Z",
+ "fetchedAt": "2026-10-24T17:40:17.743Z",
  "source": "OpenStreetMap (ODbL)",
  "places": {
   "darna-said-hamdine": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "el-walima-alger": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "house-of-burgers-bejaia": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "latina-house-tlemcen": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "le-tajine-el-biar": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "le-village-annaba": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "les-jumelles-oran": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "lexcelsior-tlemcen": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   },
   "mega-pizza-constantine": {
-   "candidates": 0
+   "match": null,
+   "candidates": [
+    {
+     "name": "Mega Pizza",
+     "amenity": "fast_food",
+     "lat": 36.2666593,
+     "lng": 6.6907845,
+     "osm": "node/4542047890",
+     "street": "Cité Bouhali"
+    },
+    {
+     "name": "Mega Pizza",
+     "amenity": "fast_food",
+     "lat": 36.2642695,
+     "lng": 6.5886788,
+     "osm": "node/4726448693",
+     "street": null
+    }
+   ]
   },
   "yummy-pizza-constantine": {
-   "candidates": 0
+   "match": null,
+   "candidates": []
   }
  }
 }
