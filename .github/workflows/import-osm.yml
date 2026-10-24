@@ -30,7 +30,7 @@ jobs:
         run: |
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"
-          git add src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
+          git add -f src/modules/annuaire/data/osm-places.json src/modules/annuaire/data/osm-stats.json
           git commit -m "Données : lieux OpenStreetMap (ODbL) [skip ci]" || echo "rien de nouveau"
           git pull --rebase origin import-data
           git push origin HEAD:import-data
