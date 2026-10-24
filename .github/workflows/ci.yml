@@ -52,6 +52,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Migrations (schéma puis données différées)
         run: pnpm payload migrate && pnpm migrate:data
+      - name: Sauvegarde puis restauration dans une base neuve
+        run: |
+          pnpm exec tsx scripts/backup.ts /tmp/sauvegarde
+          PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE DATABASE restauration'
+          export DALIL_DATABASE_URL=postgres://postgres:postgres@localhost:5432/restauration
+          pnpm payload migrate
+          pnpm exec tsx scripts/restore-backup.ts /tmp/sauvegarde
+          a=$(PGPASSWORD=postgres psql -h localhost -U postgres -d dalil -tAc 'SELECT count(*) FROM places')
+          b=$(PGPASSWORD=postgres psql -h localhost -U postgres -d restauration -tAc 'SELECT count(*) FROM places')
+          echo "fiches : $a → $b"; [ "$a" = "$b" ] && [ "$a" -gt 0 ]
       - name: Build
         run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
