@@ -1,0 +1,26 @@
+name: Coordonnées du prototype (OpenStreetMap)
+on:
+  workflow_dispatch:
+  push:
+    branches: [preview]
+    paths: [scripts/import/fetch-prototype-coords.mjs]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with: { ref: preview }
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-prototype-coords.mjs
+      - name: Commit du résultat
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add src/modules/annuaire/data/prototype-coords.json
+          git commit -m "Données : coordonnées OSM des adresses du prototype (ODbL) [skip ci]" || echo "rien de nouveau"
+          git pull --rebase origin preview
+          git push origin HEAD:preview
