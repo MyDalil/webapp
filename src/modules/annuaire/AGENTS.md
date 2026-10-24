@@ -11,12 +11,14 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
 - `listings.ts/json` : 10 adresses reprises du prototype (seed initial).
 - `ranking.ts` : règle de classement écrite (vérification > complétude > patrimoine > notoriété), calculée à chaque enregistrement, jamais liée à un paiement.
 - `data/` : import des lieux depuis des sources ouvertes —
-  - `open-places.json` : jeu brut (Wikidata CC0 + photos Commons + notes Wikipédia internes), produit par `scripts/import/fetch-places.mjs` via l’action GitHub « Import des lieux » ;
+  - `open-places.json` : jeu brut (Wikidata CC0 + photos Commons + notes Wikipédia internes), produit par `scripts/import/fetch-places.mjs` via l’action GitHub « Import des lieux » — **hors du code du site** : branche `import-data` + archive Vercel Blob `imports/wikidata/` ;
   - `descriptions-*.json` : textes DALIL rédigés à partir des faits (jamais copiés) ;
   - `open-places-selected.json` : lot publiable (`node scripts/import/select-places.mjs`) = photo libre + texte DALIL, doublons retirés, corrections manuelles ;
   - importé par migration, mise à jour par identifiant Wikidata.
   - `research-places.json` : fiches documentées sur les sites officiels (`scripts/import/select-research.mjs`) ;
-  - `osm-places.json` (brut, action « Import OSM ») → `osm-selected.json` (`scripts/import/select-osm.mjs`), ODbL ;
+  - `osm-places.json` (brut, action « Import OSM », **hors du code du site** : branche `import-data` + archive Vercel Blob `imports/osm/`) → `osm-selected.json` (`scripts/import/select-osm.mjs`, lancé sur `import-data`), ODbL ;
+  - les lots sélectionnés (`*-selected.json`, `research-places.json`) restent versionnés : les migrations en ont besoin pour reconstruire une base ; ils sont exclus des fonctions serveur (`outputFileTracingExcludes`).
+  - Neon / PostGIS : colonne `geom` (point calculé depuis lat/lng, index spatial GiST) ; `placesNear` pour la proximité.
   - `importPlaces.ts` : import idempotent, complète sans écraser.
 - `searchPlaces` / `getPlaceCounts` + `/api/annuaire` : recherche et compteurs côté serveur.
 - `filters.ts` : règle unique des filtres de l’annuaire (wilaya, thème nature, coups de cœur, critères vérifiés…), testée (`filters.test.ts`).

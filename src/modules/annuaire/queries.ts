@@ -323,3 +323,19 @@ export async function getPlaceSitemap(offset: number, limit: number): Promise<{ 
     return []
   }
 }
+
+/** Fiches publiées autour d’un point (PostGIS, index spatial), de la plus proche à la plus lointaine. */
+export async function placesNear(lat: number, lng: number, radiusKm = 5, limit = 20): Promise<{ slug: string; name: string; distanceM: number }[]> {
+  try {
+    const payload = await client()
+    const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
+    const here = sql`ST_SetSRID(ST_MakePoint(${lng}::double precision, ${lat}::double precision), 4326)::geography`
+    const { rows } = await db.execute(sql`
+      SELECT slug, name, ST_Distance(geom, ${here}) AS d FROM places
+      WHERE _status = 'published' AND geom IS NOT NULL AND ST_DWithin(geom, ${here}, ${radiusKm * 1000})
+      ORDER BY geom <-> ${here} LIMIT ${limit}`)
+    return rows.map((r) => ({ slug: String(r.slug), name: String(r.name), distanceM: Math.round(Number(r.d)) }))
+  } catch {
+    return []
+  }
+}
