@@ -1,3 +1,4 @@
+// Recherche relancée à chaque modification de ce fichier (action « Coordonnées du prototype »).
 // Coordonnées des 10 adresses reprises du prototype, cherchées dans OpenStreetMap (ODbL) — faits seulement.
 // Une adresse reçoit un point seulement si OSM a UN seul lieu de restauration au même nom dans la wilaya ; sinon rien (position approximative conservée).
 // Lancé par l’action « Coordonnées du prototype » ; sortie : src/modules/annuaire/data/prototype-coords.json.
