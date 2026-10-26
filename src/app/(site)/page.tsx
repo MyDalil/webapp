@@ -425,7 +425,7 @@ export default async function Home() {
                 <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
                   <div className="city-tile-img" style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined} />
                   <div className="city-tile-body">
-                    <span className="chip">{c.subLabel}</span>
+                    <span className="chip">{c.example ? `Exemple · ${c.subLabel}` : c.subLabel}</span>
                     <h3>{c.title}</h3>
                     <p>
                       {c.price} · {c.place}

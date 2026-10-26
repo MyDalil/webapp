@@ -2,6 +2,7 @@ import type { Access, CollectionBeforeValidateHook, CollectionConfig } from 'pay
 import { isStaff } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { DAYS, LANGUAGES, SPECIALTIES } from './specialties'
+import { indexPractitioner, unindexPractitioner } from './search'
 
 /** Public : praticiens publiés. Équipe : tous. Les pros passent par /api/pro/* (champs autorisés uniquement). */
 const readPublished: Access = (args) => (isStaff(args) ? true : { status: { equals: 'published' } })
@@ -19,7 +20,7 @@ export const Practitioners: CollectionConfig = {
   labels: { singular: 'Praticien', plural: 'Praticiens' },
   admin: { group: 'Santé', useAsTitle: 'name', defaultColumns: ['name', 'specialties', 'city', 'status', 'identityVerified'] },
   access: { read: readPublished, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { beforeValidate: [prepare] },
+  hooks: { beforeValidate: [prepare], afterChange: [indexPractitioner], afterDelete: [unindexPractitioner] },
   fields: [
     {
       type: 'tabs',

@@ -9,3 +9,8 @@
 - **Signalements** : enregistrés dans la boîte de réception (type « Signalement d’une annonce ») ; trois signalements remettent l’annonce au contrôle.
 - **Sous-catégorie stockée « categorie:type »** : un même type (« maison ») existe dans deux catégories.
 - **À ne pas refaire** : publier une porte ou un lien vers une rubrique sans page ; laisser un agent changer l’état d’une annonce.
+
+## 2026-10-26 — Aucune catégorie vide (décision de Rad)
+- **Décision** : réel d’abord, exemples ailleurs. 20 annonces d’exemple, une par type, sur tous les environnements.
+- **Règles** : badge « Exemple », messagerie et signalement refusés, hors plan du site, hors compteurs, jamais expirées ; une vraie annonce publiée dans le même type masque l’exemple. Auteur facultatif pour un exemple seulement.
+- **À ne pas refaire** : présenter un exemple comme une vraie annonce ; compter les exemples dans « N annonces ».

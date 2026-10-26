@@ -4,6 +4,7 @@ import { isStaff } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { ACTIVITIES, CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from './activities'
+import { indexProvider, unindexProvider } from './search'
 
 /** Public : prestataires publiés. Équipe : tous. Les pros passent par /api/pro/prestataire (champs autorisés uniquement). */
 const readPublished: Access = (args) => (isStaff(args) ? true : { status: { equals: 'published' } })
@@ -55,7 +56,7 @@ export const Providers: CollectionConfig = {
   labels: { singular: 'Prestataire', plural: 'Prestataires' },
   admin: { group: 'Services', useAsTitle: 'displayName', defaultColumns: ['displayName', 'categories', 'wilaya', 'status', 'identityVerified', 'legalVerified'] },
   access: { read: readPublished, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication], afterChange: [purgeCheckedDocuments] },
+  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication], afterChange: [purgeCheckedDocuments, indexProvider], afterDelete: [unindexProvider] },
   fields: [
     {
       type: 'tabs',

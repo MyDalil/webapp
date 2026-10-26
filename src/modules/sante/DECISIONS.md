@@ -8,3 +8,7 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - 2026-10-16 — DALIL hors de la boucle de paiement : le patient paie le praticien ; paiement en ligne intégré plus tard via un prestataire à reversement direct — décision de Rad.
 - 2026-10-16 — publication d’un praticien seulement après vérification de l’identité et du droit d’exercer — santé = données et responsabilité sensibles.
 - 2026-10-16 — pas de rétro-ingénierie de services tiers : WebRTC et logiciels open source suffisent, sans risque juridique.
+
+## 2026-10-26 — Jamais de faux praticien en production (décision de Rad)
+- **Décision** : aucun praticien d’exemple. Sans praticien réservable, la recherche montre de vrais établissements de santé de l’annuaire (wilaya choisie d’abord, statut « à vérifier » affiché).
+- **Raison** : une personne réelle ne doit jamais pouvoir réserver chez un médecin qui n’existe pas.

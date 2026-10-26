@@ -339,3 +339,17 @@ export async function placesNear(lat: number, lng: number, radiusKm = 5, limit =
     return []
   }
 }
+
+/** Nombre d’adresses publiées par secteur, catégorie et wilaya (pages « catégorie × wilaya » du plan du site). */
+export async function getCategoryWilayaCounts(): Promise<{ sector: string; category: string; wilaya: string | null; n: number }[]> {
+  try {
+    const payload = await client()
+    const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
+    const { rows } = await db.execute(
+      sql`SELECT sector, category, wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' AND slug IS NOT NULL AND category IS NOT NULL GROUP BY sector, category, wilaya`,
+    )
+    return rows.map((r) => ({ sector: String(r.sector), category: String(r.category), wilaya: r.wilaya ? String(r.wilaya) : null, n: Number(r.n) }))
+  } catch {
+    return []
+  }
+}

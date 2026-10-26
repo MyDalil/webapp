@@ -13,7 +13,7 @@ type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ activi
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getProvider((await params).slug)
-  return p ? { title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')} · DALIL`, description: `Prestataire vérifié par DALIL. Demande en ligne, réponse sous 24 h.` } : {}
+  return p ? { title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')} · DALIL`, description: `Prestataire vérifié par DALIL. Demande en ligne, réponse sous 24 h.`, robots: p.demo ? { index: false } : undefined } : {}
 }
 
 const date = (iso: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
@@ -23,6 +23,8 @@ export default async function ProviderPage({ params, searchParams }: Props) {
   if (!p) notFound()
   const { activite } = await searchParams
   const c = toCard(p)
+  // En production, une fiche de démonstration est un exemple : visible, jamais contactable.
+  const example = Boolean(p.demo) && process.env.VERCEL_ENV === 'production'
   const reviews = await providerReviews(p.id)
   const wilaya = WILAYAS.find((w) => String(w.code) === p.wilaya)?.name
   const zone = p.wholeWilaya ? communesOf(p.wilaya) : [...new Set([p.baseCommune, ...(p.communes ?? [])].filter(Boolean) as string[])].map((id) => ({ id, name: communeName(id) ?? id }))
@@ -58,7 +60,7 @@ export default async function ProviderPage({ params, searchParams }: Props) {
               </div>
             </div>
           </header>
-          {p.demo && <p className="praticien-notice">Fiche de démonstration : envoyez une demande pour tester, aucune mission n’aura lieu.</p>}
+          {p.demo && (example ? <p className="praticien-notice">Fiche d’exemple : elle montre à quoi ressemble un prestataire DALIL. Les demandes sont désactivées. Elle disparaît dès qu’un vrai prestataire rejoint cette catégorie.</p> : <p className="praticien-notice">Fiche de démonstration : envoyez une demande pour tester, aucune mission n’aura lieu.</p>)}
           {p.bio && (
             <section className="account-block">
               <h2>Présentation</h2>
@@ -144,7 +146,17 @@ export default async function ProviderPage({ params, searchParams }: Props) {
         </div>
         <aside className="praticien-aside">
           <Suspense>
-            <RequestForm slug={p.slug ?? ''} name={p.displayName} offers={c.offers} communes={zone} clientele={(p.clientele ?? 'all') as 'all' | 'women' | 'men'} initialActivity={activite} />
+            {example ? (
+              <div className="account-block">
+                <h2>Fiche d’exemple</h2>
+                <p className="muted-line">Les demandes sont désactivées sur cette fiche.</p>
+                <Link className="button primary" href="/espace-pro?espace=services">
+                  Vous êtes prestataire ? Rejoindre DALIL
+                </Link>
+              </div>
+            ) : (
+              <RequestForm slug={p.slug ?? ''} name={p.displayName} offers={c.offers} communes={zone} clientele={(p.clientele ?? 'all') as 'all' | 'women' | 'men'} initialActivity={activite} />
+            )}
           </Suspense>
         </aside>
       </div>

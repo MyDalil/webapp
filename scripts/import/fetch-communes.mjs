@@ -77,6 +77,13 @@ for (const b of rows) {
 console.log('types', Object.fromEntries(types))
 console.log('wilayas non reconnues', [...unmatched])
 
+// Libellés faux dans Wikidata, corrigés ici pour survivre à un nouvel import (vérifiés par l’équipe DALIL).
+// Q544733 : chef-lieu de la wilaya 34 (36,07 N ; 4,77 E), étiqueté « Alger » dans Wikidata le 2026-10-26.
+const CORRECTIONS = { Q544733: { name: 'Bordj Bou Arréridj', ar: 'برج بوعريريج' } }
+for (const c of out.values()) {
+  const fix = CORRECTIONS[c.qid]
+  if (fix) Object.assign(c, fix, { id: `${String(c.wilaya).padStart(2, '0')}-${slug(fix.name)}` })
+}
 const list = [...out.values()].filter((c) => !c.conflict)
 const ids = new Set()
 for (const c of list) {

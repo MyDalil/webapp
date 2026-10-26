@@ -4,6 +4,7 @@ import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
+import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 
 const slugify = (s: string) =>
@@ -50,7 +51,7 @@ export const Places: CollectionConfig = {
   versions: { drafts: true },
   defaultSort: 'name',
   access: { read: publishedOrStaff, create: isStaff, update: isStaff, delete: isAdmin },
-  hooks: { beforeValidate: [prepare], afterChange: [refresh] },
+  hooks: { beforeValidate: [prepare], afterChange: [refresh, indexPlace], afterDelete: [unindexPlace] },
   fields: [
     {
       type: 'tabs',

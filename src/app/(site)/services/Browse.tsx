@@ -39,7 +39,7 @@ function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
           ))}
         </ul>
         <div className="praticien-tags">
-          {p.demo && <span className="chip chip-plain">Démo</span>}
+          {p.demo && <span className="chip chip-example">Exemple</span>}
           {p.checks.identity && p.checks.legal && <span className="chip">Identité et statut vérifiés</span>}
           {p.checks.background && <span className="chip">Casier vérifié</span>}
           {p.clientele === 'women' && <span className="chip chip-plain">Réservé aux clientes</span>}
@@ -154,7 +154,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
                 <Link href={`/services/${c.value}`} className="service-tile">
                   <b>{c.label}</b>
                   <span>{c.activities.slice(0, 3).map(([, l]) => l).join(' · ')}</span>
-                  <small>{counts[c.value] ? `${counts[c.value]} prestataire${counts[c.value] > 1 ? 's' : ''}` : 'Bientôt'}</small>
+                  <small>{counts[c.value] ? `${counts[c.value]} prestataire${counts[c.value] > 1 ? 's' : ''}` : 'Voir un exemple'}</small>
                 </Link>
               </li>
             ))}

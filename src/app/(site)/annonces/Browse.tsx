@@ -13,7 +13,7 @@ export function ClassifiedTile({ c }: { c: ClassifiedCard }) {
           {c.photos > 1 && <small>{c.photos} photos</small>}
         </div>
         <div className="classified-card-body">
-          <span className="chip chip-plain">{c.subLabel}</span>
+          <span className={`chip ${c.example ? 'chip-example' : 'chip-plain'}`}>{c.example ? `Exemple · ${c.subLabel}` : c.subLabel}</span>
           <h3>{c.title}</h3>
           <b>{c.price}</b>
           <p>

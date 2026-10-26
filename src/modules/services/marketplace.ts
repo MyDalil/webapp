@@ -85,15 +85,17 @@ export async function searchProviders(q: { category?: string; activity?: string;
   if (q.language) and.push({ languages: { in: [q.language] } })
   if (q.text) and.push({ or: [{ displayName: { like: q.text } }, { bio: { like: q.text } }] })
   const { docs } = await p.find({ collection: 'providers', where: { and }, depth: 1, limit: 300, overrideAccess: true })
-  return docs
-    .filter((d) => !q.commune || covers(d, q.commune))
-    .map(toCard)
+  const cards = docs.filter((d) => !q.commune || covers(d, q.commune)).map(toCard)
+  // Une fiche d’exemple s’efface dès qu’un vrai prestataire couvre sa catégorie.
+  const realCats = new Set(cards.filter((c) => !c.demo).flatMap((c) => c.categories))
+  return cards
+    .filter((c) => !c.demo || c.categories.some((x) => !realCats.has(x)))
     .sort((a, b) => Number(a.demo) - Number(b.demo) || (b.rating ?? 0) * Math.log2(2 + b.reviews) - (a.rating ?? 0) * Math.log2(2 + a.reviews) || b.missionsDone - a.missionsDone)
 }
 
 export async function categoryCounts() {
   const p = await getPayload()
-  const { docs } = await p.find({ collection: 'providers', where: { status: { equals: 'published' } }, depth: 0, limit: 5000, pagination: false, overrideAccess: true, select: { categories: true } })
+  const { docs } = await p.find({ collection: 'providers', where: { and: [{ status: { equals: 'published' } }, { demo: { not_equals: true } }] }, depth: 0, limit: 5000, pagination: false, overrideAccess: true, select: { categories: true } })
   const counts: Record<string, number> = {}
   for (const d of docs) for (const c of (d.categories ?? []) as string[]) counts[c] = (counts[c] ?? 0) + 1
   return counts
@@ -174,6 +176,7 @@ export async function requestMission(input: { slug: string; activity: string; st
   if (!input.consent) return fail('Merci d’accepter la transmission de vos informations au prestataire.')
   const provider = await getProvider(input.slug)
   if (!provider) return fail('Prestataire introuvable.', 404)
+  if (provider.demo && process.env.VERCEL_ENV === 'production') return fail('Fiche d’exemple : les demandes sont désactivées.', 409)
   if (idOf(provider.owner) === member.id) return fail('Vous ne pouvez pas vous adresser une demande.')
   const offer = offersOf(provider).find((o) => o.activity === input.activity)
   if (!offer) return fail('Cette prestation n’est pas proposée par ce prestataire.')

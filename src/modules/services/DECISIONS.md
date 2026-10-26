@@ -16,3 +16,8 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - 2026-10-16 — photos des catégories : libres de droits (Unsplash) et, si besoin, générées mais réalistes, sans mention ; style gros plan (mains, outils, objets) — décision de Rad ; choix final reporté.
 - 2026-10-16 — pièces justificatives stockées dans Neon (pas Vercel Blob, dont les fichiers sont publics), supprimées à la vérification ou après 30 jours — minimum de tiers, données sensibles.
 - 2026-10-16 — envoi plafonné à 4 Mo (limite Vercel 4,5 Mo par requête), photos réduites dans le navigateur avant l’envoi.
+
+## 2026-10-26 — Aucune catégorie vide (décision de Rad)
+- **Décision** : un prestataire d’exemple par catégorie (11, `demo`, slug `exemple-<catégorie>`), créé partout, prix « à convenir » (aucun tarif inventé).
+- **Production** : une fiche `demo` est un exemple — badge, demandes refusées par le serveur, formulaire remplacé, page non indexée. Hors production, elle reste une fiche de test réservable.
+- **Masquage** : un vrai prestataire publié dans la catégorie masque l’exemple ; les compteurs ne comptent que les vrais.

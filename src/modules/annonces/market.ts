@@ -41,6 +41,8 @@ export type ClassifiedCard = {
   photos: number
   publishedAt: string | null
   authorKind: string
+  /** Annonce d’exemple : badge, non contactable. */
+  example: boolean
 }
 
 export const toCard = (c: Classified): ClassifiedCard => {
@@ -60,6 +62,7 @@ export const toCard = (c: Classified): ClassifiedCard => {
     photos: (c.photos ?? []).length,
     publishedAt: c.publishedAt ?? null,
     authorKind: c.authorKind ?? 'particulier',
+    example: Boolean(c.example),
   }
 }
 
@@ -80,14 +83,18 @@ export async function searchClassifieds(q: SearchQuery, limit = 60): Promise<Cla
   const text = q.q?.trim().slice(0, 80)
   if (text) and.push({ or: [{ title: { like: text } }, { description: { like: text } }, { brand: { like: text } }, { sector: { like: text } }] })
   const sort = q.tri === 'prix' ? 'price' : q.tri === 'prix-desc' ? '-price' : '-publishedAt'
-  const { docs } = await p.find({ collection: 'classifieds', where: { and }, sort, limit, depth: 1, overrideAccess: true })
-  return docs.map(toCard)
+  const { docs } = await p.find({ collection: 'classifieds', where: { and }, sort, limit: limit + 40, depth: 1, overrideAccess: true })
+  // Une annonce d’exemple s’efface dès qu’une vraie annonce existe dans le même type ; les vraies d’abord.
+  const real = new Set(docs.filter((d) => !d.example).map((d) => d.subcategory))
+  const kept = docs.filter((d) => !d.example || !real.has(d.subcategory))
+  return [...kept.filter((d) => !d.example), ...kept.filter((d) => d.example)].slice(0, limit).map(toCard)
 }
 
 /** Nombre d’annonces en ligne par catégorie (accueil, rubrique). */
 export async function classifiedCounts() {
   const p = await getPayload()
-  const { docs } = await p.find({ collection: 'classifieds', where: live(), depth: 0, limit: 10000, pagination: false, overrideAccess: true, select: { category: true } })
+  // Vraies annonces seulement : les exemples ne comptent pas.
+  const { docs } = await p.find({ collection: 'classifieds', where: { and: [live(), { example: { not_equals: true } }] }, depth: 0, limit: 10000, pagination: false, overrideAccess: true, select: { category: true } })
   const counts: Record<string, number> = {}
   for (const d of docs) counts[d.category] = (counts[d.category] ?? 0) + 1
   return { total: docs.length, byCategory: counts }
@@ -112,7 +119,7 @@ export async function getClassifiedSitemap(): Promise<{ category: string; slug: 
   const now = new Date().toISOString()
   const { docs } = await p.find({
     collection: 'classifieds',
-    where: { and: [{ status: { equals: 'published' } }, { or: [{ expiresAt: { exists: false } }, { expiresAt: { greater_than: now } }] }] },
+    where: { and: [{ status: { equals: 'published' } }, { example: { not_equals: true } }, { or: [{ expiresAt: { exists: false } }, { expiresAt: { greater_than: now } }] }] },
     depth: 0,
     pagination: false,
     select: { slug: true, category: true, updatedAt: true },
@@ -313,6 +320,7 @@ export async function postMessage(member: Member, id: number, text: string, buye
   const t = await thread(member, id, buyerId)
   if ('error' in t) return t
   const { p, c, role, buyer } = t
+  if (c.example) return fail('Annonce d’exemple : elle ne peut pas être contactée.', 409)
   if (role === 'buyer' && (c.status !== 'published' || (c.expiresAt && Date.parse(c.expiresAt) <= Date.now()))) return fail('Cette annonce n’est plus en ligne.', 409)
   let body = String(text ?? '').trim().slice(0, 2000)
   if (!body) return fail('Message vide.')
@@ -343,7 +351,7 @@ export async function postMessage(member: Member, id: number, text: string, buye
 export async function reportClassified(id: number, reason: string, email?: string) {
   const p = await getPayload()
   const c = await p.findByID({ collection: 'classifieds', id, depth: 0, overrideAccess: true }).catch(() => null)
-  if (!c || c.status !== 'published') return fail('Annonce introuvable.', 404)
+  if (!c || c.status !== 'published' || c.example) return fail('Annonce introuvable.', 404)
   const why = String(reason ?? '').trim().slice(0, 1000)
   if (why.length < 5) return fail('Expliquez le problème en quelques mots.')
   await record('report', `Annonce signalée — ${c.title}`, { annonce: c.id, titre: c.title, page: `${SITE}/annonces/${c.category}/${c.slug}`, admin: `${SITE}/admin/collections/classifieds/${c.id}`, motif: why }, email)
@@ -358,7 +366,7 @@ export async function dailyClassifiedTasks() {
   const now = Date.now()
   let warned = 0
   let expired = 0
-  const soon = await p.find({ collection: 'classifieds', where: { and: [{ status: { equals: 'published' } }, { expiresAt: { less_than: new Date(now + RULES.warnDays * DAY).toISOString() } }] }, depth: 1, limit: 1000, pagination: false, overrideAccess: true })
+  const soon = await p.find({ collection: 'classifieds', where: { and: [{ status: { equals: 'published' } }, { example: { not_equals: true } }, { expiresAt: { less_than: new Date(now + RULES.warnDays * DAY).toISOString() } }] }, depth: 1, limit: 1000, pagination: false, overrideAccess: true })
   for (const c of soon.docs) {
     const author = c.author as Member
     if (c.expiresAt && Date.parse(c.expiresAt) <= now) {

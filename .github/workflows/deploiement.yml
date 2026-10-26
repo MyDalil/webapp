@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      E2E_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+      # Production : le domaine public (l’adresse technique du déploiement exige une connexion Vercel).
+      E2E_BASE_URL: ${{ github.event.deployment.environment == 'Production' && 'https://www.mydalil.com' || github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
       VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
       E2E_EXPECT_PRODUCTION: ${{ github.event.deployment.environment == 'Production' && '1' || '' }}
     steps:

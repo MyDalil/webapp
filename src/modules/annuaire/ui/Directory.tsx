@@ -23,25 +23,25 @@ const STATUS: Record<PlaceCard['status'], string> = {
 }
 
 /** Annuaire au format de la maquette : filtres, résultats, carte. Données : collection « Adresses » (Neon). */
-export function Directory({ places: initial, total: initialTotal, sectors, initialSector = '', lockSector = false }: { places: PlaceCard[]; total?: number; sectors: Sector[]; initialSector?: string; lockSector?: boolean }) {
+export function Directory({ places: initial, total: initialTotal, sectors, initialSector = '', lockSector = false, initialCategory = '', initialWilaya = '' }: { places: PlaceCard[]; total?: number; sectors: Sector[]; initialSector?: string; lockSector?: boolean; initialCategory?: string; initialWilaya?: string }) {
   // Fiches reçues du serveur pour le périmètre courant (secteur, spécialité, wilaya, texte) ; les autres filtres s’appliquent ici.
   const [places, setPlaces] = useState(initial)
   const [total, setTotal] = useState(initialTotal ?? initial.length)
   const [loading, setLoading] = useState(false)
   const [q, setQ] = useState('')
   const [sector, setSector] = useState(initialSector)
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState(initialCategory)
   const [city, setCity] = useState('')
   const [status, setStatus] = useState('')
   const [language, setLanguage] = useState('')
   const [order, setOrder] = useState<'relevance' | 'recent'>('relevance')
-  const [wilaya, setWilayaFilter] = useState('')
+  const [wilaya, setWilayaFilter] = useState(initialWilaya)
   const [theme, setTheme] = useState<'nature' | ''>('')
   const [favorite, setFavorite] = useState(false)
   const [criteria, setCriteria] = useState<string[]>([])
   const chosen = useWilaya()
   // Wilaya imposée par le lien ou choisie ici : la wilaya de l’en-tête ne l’écrase plus (ref lue dans le même rendu).
-  const pinned = useRef(false)
+  const pinned = useRef(Boolean(initialWilaya))
 
   // Liens des menus et des cartes : ?category=…, ?theme=nature, ?wilaya=<code ou nom>, ?q=…, ?ville=…
   useEffect(() => {
@@ -281,10 +281,31 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
             ))
           ) : (
             <div className="empty-state">
-              <h3>{places.length ? 'Aucun résultat précis.' : 'La sélection se prépare.'}</h3>
+              <h3>{category ? `Pas encore de fiche « ${category} » ici.` : places.length ? 'Aucun résultat précis.' : 'La sélection se prépare.'}</h3>
               <p>
                 Élargissez vos filtres, <Link href="/recherche">demandez à DALIL</Link> ou <Link href="/proposer">proposez une adresse</Link>.
               </p>
+              {/* Jamais une liste vide (décision de Rad, 2026-10-26) : d’autres adresses réelles de la même rubrique. */}
+              {!!places.length && (
+                <div className="empty-fallback">
+                  <p>
+                    <b>Dans la même rubrique :</b>
+                  </p>
+                  <ul>
+                    {(scoped.length ? scoped : places)
+                      .filter((p) => p.category !== category)
+                      .slice(0, 6)
+                      .map((p) => (
+                        <li key={p.slug}>
+                          <Link href={`/adresses/${p.slug}`}>{p.name}</Link>
+                          <small>
+                            {p.category} · {p.city}
+                          </small>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
         </div>

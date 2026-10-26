@@ -5,6 +5,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { AGENT_VERDICTS, ALL_SUBS, CATEGORIES, CONDITIONS, CONTRACTS, DEALS, FUELS, GEARBOXES, PRICE_MODES, RULES, STATUSES, expiryFrom, isSub } from './referentiel'
 import { classifiedPublished, classifiedRejected } from './emails'
 import { refreshPages } from './refresh'
+import { indexClassified, unindexClassified } from './search'
 
 /**
  * Lecture : public = annonces publiées ; auteur = les siennes ; équipe et agents = toutes (contrôle).
@@ -48,7 +49,8 @@ const guard: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
   if (next.status === 'published' && originalDoc?.status !== 'published') {
     const now = new Date()
     data.publishedAt = now.toISOString()
-    if (!next.expiresAt || Date.parse(next.expiresAt) <= now.getTime()) data.expiresAt = expiryFrom(now).toISOString()
+    if (next.example) data.expiresAt = null
+    else if (!next.expiresAt || Date.parse(next.expiresAt) <= now.getTime()) data.expiresAt = expiryFrom(now).toISOString()
     data.expiryWarnedAt = null
     if (isStaffUser(user)) {
       data.moderatedAt = now.toISOString()
@@ -87,11 +89,11 @@ export const Classifieds: CollectionConfig = {
   admin: {
     group: 'Annonces',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'agentVerdict', 'wilaya', 'reports', 'createdAt'],
+    defaultColumns: ['title', 'category', 'status', 'example', 'agentVerdict', 'wilaya', 'reports', 'createdAt'],
     description: 'Annonces des membres. « À contrôler » : vérifier puis publier ou refuser (motif obligatoire, envoyé à l’auteur).',
   },
   access: { read, create: staffOnly, update: write, delete: staffOnly },
-  hooks: { beforeValidate: [prepare], beforeChange: [guard], afterChange: [notify] },
+  hooks: { beforeValidate: [prepare], beforeChange: [guard], afterChange: [notify, indexClassified], afterDelete: [unindexClassified] },
   fields: [
     {
       type: 'tabs',
@@ -143,7 +145,7 @@ export const Classifieds: CollectionConfig = {
         {
           label: 'Auteur',
           fields: [
-            { name: 'author', type: 'relationship', relationTo: 'members', label: 'Compte', required: true, index: true },
+            { name: 'author', type: 'relationship', relationTo: 'members', label: 'Compte', index: true, validate: (v: unknown, { siblingData }: { siblingData?: Record<string, unknown> }) => (v || siblingData?.example ? true : 'Compte requis.') },
             { type: 'row', fields: [{ name: 'authorName', type: 'text', label: 'Nom affiché' }, { name: 'authorKind', type: 'select', label: 'Annonceur', options: [{ label: 'Particulier', value: 'particulier' }, { label: 'Professionnel', value: 'pro' }] }] },
           ],
         },
@@ -151,6 +153,7 @@ export const Classifieds: CollectionConfig = {
           label: 'Contrôle',
           fields: [
             { type: 'row', fields: [{ name: 'status', type: 'select', label: 'État', required: true, defaultValue: 'pending', index: true, options: opts(STATUSES) }, { name: 'reports', type: 'number', label: 'Signalements', defaultValue: 0, admin: { readOnly: true } }] },
+            { name: 'example', type: 'checkbox', label: 'Annonce d’exemple (badge « Exemple », non contactable, masquée dès qu’une vraie annonce existe dans le même type)', defaultValue: false, index: true },
             { name: 'rejectionReason', type: 'textarea', label: 'Motif du refus (envoyé à l’auteur)', maxLength: 500 },
             { type: 'row', fields: [{ name: 'moderatedBy', type: 'text', label: 'Contrôlée par', admin: { readOnly: true } }, { name: 'moderatedAt', type: 'date', label: 'Contrôlée le', admin: { readOnly: true } }] },
             { type: 'row', fields: [{ name: 'publishedAt', type: 'date', label: 'Publiée le', admin: { readOnly: true } }, { name: 'expiresAt', type: 'date', label: 'Expire le', index: true }, { name: 'expiryWarnedAt', type: 'date', label: 'Prévenu de l’expiration le', admin: { readOnly: true } }] },
