@@ -1,0 +1,35 @@
+/* Échelle typographique unique (demande de Rad, 2026-10-26 : titres bien trop gros). Chargée en dernier. */
+h1 { font-size: clamp(2rem, 3.2vw, 2.75rem); letter-spacing: -.03em; }
+h2 { font-size: clamp(1.45rem, 2.1vw, 1.95rem); letter-spacing: -.025em; }
+h3 { font-size: clamp(1.1rem, 1.4vw, 1.3rem); }
+.page-intro.compact h1, .legacy .subpage-hero h1, .account-heading h1 { font-size: clamp(2rem, 3.2vw, 2.75rem); }
+.place-title-row h1 { font-size: clamp(1.9rem, 3vw, 2.5rem); }
+.praticiens-hero h1 { font-size: clamp(1.9rem, 3.2vw, 2.6rem); }
+.xp-hero-content h1 { font-size: clamp(2.4rem, 4.6vw, 3.9rem); }
+.hero-content h1 { font-size: clamp(2.4rem, 4.6vw, 3.9rem); }
+.section-head h2 { font-size: clamp(1.45rem, 2.1vw, 1.95rem); }
+.procedure-top h2, .featured-story h2, .login-dialog h2 { font-size: 1.8rem; }
+.classified-head h1 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
+
+/* En-tête : sept rubriques — le menu compact prend le relais avant tout débordement. */
+@media (max-width: 1500px) {
+  .primary-nav .nav-more { padding-inline: 7px; font-size: .88rem; }
+  .wilaya-pill span { display: none; }
+  .wilaya-pill { padding: 0 10px; }
+  .brand-tagline { display: none; }
+}
+@media (max-width: 1340px) {
+  .primary-nav { display: none; }
+  .header-actions { margin-left: auto; }
+  .hamburger { display: block; }
+  .mega2 { display: none !important; }
+  .header-actions > .wilaya-wrap { display: none; }
+}
+
+/* Fiches détaillées : un seul bouton flottant (assistant replié), pas de bulle d’inscription. */
+.assistant-dock.is-compact:not(.expanded) .assistant-bar { display: none; }
+.assistant-dock.is-compact:not(.expanded) { left: auto; right: 24px; width: auto; transform: none; }
+.assistant-dock.is-compact .assistant-orb { display: grid; place-items: center; }
+
+/* Accueil : légende du diaporama en haut à droite — jamais sous la recherche ni sous la bulle d’inscription. */
+.slideshow-meta { top: 24px; bottom: auto; right: max(24px, calc((100vw - 1200px) / 2)); }

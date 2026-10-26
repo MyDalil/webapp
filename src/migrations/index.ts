@@ -29,6 +29,8 @@ import * as migration_20261026_174159_exemples from './20261026_174159_exemples'
 import * as migration_20261026_175000_exemples_annonces from './20261026_175000_exemples_annonces';
 import * as migration_20261026_175100_exemples_prestataires from './20261026_175100_exemples_prestataires';
 import * as migration_20261026_190000_index_recherche from './20261026_190000_index_recherche';
+import * as migration_20261026_203255_faits_lieux from './20261026_203255_faits_lieux';
+import * as migration_20261026_213000_faits_lieux_donnees from './20261026_213000_faits_lieux_donnees';
 
 export const migrations = [
   {
@@ -169,7 +171,7 @@ export const migrations = [
   {
     up: migration_20261026_174159_exemples.up,
     down: migration_20261026_174159_exemples.down,
-    name: '20261026_174159_exemples'
+    name: '20261026_174159_exemples',
   },
   {
     up: migration_20261026_175000_exemples_annonces.up,
@@ -185,5 +187,15 @@ export const migrations = [
     up: migration_20261026_190000_index_recherche.up,
     down: migration_20261026_190000_index_recherche.down,
     name: '20261026_190000_index_recherche',
+  },
+  {
+    up: migration_20261026_203255_faits_lieux.up,
+    down: migration_20261026_203255_faits_lieux.down,
+    name: '20261026_203255_faits_lieux'
+  },
+  {
+    up: migration_20261026_213000_faits_lieux_donnees.up,
+    down: migration_20261026_213000_faits_lieux_donnees.down,
+    name: '20261026_213000_faits_lieux_donnees'
   },
 ];

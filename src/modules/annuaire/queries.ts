@@ -353,3 +353,23 @@ export async function getCategoryWilayaCounts(): Promise<{ sector: string; categ
     return []
   }
 }
+
+/** Adresses publiées à proximité d’une fiche (PostGIS), au format carte, avec la distance. */
+export async function nearbyCards(p: Pick<Place, 'id' | 'lat' | 'lng'>, limit = 6): Promise<(PlaceCard & { distanceM: number })[]> {
+  if (typeof p.lat !== 'number' || typeof p.lng !== 'number') return []
+  // Moins de 25 m : même bâtiment ou position approximative (doublon probable) — écarté.
+  const near = (await placesNear(p.lat, p.lng, 3, limit * 3)).filter((n) => n.distanceM >= 25)
+  if (!near.length) return []
+  try {
+    const payload = await client()
+    const { docs } = await payload.find({ collection: 'places', where: { and: [{ slug: { in: near.map((n) => n.slug) } }, { id: { not_equals: p.id } }, { _status: { equals: 'published' } }] }, depth: 1, limit: near.length, overrideAccess: false })
+    const by = new Map(docs.map((d) => [d.slug, toCard(d)]))
+    const cards = near.flatMap((n) => (by.get(n.slug) ? [{ ...by.get(n.slug)!, distanceM: n.distanceM }] : []))
+    // Lieux avec une vraie photo d’abord, puis les plus proches.
+    const real = (c: PlaceCard) => !c.photo.startsWith('/images/')
+    return [...cards.filter(real), ...cards.filter((c) => !real(c))].slice(0, limit)
+  } catch {
+    return []
+  }
+}
+

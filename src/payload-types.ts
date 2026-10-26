@@ -265,6 +265,17 @@ export interface Place {
   heritage?: string | null;
   inception?: string | null;
   wikipedia?: string | null;
+  /**
+   * Faits vrais et sourcés seulement (OpenStreetMap, Wikidata, site officiel). Affichés en pastilles sur la fiche.
+   */
+  facts?:
+    | {
+        label: string;
+        value: string;
+        source?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   wilaya?:
     | (
         | '1'
@@ -2051,6 +2062,14 @@ export interface PlacesSelect<T extends boolean = true> {
   heritage?: T;
   inception?: T;
   wikipedia?: T;
+  facts?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        source?: T;
+        id?: T;
+      };
   wilaya?: T;
   city?: T;
   place?: T;

@@ -116,6 +116,14 @@ export const Places: CollectionConfig = {
                 { name: 'wikipedia', type: 'text', label: 'Article Wikipédia' },
               ],
             },
+            {
+              name: 'facts',
+              type: 'array',
+              label: 'En bref (faits sourcés)',
+              labels: { singular: 'Fait', plural: 'Faits' },
+              admin: { description: 'Faits vrais et sourcés seulement (OpenStreetMap, Wikidata, site officiel). Affichés en pastilles sur la fiche.' },
+              fields: [{ type: 'row', fields: [{ name: 'label', type: 'text', required: true, label: 'Libellé' }, { name: 'value', type: 'text', required: true, label: 'Valeur' }, { name: 'source', type: 'text', label: 'Source' }] }],
+            },
           ],
         },
         {

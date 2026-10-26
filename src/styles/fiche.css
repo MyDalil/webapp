@@ -1,0 +1,82 @@
+/* Fiche lieu — modèle unique (maquette validée par Rad, 2026-10-26). */
+.pl { width: min(1200px, calc(100% - 32px)); margin: 0 auto; padding: 20px 0 96px; }
+.pl-crumbs { margin-bottom: 16px; color: var(--muted); font-size: .9rem; }
+.pl-crumbs a { color: var(--green); text-decoration: none; }
+.pl-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 36px; align-items: start; }
+.pl-main { display: grid; gap: 34px; min-width: 0; }
+.pl-side { min-width: 0; position: sticky; top: calc(var(--header, 75px) + 16px); display: grid; gap: 16px; }
+.pl-card { padding: 22px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+.pl-card h2, .pl-section h2 { margin: 0 0 12px; font-size: 1.35rem; letter-spacing: -.02em; }
+.pl-card h2 { font-size: 1.1rem; }
+.pl-id { display: grid; gap: 10px; }
+.pl-tag { justify-self: start; padding: 4px 10px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: .8rem; font-weight: 700; }
+.pl-id h1 { margin: 0; font-size: clamp(1.75rem, 2.4vw, 2.15rem); line-height: 1.12; letter-spacing: -.025em; }
+.pl-alt { margin: 0; color: var(--text); opacity: .85; }
+.pl-status { margin: 0; font-size: .88rem; font-weight: 650; color: #8a5a00; }
+.pl-status.is-verified, .pl-status.is-labelled { color: var(--green); }
+.pl-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 4px; }
+.pl-actions > * { min-height: 46px; width: 100%; min-width: 0; padding-inline: 8px; font-size: .92rem; white-space: nowrap; }
+.pl-actions > button.button.primary { background: var(--surface); color: var(--text); border: 1px solid var(--line); }
+.pl-actions .button { justify-content: center; }
+.pl-info { display: grid; gap: 0; margin: 0; }
+.pl-info > div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+.pl-info > div:first-child { border-top: 0; padding-top: 0; }
+.pl-info dt { color: var(--muted); font-size: .85rem; font-weight: 600; }
+.pl-info dd { display: grid; gap: 2px; margin: 0; overflow-wrap: anywhere; }
+.pl-info dd small { color: var(--muted); }
+.pl-map { margin-top: 12px; overflow: hidden; border-radius: 14px; }
+.pl-map .leaflet-box { height: 220px; border-radius: 14px; border: 1px solid var(--line); }
+.pl-map small { display: block; padding-top: 6px; color: var(--muted); }
+.pl-text { max-width: 72ch; margin: 0; font-size: 1.06rem; line-height: 1.7; }
+.pl-facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.pl-facts li { display: grid; gap: 2px; min-width: 150px; padding: 12px 16px; border-radius: 14px; background: var(--surface-2); }
+.pl-facts span { color: var(--muted); font-size: .8rem; }
+.pl-contribute { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 24px; border-radius: 18px; background: var(--green-soft); }
+.pl-contribute p { margin: 4px 0 0; }
+.pl-contribute .button { white-space: nowrap; flex-shrink: 0; }
+.pl-near { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+.pl-near a { display: grid; gap: 4px; color: var(--text); text-decoration: none; }
+.pl-near i { display: block; aspect-ratio: 4 / 3; border-radius: 16px; background: var(--surface-2) center / cover no-repeat; }
+.pl-near small { color: var(--muted); }
+.pl-sources { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .86rem; }
+.pl-sources a, .pl-sources summary { color: var(--green); font-weight: 600; cursor: pointer; text-decoration: none; }
+.pl-sources details ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* Galerie commune (platform/ui/PhotoGallery) */
+.pg { margin: 0; }
+.pg-main { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 22px; background: var(--surface-2); }
+.pg-main.is-empty { background: var(--surface-2) url(/images/lieu.svg) center / cover no-repeat; }
+.pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pg-arrow { position: absolute; top: 50%; width: 44px; height: 44px; margin-top: -22px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .95); color: #14201b; box-shadow: 0 4px 14px rgba(0, 0, 0, .2); cursor: pointer; }
+.pg-arrow.is-prev { left: 14px; } .pg-arrow.is-next { right: 14px; }
+.pg-count { position: absolute; right: 14px; bottom: 14px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, .62); color: #fff; font-size: .8rem; font-weight: 600; }
+.pg-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: 10px; }
+.pg-thumbs { display: flex; gap: 8px; overflow-x: auto; }
+.pg-thumbs button { flex: 0 0 84px; height: 63px; border: 3px solid transparent; border-radius: 12px; background: var(--surface-2) center / cover no-repeat; cursor: pointer; }
+.pg-thumbs button[aria-pressed="true"] { border-color: var(--green); }
+.pg-credit { margin-left: auto; color: var(--muted); font-size: .75rem; text-align: right; }
+.pg-credit a { color: inherit; }
+
+@media (max-width: 980px) {
+  /* Ordre de la maquette mobile : photo, identité, infos pratiques, puis le reste. */
+  .pl-grid { display: flex; flex-direction: column; align-items: stretch; gap: 22px; }
+  .pl-grid > * , .pl-main > *, .pl-side > * { min-width: 0; }
+  .pl-main, .pl-side { display: contents; }
+  .pl-main > * { order: 4; }
+  .pl-main > .pg { order: 1; }
+  .pl-side > .pl-id { order: 2; }
+  .pl-side > .pl-card:not(.pl-id) { order: 3; }
+  .pl-near { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .pl { width: 100%; padding-top: 0; }
+  .pl-crumbs, .pl-main > *:not(.pg):not(.pl-contribute) { padding-inline: 16px; }
+  .pl-side > * { margin-inline: 16px; }
+  .pl-main .pg-main { border-radius: 0; }
+  .pg-foot { padding-inline: 16px; }
+  .pl-contribute { flex-direction: column; align-items: stretch; margin-inline: 16px; padding: 16px; }
+  .pl-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pl-facts li { min-width: 0; }
+  .pl-near { display: flex; overflow-x: auto; }
+  .pl-near li { flex: 0 0 72%; }
+}

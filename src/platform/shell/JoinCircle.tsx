@@ -27,7 +27,9 @@ export function JoinCircle() {
       .then((me) => setHidden(Boolean(me?.member)))
       .catch(() => {})
   }, [])
-  if (hidden || pathname?.startsWith('/connexion')) return null
+  // Fiches détaillées : un seul bouton flottant (l’assistant) ; la bulle d’inscription s’efface.
+  const detail = /^\/(adresses|prestataires|missions)\/|^\/praticiens\/[^/]+|^\/annonces\/[^/]+\/[^/]+|^\/guides\/[^/]+/.test(pathname ?? '')
+  if (hidden || detail || pathname?.startsWith('/connexion')) return null
   return (
     <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}`} aria-label="Créer mon compte gratuitement">
       <span>
