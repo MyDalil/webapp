@@ -24,3 +24,10 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 
 ## 2026-10-26 — Commune mal étiquetée corrigée
 - Le chef-lieu de la wilaya 34 (Q544733, 36,07 N ; 4,77 E) portait le nom « Alger » dans le référentiel des communes (libellé faux dans Wikidata). Corrigé en « Bordj Bou Arréridj » (`34-bordj-bou-arreridj`), et dans `scripts/import/fetch-communes.mjs` (table `CORRECTIONS`) pour survivre à un nouvel import.
+
+## 2026-10-26 — Échelle des titres, en-tête, boutons flottants (demande de Rad)
+- Titres réduits partout (`styles/scale.css`, chargé en dernier) : h1 2–2,75 rem, h2 1,45–1,95 rem ; titre d’accueil 2,4–3,9 rem.
+- En-tête : menu compact (☰) sous 1 340 px ; « Connexion » n’est jamais coupé.
+- Fiches détaillées (adresses, prestataires, praticiens, annonces, guides) : un seul bouton flottant (assistant replié en rond), pas de bulle « Créer mon compte » — rien ne cache les crédits photo.
+- Accueil : légende du diaporama en haut à droite, jamais sous la recherche.
+- `PhotoGallery` (galerie commune des fiches) : crédit de la photo affichée toujours lisible sous l’image.

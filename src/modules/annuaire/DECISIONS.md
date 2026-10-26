@@ -42,3 +42,13 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 ## 2026-10-26 — Catégorie sans fiche : jamais une liste vide (décision de Rad)
 - **Décision** : une catégorie sans fiche affiche d’autres adresses réelles de la même rubrique, plus « proposer une adresse ». Aucune adresse inventée.
 - **À faire** : remplir les 21 catégories sans fiche par l’import OpenStreetMap (tags à ajouter), Vie musulmane validée par Saïd.
+
+## 2026-10-26 — Fiche lieu : un modèle unique (maquette validée par Rad)
+- **Décision** : toutes les fiches suivent la maquette « Fiche lieu » (ordinateur et mobile) : galerie, identité (nom, statut, Itinéraire / Enregistrer / Partager), infos pratiques et carte, Présentation, « En bref », « Vous connaissez ce lieu ? », À proximité, provenance discrète en bas.
+- **Statut** : deux niveaux seulement (« À vérifier · visite DALIL à venir » / « Vérifiée par DALIL le … »).
+- **En bref** : seulement les faits connus (`factsOf`, `present.ts`, testé) — jamais une case « à confirmer » ; bouton « Compléter une information » pour le reste.
+- **Texte** : présentation professionnelle ; la provenance n’apparaît plus dans le texte (`presentIntro`), elle reste dans « Sources » ; attribution OpenStreetMap (ODbL) toujours visible en bas de fiche.
+- **Faits** : champ `facts` (libellé, valeur, source). Rempli par `scripts/import/build-facts.mjs` depuis OpenStreetMap (ODbL) et Wikidata (CC0) — action « Import des faits » sur `import-data` → `data/place-facts.json` → migration `20261026_213000_faits_lieux_donnees` (remplace seulement les faits importés, jamais ceux saisis dans /admin). Une valeur inconnue n’est jamais traduite au hasard : elle est omise.
+- **Photos** : sans photo du lieu, photo de la ville si DALIL en a une (« Photo d’illustration »), sinon visuel neutre `/images/lieu.svg`. **À ne pas refaire** : montrer la photo d’Alger pour une autre ville.
+- **À proximité** : lieux à moins de 3 km, sauf ceux à moins de 25 m (même bâtiment ou doublon) ; lieux avec vraie photo d’abord.
+- **Corrections** : Djamaâ El Kebir (texte faux « époque ziride », minaret daté au XIVe siècle faute d’accord des sources) ; doublon « Grande Mosquée d’Alger (Djamaa El Kebir) » dépublié ; écoles étiquetées `religion=muslim` dans OSM sans « coranique » dans le nom reclassées de « Écoles coraniques » vers « Écoles ».

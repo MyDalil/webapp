@@ -45,6 +45,15 @@ test.describe('Annuaire', () => {
     await expect(page.locator('h1').first()).toContainText('Darna')
     await expect(page.getByText(/à vérifier/i).first()).toBeVisible()
   })
+
+  test('fiche lieu : modèle unique, sans débordement ni case « à confirmer »', async ({ page }) => {
+    await page.goto('/adresses/darna-said-hamdine')
+    await expect(page.locator('.pl-id h1')).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Compléter une information' })).toBeVisible()
+    await expect(page.getByText(/à confirmer/i)).toHaveCount(0)
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+    expect(overflow).toBeLessThanOrEqual(1)
+  })
 })
 
 // @ecriture : ces tests écrivent en base ; exclus des contrôles sur un déploiement (`--grep-invert @ecriture`).

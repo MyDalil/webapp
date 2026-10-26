@@ -40,6 +40,8 @@ export function Assistant() {
   }
   // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
   const [tucked, setTucked] = useState(false)
+  // Fiches détaillées : l’assistant se replie en bouton rond pour ne jamais masquer le contenu (crédits photo).
+  const compact = /^\/(adresses|prestataires|missions)\/|^\/praticiens\/[^/]+|^\/annonces\/[^/]+\/[^/]+|^\/guides\/[^/]+/.test(path ?? '')
   useEffect(() => {
     setTucked(false)
     if (path !== '/') return
@@ -151,7 +153,7 @@ export function Assistant() {
   if (path === '/recherche') return null
 
   return (
-    <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
+    <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact ? 'is-compact' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
       <button className="assistant-orb" type="button" aria-label="Ouvrir l’assistant DALIL" onClick={() => setExpanded(!expanded)}>
         <span aria-hidden="true">✦</span>
       </button>
