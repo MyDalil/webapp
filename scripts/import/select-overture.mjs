@@ -113,7 +113,8 @@ let seen = 0
 const rl = createInterface({ input: createReadStream(`${D}/overture-dz.jsonl.gz`).pipe(createGunzip()) })
 for await (const line of rl) {
   seen++
-  const o = JSON.parse(line)
+  // Valeurs manquantes écrites « NaN » par pandas : JSON invalide, remplacées par null.
+  const o = JSON.parse(line.replace(/:\s*NaN\b/g, ': null'))
   const tax = o.taxonomy ?? {}
   const chain = [tax.primary, ...[...(tax.hierarchy ?? [])].reverse(), o.basic_category].filter((x) => typeof x === 'string')
   if (chain.some((c) => BANNED.test(c))) continue

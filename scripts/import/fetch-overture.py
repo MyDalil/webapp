@@ -23,6 +23,8 @@ rows = con.sql(f"""
 """).fetchdf()
 print('lignes dans le cadre', len(rows))
 def js(v):
+    if isinstance(v, float) and v != v:
+        return None
     try:
         return json.loads(json.dumps(v, default=lambda o: o.tolist() if hasattr(o, 'tolist') else str(o)))
     except Exception:
