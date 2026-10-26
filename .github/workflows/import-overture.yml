@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [import-data]
-    paths: [scripts/import/fetch-overture.py]
+    paths: [scripts/import/fetch-overture.py, scripts/import/select-overture.mjs]
 permissions:
   contents: write
 jobs:
@@ -20,6 +20,13 @@ jobs:
       - run: pip install duckdb==1.1.3 pandas
       - run: python -u scripts/import/fetch-overture.py 2>&1 | tee src/modules/annuaire/data/overture-log.txt; exit ${PIPESTATUS[0]}
         shell: bash
+      - name: Sélection pour DALIL (doublons, compléments)
+        shell: bash
+        run: |
+          git fetch -q origin main
+          git checkout origin/main -- src/platform/referentiel/communes.json src/platform/referentiel/catalog.ts
+          for f in osm-selected open-places-selected research-places; do git show origin/main:src/modules/annuaire/data/$f.json > /tmp/$f.json; done
+          node scripts/import/select-overture.mjs /tmp/osm-selected.json /tmp/open-places-selected.json /tmp/research-places.json 2>&1 | tee -a src/modules/annuaire/data/overture-log.txt; exit ${PIPESTATUS[0]}
       - name: Archive du jeu brut (Vercel Blob)
         if: always()
         env:
@@ -33,7 +40,8 @@ jobs:
         run: |
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"
-          git add -f src/modules/annuaire/data/overture-log.txt src/modules/annuaire/data/overture-stats.json src/modules/annuaire/data/overture-mosques.json || git add -f src/modules/annuaire/data/overture-log.txt
+          git reset -q HEAD -- src/platform/referentiel 2>/dev/null; git checkout -q HEAD -- src/platform/referentiel 2>/dev/null || true
+          git add -f src/modules/annuaire/data/overture-log.txt src/modules/annuaire/data/overture-stats.json src/modules/annuaire/data/overture-mosques.json src/modules/annuaire/data/overture-selected.json src/modules/annuaire/data/overture-complete.json || git add -f src/modules/annuaire/data/overture-log.txt
           git commit -m "Données : lieux Overture Maps (CDLA Permissive 2.0) [skip ci]" || echo "rien de nouveau"
           git pull --rebase origin import-data
           git push origin HEAD:import-data
