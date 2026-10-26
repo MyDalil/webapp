@@ -52,3 +52,10 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Photos** : sans photo du lieu, photo de la ville si DALIL en a une (« Photo d’illustration »), sinon visuel neutre `/images/lieu.svg`. **À ne pas refaire** : montrer la photo d’Alger pour une autre ville.
 - **À proximité** : lieux à moins de 3 km, sauf ceux à moins de 25 m (même bâtiment ou doublon) ; lieux avec vraie photo d’abord.
 - **Corrections** : Djamaâ El Kebir (texte faux « époque ziride », minaret daté au XIVe siècle faute d’accord des sources) ; doublon « Grande Mosquée d’Alger (Djamaa El Kebir) » dépublié ; écoles étiquetées `religion=muslim` dans OSM sans « coranique » dans le nom reclassées de « Écoles coraniques » vers « Écoles ».
+
+## 2026-10-26 — Retraits (décision de Rad)
+- **Retirés de DALIL** : écoles et instituts de musique ; toutes les zaouïas et écoles coraniques soufies ou chiites ; tout lieu qui sert de l’alcool.
+- **Méthode** : migration `20261026_230000_retraits` — fiches dépubliées (restaurables), motif dans les notes ; un import futur ne les recrée pas.
+- **Repérage** : nom (français et arabe) dans les catégories religieuses et éducatives seulement — une ville ou un quartier « Zaouia » ne suffit pas (bureaux de poste, écoles publiques gardés) ; alcool : étiquettes OpenStreetMap (bar, pub, boîte de nuit, caviste, `drink:*`) via `scripts/import/fetch-alcohol.mjs` (branche `import-data`) → `data/alcohol-osm.json`.
+- **Limite** : OpenStreetMap ne signale l’alcool que pour 33 lieux en Algérie (aucun dans DALIL au 2026-10-26). Les hôtels et restaurants sans information restent publiés ; à contrôler lors des visites DALIL.
+- **À ne pas refaire** : importer `amenity=bar|pub|nightclub`, `shop=alcohol|wine`, `amenity=music_school`, ni une zaouïa.
