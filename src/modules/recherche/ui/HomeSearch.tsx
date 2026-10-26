@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Icon } from '@/platform/ui/Icon'
@@ -13,6 +13,9 @@ import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
  * Suggestions sous la barre (validées par Rad, 2026-10-21) : hors tourisme d’abord, selon les recherches
  * des Algériens (santé, artisans, papiers). Chaque lien ouvre directement le bon résultat.
  */
+type Item = { type: string; url: string; title: string; subtitle: string | null; badge: string | null }
+const KIND: Record<string, string> = { rubrique: 'Rubrique', categorie: 'Catégorie', adresse: 'Adresse', praticien: 'Praticien', prestataire: 'Prestataire', annonce: 'Annonce', guide: 'Guide' }
+
 const SUGGESTIONS: [href: string, label: string][] = [
   ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger'],
   ['/praticiens?specialite=pediatrie', 'Pédiatre'],
@@ -30,6 +33,38 @@ export function HomeSearch() {
   const docRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
   const [listening, setListening] = useState(false)
+  // Propositions pendant la frappe (index de recherche) : clavier ↑ ↓ Entrée, Échap pour fermer.
+  const [text, setText] = useState('')
+  const [items, setItems] = useState<Item[]>([])
+  const [active, setActive] = useState(-1)
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const q = text.trim()
+    if (q.length < 2) return
+    const ctl = new AbortController()
+    const t = setTimeout(() => {
+      fetch(`/api/recherche?q=${encodeURIComponent(q)}`, { signal: ctl.signal })
+        .then((r) => (r.ok ? r.json() : { items: [] }))
+        .then((d) => {
+          setItems(d.items ?? [])
+          setActive(-1)
+          setOpen(true)
+        })
+        .catch(() => {})
+    }, 160)
+    return () => {
+      clearTimeout(t)
+      ctl.abort()
+    }
+  }, [text])
+  const shown = open && text.trim().length >= 2 ? items : []
+  function onKey(e: KeyboardEvent<HTMLInputElement>) {
+    if (!shown.length) return
+    if (e.key === 'ArrowDown') (e.preventDefault(), setActive((i) => (i + 1) % shown.length))
+    else if (e.key === 'ArrowUp') (e.preventDefault(), setActive((i) => (i <= 0 ? shown.length - 1 : i - 1)))
+    else if (e.key === 'Escape') setOpen(false)
+    else if (e.key === 'Enter' && active >= 0) (e.preventDefault(), router.push(shown[active].url))
+  }
 
   function submit(e: FormEvent) {
     e.preventDefault()
@@ -59,6 +94,7 @@ export function HomeSearch() {
         setListening(false)
         dictation.current = null
         input.value = [base, t ? simpleClean(t) : ''].filter(Boolean).join(' ')
+        setText(input.value)
         input.focus()
       },
     })
@@ -67,6 +103,7 @@ export function HomeSearch() {
 
   return (
     <>
+    <div className="search-wrap">
     <form className="search-bar" onSubmit={submit}>
       <span>
         <Icon name="search" />
@@ -74,7 +111,7 @@ export function HomeSearch() {
       <label className="sr-only" htmlFor="home-search">
         Que recherchez-vous ?
       </label>
-      <input id="home-search" ref={ref} name="search" placeholder="Un lieu, une démarche, une activité…" />
+      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder="Un lieu, une démarche, une activité…" />
       <input ref={docRef} type="file" accept={ACCEPT_DOC} hidden onChange={(e) => pickDoc(e.target.files?.[0])} />
       <button type="button" className="search-attach" aria-label="Joindre un document" title="PDF ou fichier texte, 5 Mo maximum" onClick={() => docRef.current?.click()}>
         <Icon name="file" />
@@ -89,6 +126,25 @@ export function HomeSearch() {
         Rechercher
       </button>
     </form>
+    {shown.length > 0 && (
+      <ul id="home-search-list" className="search-suggest" role="listbox" aria-label="Propositions">
+        {shown.map((it, i) => (
+          <li key={it.url} id={`home-search-${i}`} role="option" aria-selected={i === active}>
+            <Link href={it.url} className={i === active ? 'is-active' : undefined}>
+              <span className="search-suggest-kind">{KIND[it.type] ?? ''}</span>
+              <b>{it.title}</b>
+              {it.subtitle && <small>{it.subtitle}</small>}
+            </Link>
+          </li>
+        ))}
+        <li role="option" aria-selected={false}>
+          <Link href={`/recherche?q=${encodeURIComponent(text.trim())}`} className="search-suggest-all">
+            Voir tous les résultats pour « {text.trim()} »
+          </Link>
+        </li>
+      </ul>
+    )}
+    </div>
     <p className="xp-suggest">
       <span>Par exemple :</span>
       {SUGGESTIONS.map(([href, label]) => (

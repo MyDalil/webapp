@@ -12,7 +12,7 @@ const since = (iso: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long',
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const a = await getClassified((await params).slug)
-  return a ? { title: `${a.title} — ${a.price} · ${a.place} · DALIL`, description: a.description.slice(0, 160), robots: a.status === 'published' ? undefined : { index: false } } : {}
+  return a ? { title: `${a.title} — ${a.price} · ${a.place} · DALIL`, description: a.description.slice(0, 160), robots: a.status === 'published' && !a.example ? undefined : { index: false } } : {}
 }
 
 export default async function AnnoncePage({ params }: Props) {
@@ -35,7 +35,7 @@ export default async function AnnoncePage({ params }: Props) {
         <div className="praticien-main">
           <Gallery photos={a.gallery} title={a.title} />
           <header className="classified-head">
-            <span className="chip">{a.subLabel}</span>
+            <span className={`chip ${a.example ? 'chip-example' : ''}`}>{a.example ? `Exemple · ${a.subLabel}` : a.subLabel}</span>
             <h1>{a.title}</h1>
             <p className="classified-price">{a.price}</p>
             <p className="muted-line">
@@ -67,7 +67,7 @@ export default async function AnnoncePage({ params }: Props) {
               <li>Rencontrez-vous dans un lieu public. Vérifiez les papiers d’un véhicule ou d’un logement.</li>
               {a.category === 'emploi' && <li>Un employeur sérieux ne demande jamais d’argent à un candidat.</li>}
             </ul>
-            {!a.mine && a.status === 'published' && <ReportForm id={a.id} />}
+            {!a.mine && !a.example && a.status === 'published' && <ReportForm id={a.id} />}
           </section>
         </div>
         <aside className="praticien-aside">
@@ -77,7 +77,15 @@ export default async function AnnoncePage({ params }: Props) {
               {a.author.kind === 'pro' ? 'Professionnel' : 'Particulier'} · membre depuis {since(a.author.since)}
             </p>
           </section>
-          {a.mine ? (
+          {a.example ? (
+            <section className="account-block classified-example">
+              <h2>Annonce d’exemple</h2>
+              <p>Elle montre à quoi ressemble une annonce DALIL. Elle ne peut pas être contactée et disparaît dès qu’une vraie annonce est publiée dans ce type.</p>
+              <Link className="button primary" href={`/annonces/deposer?categorie=${a.category}`}>
+                Déposer une vraie annonce
+              </Link>
+            </section>
+          ) : a.mine ? (
             <section className="account-block">
               <h2>C’est votre annonce</h2>
               <p className="muted-line">Les messages reçus sont dans votre espace.</p>

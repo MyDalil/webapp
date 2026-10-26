@@ -28,6 +28,7 @@ Petites annonces entre membres, partout en Algérie : immobilier, emploi, véhic
 - **Photos** : 8 au plus, contrôlées (type réel, métadonnées retirées, 4 Mo), enregistrées « À contrôler » dans Photos.
 - **DALIL n’encaisse rien** et ne garantit pas la transaction : conseils de sécurité sur chaque annonce.
 - Données du compte : supprimées avec le compte, incluses dans l’export.
+- **Exemples** (`example`) : une annonce d’exemple par type, badge « Exemple », non contactable, non signalable, hors plan du site et hors compteurs, jamais expirée ; masquée dès qu’une vraie annonce est publiée dans le même type (`searchClassifieds`). Créées par la migration `20261026_175000_exemples_annonces`.
 
 ## Dépend de
 `membres` (compte connecté), `messages` (signalements dans la boîte de réception), `platform` (wilayas, communes, photos, mail, limites de débit).

@@ -1409,11 +1409,12 @@ export interface Classified {
    * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
    */
   commune?: string | null;
-  author: number | Member;
+  author?: (number | null) | Member;
   authorName?: string | null;
   authorKind?: ('particulier' | 'pro') | null;
   status: 'pending' | 'published' | 'rejected' | 'expired' | 'closed';
   reports?: number | null;
+  example?: boolean | null;
   rejectionReason?: string | null;
   moderatedBy?: string | null;
   moderatedAt?: string | null;
@@ -2400,6 +2401,7 @@ export interface ClassifiedsSelect<T extends boolean = true> {
   authorKind?: T;
   status?: T;
   reports?: T;
+  example?: T;
   rejectionReason?: T;
   moderatedBy?: T;
   moderatedAt?: T;

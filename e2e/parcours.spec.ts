@@ -112,3 +112,55 @@ test.describe('Anti-robot @ecriture', () => {
     expect(statuses).toEqual([200, 403])
   })
 })
+
+test.describe('Aucune catégorie vide', () => {
+  for (const c of ['immobilier', 'emploi', 'vehicules', 'objets']) {
+    test(`annonces ${c} : au moins une annonce`, async ({ page }) => {
+      await page.goto(`/annonces/${c}`)
+      await expect(page.locator('.classified-card').first()).toBeVisible()
+    })
+  }
+
+  test('services : chaque catégorie montre au moins un prestataire', async ({ page }) => {
+    await page.goto('/services/menage')
+    await expect(page.locator('.provider-card').first()).toBeVisible()
+  })
+
+  test('praticiens : sans résultat, des établissements de santé réels', async ({ page }) => {
+    await page.goto('/praticiens?specialite=orthophonie&wilaya=16')
+    await expect(page.locator('.praticien-card, .health-fallback a').first()).toBeVisible()
+  })
+})
+
+test.describe('Recherche', () => {
+  test('« hopital » trouve de vraies adresses de santé', async ({ page }) => {
+    await page.goto('/recherche?q=hopital')
+    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toBeVisible()
+  })
+})
+
+test.describe('Recherche complète', () => {
+  test('« hopital oran » : la catégorie et des hôpitaux d’Oran', async ({ page }) => {
+    await page.goto('/recherche?q=hopital%20oran')
+    await expect(page.locator('.search-pistes a[href*="/annuaire/sante-soins/hopitaux"]').first()).toBeVisible()
+    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toBeVisible()
+  })
+
+  test('faute de frappe tolérée : « pharmasie »', async ({ page }) => {
+    await page.goto('/recherche?q=pharmasie')
+    await expect(page.locator('.search-pistes a[href*="pharmacies"]').first()).toBeVisible()
+  })
+
+  test('propositions pendant la frappe', async ({ request }) => {
+    const res = await request.get('/api/recherche?q=plombier')
+    expect(res.status()).toBe(200)
+    const { items } = (await res.json()) as { items: { type: string; url: string }[] }
+    expect(items.some((i) => i.url.includes('plomberie'))).toBe(true)
+  })
+
+  test('page catégorie × wilaya référencée', async ({ page }) => {
+    await page.goto('/annuaire/sante-soins/hopitaux/oran')
+    await expect(page.locator('h1').first()).toContainText('Oran')
+    await expect(page.locator('a[href^="/adresses/"]').first()).toBeVisible()
+  })
+})

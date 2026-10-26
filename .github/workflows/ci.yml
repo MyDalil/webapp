@@ -50,8 +50,8 @@ jobs:
       - uses: actions/setup-node@v5
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Migrations (schéma puis données différées)
-        run: pnpm payload migrate && pnpm migrate:data
+      - name: Migrations (schéma, données différées, index de recherche)
+        run: pnpm payload migrate && pnpm migrate:data && pnpm search:index
       - name: Sauvegarde puis restauration dans une base neuve
         run: |
           pnpm exec tsx scripts/backup.ts /tmp/sauvegarde

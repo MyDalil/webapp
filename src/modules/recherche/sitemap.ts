@@ -1,11 +1,12 @@
 import 'server-only'
-import { countPublishedPlaces, getPlaceCounts, getPlaceSitemap, wilayaSlug } from '@/modules/annuaire'
+import { countPublishedPlaces, getCategoryWilayaCounts, getPlaceCounts, getPlaceSitemap, wilayaSlug } from '@/modules/annuaire'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, getClassifiedSitemap } from '@/modules/annonces'
 import { ROUTES } from '@/modules/contenus'
 import { getPractitionerSitemap } from '@/modules/sante'
 import { CATEGORIES as SERVICE_CATEGORIES, getProviderSitemap } from '@/modules/services'
 import { SITE } from '@/platform/mail'
 import { SECTORS } from '@/platform/referentiel/catalog'
+import { categoryPath } from '@/platform/referentiel/slug'
 
 /**
  * Plan du site dynamique : uniquement les pages publiques et les contenus publiés (annonces : en ligne et non expirées).
@@ -28,7 +29,7 @@ const url = (path: string, lastmod?: string): SitemapUrl => ({ loc: `${SITE}${pa
 export async function sitemapFiles(): Promise<string[]> {
   const places = await countPublishedPlaces()
   const chunks = Math.max(1, Math.ceil(places / PLACES_PER_FILE))
-  return ['pages', 'professionnels', 'annonces', ...Array.from({ length: chunks }, (_, i) => `adresses-${i}`)]
+  return ['pages', 'categories', 'professionnels', 'annonces', ...Array.from({ length: chunks }, (_, i) => `adresses-${i}`)]
 }
 
 /** Adresses d’un fichier du plan, ou null si le nom est inconnu. */
@@ -43,6 +44,13 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
     const services = SERVICE_CATEGORIES.map((c) => `/services/${c.value}`)
     const classifieds = CLASSIFIED_CATEGORIES.map((c) => `/annonces/${c.value}`)
     return [...new Set([...content, ...DEDICATED, ...sectors, ...cities, ...services, ...classifieds])].map((p) => url(p))
+  }
+  // Pages « catégorie » (toutes : jamais vides) et « catégorie × wilaya » (seulement avec au moins une adresse).
+  if (file === 'categories') {
+    const counts = await getCategoryWilayaCounts()
+    const all = SECTORS.flatMap((s) => s.categories.map((c) => categoryPath(s.slug, c)))
+    const local = counts.filter((c) => c.wilaya && c.n > 0 && SECTORS.some((s) => s.slug === c.sector && s.categories.includes(c.category))).map((c) => categoryPath(c.sector, c.category, c.wilaya))
+    return [...new Set([...all, ...local])].map((p) => url(p))
   }
   if (file === 'professionnels') {
     const [practitioners, providers] = await Promise.all([getPractitionerSitemap().catch(() => []), getProviderSitemap().catch(() => [])])

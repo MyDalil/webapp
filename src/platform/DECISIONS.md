@@ -17,3 +17,10 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - 2026-10-23 — lint : configuration native Next 16 (`@eslint/eslintrc` absent cassait `pnpm lint`), dans la CI ; `react-hooks/set-state-in-effect` en avertissement (lecture du navigateur après hydratation, voulue).
 - 2026-10-23 — suivi des erreurs dans Neon (`error-logs`) avec alerte email, au lieu de Sentry — aucun compte tiers, données dans l’infrastructure existante, consultation dans /admin ; testé de bout en bout (Playwright + base).
 - 2026-10-24 — sauvegardes quotidiennes chiffrées vers Vercel Blob (store public : fichiers chiffrés, chemins aléatoires) + restauration scriptée, testée à chaque CI — une sauvegarde jamais restaurée ne compte pas ; aucun nouveau compte.
+
+## 2026-10-26 — Index de recherche dans le socle
+- `platform/search/store.ts` (écriture, requête) et `rebuild.ts` (reconstruction) : le socle ne connaît aucun métier ; chaque métier fournit ses lignes.
+- Migration `20261026_190000_index_recherche` : extensions `unaccent`, `pg_trgm`, fonction immuable `dalil_unaccent`, table hors schéma Payload.
+
+## 2026-10-26 — Commune mal étiquetée corrigée
+- Le chef-lieu de la wilaya 34 (Q544733, 36,07 N ; 4,77 E) portait le nom « Alger » dans le référentiel des communes (libellé faux dans Wikidata). Corrigé en « Bordj Bou Arréridj » (`34-bordj-bou-arreridj`), et dans `scripts/import/fetch-communes.mjs` (table `CORRECTIONS`) pour survivre à un nouvel import.

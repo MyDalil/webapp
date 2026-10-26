@@ -25,6 +25,10 @@ import * as migration_20261017_230000_import_osm from './20261017_230000_import_
 import * as migration_20261021_082159_annonces from './20261021_082159_annonces';
 import * as migration_20261023_071938_erreurs_du_site from './20261023_071938_erreurs_du_site';
 import * as migration_20261024_180000_postgis_places from './20261024_180000_postgis_places';
+import * as migration_20261026_174159_exemples from './20261026_174159_exemples';
+import * as migration_20261026_175000_exemples_annonces from './20261026_175000_exemples_annonces';
+import * as migration_20261026_175100_exemples_prestataires from './20261026_175100_exemples_prestataires';
+import * as migration_20261026_190000_index_recherche from './20261026_190000_index_recherche';
 
 export const migrations = [
   {
@@ -155,11 +159,31 @@ export const migrations = [
   {
     up: migration_20261023_071938_erreurs_du_site.up,
     down: migration_20261023_071938_erreurs_du_site.down,
-    name: '20261023_071938_erreurs_du_site'
+    name: '20261023_071938_erreurs_du_site',
   },
   {
     up: migration_20261024_180000_postgis_places.up,
     down: migration_20261024_180000_postgis_places.down,
     name: '20261024_180000_postgis_places',
+  },
+  {
+    up: migration_20261026_174159_exemples.up,
+    down: migration_20261026_174159_exemples.down,
+    name: '20261026_174159_exemples'
+  },
+  {
+    up: migration_20261026_175000_exemples_annonces.up,
+    down: migration_20261026_175000_exemples_annonces.down,
+    name: '20261026_175000_exemples_annonces',
+  },
+  {
+    up: migration_20261026_175100_exemples_prestataires.up,
+    down: migration_20261026_175100_exemples_prestataires.down,
+    name: '20261026_175100_exemples_prestataires',
+  },
+  {
+    up: migration_20261026_190000_index_recherche.up,
+    down: migration_20261026_190000_index_recherche.down,
+    name: '20261026_190000_index_recherche',
   },
 ];
