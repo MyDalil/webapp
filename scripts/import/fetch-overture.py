@@ -5,12 +5,12 @@ import duckdb, gzip, json, os, urllib.request, collections
 
 OUT = 'src/modules/annuaire/data'
 os.makedirs(OUT, exist_ok=True)
-cat = json.load(urllib.request.urlopen('https://stac.overturemaps.org/catalog.json'))
-release = cat.get('latest') or sorted(l['href'].split('/')[1] for l in cat['links'] if l.get('rel') == 'child')[-1]
-release = release.strip('./').split('/')[0]
-print('version Overture', release)
 con = duckdb.connect()
 con.sql("INSTALL httpfs; LOAD httpfs; SET s3_region='us-west-2';")
+# Dernière version publiée : dossiers release/AAAA-MM-JJ.N/ du compartiment public.
+files = [r[0] for r in con.sql("SELECT file FROM glob('s3://overturemaps-us-west-2/release/*/theme=places/type=place/*')").fetchall()]
+release = sorted({f.split('/release/')[1].split('/')[0] for f in files})[-1]
+print('version Overture', release, 'fichiers', len(files), flush=True)
 src = f"s3://overturemaps-us-west-2/release/{release}/theme=places/type=place/*"
 cols = [r[0] for r in con.sql(f"DESCRIBE SELECT * FROM read_parquet('{src}', hive_partitioning=1) LIMIT 1").fetchall()]
 print('colonnes', cols)
