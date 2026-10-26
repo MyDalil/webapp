@@ -137,7 +137,7 @@ for await (const line of rl) {
     address: typeof addr.freeform === 'string' && addr.freeform.length > 3 ? addr.freeform : null,
   }
   // Même lieu déjà dans DALIL : on complète seulement ce qui manque.
-  const twin = around(grid, p).find((e) => km(p, e) < 0.08 && (similar(e.name, name) || similar(e.nameAr, name) || (e.category === category && km(p, e) < 0.03)))
+  const twin = around(grid, p).find((e) => km(p, e) < 0.08 && (similar(e.name, name) || similar(e.nameAr, name) || (e.category === category && km(p, e) < (religious ? 0.15 : 0.03))))
   if (twin) {
     if (!String(twin.id).startsWith('ovt:')) {
       const fill = Object.fromEntries(Object.entries(facts).filter(([k, v]) => v && !twin[k]))
@@ -155,7 +155,6 @@ for await (const line of rl) {
     id,
     provider: 'overture',
     name,
-    nameAr: ar ? name : null,
     sector,
     category,
     wilaya: w.name,
