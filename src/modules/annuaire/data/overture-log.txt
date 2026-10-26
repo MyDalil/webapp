@@ -1,0 +1,4 @@
+version Overture 2026-10-21.0 fichiers 48
+colonnes ['id', 'geometry', 'confidence', 'websites', 'emails', 'socials', 'phones', 'brand', 'addresses', 'names', 'sources', 'operating_status', 'basic_category', 'taxonomy', 'version', 'bbox', 'theme', 'type']
+lignes dans le cadre 118095
+Algérie 118095 mosquées 1409
