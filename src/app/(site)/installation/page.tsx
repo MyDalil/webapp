@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Icon } from '@/components/Icon'
-import { Legacy } from '@/components/Legacy'
+import { Icon } from '@/platform/ui/Icon'
+import { Legacy } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
   title: 'S’installer & Vivre en Algérie',

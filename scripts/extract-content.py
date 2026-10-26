@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Convertit les flux RSC du prototype DALIL (public/**/*.rsc) en arbres JSON
-rendus par Next.js (src/content/pages/*.json).
+rendus par Next.js (src/modules/contenus/pages/*.json).
 
 Format d'un nœud :
   "texte" | nombre | null

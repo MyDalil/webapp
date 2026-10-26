@@ -1,0 +1,72 @@
+name: CI
+# Contrôles obligatoires avant fusion (règles de branche sur `preview` et `main`) :
+# frontières + types, tests unitaires, base neuve migrée, build complet, parcours essentiels (ordinateur + mobile).
+on:
+  pull_request:
+    branches: [preview, main]
+  push:
+    branches: [preview]
+  workflow_dispatch:
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  verifier:
+    name: Frontières, types et tests unitaires
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm lint
+      - run: pnpm test
+
+  parcours:
+    name: Build et parcours essentiels
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        # Même moteur que Neon (Postgres + PostGIS) ; base vide : toutes les migrations sont rejouées depuis zéro.
+        image: postgis/postgis:16-3.4
+        env: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: dalil }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DALIL_DATABASE_URL: postgres://postgres:postgres@localhost:5432/dalil
+      PAYLOAD_SECRET: ci-secret-sans-valeur
+      NEXT_PUBLIC_SITE_URL: https://www.mydalil.com
+      DALIL_TEST_ERRORS: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Migrations (schéma puis données différées)
+        run: pnpm payload migrate && pnpm migrate:data
+      - name: Sauvegarde puis restauration dans une base neuve
+        run: |
+          pnpm exec tsx scripts/backup.ts /tmp/sauvegarde
+          PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE DATABASE restauration'
+          export DALIL_DATABASE_URL=postgres://postgres:postgres@localhost:5432/restauration
+          pnpm payload migrate
+          pnpm exec tsx scripts/restore-backup.ts /tmp/sauvegarde
+          a=$(PGPASSWORD=postgres psql -h localhost -U postgres -d dalil -tAc 'SELECT count(*) FROM places')
+          b=$(PGPASSWORD=postgres psql -h localhost -U postgres -d restauration -tAc 'SELECT count(*) FROM places')
+          echo "fiches : $a → $b"; [ "$a" = "$b" ] && [ "$a" -gt 0 ]
+      - name: Build
+        run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Parcours essentiels
+        run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: rapport-playwright, path: playwright-report, retention-days: 7 }

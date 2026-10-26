@@ -1,4 +1,4 @@
-import { fail } from '@/lib/site'
+import { fail } from '@/platform/http'
 
 // L’administration se fait désormais dans /admin (Payload, sur Neon).
 const denied = () => fail('Administration disponible sur /admin.', 401)

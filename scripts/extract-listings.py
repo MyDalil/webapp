@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extrait les fiches d'adresses du prototype (src/content/pages/adresses__*.json) vers src/content/listings.json."""
+"""Extrait les fiches d'adresses du prototype (src/modules/contenus/pages/adresses__*.json) vers src/modules/annuaire/listings.json."""
 import glob, json, os, re
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 
@@ -20,7 +20,7 @@ def find(nodes, pred, acc):
     return acc
 
 listings = []
-for f in sorted(glob.glob(os.path.join(ROOT, 'src/content/pages/adresses__*.json'))):
+for f in sorted(glob.glob(os.path.join(ROOT, 'src/modules/contenus/pages/adresses__*.json'))):
     slug = os.path.basename(f)[len('adresses__'):-5]
     c = json.load(open(f))['content']
     h1 = find(c, lambda n: n[0] == 'el' and n[1] == 'h1', [])[0]
@@ -46,5 +46,5 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'src/content/pages/adresses__*.json
         'source': src[0][2]['href'] if src else None,
         'updated': updated.group(1) if updated else None,
     })
-json.dump(listings, open(os.path.join(ROOT, 'src/content/listings.json'), 'w'), ensure_ascii=False, indent=1)
+json.dump(listings, open(os.path.join(ROOT, 'src/modules/annuaire/listings.json'), 'w'), ensure_ascii=False, indent=1)
 print(len(listings), 'fiches'); print(json.dumps(listings[0], ensure_ascii=False)[:500])

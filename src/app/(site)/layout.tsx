@@ -9,12 +9,21 @@ import '@fontsource/manrope/700.css'
 import '@/styles/legacy.css'
 import '@/styles/mockup.css'
 import '@/styles/site.css'
-import { Header } from '@/components/shell/Header'
-import { Assistant } from '@/components/shell/Assistant'
-import { LoginDialog } from '@/components/shell/LoginDialog'
-import { Toast } from '@/components/shell/Toast'
-import { Tree } from '@/components/Tree'
-import { SHELL } from '@/content'
+import '@/styles/experience.css'
+import '@/styles/sante.css'
+import '@/styles/services.css'
+import '@/styles/annonces.css'
+import '@/styles/smart-text.css'
+import '@/styles/nav.css'
+import '@/styles/polish.css'
+import { Header } from '@/platform/shell/Header'
+import { Assistant } from '@/modules/recherche/ui'
+import { LoginDialog } from '@/platform/shell/LoginDialog'
+import { Toast } from '@/platform/shell/Toast'
+import { Motion } from '@/platform/ui/Motion'
+import { JoinCircle } from '@/platform/shell/JoinCircle'
+import { Tree } from '@/modules/contenus/ui'
+import { SHELL } from '@/modules/contenus'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://mydalil.com'
 
@@ -56,6 +65,8 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Assistant />
         <Toast />
+        <Motion />
+        <JoinCircle />
         <LoginDialog />
       </body>
     </html>

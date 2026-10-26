@@ -1,21 +1,19 @@
 import type { Metadata } from 'next'
-import { getPage, type Node } from '@/content'
-import { SECTORS } from '@/content/catalog'
-import { LISTINGS, cityPhoto } from '@/content/listings'
-import { Directory } from '@/components/Directory'
-import { Tree } from '@/components/Tree'
+import Link from 'next/link'
+import { SECTORS } from '@/platform/referentiel/catalog'
+import { searchPlaces } from '@/modules/annuaire'
+import { Directory } from '@/modules/annuaire/ui'
 
 export const metadata: Metadata = {
   title: 'Annuaire & Adresses',
   description: 'Des lieux utiles et des professionnels présentés avec des critères lisibles, secteur par secteur.',
 }
 
-const cls = (n: Node) => (Array.isArray(n) && n[0] === 'el' ? String(n[2].className ?? '') : '')
+/** Rafraîchi à chaque enregistrement dans /admin ; filet de sécurité toutes les 5 minutes. */
+export const revalidate = 300
 
 export default async function AnnuairePage() {
-  const page = await getPage('/annuaire')
-  const sectors = (page?.content ?? []).filter((n) => !cls(n).includes('subpage-hero'))
-  const photos = Object.fromEntries(LISTINGS.map((l) => [l.slug, cityPhoto(l.city)]))
+  const { places, total } = await searchPlaces({})
   return (
     <>
       <section className="page-intro container compact">
@@ -23,9 +21,30 @@ export default async function AnnuairePage() {
         <h1>Trouvez une adresse qui vous correspond.</h1>
         <p>Des lieux utiles et des professionnels présentés avec des critères lisibles. Choisissez un secteur ou recherchez directement.</p>
       </section>
-      <Directory listings={LISTINGS} sectors={SECTORS.map(({ slug, title }) => ({ slug, title }))} photos={photos} />
+      <Directory places={places} total={total} sectors={SECTORS.map(({ slug, title, categories }) => ({ slug, title, categories }))} />
+      {/* Cartes secteurs du prototype (même balisage), générées depuis le catalogue pour rester synchronisées. */}
       <div className="legacy">
-        <Tree nodes={sectors} />
+        <section className="shell discovery-grid">
+          {SECTORS.map((s, i) => (
+            <article key={s.slug}>
+              <span className="section-label">{String(i + 1).padStart(2, '0')}</span>
+              <h2>
+                <Link href={`/annuaire/${s.slug}`}>{s.title}</Link>
+              </h2>
+              <p>{s.description}</p>
+              <ul>
+                {s.categories.map((c) => (
+                  <li key={c}>
+                    <Link href={`/annuaire/${s.slug}?category=${encodeURIComponent(c)}`}>
+                      {c}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
       </div>
     </>
   )

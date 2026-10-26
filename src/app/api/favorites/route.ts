@@ -1,4 +1,6 @@
-import { clean, fail, json, pathFor, readSession, saveSession } from '@/lib/site'
+import { clean, fail, json } from '@/platform/http'
+import { pathFor, readSession, saveSession } from '@/modules/membres'
+import { guard } from '@/platform/security/rateLimit'
 
 export async function GET(req: Request) {
   const url = new URL(req.url)
@@ -9,6 +11,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const limited = await guard('favoris', 120, 3600)
+  if (limited) return limited
   const s = await readSession()
   if (!s) return fail('Connectez-vous pour enregistrer.', 401)
   const body = await req.json().catch(() => ({}))
@@ -23,6 +27,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const limited = await guard('favoris', 120, 3600)
+  if (limited) return limited
   const s = await readSession()
   if (!s) return fail('Connectez-vous pour modifier vos favoris.', 401)
   const body = await req.json().catch(() => ({}))
