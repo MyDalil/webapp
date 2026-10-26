@@ -19,6 +19,7 @@ rows = con.sql(f"""
   SELECT {', '.join(keep)}, (bbox.xmin + bbox.xmax) / 2 AS lng, (bbox.ymin + bbox.ymax) / 2 AS lat
   FROM read_parquet('{src}', hive_partitioning=1)
   WHERE bbox.xmin > -8.7 AND bbox.xmax < 12.0 AND bbox.ymin > 18.9 AND bbox.ymax < 37.2
+    AND (addresses IS NULL OR len(addresses) = 0 OR addresses[1].country = 'DZ')
 """).fetchdf()
 print('lignes dans le cadre', len(rows))
 def js(v):
