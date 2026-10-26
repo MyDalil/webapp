@@ -1,6 +1,7 @@
 import type { Payload, PayloadRequest } from 'payload'
 import { sql } from '@payloadcms/db-postgres'
 import { scorePlace } from './ranking'
+import { exclusionReason } from './exclusions'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 /** Fiche prête à importer (recherche documentaire ou OpenStreetMap). Faits seulement, textes rédigés par DALIL. */
@@ -97,7 +98,8 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
   const pending: Record<string, unknown>[] = []
   for (const r of records) {
     const wilaya = code(r.wilaya)
-    if (!wilaya || !r.name || !r.city && !r.wilaya) {
+    // Lieux exclus de DALIL (musique, zaouïas, chiisme, alcool) : jamais importés.
+    if (!wilaya || !r.name || !r.city && !r.wilaya || exclusionReason(r)) {
       skipped++
       continue
     }

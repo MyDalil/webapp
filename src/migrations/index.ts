@@ -32,6 +32,7 @@ import * as migration_20261026_190000_index_recherche from './20261026_190000_in
 import * as migration_20261026_203255_faits_lieux from './20261026_203255_faits_lieux';
 import * as migration_20261026_213000_faits_lieux_donnees from './20261026_213000_faits_lieux_donnees';
 import * as migration_20261026_230000_retraits from './20261026_230000_retraits';
+import * as migration_20261026_235900_suppression_retraits from './20261026_235900_suppression_retraits';
 
 export const migrations = [
   {
@@ -203,5 +204,10 @@ export const migrations = [
     up: migration_20261026_230000_retraits.up,
     down: migration_20261026_230000_retraits.down,
     name: '20261026_230000_retraits'
+  },
+  {
+    up: migration_20261026_235900_suppression_retraits.up,
+    down: migration_20261026_235900_suppression_retraits.down,
+    name: '20261026_235900_suppression_retraits'
   },
 ];
