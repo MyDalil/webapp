@@ -14,10 +14,10 @@ export const dynamicParams = false
 export const revalidate = 3600
 
 /** Routes ayant une page dédiée au format de la maquette. */
-const DEDICATED = ['/', '/recherche', '/annuaire', '/label', '/proposer', '/installation']
+const DEDICATED = ['/', '/recherche', '/annuaire', '/label', '/proposer', '/installation', '/explorer', '/vie-pratique', '/business-emploi', '/demarches']
 
 export function generateStaticParams() {
-  return ROUTES.filter((r) => !DEDICATED.includes(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/')).map((r) => ({ slug: r.slice(1).split('/') }))
+  return ROUTES.filter((r) => !DEDICATED.includes(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/') && r !== '/guides' && !r.startsWith('/guides/')).map((r) => ({ slug: r.slice(1).split('/') }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

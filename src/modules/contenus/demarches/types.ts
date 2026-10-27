@@ -15,6 +15,8 @@ export type Demarche = {
   tone: Tone
   /** Illustration de la fiche (public/images/demarches). */
   image: string
+  /** Crédit de la photo (auteur · licence), absent pour une illustration DALIL. */
+  credit?: string
   /** Une phrase sous le titre des cartes. */
   summary: string
   lead: string

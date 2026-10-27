@@ -69,6 +69,7 @@ export default async function DemarchePage({ params }: Props) {
           <Link href="/demarches" className="dm-round" aria-label="Retour aux démarches">
             ‹
           </Link>
+          {d.credit && <small className="dm-credit">{d.credit}</small>}
         </div>
         <div className="dm-hero-text">
           <h1>{d.title}</h1>

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { listPacks } from '@/modules/accompagnement'
 import { Transparency, Why } from '@/modules/accompagnement/ui'
+import { Icon } from '@/platform/ui/Icon'
 
 export const metadata: Metadata = {
   title: 'Accompagnement aux démarches · DALIL',
@@ -29,7 +30,9 @@ export default async function Accompagnement() {
           {packs.map((p) => (
             <li key={p.slug}>
               <Link href={`/accompagnement/${p.slug}`} className="sr-row is-wrap">
-                <span className="sr-icon" aria-hidden="true">★</span>
+                <span className="sr-icon" aria-hidden="true">
+                  <Icon name="check" />
+                </span>
                 <span className="sr-text">
                   <b>{p.demarche}</b>
                   <small>{p.summary}</small>

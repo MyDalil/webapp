@@ -98,6 +98,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
     }
   }, [scope]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const [showFilters, setShowFilters] = useState(false)
   const scoped = useMemo(() => filterPlaces(places, { sector, wilaya }), [places, sector, wilaya])
   const wilayas = useMemo(() => WILAYAS.filter((w) => !w.transition).map((w) => w.name).sort((a, b) => a.localeCompare(b, 'fr')), [])
   const cities = useMemo(() => [...new Set(scoped.map((p) => p.city))].sort((a, b) => a.localeCompare(b, 'fr')), [scoped])
@@ -126,6 +127,11 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nom, lieu, métier…" />
           </div>
         </label>
+        {/* Mobile : les filtres se replient derrière un bouton pour montrer les résultats tout de suite. */}
+        <button type="button" className="filter-toggle" aria-expanded={showFilters} aria-controls="directory-filters" onClick={() => setShowFilters((v) => !v)}>
+          <Icon name="list" /> {showFilters ? 'Masquer les filtres' : 'Filtres'}
+        </button>
+        <div id="directory-filters" className={`filter-fields${showFilters ? ' is-open' : ''}`}>
         {!lockSector && (
           <label>
             Secteur
@@ -221,6 +227,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
             <option value="recent">Mises à jour récentes</option>
           </select>
         </label>
+        </div>
         <Link className="button primary wide" href="/proposer">
           Proposer une adresse
         </Link>

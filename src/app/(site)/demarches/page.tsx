@@ -6,16 +6,32 @@ import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
 import { HubHero } from '@/platform/ui/HubHero'
+import { Visual } from '@/platform/ui/Visual'
+import type { PhotoKey } from '@/platform/referentiel/photos'
 import { NearMe } from '@/modules/recherche/ui'
 import { offerState, packsByGuide } from '@/modules/accompagnement'
 import { SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
-import { DEMARCHES, DEMARCHE_CATEGORIES } from '@/modules/contenus'
+import { DEMARCHES, DEMARCHE_CATEGORIES, GUIDE_VISUALS } from '@/modules/contenus'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
   description: 'Documents et papiers, administrations, création d’entreprise, installation, ambassades et contacts utiles : les bons interlocuteurs et les pièces à préparer.',
 }
 export const revalidate = 3600
+
+/** Photo réelle de chaque entrée « essentielle » (seulement si elle montre le sujet). */
+const ESSENTIAL_PHOTO: Record<string, PhotoKey | undefined> = {
+  'Documents & papiers': 'mairie',
+  Administrations: 'mairie-blida',
+  'S’installer depuis l’étranger': 'aeroport',
+  'Ambassades & consulats': 'ambassade',
+  'Urgences & contacts utiles': 'protection-civile',
+}
+const HELP = [
+  { icon: 'list', title: 'Quoi faire, dans quel ordre', text: 'Chaque guide découpe la démarche en étapes simples, avec ses sources officielles.' },
+  { icon: 'clipboard', title: 'Les pièces à préparer', text: 'La liste des documents à réunir avant de vous déplacer ou de remplir un formulaire.' },
+  { icon: 'pin', title: 'Où aller', text: 'Le site officiel pour le faire en ligne, ou l’administration la plus proche de chez vous.' },
+]
 
 /** Guides utiles aux démarches (référentiel), dans l’ordre d’un parcours d’installation. */
 const GUIDE_ORDER = ['documents-et-demarches', 'preparer-son-installation', 'travail-et-entreprise', 'budget-et-banque', 'logement', 'ecole-et-famille', 'sante', 'transport', 'internet-et-telecoms', 'choisir-sa-ville']
@@ -124,41 +140,36 @@ export default async function Demarches() {
 
       <section className="sr-group" aria-label="Comment DALIL vous aide">
         <h2>Comment DALIL vous aide</h2>
-        <ul className="sr-steps swipe">
-          <li>
-            <b>Quoi faire, dans quel ordre</b>
-            <small>Chaque guide découpe la démarche en étapes simples, avec ses sources officielles.</small>
-          </li>
-          <li>
-            <b>Les pièces à préparer</b>
-            <small>La liste des documents à réunir avant de vous déplacer ou de remplir un formulaire.</small>
-          </li>
-          <li>
-            <b>Où aller</b>
-            <small>Le site officiel pour le faire en ligne, ou l’administration la plus proche de chez vous.</small>
-          </li>
+        <ul className="sr-steps swipe dm-help">
+          {HELP.map((h, i) => (
+            <li key={h.title}>
+              <span className={`dm-key-icon is-${['ciel', 'sable', 'violet'][i]}`} aria-hidden="true">
+                <Icon name={h.icon} />
+              </span>
+              <b>{h.title}</b>
+              <small>{h.text}</small>
+            </li>
+          ))}
         </ul>
         <p className="sr-note">Les démarches se font gratuitement sur les sites de l’État. DALIL ne vous demande jamais vos identifiants ni vos codes.</p>
       </section>
 
       <section className="sr-group" aria-label="Les essentiels">
         <h2>Les essentiels</h2>
-        <ul className="sr-list">
-          {entries.map((e, i) => (
-            <li key={e.href}>
-              <Link href={e.href} className="sr-row is-wrap">
-                <span className={`sr-icon is-${TONES[i % TONES.length]}`} aria-hidden="true">
-                  <Icon name={e.icon} />
+        <ul className="dm-cards swipe">
+          {entries.map((e) => (
+            <li key={e.href} className="dm-card">
+              <Link href={e.href} className="dm-card-main">
+                <span className="dm-card-media">
+                  <Visual photo={ESSENTIAL_PHOTO[e.title]} icon={e.icon} tone="vert" />
+                  <span className="dm-card-overlay">
+                    <b>{e.title}</b>
+                    {e.count ? <small>{e.count.toLocaleString('fr-FR')} adresses</small> : null}
+                  </span>
                 </span>
-                <span className="sr-text">
-                  <b>{e.title}</b>
-                  <small>
-                    {e.sub}
-                    {e.count ? ` · ${e.count.toLocaleString('fr-FR')} adresses` : ''}
-                  </small>
+                <span className="dm-card-text">
+                  <small>{e.sub}</small>
                 </span>
-                <span />
-                <span className="sr-chev" aria-hidden="true">›</span>
               </Link>
             </li>
           ))}
@@ -193,22 +204,26 @@ export default async function Demarches() {
 
       <section className="sr-group" id="guides" aria-label="Guides pratiques">
         <h2>Guides pratiques</h2>
-        <ul className="sr-list">
-          {guides.map((g, i) => (
-            <li key={g.href}>
-              <Link href={g.href} className="sr-row is-wrap">
-                <span className={`sr-icon is-${TONES[(i + 2) % TONES.length]}`} aria-hidden="true">
-                  <Icon name={g.icon} />
-                </span>
-                <span className="sr-text">
-                  <b>{g.title}</b>
-                  <small>{g.summary}</small>
-                </span>
-                <span className="ac-free">Guide gratuit</span>
-                <span className="sr-chev" aria-hidden="true">›</span>
-              </Link>
-            </li>
-          ))}
+        <ul className="dm-cards swipe">
+          {guides.map((g) => {
+            const v = GUIDE_VISUALS[g.href.split('/').pop() ?? ''] ?? { icon: g.icon, tone: 'vert' as const }
+            return (
+              <li key={g.href} className="dm-card">
+                <Link href={g.href} className="dm-card-main">
+                  <span className="dm-card-media">
+                    <Visual photo={v.photo} icon={v.icon} tone={v.tone} />
+                    <span className="dm-card-overlay">
+                      <b>{g.title}</b>
+                    </span>
+                    <span className="dm-card-badge">Guide gratuit</span>
+                  </span>
+                  <span className="dm-card-text">
+                    <small>{g.summary}</small>
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
         </ul>
       </section>
 
