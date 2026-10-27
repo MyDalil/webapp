@@ -32,7 +32,7 @@ export function JoinCircle() {
   // Résultats de recherche aussi : la bulle masquait les dernières fiches sur mobile.
   if (hidden || detail || pathname?.startsWith('/connexion') || pathname?.startsWith('/recherche')) return null
   return (
-    <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}`} aria-label="Créer mon compte gratuitement">
+    <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}${pathname === '/' ? ' is-home' : ''}`} aria-label="Créer mon compte gratuitement">
       <span>
         Créer
         <br />
