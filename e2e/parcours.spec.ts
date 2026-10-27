@@ -187,6 +187,14 @@ test.describe('Recherche complète', () => {
   })
 })
 
+test('démarches : deux options sur la démarche à la une (hors production)', async ({ page, baseURL }) => {
+  test.skip(/mydalil\.com/.test(baseURL ?? ''), 'offre cachée en production')
+  await page.goto('/demarches')
+  await expect(page.getByText(/portail d’information indépendant/).first()).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Accéder au guide gratuit' }).first()).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Pack Accompagnement Premium' }).first()).toBeVisible()
+})
+
 test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est ouvert', async ({ page }) => {
   const errors = watchErrors(page)
   await page.goto('/demarches/ccr')

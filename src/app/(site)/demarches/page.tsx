@@ -7,8 +7,8 @@ import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
 import { HubHero } from '@/platform/ui/HubHero'
 import { NearMe } from '@/modules/recherche/ui'
-import { packsByGuide } from '@/modules/accompagnement'
-import { Transparency, Why } from '@/modules/accompagnement/ui'
+import { packForGuide, packsByGuide } from '@/modules/accompagnement'
+import { Choice, Transparency, Why } from '@/modules/accompagnement/ui'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -47,12 +47,23 @@ export default async function Demarches() {
   ]
   // Packs d’accompagnement (vide tant que l’offre est cachée).
   const packs = await packsByGuide()
+  const ccr = await packForGuide('/demarches/ccr')
   return (
     <>
     <HubHero eyebrow="Démarches" title="Vos démarches, étape par étape." lead="DALIL vous guide : quoi faire, quelles pièces préparer, où aller." photo={hero.cover} credit={`${hero.name} · ${hero.credit}`}>
       <NearMe text="administration" label="Administrations autour de moi" className="near-me-home" />
     </HubHero>
     <section className="sr" aria-label="Démarches">
+      {ccr && (
+        <section className="sr-group" aria-label="Démarche à la une">
+          <h2>
+            Rentrer vivre en Algérie <small>· certificat de changement de résidence (CCR)</small>
+          </h2>
+          <Transparency />
+          <Choice pack={ccr} freeHref="/demarches/ccr" freeNote="Conditions, véhicule, étapes, liens officiels et sources datées." />
+        </section>
+      )}
+
       <section className="sr-group" aria-label="Comment DALIL vous aide">
         <h2>Comment DALIL vous aide</h2>
         <ul className="sr-steps">
@@ -151,12 +162,7 @@ export default async function Demarches() {
         </ul>
       </section>
 
-      {packs.size > 0 && (
-        <>
-          <Transparency />
-          <Why />
-        </>
-      )}
+      {packs.size > 0 && <Why />}
 
       <p className="sr-note">
         Une démarche manque, ou une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.
