@@ -60,3 +60,20 @@ html[data-theme="dark"] .sr-icon.is-guide { background: rgba(109, 40, 217, .2); 
 .sr-row.is-wrap .sr-text small, .sr-row.is-wrap .sr-text b { white-space: normal; }
 .sr-note a { color: var(--green); font-weight: 650; }
 .sr-site { display: inline-block; color: var(--green); font-weight: 650; white-space: nowrap; }
+
+/* En-tête des pages de rubrique (platform/ui/HubHero) */
+.hub-hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; min-height: clamp(300px, 46vh, 420px); overflow: hidden; background: #0b1410 linear-gradient(135deg, #0b2a1c, #0b1410); color: #fff; }
+.hub-hero-img { position: absolute; inset: 0; z-index: -2; background: center / cover no-repeat; }
+.hub-hero-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(5, 12, 9, .15) 0%, rgba(5, 12, 9, .25) 40%, rgba(5, 12, 9, .82) 100%); }
+.hub-hero-content { width: min(860px, calc(100% - 32px)); margin: 0 auto; padding: 72px 0 30px; display: grid; gap: 8px; }
+.hub-eyebrow { margin: 0; color: #9be3bd; font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.hub-hero h1 { margin: 0; max-width: 22ch; color: #fff; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.12; letter-spacing: -.025em; text-wrap: balance; }
+.hub-lead { margin: 0; max-width: 56ch; color: rgba(255, 255, 255, .88); font-size: 1rem; line-height: 1.55; }
+.hub-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.hub-credit { position: absolute; right: 12px; bottom: 8px; color: rgba(255, 255, 255, .72); font-size: .68rem; }
+/* « Comment DALIL vous aide » : trois repères courts */
+.sr-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.sr-steps li { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.sr-steps b { font-size: .98rem; }
+.sr-steps small { color: var(--muted); font-size: .86rem; line-height: 1.45; }
+@media (max-width: 640px) { .sr-steps { grid-template-columns: 1fr; } .hub-hero-content { padding-top: 56px; } }

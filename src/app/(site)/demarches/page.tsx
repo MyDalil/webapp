@@ -5,6 +5,8 @@ import { OFFICIAL_SITES, OFFICIAL_SITES_CHECKED } from '@/modules/contenus'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
+import { HubHero } from '@/platform/ui/HubHero'
+import { NearMe } from '@/modules/recherche/ui'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -32,16 +34,33 @@ export default async function Demarches() {
       return { href, icon: ICON[icon] ?? 'file', title, sub, count: r?.total ?? null }
     }),
   )
+  // Photo d’en-tête : baie d’Alger (photo du site, créditée — voir /credits-photos).
+  const hero = { cover: '/images/algeria/alger.webp', credit: 'Photo : Manini row · CC BY-SA 4.0', name: 'Baie d’Alger' }
   const guides = GUIDE_ORDER.map((s) => GUIDES.find((g) => g.slug === s)).filter((g): g is (typeof GUIDES)[number] => Boolean(g))
   return (
-    <section className="sr" aria-labelledby="demarches-titre">
-      <header className="sr-head">
-        <p className="sr-eyebrow">Démarches</p>
-        <h1 id="demarches-titre">Vos démarches, étape par étape.</h1>
-        <p className="sr-meta">
-          DALIL vous aide à chaque démarche : quoi faire et dans quel ordre, quelles pièces préparer, sur quel site officiel la faire en ligne, et quelle administration contacter près de chez vous. Les démarches en ligne se font sur les sites de l’État, sans intermédiaire : DALIL ne vous demande jamais de payer une démarche ni vos identifiants.
-        </p>
-      </header>
+    <>
+    <HubHero eyebrow="Démarches" title="Vos démarches, étape par étape." lead="DALIL vous guide : quoi faire, quelles pièces préparer, où aller." photo={hero.cover} credit={`${hero.name} · ${hero.credit}`}>
+      <NearMe text="administration" label="Administrations autour de moi" className="near-me-home" />
+    </HubHero>
+    <section className="sr" aria-label="Démarches">
+      <section className="sr-group" aria-label="Comment DALIL vous aide">
+        <h2>Comment DALIL vous aide</h2>
+        <ul className="sr-steps">
+          <li>
+            <b>Quoi faire, dans quel ordre</b>
+            <small>Chaque guide découpe la démarche en étapes simples, avec ses sources officielles.</small>
+          </li>
+          <li>
+            <b>Les pièces à préparer</b>
+            <small>La liste des documents à réunir avant de vous déplacer ou de remplir un formulaire.</small>
+          </li>
+          <li>
+            <b>Où aller</b>
+            <small>Le site officiel pour le faire en ligne, ou l’administration la plus proche de chez vous.</small>
+          </li>
+        </ul>
+        <p className="sr-note">Les démarches en ligne se font sur les sites de l’État, sans intermédiaire : DALIL ne vous demande jamais de payer une démarche ni vos identifiants.</p>
+      </section>
 
       <section className="sr-group" aria-label="Les essentiels">
         <h2>Les essentiels</h2>
@@ -118,5 +137,6 @@ export default async function Demarches() {
         Une démarche manque, ou une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.
       </p>
     </section>
+    </>
   )
 }

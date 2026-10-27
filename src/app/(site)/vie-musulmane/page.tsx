@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { searchPlaces } from '@/modules/annuaire'
 import { NearMe } from '@/modules/recherche/ui'
 import { RUBRICS } from '@/platform/shell/nav'
+import { HubHero } from '@/platform/ui/HubHero'
 
 export const metadata: Metadata = {
   title: 'Vie musulmane en Algérie · DALIL',
@@ -22,24 +23,17 @@ export default async function VieMusulmane() {
       const category = new URL(href, 'https://www.mydalil.com').searchParams.get('category')
       const r = category ? await searchPlaces({ sector: 'mosquees-priere', category }, 1) : null
       const p = r?.places[0]
-      return { href, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') ? p.photo : null }
+      return { href, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') ? p.photo : null, cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
     }),
   )
-  const hero = tiles.find((t) => t.photo)?.photo
+  // Photo d’en-tête : seulement une photo libre créditée (licence).
+  const pick = tiles.find((t) => t.credit && t.cover)
+  const hero = pick ? { photo: pick.cover, credit: pick.credit, name: pick.name } : null
   return (
     <div className="xp">
-      <section className="xp-hero xp-hero-city">
-        {hero && <div className="xp-hero-img" style={{ backgroundImage: `url(${hero})` }} />}
-        <div className="xp-hero-shade" />
-        <div className="xp-hero-content container">
-          <p className="eyebrow inverse">Vie musulmane</p>
-          <h1>Prier, apprendre, s’entraider.</h1>
-          <p className="xp-lead">Mosquées et salles de prière, enseignement coranique, Hajj et Omra, librairies, entraide et funérailles, partout en Algérie.</p>
-          <div className="vm-actions">
-            <NearMe text="mosquée" label="Mosquées autour de moi" className="near-me-home" />
-          </div>
-        </div>
-      </section>
+      <HubHero eyebrow="Vie musulmane" title="Prier, apprendre, s’entraider." lead="Mosquées, enseignement coranique, Hajj et Omra, librairies, entraide et funérailles, partout en Algérie." photo={hero?.photo} credit={hero ? `${hero.name} · ${hero.credit}` : null}>
+        <NearMe text="mosquée" label="Mosquées autour de moi" className="near-me-home" />
+      </HubHero>
 
       <section className="section">
         <div className="container">
