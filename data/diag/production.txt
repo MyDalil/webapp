@@ -1,0 +1,11 @@
+Relevé : 2026-10-27 20:36:46 UTC
+== /api/sante → 503 3.065017s
+{"ok":false,"base":"indisponible","ms":764}
+== / → 200 0.205140s
+ résultats
+== /annuaire/mosquees-priere → 200 0.241038s
+0 résultat
+La sélection se prépare
+== /adresses/masdjid-al-bashir-al-ibrahimi → 200 0.242647s
+== /recherche?q=mosquee → 500 2.081055s
+== /demarches → 200 0.366854s
