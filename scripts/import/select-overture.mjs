@@ -137,7 +137,15 @@ for await (const line of rl) {
     address: typeof addr.freeform === 'string' && addr.freeform.length > 3 ? addr.freeform : null,
   }
   // Même lieu déjà dans DALIL : on complète seulement ce qui manque.
-  const twin = around(grid, p).find((e) => (km(p, e) < 0.08 && (similar(e.name, name) || similar(e.nameAr, name))) || (e.category === category && km(p, e) < (religious ? 0.15 : 0.03)))
+  // Même écriture et noms différents : deux lieux distincts (sauf même point). Écritures différentes (arabe / latin) : même lieu si même catégorie à moins de 80 m.
+  const arabic = (s) => /[\u0600-\u06ff]/.test(s ?? '') && !/[a-z]{3}/i.test(s ?? '')
+  const twin = around(grid, p).find((e) => {
+    const d = km(p, e)
+    if (d < 0.08 && (similar(e.name, name) || similar(e.nameAr, name))) return true
+    if (e.category !== category) return false
+    if (arabic(e.name) !== arabic(name)) return d < 0.08
+    return d < 0.015
+  })
   if (twin) {
     if (!String(twin.id).startsWith('ovt:')) {
       const fill = Object.fromEntries(Object.entries(facts).filter(([k, v]) => v && !twin[k]))
