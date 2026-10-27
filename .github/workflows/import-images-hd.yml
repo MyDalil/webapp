@@ -1,0 +1,28 @@
+name: Photos HD (Wikimedia Commons)
+on:
+  workflow_dispatch:
+  push:
+    branches: [import-data]
+    paths: [scripts/import/fetch-images-hd.mjs]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: import-data, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-images-hd.mjs
+        continue-on-error: true
+      - name: Commit des faits
+        if: always()
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add -f data/images-hd
+          git commit -m "Données : photos HD (Commons, licences libres) [skip ci]" || echo "rien de nouveau"
+          git pull --rebase origin import-data
+          git push origin HEAD:import-data
