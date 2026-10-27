@@ -59,3 +59,4 @@ html[data-theme="dark"] .sr-icon.is-guide { background: rgba(109, 40, 217, .2); 
 }
 .sr-row.is-wrap .sr-text small, .sr-row.is-wrap .sr-text b { white-space: normal; }
 .sr-note a { color: var(--green); font-weight: 650; }
+.sr-site { display: inline-block; color: var(--green); font-weight: 650; white-space: nowrap; }

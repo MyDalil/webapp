@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { searchPlaces } from '@/modules/annuaire'
+import { OFFICIAL_SITES, OFFICIAL_SITES_CHECKED } from '@/modules/contenus'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
@@ -37,7 +38,9 @@ export default async function Demarches() {
       <header className="sr-head">
         <p className="sr-eyebrow">Démarches</p>
         <h1 id="demarches-titre">Vos démarches, étape par étape.</h1>
-        <p className="sr-meta">Papiers, administrations, entreprise, installation : les bons interlocuteurs et les pièces à préparer. Chaque guide cite ses sources et leur date de consultation.</p>
+        <p className="sr-meta">
+          DALIL vous aide à chaque démarche : quoi faire et dans quel ordre, quelles pièces préparer, sur quel site officiel la faire en ligne, et quelle administration contacter près de chez vous. Les démarches en ligne se font sur les sites de l’État, sans intermédiaire : DALIL ne vous demande jamais de payer une démarche ni vos identifiants.
+        </p>
       </header>
 
       <section className="sr-group" aria-label="Les essentiels">
@@ -45,7 +48,7 @@ export default async function Demarches() {
         <ul className="sr-list">
           {entries.map((e) => (
             <li key={e.href}>
-              <Link href={e.href} className="sr-row">
+              <Link href={e.href} className="sr-row is-wrap">
                 <span className="sr-icon" aria-hidden="true">
                   <Icon name={e.icon} />
                 </span>
@@ -62,6 +65,32 @@ export default async function Demarches() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="sr-group" aria-label="Sites officiels">
+        <h2>
+          Sites officiels <small>· adresses relevées le {new Date(OFFICIAL_SITES_CHECKED).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
+        </h2>
+        <ul className="sr-list">
+          {OFFICIAL_SITES.map((s) => (
+            <li key={s.need}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="sr-row is-wrap" title={`Source de l’adresse : ${s.source}`}>
+                <span className="sr-icon" aria-hidden="true">
+                  <Icon name="check" />
+                </span>
+                <span className="sr-text">
+                  <b>{s.need}</b>
+                  <small>
+                    {s.what} <span className="sr-site">{s.site} ↗</span>
+                  </small>
+                </span>
+                <span />
+                <span className="sr-chev" aria-hidden="true">›</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p className="sr-note">Attention aux copies : seul dzds.dz est le portail officiel (pas les variantes en .com ou .online). Aucune administration ne demande de payer un intermédiaire.</p>
       </section>
 
       <section className="sr-group" aria-label="Guides pratiques">
