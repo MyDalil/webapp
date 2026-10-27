@@ -144,26 +144,33 @@ test.describe('Aucune catégorie vide', () => {
 test.describe('Recherche', () => {
   test('« hopital » trouve de vraies adresses de santé', async ({ page }) => {
     await page.goto('/recherche?q=hopital')
-    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toBeVisible()
+    await expect(page.locator('.sr a[href^="/adresses/"]').first()).toBeVisible()
   })
 })
 
 test.describe('Recherche complète', () => {
   test('« hopital oran » : la catégorie et des hôpitaux d’Oran', async ({ page }) => {
     await page.goto('/recherche?q=hopital%20oran')
-    await expect(page.locator('.search-pistes a[href*="/annuaire/sante-soins/hopitaux"]').first()).toBeVisible()
-    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toBeVisible()
+    await expect(page.locator('.sr-scroll a[href*="/annuaire/sante-soins/hopitaux"]').first()).toBeVisible()
+    await expect(page.locator('.sr a[href^="/adresses/"]').first()).toBeVisible()
   })
 
   test('« mosquée draria » : d’abord les mosquées de Draria (quartier d’Alger)', async ({ page }) => {
     await page.goto('/recherche?q=mosqu%C3%A9e%20draria')
-    await expect(page.locator('.search-place')).toContainText('près de Draria')
-    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toContainText('Draria')
+    await expect(page.locator('.sr-meta')).toContainText('Près de Draria')
+    await expect(page.locator('.sr a[href^="/adresses/"]').first()).toContainText('Draria')
+  })
+
+  test('homonymes : choix de la wilaya proposé, puis le nom le plus proche d’abord', async ({ page }) => {
+    await page.goto('/recherche?q=mosqu%C3%A9e%20bachir%20ibrahimi')
+    await expect(page.locator('.sr-note + .sr-scroll a').first()).toBeVisible()
+    await page.goto('/recherche?q=mosqu%C3%A9e%20cheick%20bachir%20ibrahimi%20draria')
+    await expect(page.locator('.sr a[href^="/adresses/"]').first()).toContainText(/ibrahimi/i)
   })
 
   test('faute de frappe tolérée : « pharmasie »', async ({ page }) => {
     await page.goto('/recherche?q=pharmasie')
-    await expect(page.locator('.search-pistes a[href*="pharmacies"]').first()).toBeVisible()
+    await expect(page.locator('.sr-scroll a[href*="pharmacies"]').first()).toBeVisible()
   })
 
   test('propositions pendant la frappe', async ({ request }) => {

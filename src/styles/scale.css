@@ -40,3 +40,10 @@ h3 { font-size: clamp(1.1rem, 1.4vw, 1.3rem); }
 .near-me:disabled { opacity: .7; cursor: progress; }
 .near-me-home { margin-top: 12px; border-color: rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .12); color: #fff; backdrop-filter: blur(6px); }
 .near-me-home svg { color: #fff; }
+
+/* Recherche : homonymes répartis dans plusieurs wilayas */
+.search-spread { display: grid; gap: 10px; margin: 0 0 24px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.search-spread p { margin: 0; }
+.search-spread nav { display: flex; flex-wrap: wrap; gap: 8px; }
+.search-spread .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); text-decoration: none; font-weight: 600; }
+.search-spread .chip small { color: var(--muted); font-weight: 500; }
