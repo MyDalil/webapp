@@ -21,7 +21,7 @@ export const PLACES_PER_FILE = 40_000
 const EXCLUDED = new Set(['/recherche', '/professionnels/espace', '/feedback'])
 
 /** Pages dédiées hors du contenu du prototype. */
-const DEDICATED = ['/annonces', '/services', '/praticiens', '/que-faire-ce-week-end']
+const DEDICATED = ['/annonces', '/services', '/praticiens', '/que-faire-ce-week-end', '/vie-musulmane']
 
 const url = (path: string, lastmod?: string): SitemapUrl => ({ loc: `${SITE}${path === '/' ? '' : path}`, lastmod })
 

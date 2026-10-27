@@ -27,8 +27,8 @@ export const RUBRICS: Rubric[] = [
   {
     key: 'musulmane',
     label: 'Vie musulmane',
-    href: '/guides/vie-musulmane',
-    match: ['/guides/vie-musulmane', '/guides/hajj-et-omra', '/annuaire/mosquees-priere'],
+    href: '/vie-musulmane',
+    match: ['/vie-musulmane', '/guides/vie-musulmane', '/guides/hajj-et-omra', '/annuaire/mosquees-priere'],
     entries: [
       [cat('mosquees-priere', 'Mosquées'), 'mosque', 'Mosquées & salles de prière', 'Trouver où prier'],
       [cat('mosquees-priere', 'Écoles coraniques'), 'book', 'Enseignement coranique', 'Écoles, instituts, cours'],

@@ -47,3 +47,25 @@ h3 { font-size: clamp(1.1rem, 1.4vw, 1.3rem); }
 .search-spread nav { display: flex; flex-wrap: wrap; gap: 8px; }
 .search-spread .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); text-decoration: none; font-weight: 600; }
 .search-spread .chip small { color: var(--muted); font-weight: 500; }
+
+/* Porte Vie musulmane (/vie-musulmane) */
+.vm-actions { margin-top: 18px; }
+.vm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+.vm-tile { display: grid; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--text); text-decoration: none; }
+.vm-tile:hover { border-color: var(--green); }
+.vm-img { display: block; aspect-ratio: 16 / 10; background: var(--surface-2) url(/images/lieu.svg) center / cover no-repeat; }
+.vm-body { display: grid; gap: 4px; padding: 14px 16px 16px; }
+.vm-body b { font-size: 1.05rem; }
+.vm-body small { color: var(--muted); font-size: .88rem; }
+@media (max-width: 900px) { .vm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+@media (max-width: 560px) { .vm-grid { grid-template-columns: 1fr; } .vm-tile { grid-template-columns: 112px 1fr; align-items: center; } .vm-img { aspect-ratio: auto; height: 100%; min-height: 84px; } }
+
+/* Guides (pages du prototype) : lien retour et rubrique sur deux lignes, sans grand vide ni retrait excessif. */
+.legacy .subpage-hero .shell > a:first-child { display: inline-flex; margin-bottom: 14px; color: var(--muted); font-size: .92rem; text-decoration: none; }
+.legacy .subpage-hero .section-label { display: block; margin-bottom: 8px; }
+.legacy .subpage-hero { padding-bottom: 8px; }
+.legacy .guide-article { padding-top: 8px; }
+.legacy .guide-steps { list-style: decimal; padding-left: 1.4em; line-height: 1.6; }
+.legacy .guide-steps li { padding: 8px 0 8px 4px; }
+/* Mobile : la bulle « Créer mon compte » seulement sur l’accueil (elle masquait le contenu ailleurs). */
+@media (max-width: 720px) { .join-circle:not(.is-home) { display: none; } }

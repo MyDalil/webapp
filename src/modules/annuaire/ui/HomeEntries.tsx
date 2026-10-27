@@ -16,7 +16,7 @@ const fiches = (n: number) => `${n} fiche${n > 1 ? 's' : ''}`
  * même ordre, mêmes mots.
  */
 const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
-  { key: 'musulmane', href: '/guides/vie-musulmane', title: 'Vie musulmane' },
+  { key: 'musulmane', href: '/vie-musulmane', title: 'Vie musulmane' },
   {
     key: 'services',
     href: '/services',
