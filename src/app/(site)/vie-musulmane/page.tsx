@@ -4,6 +4,7 @@ import { searchPlaces } from '@/modules/annuaire'
 import { NearMe } from '@/modules/recherche/ui'
 import { RUBRICS } from '@/platform/shell/nav'
 import { HubHero } from '@/platform/ui/HubHero'
+import { PHOTOS } from '@/platform/referentiel/photos'
 
 export const metadata: Metadata = {
   title: 'Vie musulmane en Algérie · DALIL',
@@ -15,6 +16,9 @@ export const revalidate = 3600
  * Porte de la rubrique Vie musulmane (même place que /services, /explorer…) : les entrées du menu, validées par Saïd,
  * avec le nombre d’adresses et une photo réelle de chaque catégorie ; « Autour de moi » pour la mosquée la plus proche.
  */
+/** Photo libre de repli quand la catégorie n’a pas encore de photo de lieu (même sujet seulement). */
+const FALLBACK: Record<string, string> = { Mosquées: PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src }
+
 export default async function VieMusulmane() {
   const rubric = RUBRICS.find((r) => r.key === 'musulmane')
   const entries = rubric?.entries ?? []
@@ -23,7 +27,7 @@ export default async function VieMusulmane() {
       const category = new URL(href, 'https://www.mydalil.com').searchParams.get('category')
       const r = category ? await searchPlaces({ sector: 'mosquees-priere', category }, 1) : null
       const p = r?.places[0]
-      return { href, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') ? p.photo : null, cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
+      return { href, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : (FALLBACK[category ?? title] ?? null), cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
     }),
   )
   // Photo d’en-tête : seulement une photo libre créditée (licence).

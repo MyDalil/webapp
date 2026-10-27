@@ -350,3 +350,10 @@ html[data-theme="dark"] .sr-icon.is-guide { background: rgba(109, 40, 217, .2); 
 .dm-cats a { width: 132px; min-height: 124px; }
 .dm-cats b { -webkit-line-clamp: 2; line-height: 1.25; min-height: 2.5em; }
 @media (max-width: 640px) { .dm-cats a { width: 104px; min-height: 116px; } }
+/* Formulaires de recherche Services / Annonces / Praticiens : 2 colonnes compactes sur mobile (moitié moins haut). */
+@media (max-width: 640px) {
+  .praticiens-search { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px; border-radius: 18px; }
+  .praticiens-search > :only-child, .praticiens-search button, .praticiens-search label:has(input[type="search"]), .praticiens-search label:has(input[name="q"]) { grid-column: 1 / -1; }
+  .praticiens-search label { font-size: .72rem; gap: 4px; }
+  .praticiens-search select, .praticiens-search input { min-height: 44px; font-size: .95rem; }
+}
