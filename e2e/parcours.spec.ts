@@ -155,6 +155,12 @@ test.describe('Recherche complète', () => {
     await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toBeVisible()
   })
 
+  test('« mosquée draria » : d’abord les mosquées de Draria (quartier d’Alger)', async ({ page }) => {
+    await page.goto('/recherche?q=mosqu%C3%A9e%20draria')
+    await expect(page.locator('.search-place')).toContainText('près de Draria')
+    await expect(page.locator('.search-results a[href^="/adresses/"]').first()).toContainText('Draria')
+  })
+
   test('faute de frappe tolérée : « pharmasie »', async ({ page }) => {
     await page.goto('/recherche?q=pharmasie')
     await expect(page.locator('.search-pistes a[href*="pharmacies"]').first()).toBeVisible()

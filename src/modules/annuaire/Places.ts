@@ -215,7 +215,7 @@ export const Places: CollectionConfig = {
       label: 'Origine de la fiche',
       admin: { position: 'sidebar' },
       fields: [
-        { name: 'provider', type: 'select', label: 'Source', defaultValue: 'dalil', options: [{ label: 'Équipe DALIL', value: 'dalil' }, { label: 'Wikidata', value: 'wikidata' }, { label: 'OpenStreetMap', value: 'osm' }, { label: 'Établissement', value: 'pro' }] },
+        { name: 'provider', type: 'select', label: 'Source', defaultValue: 'dalil', options: [{ label: 'Équipe DALIL', value: 'dalil' }, { label: 'Wikidata', value: 'wikidata' }, { label: 'OpenStreetMap', value: 'osm' }, { label: 'Overture Maps', value: 'overture' }, { label: 'Établissement', value: 'pro' }] },
         { name: 'externalId', type: 'text', label: 'Identifiant source', index: true },
         { name: 'url', type: 'text', label: 'Lien source' },
         { name: 'notoriety', type: 'number', label: 'Notoriété (nombre de Wikipédias)', admin: { readOnly: true } },

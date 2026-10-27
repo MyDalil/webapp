@@ -21,6 +21,8 @@ export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow
     wilaya: p.wilaya ?? null,
     badge: STATUS[p.verification ?? 'spotted'] ?? null,
     boost: (BOOST[p.verification ?? ''] ?? 0) + (p.favorite ? 0.2 : 0),
+    lat: typeof p.lat === 'number' ? p.lat : null,
+    lng: typeof p.lng === 'number' ? p.lng : null,
     text: [p.nameAr, p.nameEn, p.category, sector?.title, p.city, p.place, p.address, wilayaName(p.wilaya), (p.intro ?? '').slice(0, 400)].filter(Boolean).join(' '),
   }
 }
@@ -50,7 +52,7 @@ export async function reindexPlaces(payload: Payload) {
     limit: 100000,
     pagination: false,
     overrideAccess: true,
-    select: { name: true, nameAr: true, nameEn: true, slug: true, sector: true, category: true, city: true, place: true, address: true, wilaya: true, intro: true, verification: true, favorite: true, _status: true },
+    select: { name: true, nameAr: true, nameEn: true, slug: true, sector: true, category: true, city: true, place: true, address: true, wilaya: true, intro: true, verification: true, favorite: true, _status: true, lat: true, lng: true },
   })
   const rows = docs.map((d) => placeRow(d as Place)).filter((r): r is SearchRow => r !== null)
   await replaceType(payload, 'adresse', rows)

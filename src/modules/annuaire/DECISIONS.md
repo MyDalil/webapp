@@ -60,3 +60,10 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Limite** : OpenStreetMap ne signale l’alcool que pour 33 lieux en Algérie (aucun dans DALIL au 2026-10-26). Les hôtels et restaurants sans information restent publiés ; à contrôler lors des visites DALIL.
 - **À ne pas refaire** : importer `amenity=bar|pub|nightclub`, `shop=alcohol|wine`, `amenity=music_school`, ni une zaouïa.
 - **Puis, même jour (demande de Rad)** : suppression définitive des 56 fiches retirées (migration `20261026_235900_suppression_retraits`, via Payload : versions, index et journal d’audit à jour). Restauration seulement par la sauvegarde quotidienne ou l’historique Neon. Règle unique `exclusions.ts` (testée) appliquée par `importPlaces` : ces lieux ne sont plus jamais importés.
+
+## 2026-10-27 — Couverture « comme Google » (demande de Rad)
+- **Constat** : « mosquée Draria » donnait 5 mosquées ; Google en montre une vingtaine. OpenStreetMap ne gardait que les lieux nommés.
+- **Décision** : Overture Maps (licence CDLA Permissive 2.0, stockage permis) pour tout DALIL — 20 555 fiches proposées, 1 087 fiches existantes complétées (téléphone, site, email, Facebook, Instagram, adresse) ; plus toutes les mosquées OSM, y compris sans nom (4 833). Autour de Draria (3 km) : 9 → 21 mosquées.
+- **Jamais** de données Google copiées (licence) ; jamais d’alcool, de musique, de culte non musulman ni de zaouïa (filtres à la sélection et `exclusions.ts` à l’import).
+- **Doublons** : même nom proche à moins de 80 m ; même catégorie à moins de 15 m (même écriture) ou 80 m (arabe / latin).
+- **À ne pas refaire** : dédoublonner par nom seul dans une wilaya (toutes les « Mosquée · nom à compléter » d’une wilaya fusionnaient).

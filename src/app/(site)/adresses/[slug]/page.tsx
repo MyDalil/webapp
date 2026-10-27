@@ -19,7 +19,9 @@ export const generateStaticParams = async () => (await getPlaceSlugs()).map((slu
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getPlace((await params).slug)
-  return p ? { title: `${p.name} — ${p.category}, ${p.city}`, description: presentIntro(p.intro) ?? undefined, openGraph: { images: [coverOf(p)] } } : {}
+  // Fiche sans nom connu (« Mosquée · nom à compléter ») : utile sur place, pas dans les moteurs de recherche.
+  const unnamed = p ? /nom à compléter/.test(p.name) : false
+  return p ? { title: `${p.name} — ${p.category}, ${p.city}`, description: presentIntro(p.intro) ?? undefined, openGraph: { images: [coverOf(p)] }, ...(unnamed ? { robots: { index: false } } : {}) } : {}
 }
 
 const link = (url: string) => (/^https?:\/\//.test(url) ? url : `https://${url}`)
@@ -131,6 +133,11 @@ export default async function PlacePage({ params }: Props) {
 
           <footer className="pl-sources">
             <span>{updated ? `Informations vérifiées le ${updated}` : 'Informations issues de sources publiques'}</span>
+            {p.source?.provider === 'overture' && (
+              <a href="https://overturemaps.org" target="_blank" rel="noreferrer">
+                © Overture Maps Foundation
+              </a>
+            )}
             {p.source?.provider === 'osm' && (
               <a href={p.source.url ?? 'https://www.openstreetmap.org/copyright'} target="_blank" rel="noreferrer">
                 © les contributeurs OpenStreetMap (ODbL)

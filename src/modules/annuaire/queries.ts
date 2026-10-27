@@ -316,7 +316,7 @@ export async function getPlaceSitemap(offset: number, limit: number): Promise<{ 
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
     const { rows } = await db.execute(
-      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND slug IS NOT NULL ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND slug IS NOT NULL AND name NOT LIKE '%nom à compléter%' ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
     )
     return rows.map((r) => ({ slug: String(r.slug), updatedAt: new Date(String(r.updated_at)).toISOString() }))
   } catch {

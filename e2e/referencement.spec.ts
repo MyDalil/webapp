@@ -17,6 +17,7 @@ test.describe('Référencement', () => {
   })
 
   test('plan du site : index, fichiers valides, aucune page privée', async ({ request }) => {
+    test.setTimeout(120_000)
     const index = await request.get('/sitemap.xml')
     expect(index.status()).toBe(200)
     expect(index.headers()['content-type']).toContain('xml')
@@ -28,7 +29,8 @@ test.describe('Référencement', () => {
       expect(res.status(), file).toBe(200)
       const urls = locs(await res.text())
       expect(urls.length).toBeLessThanOrEqual(50_000)
-      for (const u of urls) expect(new URL(u).pathname, u).not.toMatch(PRIVATE)
+      // Une seule assertion par fichier : des dizaines de milliers d’adresses par fichier.
+      expect(urls.filter((u) => PRIVATE.test(new URL(u).pathname)), file).toEqual([])
       total += urls.length
     }
     expect(total).toBeGreaterThan(100)

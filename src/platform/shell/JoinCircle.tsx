@@ -29,7 +29,8 @@ export function JoinCircle() {
   }, [])
   // Fiches détaillées : un seul bouton flottant (l’assistant) ; la bulle d’inscription s’efface.
   const detail = /^\/(adresses|prestataires|missions)\/|^\/praticiens\/[^/]+|^\/annonces\/[^/]+\/[^/]+|^\/guides\/[^/]+/.test(pathname ?? '')
-  if (hidden || detail || pathname?.startsWith('/connexion')) return null
+  // Résultats de recherche aussi : la bulle masquait les dernières fiches sur mobile.
+  if (hidden || detail || pathname?.startsWith('/connexion') || pathname?.startsWith('/recherche')) return null
   return (
     <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}`} aria-label="Créer mon compte gratuitement">
       <span>

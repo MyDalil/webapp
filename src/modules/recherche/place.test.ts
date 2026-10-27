@@ -18,6 +18,7 @@ describe('detectPlace', () => {
     expect(r.rest).toBe('plombier')
   })
   it('sans lieu, rend la recherche telle quelle', () => {
-    expect(detectPlace('hopital')).toEqual({ wilaya: null, label: null, rest: 'hopital' })
+    expect(detectPlace('hopital')).toEqual({ wilaya: null, label: null, rest: 'hopital', near: null })
+    expect(detectPlace('mosquée draria')).toMatchObject({ wilaya: '16', label: 'Draria', rest: 'mosquee', near: { lat: 36.71389, lng: 2.99778 } })
   })
 })
