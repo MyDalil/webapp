@@ -7,6 +7,8 @@ import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
 import { HubHero } from '@/platform/ui/HubHero'
 import { NearMe } from '@/modules/recherche/ui'
+import { packsByGuide } from '@/modules/accompagnement'
+import { Transparency, Why } from '@/modules/accompagnement/ui'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -36,7 +38,15 @@ export default async function Demarches() {
   )
   // Photo d’en-tête : baie d’Alger (photo du site, créditée — voir /credits-photos).
   const hero = { cover: '/images/algeria/alger.webp', credit: 'Photo : Manini row · CC BY-SA 4.0', name: 'Baie d’Alger' }
-  const guides = GUIDE_ORDER.map((s) => GUIDES.find((g) => g.slug === s)).filter((g): g is (typeof GUIDES)[number] => Boolean(g))
+  // Guide CCR (page dédiée, sources datées) en tête, puis les guides du référentiel.
+  const guides = [
+    { href: '/demarches/ccr', icon: 'car', title: 'Changement de résidence (CCR)', summary: 'Rentrer vivre en Algérie avec vos effets et votre véhicule, en franchise de droits.' },
+    ...GUIDE_ORDER.map((s) => GUIDES.find((g) => g.slug === s))
+      .filter((g): g is (typeof GUIDES)[number] => Boolean(g))
+      .map((g) => ({ href: `/guides/${g.slug}`, icon: GUIDE_ICON[g.slug] ?? 'file', title: g.title, summary: g.summary })),
+  ]
+  // Packs d’accompagnement (vide tant que l’offre est cachée).
+  const packs = await packsByGuide()
   return (
     <>
     <HubHero eyebrow="Démarches" title="Vos démarches, étape par étape." lead="DALIL vous guide : quoi faire, quelles pièces préparer, où aller." photo={hero.cover} credit={`${hero.name} · ${hero.credit}`}>
@@ -59,7 +69,7 @@ export default async function Demarches() {
             <small>Le site officiel pour le faire en ligne, ou l’administration la plus proche de chez vous.</small>
           </li>
         </ul>
-        <p className="sr-note">Les démarches en ligne se font sur les sites de l’État, sans intermédiaire : DALIL ne vous demande jamais de payer une démarche ni vos identifiants.</p>
+        <p className="sr-note">Les démarches se font gratuitement sur les sites de l’État. DALIL ne vous demande jamais vos identifiants ni vos codes.</p>
       </section>
 
       <section className="sr-group" aria-label="Les essentiels">
@@ -115,23 +125,38 @@ export default async function Demarches() {
       <section className="sr-group" aria-label="Guides pratiques">
         <h2>Guides pratiques</h2>
         <ul className="sr-list">
-          {guides.map((g) => (
-            <li key={g.slug}>
-              <Link href={`/guides/${g.slug}`} className="sr-row is-wrap">
-                <span className="sr-icon is-guide" aria-hidden="true">
-                  <Icon name={GUIDE_ICON[g.slug] ?? 'file'} />
-                </span>
-                <span className="sr-text">
-                  <b>{g.title}</b>
-                  <small>{g.summary}</small>
-                </span>
-                <span />
-                <span className="sr-chev" aria-hidden="true">›</span>
-              </Link>
-            </li>
-          ))}
+          {guides.map((g) => {
+            const pack = packs.get(g.href)
+            return (
+              <li key={g.href} className={pack ? 'ac-duo' : undefined}>
+                <Link href={g.href} className="sr-row is-wrap">
+                  <span className="sr-icon is-guide" aria-hidden="true">
+                    <Icon name={g.icon} />
+                  </span>
+                  <span className="sr-text">
+                    <b>{g.title}</b>
+                    <small>{g.summary}</small>
+                  </span>
+                  <span className="ac-free">Guide gratuit</span>
+                  <span className="sr-chev" aria-hidden="true">›</span>
+                </Link>
+                {pack && (
+                  <Link href={`/accompagnement/${pack}`} className="ac-premium-link">
+                    Pack Accompagnement Premium
+                  </Link>
+                )}
+              </li>
+            )
+          })}
         </ul>
       </section>
+
+      {packs.size > 0 && (
+        <>
+          <Transparency />
+          <Why />
+        </>
+      )}
 
       <p className="sr-note">
         Une démarche manque, ou une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.

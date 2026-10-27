@@ -186,3 +186,32 @@ test.describe('Recherche complète', () => {
     await expect(page.locator('a[href^="/adresses/"]').first()).toBeVisible()
   })
 })
+
+test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est ouvert', async ({ page }) => {
+  const errors = watchErrors(page)
+  await page.goto('/demarches/ccr')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Certificat de changement de résidence')
+  await expect(page.getByText(/Dernière vérification/)).toBeVisible()
+  await expect(page.getByText(/3 ans sans interruption/).first()).toBeVisible()
+  await expect(page.locator('#source-1')).toBeVisible()
+  // L’offre payante est cachée en production avant le lancement ; ailleurs, elle s’affiche avec la transparence.
+  const offer = page.getByRole('link', { name: 'Pack Accompagnement Premium' })
+  if (await offer.count()) {
+    await expect(page.getByText(/portail d’information indépendant/)).toBeVisible()
+    await offer.first().click()
+    await expect(page).toHaveURL(/\/accompagnement\/ccr$/)
+    await expect(page.getByRole('button', { name: /liste d’attente|Envoyer ma demande/ })).toBeVisible()
+  }
+  expect(errors).toEqual([])
+})
+
+test('accompagnement : inscription sur la liste d’attente @ecriture', async ({ page, request }) => {
+  const r = await request.get('/accompagnement/ccr')
+  test.skip(r.status() === 404, 'offre cachée')
+  await page.setExtraHTTPHeaders(freshIp())
+  await page.goto('/accompagnement/ccr')
+  await page.locator('.ac-form input[name=name]').fill('Test Parcours')
+  await page.locator('.ac-form input[name=email]').fill('parcours@example.com')
+  await page.getByRole('button', { name: /liste d’attente|Envoyer ma demande/ }).click()
+  await expect(page.getByText(/C’est noté|Demande reçue/)).toBeVisible()
+})

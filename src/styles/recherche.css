@@ -77,3 +77,52 @@ html[data-theme="dark"] .sr-icon.is-guide { background: rgba(109, 40, 217, .2); 
 .sr-steps b { font-size: .98rem; }
 .sr-steps small { color: var(--muted); font-size: .86rem; line-height: 1.45; }
 @media (max-width: 640px) { .sr-steps { grid-template-columns: 1fr; } .hub-hero-content { padding-top: 56px; } }
+
+/* Accompagnement (packs payants) — même système que /recherche et /demarches : filets fins, rayons 16–18 px, vert DALIL. */
+.ac-crumbs { color: var(--muted); font-size: .85rem; }
+.ac-crumbs a { color: var(--muted); text-decoration: none; }
+.ac-crumbs a:hover { color: var(--green); }
+.ac-badge { justify-self: start; margin: 6px 0 0; padding: 4px 10px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: .8rem; font-weight: 650; }
+.ac-transparency { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: 14px; background: var(--surface); }
+.ac-transparency b { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+.ac-transparency p { margin: 0; color: var(--text); font-size: .94rem; line-height: 1.55; }
+.ac-choice { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ac-choice.is-single { grid-template-columns: minmax(0, 1fr); }
+.ac-option { display: grid; align-content: start; gap: 10px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.ac-option.is-premium { border-color: color-mix(in srgb, var(--green) 45%, var(--line)); box-shadow: 0 10px 30px rgba(0, 107, 60, .07); }
+.ac-option h3 { margin: 0; font-size: 1.12rem; letter-spacing: -.01em; }
+.ac-option p { margin: 0; color: var(--muted); font-size: .94rem; line-height: 1.5; }
+.ac-option .sr-pill { justify-self: start; margin-top: 4px; }
+.ac-kicker { color: var(--green) !important; font-size: .75rem !important; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.ac-price { display: grid; gap: 2px; }
+.ac-price b { color: var(--text); font-size: 1.6rem; letter-spacing: -.02em; }
+.ac-price small { color: var(--muted); font-size: .84rem; }
+.ac-includes { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ac-includes li { position: relative; padding-left: 22px; font-size: .94rem; line-height: 1.45; }
+.ac-includes li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.ac-facts, .ac-steps { display: grid; gap: 8px; margin: 0; padding: 16px 18px 16px 34px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); line-height: 1.55; }
+.ac-steps li::marker { color: var(--green); font-weight: 700; }
+.ac-refs { margin-left: 2px; font-size: .7rem; white-space: nowrap; }
+.ac-refs a { color: var(--green); text-decoration: none; }
+.ac-faq { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+.ac-faq details + details { border-top: 1px solid var(--line); }
+.ac-faq summary { padding: 14px 16px; font-weight: 650; cursor: pointer; }
+.ac-faq p { margin: 0; padding: 0 16px 14px; color: var(--muted); line-height: 1.55; }
+.ac-sources { display: grid; gap: 6px; margin: 0; padding-left: 22px; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+.ac-sources a { color: var(--text); }
+.ac-free { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+.ac-row-price { color: var(--text); font-weight: 650; font-size: .9rem; white-space: nowrap; }
+.ac-duo { display: grid; }
+.ac-premium-link { justify-self: end; margin: -8px 16px 10px; padding: 6px 12px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: .82rem; font-weight: 650; text-decoration: none; }
+.ac-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.ac-form label { display: grid; gap: 6px; font-size: .9rem; font-weight: 600; }
+.ac-form label small { color: var(--muted); font-weight: 500; }
+.ac-form input, .ac-form textarea { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg, #fff); font: 400 1rem/1.4 Inter, system-ui, sans-serif; color: var(--text); }
+.ac-form .is-wide, .ac-form button, .ac-form > small { grid-column: 1 / -1; }
+.ac-form button { justify-self: start; }
+.ac-after-guide { padding-top: 0; }
+@media (max-width: 640px) {
+  .ac-choice, .ac-form { grid-template-columns: minmax(0, 1fr); }
+  .ac-free { display: none; }
+  .ac-premium-link { justify-self: start; margin: -6px 14px 10px 60px; }
+}
