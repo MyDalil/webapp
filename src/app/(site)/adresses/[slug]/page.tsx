@@ -5,6 +5,7 @@ import { factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '
 import { languageLabel } from '@/platform/referentiel/languages'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
+import { latinCity } from '@/platform/referentiel/communes'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
 import { SaveButton } from '@/modules/membres/ui'
 import { PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
@@ -165,7 +166,7 @@ export default async function PlacePage({ params }: Props) {
         <aside className="pl-side">
           <div className="pl-card pl-id">
             <span className="pl-tag">
-              {p.category} · {p.city}
+              {p.category} · {latinCity(p.city)}
             </span>
             <h1>{p.name}</h1>
             {(p.nameAr || p.nameEn) && <p className="pl-alt">{[p.nameEn, p.nameAr].filter(Boolean).join(' · ')}</p>}

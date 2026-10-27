@@ -11,6 +11,10 @@ export const COMMUNES = data as Commune[]
 const BY_ID = new Map(COMMUNES.map((c) => [c.id, c]))
 
 export const commune = (id: string | null | undefined) => (id ? BY_ID.get(id) ?? null : null)
+/** Nom de commune en lettres latines quand la source l’a écrit en arabe (« العاشور » → « El Achour »). */
+export const latinCity = (s?: string | null) => (s && /[\u0600-\u06ff]/.test(s) && !/[a-z]/i.test(s) ? (AR.get(s.trim().replace(/^بلدية\s+/, '')) ?? s) : s ?? '')
+// Noms arabes des communes, sans « بلدية » (municipalité) en tête.
+const AR = new Map(COMMUNES.filter((c) => c.ar).map((c) => [String(c.ar).replace(/^بلدية\s+/, '').trim(), c.name]))
 export const communeName = (id: string | null | undefined) => commune(id)?.name ?? null
 export const communesOf = (wilaya: number | string) => COMMUNES.filter((c) => c.wilaya === Number(wilaya))
 

@@ -2,6 +2,7 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, Payload } fr
 import type { Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { categoryPath, slugify } from '@/platform/referentiel/slug'
+import { latinCity } from '@/platform/referentiel/communes'
 import { indexRows, removeRow, replaceType, type SearchRow } from '@/platform/search/store'
 
 const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée', labelled: 'Label Excellence' }
@@ -17,7 +18,7 @@ export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow
     id: String(p.id),
     url: `/adresses/${p.slug}`,
     title: p.name,
-    subtitle: [p.category, p.city].filter(Boolean).join(' · '),
+    subtitle: [p.category, latinCity(p.city)].filter(Boolean).join(' · '),
     wilaya: p.wilaya ?? null,
     badge: STATUS[p.verification ?? 'spotted'] ?? null,
     boost: (BOOST[p.verification ?? ''] ?? 0) + (p.favorite ? 0.2 : 0),

@@ -30,3 +30,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Index : colonnes `lat`, `lng` dans `search_index` (migration `20261027_090000_index_position`).
 - « Autour de moi » (`ui/NearMe`) : position du navigateur, arrondie à ~100 m, passée dans l’adresse (`pos=lat,lng`), acceptée seulement en Algérie, jamais enregistrée.
 - Bulle « Créer mon compte » masquée sur /recherche.
+
+## 2026-10-27 — Homonymes et mise en page des résultats (demande de Rad)
+- Nom porté par des lieux de plusieurs wilayas (« Mosquée Bachir El Ibrahimi », ~35) : rangée « Précisez la wilaya » (compte par wilaya) ; la wilaya choisie dans l’en-tête (`w=`) passe devant.
+- Catégorie + nom + lieu (« mosquée cheick brahim ibrahimi draria ») : adresses proches de la catégorie, les plus ressemblantes au nom d’abord (`categoryPrefix`, `nameMatch`, fautes légères tolérées, testés).
+- Page /recherche : une colonne centrée, liste groupée à filets fins (icône, nom, catégorie · commune, distance), actions de même hauteur, pistes et wilayas en défilement horizontal, « Afficher N de plus » (`styles/recherche.css`).
+- Communes écrites en arabe par la source affichées en lettres latines (`latinCity`).

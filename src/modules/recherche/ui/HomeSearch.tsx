@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Icon } from '@/platform/ui/Icon'
 import { NearMe } from './NearMe'
+import { readWilaya } from '@/platform/shell/wilaya'
 import { toast } from '@/platform/shell/toast'
 import { simpleClean } from '@/platform/ai/clean'
 import { preferredLang, startDictation, type Dictation } from '@/platform/ui/speech'
@@ -71,7 +72,9 @@ export function HomeSearch() {
     e.preventDefault()
     dictation.current?.stop()
     const q = ref.current?.value.trim()
-    router.push(q ? `/recherche?q=${encodeURIComponent(q)}` : '/recherche')
+    // Wilaya choisie dans l’en-tête : ses adresses passent devant quand la recherche ne nomme aucun lieu.
+    const w = readWilaya()
+    router.push(q ? `/recherche?q=${encodeURIComponent(q)}${w ? `&w=${w.code}` : ''}` : '/recherche')
   }
 
   // Trombone : choisir le document ici, il est lu sur la recherche guidée.
