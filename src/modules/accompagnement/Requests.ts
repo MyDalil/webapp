@@ -26,7 +26,13 @@ export const AccompagnementRequests: CollectionConfig = {
         { name: 'phone', type: 'text', label: 'Téléphone ou WhatsApp' },
       ],
     },
-    { name: 'country', type: 'text', label: 'Pays de résidence' },
+    {
+      type: 'row',
+      fields: [
+        { name: 'country', type: 'text', label: 'Pays de résidence' },
+        { name: 'persons', type: 'number', label: 'Nombre de personnes', min: 1, max: 20, defaultValue: 1 },
+      ],
+    },
     { name: 'message', type: 'textarea', label: 'Situation décrite' },
     { name: 'status', type: 'select', label: 'Statut', required: true, defaultValue: 'attente', options: [...REQUEST_STATUS], index: true, admin: { position: 'sidebar' } },
     { name: 'advisor', type: 'relationship', relationTo: 'users', label: 'Conseiller', admin: { position: 'sidebar' } },

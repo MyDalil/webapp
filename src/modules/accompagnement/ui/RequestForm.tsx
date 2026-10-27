@@ -4,7 +4,7 @@ import { useState, type FormEvent } from 'react'
 import { proofHeaders } from '@/platform/security/proofClient'
 
 /** Demande d’accompagnement (liste d’attente tant que l’offre n’est pas ouverte). Aucun paiement ici. */
-export function RequestForm({ pack, waitlist }: { pack: string; waitlist: boolean }) {
+export function RequestForm({ pack, waitlist, persons = 1 }: { pack: string; waitlist: boolean; persons?: number }) {
   const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [msg, setMsg] = useState('')
 
@@ -15,7 +15,7 @@ export function RequestForm({ pack, waitlist }: { pack: string; waitlist: boolea
     setState('loading')
     setMsg('Envoi en cours…')
     try {
-      const r = await fetch('/api/accompagnement', { method: 'POST', headers: await proofHeaders({ 'content-type': 'application/json' }), body: JSON.stringify({ ...fd, pack }) })
+      const r = await fetch('/api/accompagnement', { method: 'POST', headers: await proofHeaders({ 'content-type': 'application/json' }), body: JSON.stringify({ ...fd, pack, persons }) })
       const j = await r.json()
       if (!r.ok) throw new Error(j.error ?? 'Envoi impossible.')
       setState('success')

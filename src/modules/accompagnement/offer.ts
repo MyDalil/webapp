@@ -13,6 +13,7 @@ export type Pack = {
   includes: { item: string }[]
   priceEur: number | null
   priceDa: number | null
+  perPerson: boolean
   price: { main: string; sub: string | null }
 }
 
@@ -36,7 +37,7 @@ export async function offerState() {
 
 const shape = (d: Record<string, unknown>): Pack => {
   const p = d as unknown as Omit<Pack, 'price'>
-  return { ...p, includes: p.includes ?? [], priceEur: p.priceEur ?? null, priceDa: p.priceDa ?? null, price: priceLabel(p) }
+  return { ...p, includes: p.includes ?? [], priceEur: p.priceEur ?? null, priceDa: p.priceDa ?? null, perPerson: Boolean(p.perPerson), price: priceLabel(p) }
 }
 
 /** Packs proposés (vide si l’offre est cachée). */
@@ -60,12 +61,12 @@ export async function packsByGuide() {
   return new Map((await listPacks()).map((p) => [p.guide, p.slug]))
 }
 
-export type RequestInput = { pack: string; name: string; email: string; phone: string; country: string; message: string }
+export type RequestInput = { pack: string; name: string; email: string; phone: string; country: string; message: string; persons: number }
 
 /** Enregistre une demande, prévient l’équipe et accuse réception. Aucun paiement à ce stade. */
 export async function createRequest(input: RequestInput): Promise<{ ok: true; waitlist: boolean } | { ok: false; error: string }> {
   const state = await offerState()
-  if (!state.visible) return { ok: false, error: 'L’accompagnement n’est pas encore ouvert.' }
+  if (state.mode !== 'ouvert') return { ok: false, error: 'L’accompagnement est à venir.' }
   const pack = await packBySlug(input.pack)
   if (!pack) return { ok: false, error: 'Pack introuvable.' }
   const waitlist = state.mode !== 'ouvert'
@@ -73,7 +74,7 @@ export async function createRequest(input: RequestInput): Promise<{ ok: true; wa
   const doc = await p.create({
     collection: 'demandes-accompagnement',
     overrideAccess: true,
-    data: { pack: pack.id, name: input.name, email: input.email, phone: input.phone || undefined, country: input.country || undefined, message: input.message || undefined, status: waitlist ? 'attente' : 'a-contacter' },
+    data: { pack: pack.id, name: input.name, email: input.email, phone: input.phone || undefined, country: input.country || undefined, message: input.message || undefined, persons: pack.perPerson ? input.persons : 1, status: waitlist ? 'attente' : 'a-contacter' },
   })
   const s = await settings()
   const team = s.notifyEmail || TEAM
@@ -82,7 +83,7 @@ export async function createRequest(input: RequestInput): Promise<{ ok: true; wa
     `Accompagnement : ${pack.demarche} — ${input.name}`,
     layout(
       `Nouvelle demande d’accompagnement`,
-      `<p><b>${esc(pack.title)}</b>${waitlist ? ' (liste d’attente)' : ''}</p><p>${esc(input.name)} · ${esc(input.email)}${input.phone ? ` · ${esc(input.phone)}` : ''}${input.country ? ` · ${esc(input.country)}` : ''}</p>${input.message ? paragraphs(input.message) : ''}`,
+      `<p><b>${esc(pack.title)}</b>${pack.perPerson ? ` · ${input.persons} personne(s)` : ''}${waitlist ? ' (liste d’attente)' : ''}</p><p>${esc(input.name)} · ${esc(input.email)}${input.phone ? ` · ${esc(input.phone)}` : ''}${input.country ? ` · ${esc(input.country)}` : ''}</p>${input.message ? paragraphs(input.message) : ''}`,
       { label: 'Ouvrir la demande', href: `${SITE}/admin/collections/demandes-accompagnement/${doc.id}` },
     ),
   )

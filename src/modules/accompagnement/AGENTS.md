@@ -12,8 +12,8 @@ Proposer, à côté de chaque guide gratuit de démarche, un pack payant : un co
 - `rules.ts` (+ test) — mode appliqué, prix affiché, numéro WhatsApp.
 - `offer.ts` — lecture de l’offre, packs, création d’une demande + emails (équipe, accusé de réception).
 - `texts.ts` — texte de transparence, absence de garantie, « Pourquoi choisir nos accompagnements payants ? ».
-- `ui/` — `Choice` (guide gratuit / pack), `Transparency`, `Why`, `RequestForm`.
-- Routes : `/accompagnement`, `/accompagnement/[slug]` (noindex), `/api/accompagnement`. Blocs affichés sur `/demarches`, `/demarches/ccr` et chaque `/guides/*` lié à un pack.
+- `ui/` — `Choice` (option 1 guide autonome / option 2 pack), `Transparency`, `Why`, `Booking` (nombre de personnes, tarification, mode de paiement fermé, coordonnées), `RequestForm`.
+- Routes : `/accompagnement`, `/accompagnement/[slug]` (noindex), `/api/accompagnement`. Blocs affichés sur `/demarches` (démarches phares), `/demarches/[slug]` et chaque `/guides/*` lié à un pack. Prix par personne (`perPerson`) : le total se calcule au nombre de personnes.
 
 ## Règles propres
 - **Transparence** : le texte de transparence accompagne toujours l’offre. Les démarches sont gratuites sur les sites de l’État ; le pack paie l’aide humaine.

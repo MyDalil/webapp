@@ -24,6 +24,7 @@ export const Packs: CollectionConfig = {
         { name: 'priceDa', type: 'number', label: 'Prix (DA)', min: 0, admin: { description: 'Vide : « Équivalent en dinars annoncé au lancement ».' } },
       ],
     },
+    { name: 'perPerson', type: 'checkbox', label: 'Prix par personne', defaultValue: false, admin: { description: 'Coché : le demandeur choisit le nombre de personnes et le total se calcule.' } },
     { name: 'active', type: 'checkbox', label: 'Proposé', defaultValue: true, admin: { position: 'sidebar' } },
     { name: 'order', type: 'number', label: 'Ordre', defaultValue: 100, admin: { position: 'sidebar' } },
   ],

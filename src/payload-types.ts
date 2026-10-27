@@ -1490,6 +1490,10 @@ export interface Pack {
    * Vide : « Équivalent en dinars annoncé au lancement ».
    */
   priceDa?: number | null;
+  /**
+   * Coché : le demandeur choisit le nombre de personnes et le total se calcule.
+   */
+  perPerson?: boolean | null;
   active?: boolean | null;
   order?: number | null;
   updatedAt: string;
@@ -1506,6 +1510,7 @@ export interface DemandesAccompagnement {
   email: string;
   phone?: string | null;
   country?: string | null;
+  persons?: number | null;
   message?: string | null;
   status: 'attente' | 'a-contacter' | 'en-cours' | 'terminee' | 'annulee';
   advisor?: (number | null) | User;
@@ -2536,6 +2541,7 @@ export interface PacksSelect<T extends boolean = true> {
       };
   priceEur?: T;
   priceDa?: T;
+  perPerson?: T;
   active?: T;
   order?: T;
   updatedAt?: T;
@@ -2551,6 +2557,7 @@ export interface DemandesAccompagnementSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   country?: T;
+  persons?: T;
   message?: T;
   status?: T;
   advisor?: T;

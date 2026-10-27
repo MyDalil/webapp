@@ -19,8 +19,8 @@ export const AccompagnementSettings: GlobalConfig = {
       defaultValue: 'cache',
       options: [
         { label: 'Cachée — rien n’apparaît sur www.mydalil.com (visible sur preview seulement)', value: 'cache' },
-        { label: 'Liste d’attente — l’offre est visible, les demandes sont notées « en attente »', value: 'liste-attente' },
-        { label: 'Ouverte — un conseiller traite les demandes', value: 'ouvert' },
+        { label: 'Annoncée — l’offre est visible, les boutons payants affichent « À venir »', value: 'liste-attente' },
+        { label: 'Ouverte — boutons actifs, un conseiller traite les demandes', value: 'ouvert' },
       ],
     },
     {

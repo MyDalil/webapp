@@ -6,39 +6,60 @@ import { NO_GUARANTEE, TRANSPARENCY, WHY } from '../texts'
 export function Transparency() {
   return (
     <aside className="ac-transparency" aria-label="Transparence">
-      <b>Transparence</b>
+      <b>Transparence DALIL</b>
       <p>{TRANSPARENCY}</p>
     </aside>
   )
 }
 
-/** Deux options côte à côte : le guide gratuit, ou le pack d’accompagnement. */
-export function Choice({ pack, freeHref, freeNote = 'Toutes les étapes, les pièces à préparer et les liens officiels.' }: { pack: Pack; freeHref: string; freeNote?: string }) {
+/** Option 1 (guide autonome, gratuit) et option 2 (pack), côte à côte comme la maquette validée par Rad. */
+/** `open` : l’offre est « Ouverte » dans /admin ; sinon le bouton payant affiche « À venir ». */
+export function Choice({ pack, freeHref, outline, freeNote, open = false }: { pack: Pack; freeHref: string; outline?: string[]; freeNote?: string; open?: boolean }) {
+  const book = pack.price.main.endsWith('€') || pack.price.main.endsWith('DA') ? `Je réserve mon pack — ${pack.price.main}` : 'Je réserve mon pack'
   return (
-    <section className="ac-choice" aria-label="Deux façons de faire votre démarche">
+    <section className="ac-choice swipe" aria-label="Deux façons de faire votre démarche">
       <article className="ac-option">
-        <p className="ac-kicker">Gratuit</p>
-        <h3>Guide pas à pas</h3>
-        <p>{freeNote}</p>
-        <Link href={freeHref} className="sr-pill">
+        <header className="ac-option-head">
+          <h3>Option 1 : Guide autonome</h3>
+          <span className="ac-tag">Gratuit</span>
+        </header>
+        {outline?.length ? (
+          <ol className="ac-outline">
+            {outline.map((o) => (
+              <li key={o}>{o}</li>
+            ))}
+          </ol>
+        ) : (
+          <p>{freeNote ?? 'Toutes les étapes, les pièces à préparer et les liens officiels.'}</p>
+        )}
+        <Link href={freeHref} className="sr-pill ac-cta">
           Accéder au guide gratuit
         </Link>
       </article>
       <article className="ac-option is-premium">
-        <p className="ac-kicker">Accompagnement</p>
-        <h3>{pack.title}</h3>
-        <p className="ac-price">
-          <b>{pack.price.main}</b>
-          {pack.price.sub && <small>{pack.price.sub}</small>}
-        </p>
+        <header className="ac-option-head">
+          <h3>Option 2 : {pack.title}</h3>
+          <span className="ac-tag is-premium">Accompagnement</span>
+        </header>
+        <p className="ac-option-lead">Un conseiller vous accompagne.</p>
         <ul className="ac-includes">
           {pack.includes.map((i) => (
             <li key={i.item}>{i.item}</li>
           ))}
         </ul>
-        <Link href={`/accompagnement/${pack.slug}`} className="sr-pill is-primary">
-          Pack Accompagnement Premium
-        </Link>
+        {open ? (
+          <Link href={`/accompagnement/${pack.slug}`} className="sr-pill is-primary ac-cta" aria-label={`Pack Accompagnement Premium : ${book}`}>
+            {book}
+          </Link>
+        ) : (
+          <SoonButton />
+        )}
+        {open && (
+          <small className="ac-pay-note">
+            {pack.price.sub ? `${pack.price.sub} · ` : ''}
+            Paiement en ligne : ouverture prochaine
+          </small>
+        )}
       </article>
     </section>
   )
@@ -49,7 +70,7 @@ export function Why() {
   return (
     <section className="sr-group" aria-label="Pourquoi choisir nos accompagnements payants ?">
       <h2>Pourquoi choisir nos accompagnements payants ?</h2>
-      <ul className="sr-steps">
+      <ul className="sr-steps swipe">
         {WHY.map((w) => (
           <li key={w.title}>
             <b>{w.title}</b>
@@ -59,5 +80,14 @@ export function Why() {
       </ul>
       <p className="sr-note">{NO_GUARANTEE}</p>
     </section>
+  )
+}
+
+/** Bouton d’une offre payante pas encore ouverte. */
+export function SoonButton({ label = 'Accompagnement' }: { label?: string }) {
+  return (
+    <span className="sr-pill ac-cta is-soon" role="button" aria-disabled="true" aria-label={`Pack Accompagnement Premium : ${label} à venir`}>
+      {label} · À venir
+    </span>
   )
 }

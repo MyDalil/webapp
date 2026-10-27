@@ -14,6 +14,6 @@ export async function POST(req: Request) {
   const email = clean(body?.email, 200)
   if (name.length < 2) return fail('Indiquez votre nom.')
   if (!isEmail(email)) return fail('Adresse email invalide.')
-  const r = await createRequest({ pack: clean(body?.pack, 80), name, email, phone: clean(body?.phone, 30), country: clean(body?.country, 80), message: clean(body?.message, 3000) })
+  const r = await createRequest({ pack: clean(body?.pack, 80), name, email, phone: clean(body?.phone, 30), country: clean(body?.country, 80), message: clean(body?.message, 3000), persons: Math.min(20, Math.max(1, Math.floor(Number(body?.persons) || 1))) })
   return r.ok ? json(r) : fail(r.error, 404)
 }

@@ -187,12 +187,21 @@ test.describe('Recherche complète', () => {
   })
 })
 
-test('démarches : deux options sur la démarche à la une (hors production)', async ({ page, baseURL }) => {
+test('démarches : catégories, démarches phares et deux options (hors production)', async ({ page, baseURL }) => {
   test.skip(/mydalil\.com/.test(baseURL ?? ''), 'offre cachée en production')
   await page.goto('/demarches')
   await expect(page.getByText(/portail d’information indépendant/).first()).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Accéder au guide gratuit' }).first()).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Pack Accompagnement Premium' }).first()).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Guide gratuit' }).first()).toBeVisible()
+  // Offre payante pas encore « Ouverte » dans /admin : bouton « À venir », sans lien.
+  await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
+  await expect(page.getByRole('heading', { name: 'Catégories populaires' })).toBeVisible()
+  await page.getByRole('link', { name: /Passeport biométrique/ }).first().click()
+  await expect(page.getByRole('heading', { name: 'Points clés' })).toBeVisible()
+  await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
+  await page.goto('/accompagnement/passeport')
+  await expect(page.getByText('Nombre de personnes')).toBeVisible()
+  await page.getByRole('button', { name: 'Une personne de plus' }).click()
+  await expect(page.locator('.ac-stepper output')).toHaveText('2')
 })
 
 test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est ouvert', async ({ page }) => {
@@ -203,19 +212,18 @@ test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est
   await expect(page.getByText(/3 ans sans interruption/).first()).toBeVisible()
   await expect(page.locator('#source-1')).toBeVisible()
   // L’offre payante est cachée en production avant le lancement ; ailleurs, elle s’affiche avec la transparence.
-  const offer = page.getByRole('link', { name: 'Pack Accompagnement Premium' })
+  // Offre visible (hors production) : transparence et bouton payant « À venir » tant qu’elle n’est pas ouverte.
+  const offer = page.getByRole('button', { name: /Pack Accompagnement Premium/ })
   if (await offer.count()) {
     await expect(page.getByText(/portail d’information indépendant/)).toBeVisible()
-    await offer.first().click()
-    await expect(page).toHaveURL(/\/accompagnement\/ccr$/)
-    await expect(page.getByRole('button', { name: /liste d’attente|Envoyer ma demande/ })).toBeVisible()
+    await expect(offer.first()).toContainText('À venir')
   }
   expect(errors).toEqual([])
 })
 
 test('accompagnement : inscription sur la liste d’attente @ecriture', async ({ page, request }) => {
   const r = await request.get('/accompagnement/ccr')
-  test.skip(r.status() === 404, 'offre cachée')
+  test.skip(r.status() === 404 || (await r.text()).includes('À venir'), 'offre cachée ou à venir')
   await page.setExtraHTTPHeaders(freshIp())
   await page.goto('/accompagnement/ccr')
   await page.locator('.ac-form input[name=name]').fill('Test Parcours')

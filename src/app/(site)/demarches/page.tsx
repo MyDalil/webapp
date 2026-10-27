@@ -7,8 +7,9 @@ import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
 import { HubHero } from '@/platform/ui/HubHero'
 import { NearMe } from '@/modules/recherche/ui'
-import { packForGuide, packsByGuide } from '@/modules/accompagnement'
-import { Choice, Transparency, Why } from '@/modules/accompagnement/ui'
+import { offerState, packsByGuide } from '@/modules/accompagnement'
+import { SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
+import { DEMARCHES, DEMARCHE_CATEGORIES } from '@/modules/contenus'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -38,35 +39,92 @@ export default async function Demarches() {
   )
   // Photo d’en-tête : baie d’Alger (photo du site, créditée — voir /credits-photos).
   const hero = { cover: '/images/algeria/alger.webp', credit: 'Photo : Manini row · CC BY-SA 4.0', name: 'Baie d’Alger' }
-  // Guide CCR (page dédiée, sources datées) en tête, puis les guides du référentiel.
+  // Guides du référentiel (les démarches phares ont leur fiche sourcée, plus haut).
   const guides = [
-    { href: '/demarches/ccr', icon: 'car', title: 'Changement de résidence (CCR)', summary: 'Rentrer vivre en Algérie avec vos effets et votre véhicule, en franchise de droits.' },
     ...GUIDE_ORDER.map((s) => GUIDES.find((g) => g.slug === s))
       .filter((g): g is (typeof GUIDES)[number] => Boolean(g))
       .map((g) => ({ href: `/guides/${g.slug}`, icon: GUIDE_ICON[g.slug] ?? 'file', title: g.title, summary: g.summary })),
   ]
   // Packs d’accompagnement (vide tant que l’offre est cachée).
   const packs = await packsByGuide()
-  const ccr = await packForGuide('/demarches/ccr')
+  const open = (await offerState()).mode === 'ouvert'
+  // Couleurs des pictogrammes : une teinte par ligne, pour repérer les rubriques d’un coup d’œil.
+  const TONES = ['ciel', 'sable', 'vert', 'violet', 'corail']
   return (
     <>
-    <HubHero eyebrow="Démarches" title="Vos démarches, étape par étape." lead="DALIL vous guide : quoi faire, quelles pièces préparer, où aller." photo={hero.cover} credit={`${hero.name} · ${hero.credit}`}>
+    <HubHero eyebrow="Démarches" title={<>Vos démarches en Algérie, <em className="hub-accent">sans stress</em>.</>} lead="DALIL vous guide : quoi faire, quelles pièces préparer, où aller." photo={hero.cover} credit={`${hero.name} · ${hero.credit}`}>
+      <form action="/recherche" className="dm-search" role="search">
+        <Icon name="search" />
+        <input name="q" type="search" placeholder="Rechercher une démarche…" aria-label="Rechercher une démarche" />
+      </form>
       <NearMe text="administration" label="Administrations autour de moi" className="near-me-home" />
     </HubHero>
     <section className="sr" aria-label="Démarches">
-      {ccr && (
-        <section className="sr-group" aria-label="Démarche à la une">
-          <h2>
-            Rentrer vivre en Algérie <small>· certificat de changement de résidence (CCR)</small>
-          </h2>
-          <Transparency />
-          <Choice pack={ccr} freeHref="/demarches/ccr" freeNote="Conditions, véhicule, étapes, liens officiels et sources datées." />
-        </section>
-      )}
+      <section className="sr-group" aria-label="Catégories populaires">
+        <h2 className="dm-head">
+          Catégories populaires <Link href="#guides">Tout voir</Link>
+        </h2>
+        <ul className="dm-cats">
+          {DEMARCHE_CATEGORIES.map((c) => (
+            <li key={c.key}>
+              <Link href={c.href}>
+                <span className={`dm-cat-icon is-${c.color}`}>
+                  <Icon name={c.icon} />
+                </span>
+                <b>{c.label}</b>
+                <small>{c.sub}</small>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="sr-group" aria-label="Démarches phares">
+        <h2>Démarches phares</h2>
+        <ul className="dm-cards swipe">
+          {DEMARCHES.map((d) => {
+            const pack = packs.get(`/demarches/${d.slug}`)
+            return (
+              <li key={d.slug} className="dm-card">
+                <Link href={`/demarches/${d.slug}`} className="dm-card-main">
+                  <span className="dm-card-media">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- illustration SVG locale */}
+                    <img className="dm-card-img" src={d.image} alt="" width={640} height={360} loading="lazy" />
+                    <span className="dm-card-overlay">
+                      <b>{d.short}</b>
+                      <small>
+                        <Icon name="pin" /> {d.where}
+                      </small>
+                    </span>
+                    <span className="dm-card-badge">Guide gratuit</span>
+                  </span>
+                  <span className="dm-card-text">
+                    <small>{d.summary}</small>
+                  </span>
+                </Link>
+                <span className="dm-card-actions">
+                  <Link href={`/demarches/${d.slug}#guide`} className="sr-pill">
+                    Guide gratuit
+                  </Link>
+                  {pack &&
+                    (open ? (
+                      <Link href={`/accompagnement/${pack}`} className="sr-pill is-primary" aria-label={`Pack Accompagnement Premium : ${d.short}`}>
+                        Se faire accompagner
+                      </Link>
+                    ) : (
+                      <SoonButton label="Pack" />
+                    ))}
+                </span>
+              </li>
+            )
+          })}
+        </ul>
+        {packs.size > 0 && <Transparency />}
+      </section>
 
       <section className="sr-group" aria-label="Comment DALIL vous aide">
         <h2>Comment DALIL vous aide</h2>
-        <ul className="sr-steps">
+        <ul className="sr-steps swipe">
           <li>
             <b>Quoi faire, dans quel ordre</b>
             <small>Chaque guide découpe la démarche en étapes simples, avec ses sources officielles.</small>
@@ -86,10 +144,10 @@ export default async function Demarches() {
       <section className="sr-group" aria-label="Les essentiels">
         <h2>Les essentiels</h2>
         <ul className="sr-list">
-          {entries.map((e) => (
+          {entries.map((e, i) => (
             <li key={e.href}>
               <Link href={e.href} className="sr-row is-wrap">
-                <span className="sr-icon" aria-hidden="true">
+                <span className={`sr-icon is-${TONES[i % TONES.length]}`} aria-hidden="true">
                   <Icon name={e.icon} />
                 </span>
                 <span className="sr-text">
@@ -133,32 +191,24 @@ export default async function Demarches() {
         <p className="sr-note">Attention aux copies : seul dzds.dz est le portail officiel (pas les variantes en .com ou .online). Aucune administration ne demande de payer un intermédiaire.</p>
       </section>
 
-      <section className="sr-group" aria-label="Guides pratiques">
+      <section className="sr-group" id="guides" aria-label="Guides pratiques">
         <h2>Guides pratiques</h2>
         <ul className="sr-list">
-          {guides.map((g) => {
-            const pack = packs.get(g.href)
-            return (
-              <li key={g.href} className={pack ? 'ac-duo' : undefined}>
-                <Link href={g.href} className="sr-row is-wrap">
-                  <span className="sr-icon is-guide" aria-hidden="true">
-                    <Icon name={g.icon} />
-                  </span>
-                  <span className="sr-text">
-                    <b>{g.title}</b>
-                    <small>{g.summary}</small>
-                  </span>
-                  <span className="ac-free">Guide gratuit</span>
-                  <span className="sr-chev" aria-hidden="true">›</span>
-                </Link>
-                {pack && (
-                  <Link href={`/accompagnement/${pack}`} className="ac-premium-link">
-                    Pack Accompagnement Premium
-                  </Link>
-                )}
-              </li>
-            )
-          })}
+          {guides.map((g, i) => (
+            <li key={g.href}>
+              <Link href={g.href} className="sr-row is-wrap">
+                <span className={`sr-icon is-${TONES[(i + 2) % TONES.length]}`} aria-hidden="true">
+                  <Icon name={g.icon} />
+                </span>
+                <span className="sr-text">
+                  <b>{g.title}</b>
+                  <small>{g.summary}</small>
+                </span>
+                <span className="ac-free">Guide gratuit</span>
+                <span className="sr-chev" aria-hidden="true">›</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </section>
 
