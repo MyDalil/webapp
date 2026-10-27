@@ -43,8 +43,13 @@ const shape = (d: Record<string, unknown>): Pack => {
 /** Packs proposés (vide si l’offre est cachée). */
 export async function listPacks(): Promise<Pack[]> {
   if (!(await offerState()).visible) return []
-  const r = await (await payload()).find({ collection: 'packs', where: { active: { equals: true } }, sort: 'order', limit: 100, depth: 0, overrideAccess: true })
-  return r.docs.map((d) => shape(d as unknown as Record<string, unknown>))
+  try {
+    const r = await (await payload()).find({ collection: 'packs', where: { active: { equals: true } }, sort: 'order', limit: 100, depth: 0, overrideAccess: true })
+    return r.docs.map((d) => shape(d as unknown as Record<string, unknown>))
+  } catch {
+    // Base indisponible : la page s’affiche sans l’offre plutôt que de tomber.
+    return []
+  }
 }
 
 export async function packBySlug(slug: string) {
