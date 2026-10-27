@@ -57,3 +57,5 @@ html[data-theme="dark"] .sr-icon.is-guide { background: rgba(109, 40, 217, .2); 
   .sr-icon { width: 36px; height: 36px; border-radius: 10px; }
   .sr-chev { display: none; }
 }
+.sr-row.is-wrap .sr-text small, .sr-row.is-wrap .sr-text b { white-space: normal; }
+.sr-note a { color: var(--green); font-weight: 650; }
