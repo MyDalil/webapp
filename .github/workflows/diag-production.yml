@@ -1,0 +1,24 @@
+name: Diagnostic production (lecture seule)
+on:
+  workflow_dispatch:
+  push:
+    branches: [import-data]
+    paths: [scripts/diag/probe.sh]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: import-data }
+      - run: bash scripts/diag/probe.sh
+      - name: Commit du relevé
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add -f data/diag
+          git commit -m "Diagnostic production [skip ci]" || echo "rien"
+          git pull --rebase origin import-data
+          git push origin HEAD:import-data
