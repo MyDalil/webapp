@@ -19,7 +19,9 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
   - `osm-places.json` (brut, action « Import OSM », **hors du code du site** : branche `import-data` + archive Vercel Blob `imports/osm/`) → `osm-selected.json` (`scripts/import/select-osm.mjs`, lancé sur `import-data`), ODbL ;
   - les lots sélectionnés (`*-selected.json`, `research-places.json`) restent versionnés : les migrations en ont besoin pour reconstruire une base ; ils sont exclus des fonctions serveur (`outputFileTracingExcludes`).
   - Neon / PostGIS : colonne `geom` (point calculé depuis lat/lng, index spatial GiST) ; `placesNear` pour la proximité.
-  - `importPlaces.ts` : import idempotent, complète sans écraser.
+  - `overture-selected.json` / `overture-complete.json` : lieux Overture Maps (CDLA Permissive 2.0, sources Meta, Microsoft…) — action « Import des lieux (Overture Maps) » sur `import-data` (`fetch-overture.py` puis `select-overture.mjs`) : nouvelles fiches (catégorie donnée par la taxonomie Overture, confiance ≥ 0,6, lieux de culte ≥ 0,5) et champs manquants des fiches existantes ; brut archivé dans Vercel Blob `imports/overture/` ;
+  - `osm-mosques-selected.json` : toutes les mosquées et salles de prière OSM absentes, y compris sans nom (« Mosquée · nom à compléter », hors moteurs de recherche) — `fetch-mosques.mjs` puis `scripts/import/select-mosques.mjs` ;
+  - `importPlaces.ts` : import idempotent, complète sans écraser ; deux homonymes à plus de 300 m sont deux lieux ; jamais un lieu exclu (`exclusions.ts`).
 - `searchPlaces` / `getPlaceCounts` + `/api/annuaire` : recherche et compteurs côté serveur.
 - `filters.ts` : règle unique des filtres de l’annuaire (wilaya, thème nature, coups de cœur, critères vérifiés…), testée (`filters.test.ts`).
 - `Events.ts` (Événements) + `weekend.ts` : page « Que faire ce week-end ? » — week-end algérien (vendredi-samedi, heure d’Alger), jamais d’événement terminé, confirmés séparés des incomplets, un filtre n’est jamais satisfait par une information inconnue ; testé (`weekend.test.ts`).
@@ -39,7 +41,8 @@ Enregistrer une fiche rafraîchit /annuaire, le secteur et la fiche (revalidateP
 - Les coordonnées ne s’affichent à tous que si `showContacts` est coché.
 - Aucune copie de Tripadvisor, Google ou autre site : uniquement des sources ouvertes ou nos propres contenus.
 - Pas de publication sans photo sous licence ; auteur et licence toujours affichés (couverture comprise). Exception : repères pratiques importés (photo de la ville, créditée).
-- Fiche OpenStreetMap : attribution « © les contributeurs OpenStreetMap (ODbL) » toujours visible.
+- Fiche OpenStreetMap : attribution « © les contributeurs OpenStreetMap (ODbL) » toujours visible ; fiche Overture : « © Overture Maps Foundation ».
+- Aucune donnée Google (licence) : la couverture « comme Google » vient d’Overture Maps et d’OpenStreetMap.
 - Un lieu importé est publié « Repérée — à vérifier », avec ses sources.
 - Un événement « confirmé » cite sa source (validation dans /admin) ; sinon il s’affiche « À confirmer ».
 - Coup de cœur, destination à l’honneur et classement : jamais liés à un paiement.

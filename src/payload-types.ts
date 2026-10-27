@@ -416,7 +416,7 @@ export interface Place {
    */
   score?: number | null;
   source?: {
-    provider?: ('dalil' | 'wikidata' | 'osm' | 'pro') | null;
+    provider?: ('dalil' | 'wikidata' | 'osm' | 'overture' | 'pro') | null;
     externalId?: string | null;
     url?: string | null;
     notoriety?: number | null;

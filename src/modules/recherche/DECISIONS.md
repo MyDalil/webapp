@@ -24,3 +24,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Google** : pages catégorie et catégorie × wilaya avec titre, description et adresse canonique ; fichier `categories` du plan du site.
 - **Testé** sur une base neuve complète (22 653 adresses) : « hopital oran », « pharmasie » (faute), « pediatre alger », « avocat constantine », « f3 », « voiture » donnent la bonne catégorie et de vrais contenus.
 - **Donnée à corriger** : le référentiel des communes contient une commune « Alger » rattachée à la wilaya 34 (à vérifier) ; la wilaya l’emporte désormais.
+
+## 2026-10-27 — Recherche par quartier et « Autour de moi » (demande de Rad)
+- Commune ou quartier nommé (« mosquée Draria ») : catégorie reconnue (`category.ts`, testé) → toutes les adresses de la catégorie dans 5 km, de la plus proche à la plus lointaine, distance affichée ; rayon élargi à 15 km sous 8 résultats. Sinon, bonus de proximité dans le classement plein texte.
+- Index : colonnes `lat`, `lng` dans `search_index` (migration `20261027_090000_index_position`).
+- « Autour de moi » (`ui/NearMe`) : position du navigateur, arrondie à ~100 m, passée dans l’adresse (`pos=lat,lng`), acceptée seulement en Algérie, jamais enregistrée.
+- Bulle « Créer mon compte » masquée sur /recherche.

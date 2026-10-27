@@ -33,3 +33,10 @@ h3 { font-size: clamp(1.1rem, 1.4vw, 1.3rem); }
 
 /* Accueil : légende du diaporama en haut à droite — jamais sous la recherche ni sous la bulle d’inscription. */
 .slideshow-meta { top: 24px; bottom: auto; right: max(24px, calc((100vw - 1200px) / 2)); }
+
+/* « Autour de moi » (recherche par position) */
+.near-me { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-weight: 650; cursor: pointer; }
+.near-me svg { color: var(--green); }
+.near-me:disabled { opacity: .7; cursor: progress; }
+.near-me-home { margin-top: 12px; border-color: rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .12); color: #fff; backdrop-filter: blur(6px); }
+.near-me-home svg { color: #fff; }

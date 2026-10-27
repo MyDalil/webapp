@@ -7,7 +7,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 /** Fiche prête à importer (recherche documentaire ou OpenStreetMap). Faits seulement, textes rédigés par DALIL. */
 export type ImportRecord = {
   id: string
-  provider: 'dalil' | 'osm'
+  provider: 'dalil' | 'osm' | 'overture'
   name: string
   nameAr?: string | null
   sector: string
@@ -20,6 +20,8 @@ export type ImportRecord = {
   phone?: string | null
   email?: string | null
   website?: string | null
+  facebook?: string | null
+  instagram?: string | null
   hours?: { days: string; time: string }[]
   intro?: string | null
   inception?: string | null
@@ -34,6 +36,16 @@ const slugify = (s: string) => key(s).replace(/ /g, '-')
 const code = (name: string | null) => {
   const w = WILAYAS.find((x) => key(x.name) === key(name))
   return w ? String(w.code) : undefined
+}
+const SOURCE_LABEL: Record<ImportRecord['provider'], string> = {
+  osm: 'OpenStreetMap — © les contributeurs OpenStreetMap (ODbL)',
+  overture: 'Overture Maps — © Overture Maps Foundation (CDLA Permissive 2.0)',
+  dalil: 'Source officielle consultée',
+}
+const distanceKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+  const r = Math.PI / 180
+  const x = (b.lng - a.lng) * r * Math.cos(((a.lat + b.lat) / 2) * r)
+  return Math.hypot(x, (b.lat - a.lat) * r) * 6371
 }
 const site = (u?: string | null) => (u ? (/^https?:\/\//.test(u) ? u : `https://${u}`) : undefined)
 const email = (e?: string | null) => (e && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim()) ? e.trim() : undefined)
@@ -51,13 +63,13 @@ async function bulkCreate(db: Db, rows: Record<string, unknown>[]) {
   for (let i = 0; i < rows.length; i += 500) {
     const chunk = rows.slice(i, i + 500)
     const res = await db.execute(sql`
-      INSERT INTO places (name, name_ar, sector, category, intro, inception, wilaya, city, place, address, lat, lng, phone, email, website,
+      INSERT INTO places (name, name_ar, sector, category, intro, inception, wilaya, city, place, address, lat, lng, phone, email, website, facebook, instagram,
         show_contacts, verification, slug, _status, score, source_provider, source_external_id, source_url, source_notes)
       SELECT x.name, x.name_ar, x.sector::enum_places_sector, x.category, x.intro, x.inception, x.wilaya::enum_places_wilaya, x.city, x.city, x.address,
-        x.lat, x.lng, x.phone, x.email, x.website, x.show_contacts, 'spotted', x.slug, 'published', x.score,
+        x.lat, x.lng, x.phone, x.email, x.website, x.facebook, x.instagram, x.show_contacts, 'spotted', x.slug, 'published', x.score,
         x.provider::enum_places_source_provider, x.external_id, x.url, x.notes
       FROM jsonb_to_recordset(${JSON.stringify(chunk)}::jsonb) AS x(name text, name_ar text, sector text, category text, intro text, inception text,
-        wilaya text, city text, address text, lat numeric, lng numeric, phone text, email text, website text, show_contacts boolean, slug text,
+        wilaya text, city text, address text, lat numeric, lng numeric, phone text, email text, website text, facebook text, instagram text, show_contacts boolean, slug text,
         score numeric, provider text, external_id text, url text, notes text)
       RETURNING id, source_external_id`)
     const ids = new Map(res.rows.map((r) => [String(r.source_external_id), Number(r.id)]))
@@ -83,13 +95,17 @@ async function bulkCreate(db: Db, rows: Record<string, unknown>[]) {
 
 export async function importPlaces(payload: Payload, req: PayloadRequest | undefined, records: ImportRecord[], db?: Db) {
   const ctx = { skipRevalidate: true, skipAudit: true }
-  const existing = await payload.find({ collection: 'places', req, overrideAccess: true, limit: 100000, depth: 0, pagination: false, select: { name: true, wilaya: true, slug: true, source: true } as never })
+  const existing = await payload.find({ collection: 'places', req, overrideAccess: true, limit: 100000, depth: 0, pagination: false, select: { name: true, wilaya: true, slug: true, source: true, lat: true, lng: true } as never })
   const byExternal = new Map<string, number>()
   const byName = new Map<string, number>()
+  // Position des fiches par nom : deux lieux homonymes éloignés de plus de 300 m sont distincts (mosquées sans nom, chaînes…).
+  const where = new Map<number, { lat: number; lng: number }>()
   const slugs = new Set<string>()
-  for (const d of existing.docs as unknown as { id: number; name: string; wilaya?: string | null; slug?: string; source?: { externalId?: string | null } }[]) {
+  let pendingId = -1
+  for (const d of existing.docs as unknown as { id: number; name: string; wilaya?: string | null; slug?: string; lat?: number | null; lng?: number | null; source?: { externalId?: string | null } }[]) {
     if (d.source?.externalId) byExternal.set(d.source.externalId, d.id)
     byName.set(`${key(d.name)}|${d.wilaya ?? ''}`, d.id)
+    if (d.lat != null && d.lng != null) where.set(d.id, { lat: Number(d.lat), lng: Number(d.lng) })
     if (d.slug) slugs.add(d.slug)
   }
   let created = 0
@@ -112,18 +128,23 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
       phone: r.phone || undefined,
       email: email(r.email),
       website: site(r.website),
+      facebook: r.facebook || undefined,
+      instagram: r.instagram || undefined,
       hours: r.hours?.length ? r.hours : undefined,
       intro: r.intro || undefined,
       inception: r.inception || undefined,
       // Source publique affichée sur la fiche (attribution ODbL pour OpenStreetMap).
-      sources: [{ label: r.provider === 'osm' ? 'OpenStreetMap — © les contributeurs OpenStreetMap (ODbL)' : 'Source officielle consultée', url: r.sourceUrl }],
+      sources: [{ label: SOURCE_LABEL[r.provider], url: r.sourceUrl }],
     }
-    const id = byExternal.get(r.id) ?? byName.get(`${key(r.name)}|${wilaya}`)
+    const homonym = byName.get(`${key(r.name)}|${wilaya}`)
+    const at = homonym != null ? where.get(homonym) : undefined
+    const far = at && r.lat != null && r.lng != null && distanceKm(at, { lat: r.lat, lng: r.lng }) > 0.3
+    const id = byExternal.get(r.id) ?? (far ? undefined : homonym)
     if (byExternal.has(r.id)) {
       skipped++ // déjà importée depuis cette source : rien à refaire
       continue
     }
-    if (id === -1) {
+    if (id != null && id < 0) {
       skipped++ // doublon dans le même lot
       continue
     }
@@ -144,12 +165,14 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
         pending.push({
           name: r.name, name_ar: facts.nameAr ?? null, sector: r.sector, category: r.category, intro: facts.intro ?? null, inception: facts.inception ?? null,
           wilaya, city, address: facts.address ?? null, lat: facts.lat ?? null, lng: facts.lng ?? null, phone: facts.phone ?? null, email: facts.email ?? null,
-          website: facts.website ?? null, show_contacts: Boolean(r.publicBody), slug, provider: r.provider, external_id: r.id, url: r.sourceUrl, notes: r.note ?? null,
+          website: facts.website ?? null, facebook: facts.facebook ?? null, instagram: facts.instagram ?? null, show_contacts: Boolean(r.publicBody), slug, provider: r.provider, external_id: r.id, url: r.sourceUrl, notes: r.note ?? null,
           hours: facts.hours ?? [], source_label: facts.sources[0].label,
           score: scorePlace({ verification: 'spotted', intro: facts.intro, lat: facts.lat, lng: facts.lng, hours: facts.hours, phone: facts.phone, website: facts.website }),
         })
-        byExternal.set(r.id, -1)
-        byName.set(`${key(r.name)}|${wilaya}`, -1)
+        const pid = pendingId--
+        byExternal.set(r.id, pid)
+        byName.set(`${key(r.name)}|${wilaya}`, pid)
+        if (r.lat != null && r.lng != null) where.set(pid, { lat: r.lat, lng: r.lng })
         created++
         continue
       }

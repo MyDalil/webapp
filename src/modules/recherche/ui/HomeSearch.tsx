@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Icon } from '@/platform/ui/Icon'
+import { NearMe } from './NearMe'
 import { toast } from '@/platform/shell/toast'
 import { simpleClean } from '@/platform/ai/clean'
 import { preferredLang, startDictation, type Dictation } from '@/platform/ui/speech'
@@ -126,6 +127,7 @@ export function HomeSearch() {
         Rechercher
       </button>
     </form>
+    <NearMe inputId="home-search" className="near-me-home" />
     {shown.length > 0 && (
       <ul id="home-search-list" className="search-suggest" role="listbox" aria-label="Propositions">
         {shown.map((it, i) => (
