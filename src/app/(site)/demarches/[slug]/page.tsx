@@ -5,6 +5,7 @@ import { DEMARCHES, demarcheBySlug, type Demarche, type GuideFact } from '@/modu
 import { offerState, packForGuide } from '@/modules/accompagnement'
 import { Choice, SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
+import { XpHero } from '@/platform/ui/Xp'
 
 type Props = { params: Promise<{ slug: string }> }
 export const revalidate = 3600
@@ -57,30 +58,11 @@ export default async function DemarchePage({ params }: Props) {
   const pack = await packForGuide(`/demarches/${d.slug}`)
   const open = (await offerState()).mode === 'ouvert'
   return (
-    <article className="sr dm-page">
-      <nav className="ac-crumbs dm-crumbs" aria-label="Fil d’Ariane">
-        <Link href="/">Accueil</Link> › <Link href="/demarches">Démarches</Link> › <span>{d.short}</span>
-      </nav>
-
-      <header className="dm-hero">
-        <div className="dm-hero-media">
-          {/* eslint-disable-next-line @next/next/no-img-element -- illustration SVG locale */}
-          <img className="dm-hero-img" src={d.image} alt="" width={640} height={360} />
-          <Link href="/demarches" className="dm-round" aria-label="Retour aux démarches">
-            ‹
-          </Link>
-          {d.credit && <small className="dm-credit">{d.credit}</small>}
-        </div>
-        <div className="dm-hero-text">
-          <h1>{d.title}</h1>
-          <p className="dm-where">
-            <Icon name="pin" /> {d.where}
-          </p>
-          <p className="sr-meta">{d.lead}</p>
-          <p className="ac-badge">Dernière vérification : {dateFr(d.checked)}</p>
-        </div>
-      </header>
-
+    <article className="xp">
+      <XpHero compact photo={d.image} credit={d.credit} eyebrow={`Démarche · ${d.where}`} title={d.title} lead={d.lead} back={{ href: '/demarches', label: 'Toutes les démarches' }}>
+        <p className="ac-badge is-light">Dernière vérification : {dateFr(d.checked)}</p>
+      </XpHero>
+      <div className="container xp-narrow xp-body">
       <section className="sr-group" aria-label="Points clés">
         <h2>Points clés</h2>
         <ul className="dm-keys swipe">
@@ -193,6 +175,7 @@ export default async function DemarchePage({ params }: Props) {
           Une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.
         </p>
       </section>
+      </div>
     </article>
   )
 }

@@ -9,6 +9,7 @@ import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS } from '@/platform/referentiel/photos'
 import { Icon } from '@/platform/ui/Icon'
 import { Visual } from '@/platform/ui/Visual'
+import { XpHero } from '@/platform/ui/Xp'
 
 type Props = { params: Promise<{ slug: string }> }
 export const revalidate = 3600
@@ -32,29 +33,13 @@ export default async function GuidePage({ params }: Props) {
   const open = (await offerState()).mode === 'ouvert'
   const others = GUIDES.filter((x) => x.slug !== slug && x.category === GUIDES.find((y) => y.slug === slug)?.category).slice(0, 6)
   return (
-    <article className="sr dm-page">
-      <nav className="ac-crumbs dm-crumbs" aria-label="Fil d’Ariane">
-        <Link href="/">Accueil</Link> › <Link href="/guides">Guides</Link> › <span>{g.title}</span>
-      </nav>
-
-      <header className="dm-hero">
-        <div className="dm-hero-media">
-          <Visual photo={v.photo} icon={v.icon} tone={v.tone} className="dm-hero-visual" eager />
-          <Link href="/guides" className="dm-round" aria-label="Tous les guides">
-            ‹
-          </Link>
-          {v.photo && <small className="dm-credit">{PHOTOS[v.photo].credit}</small>}
-        </div>
-        <div className="dm-hero-text">
-          <p className="sr-eyebrow">{g.label}</p>
-          <h1>{g.title}</h1>
-          <p className="sr-meta">{g.lead}</p>
-          <span className="dm-fav">
-            <FavoriteButton itemType="guide" itemKey={slug} label={g.title} />
-          </span>
-        </div>
-      </header>
-
+    <article className="xp">
+      <XpHero compact photo={v.photo ? PHOTOS[v.photo].src : undefined} credit={v.photo ? PHOTOS[v.photo].credit : null} eyebrow={g.label} title={g.title} lead={g.lead} back={{ href: '/guides', label: 'Tous les guides' }}>
+        <span className="dm-fav is-light">
+          <FavoriteButton itemType="guide" itemKey={slug} label={g.title} />
+        </span>
+      </XpHero>
+      <div className="container xp-narrow xp-body">
       {g.disclosure && <p className="dm-note">{g.disclosure}</p>}
 
       <section className="sr-group" id="guide" aria-label="Étape par étape">
@@ -134,6 +119,7 @@ export default async function GuidePage({ params }: Props) {
           </ul>
         </section>
       )}
+      </div>
     </article>
   )
 }

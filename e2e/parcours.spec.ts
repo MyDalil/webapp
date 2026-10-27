@@ -194,7 +194,7 @@ test('démarches : catégories, démarches phares et deux options (hors producti
   await expect(page.getByRole('link', { name: 'Guide gratuit' }).first()).toBeVisible()
   // Offre payante pas encore « Ouverte » dans /admin : bouton « À venir », sans lien.
   await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
-  await expect(page.getByRole('heading', { name: 'Catégories populaires' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Que voulez-vous faire ?' })).toBeVisible()
   await page.getByRole('link', { name: /Passeport biométrique/ }).first().click()
   await expect(page.getByRole('heading', { name: 'Points clés' })).toBeVisible()
   await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
