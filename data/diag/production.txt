@@ -1,4 +1,4 @@
-Relevé : 2026-10-28 07:22:55 UTC
+Relevé : 2026-10-28 07:23:31 UTC
 Stockage photos : introuvable
 == /api/sante → 503
-{"ok":false,"base":"indisponible","ms":665}
+{"ok":false,"base":"indisponible","ms":654}
