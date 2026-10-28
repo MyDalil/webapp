@@ -1,0 +1,43 @@
+name: Économie de la base (Neon)
+# Chaque jour : met la base en veille après 5 minutes sans activité et supprime les copies d’aperçu inutilisées.
+# Secrets GitHub à créer une fois : NEON_API_KEY (console Neon › Account › API keys) et NEON_PROJECT_ID.
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [preview]
+    paths: [.github/workflows/neon-economie.yml]
+permissions:
+  contents: read
+jobs:
+  economie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KEY: ${{ secrets.NEON_API_KEY }}
+      PROJECT: ${{ secrets.NEON_PROJECT_ID }}
+      API: https://console.neon.tech/api/v2
+    steps:
+      - name: Accès
+        id: acces
+        run: |
+          if [ -z "$KEY" ] || [ -z "$PROJECT" ]; then echo "::notice::NEON_API_KEY ou NEON_PROJECT_ID absent : rien à faire."; echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - name: Veille après 5 minutes
+        if: steps.acces.outputs.skip != '1'
+        run: |
+          h=(-H "Authorization: Bearer $KEY" -H "Content-Type: application/json")
+          curl -sf -X PATCH "${h[@]}" "$API/projects/$PROJECT" -d '{"project":{"default_endpoint_settings":{"suspend_timeout_seconds":300}}}' > /dev/null && echo "Réglage du projet : veille à 5 min"
+          for ep in $(curl -sf "${h[@]}" "$API/projects/$PROJECT/endpoints" | jq -r '.endpoints[].id'); do
+            curl -sf -X PATCH "${h[@]}" "$API/projects/$PROJECT/endpoints/$ep" -d '{"endpoint":{"suspend_timeout_seconds":300}}' > /dev/null && echo "Calcul $ep : veille à 5 min"
+          done
+      - name: Copies d’aperçu inutilisées supprimées
+        if: steps.acces.outputs.skip != '1'
+        run: |
+          h=(-H "Authorization: Bearer $KEY")
+          limite=$(date -u -d '3 days ago' +%s)
+          curl -sf "${h[@]}" "$API/projects/$PROJECT/branches" | jq -c '.branches[] | select(.default != true and .protected != true)' | while read -r b; do
+            id=$(echo "$b" | jq -r .id); name=$(echo "$b" | jq -r .name); upd=$(date -u -d "$(echo "$b" | jq -r .updated_at)" +%s)
+            case "$name" in preview/preview|main|production) echo "Gardée : $name"; continue;; esac
+            if [ "$upd" -lt "$limite" ]; then curl -sf -X DELETE "${h[@]}" "$API/projects/$PROJECT/branches/$id" > /dev/null && echo "Supprimée : $name"; else echo "Récente, gardée : $name"; fi
+          done

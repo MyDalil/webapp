@@ -14,7 +14,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "node scripts/check-boundaries.mjs && node scripts/db-check.mjs && cross-env NODE_OPTIONS=--no-deprecation payload migrate && pnpm migrate:data && pnpm search:index && pnpm build",
+    "vercel-build": "node scripts/check-boundaries.mjs && node scripts/db-check.mjs && cross-env NODE_OPTIONS=--no-deprecation payload migrate && pnpm migrate:data && node scripts/index-if-needed.mjs && pnpm build",
     "check": "node scripts/check-boundaries.mjs && tsc --noEmit",
     "migrate:data": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/flush-deferred.ts",
     "search:index": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/reindex-search.ts",
