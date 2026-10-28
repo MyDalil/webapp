@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
-# Diagnostic de production (lecture seule) : état de l’application et de la base, temps de réponse des pages clés. Relance : 2026-10-28T07:05:41
+# Diagnostic de production (lecture seule) : état de l’application et de la base, rapport du build (Vercel Blob).
 set +e
 out=data/diag/production.txt
 mkdir -p data/diag
 {
   echo "Relevé : $(date -u '+%Y-%m-%d %H:%M:%S') UTC"
-  for path in /api/sante / /annuaire/mosquees-priere /adresses/masdjid-al-bashir-al-ibrahimi /recherche?q=mosquee "/demarches"; do
-    code=$(curl -s -o /tmp/body -w '%{http_code} %{time_total}s' --max-time 40 "https://www.mydalil.com$path")
-    echo "== $path → $code"
-    if [ "$path" = /api/sante ]; then head -c 600 /tmp/body; echo; fi
-    grep -o '[0-9  ]* résultats\?' /tmp/body | head -2
-    grep -o 'La sélection se prépare' /tmp/body | head -1
-    grep -o '"digest":"[^"]*"' /tmp/body | head -2
-  done
+  curl -s --max-time 30 https://www.mydalil.com/ -o /tmp/home
+  blob=$(grep -oE 'https://[a-z0-9]+\.public\.blob\.vercel-storage\.com' /tmp/home | head -1)
+  echo "Stockage photos : ${blob:-introuvable}"
+  if [ -n "$blob" ]; then echo "== Rapport du build :"; curl -s --max-time 20 "$blob/diag/base.txt"; echo; fi
+  code=$(curl -s -o /tmp/body -w '%{http_code}' --max-time 40 "https://www.mydalil.com/api/sante"); echo "== /api/sante → $code"; head -c 300 /tmp/body; echo
 } > "$out" 2>&1
 cat "$out"
