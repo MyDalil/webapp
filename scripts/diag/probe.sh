@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Diagnostic de production (lecture seule) : état de l’application et de la base, temps de réponse des pages clés.
+# Diagnostic de production (lecture seule) : état de l’application et de la base, temps de réponse des pages clés. Relance : 2026-10-28T07:05:41
 set +e
 out=data/diag/production.txt
 mkdir -p data/diag
