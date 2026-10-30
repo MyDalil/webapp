@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { getPage } from '@/modules/contenus'
 import { Tree } from '@/modules/contenus/ui'
 import { searchEverything } from '@/modules/recherche'
+import { cardsBySlugs } from '@/modules/annuaire'
+import { PlaceRow } from '@/modules/annuaire/ui'
 import { NearMe } from '@/modules/recherche/ui'
 import { Icon } from '@/platform/ui/Icon'
 
@@ -32,6 +34,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const [page, r] = await Promise.all([getPage('/recherche'), query ? searchEverything(query, { position, prefer: /^\d{1,2}$/.test(w ?? '') ? w : null }) : null])
   const pistes = r?.groups.find((g) => g.key === 'pistes')
   const adresses = r?.groups.find((g) => g.key === 'adresse')
+  // Adresses : même carte que les pages de catégorie (vignette, catégorie · ville, statut, favori).
+  const cards = new Map((await cardsBySlugs((adresses?.hits ?? []).map((h) => h.url.replace(/^\/adresses\//, '')))).map((c) => [`/adresses/${c.slug}`, c]))
   const found = r?.spread ? r.spread.reduce((n, s) => n + s.count, 0) : adresses?.hits.length ?? 0
   return (
     <>
@@ -85,7 +89,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               const first = g.hits.slice(0, 12)
               const more = g.hits.slice(12)
               const rows = (list: typeof g.hits) =>
-                list.map((h) => (
+                list.map((h) =>
+                  cards.has(h.url) ? (
+                    <li key={`${h.type}:${h.id}`} className="sr-place">
+                      <PlaceRow p={cards.get(h.url)!} distance={h.distanceKm != null ? distance(h.distanceKm) : null} />
+                    </li>
+                  ) : (
                   <li key={`${h.type}:${h.id}`}>
                     <Link href={h.url} className="sr-row">
                       <span className={`sr-icon is-${h.type}`} aria-hidden="true">
@@ -102,7 +111,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       <span className="sr-chev" aria-hidden="true">›</span>
                     </Link>
                   </li>
-                ))
+                  ),
+                )
               return (
                 <section key={g.key} className="sr-group">
                   <h2>

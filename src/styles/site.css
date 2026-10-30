@@ -122,3 +122,5 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
   .place-panel-list .place-row:nth-child(odd) { border-right: 1px solid var(--line); }
   .place-panel-list .place-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
 }
+.sr-list > li.sr-place { padding: 0; }
+.sr-list > li.sr-place .place-row { padding: 12px 14px; }

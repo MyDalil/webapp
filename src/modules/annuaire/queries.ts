@@ -225,6 +225,19 @@ export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTil
   return { top: illustrated.slice(0, 14), cities, total: counts.total || all.length }
 }
 
+/** Cartes d’adresses par slug, dans l’ordre demandé (résultats de recherche affichés avec la carte unique). */
+export async function cardsBySlugs(slugs: string[]): Promise<PlaceCard[]> {
+  if (!slugs.length) return []
+  try {
+    const payload = await client()
+    const { docs } = await payload.find({ collection: 'places', where: { and: [{ _status: { equals: 'published' } }, { slug: { in: slugs } }] }, depth: 1, limit: slugs.length, overrideAccess: false })
+    const by = new Map(docs.map((d) => [d.slug, toCard(d)]))
+    return slugs.flatMap((s) => (by.has(s) ? [by.get(s)!] : []))
+  } catch {
+    return []
+  }
+}
+
 /** Lieux d’une wilaya, déjà classés par score. */
 export async function getWilayaPlaces(name: string): Promise<PlaceCard[]> {
   return (await searchPlaces({ wilaya: name }, 600)).places

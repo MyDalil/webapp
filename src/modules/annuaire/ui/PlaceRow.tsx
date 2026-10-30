@@ -6,13 +6,14 @@ export type PlaceRowData = { slug: string; name: string; photo: string; category
 export const PLACE_STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée', labelled: 'Label Excellence' }
 
 /** Carte unique d’une adresse (modèle des pages de catégorie) : vignette, catégorie · ville, nom, rubrique · statut, favori. */
-export function PlaceRow({ p }: { p: PlaceRowData }) {
+export function PlaceRow({ p, distance }: { p: PlaceRowData; distance?: string | null }) {
   return (
     <article className="place-row">
       <div className="place-thumb" style={{ backgroundImage: `url(${p.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <Link className="place-main" href={`/adresses/${p.slug}`}>
         <span className="place-type">
           {p.category} · {p.city}
+          {distance ? ` · ${distance}` : ''}
         </span>
         <h3>{p.name}</h3>
         <p>
