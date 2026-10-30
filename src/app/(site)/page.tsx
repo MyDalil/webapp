@@ -13,6 +13,8 @@ import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as SERVICE_CATEGORIES } from '@/modules/services'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
+import { TileCarousel, type Tile } from '@/platform/ui/Xp'
+import { PHOTOS } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
@@ -72,6 +74,8 @@ function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
     </Carousel>
   )
 }
+
+const MUSULMANE_PHOTO: Record<string, string> = { 'Mosquées & salles de prière': PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src }
 
 export default async function Home() {
   const [{ top, cities }, all, destination, counts, latest, classified] = await Promise.all([
@@ -133,18 +137,16 @@ export default async function Home() {
   const city = cities[0]
   const photos: EntryPhotos = {
     musulmane: door(['mosquees-priere'], (p) => p.category === 'Mosquées'),
-    services: door(
-      ['sante-soins', 'maison-travaux', 'droit-finance-conseil', 'transports-mobilite'],
-      (p) => p.sector === 'sante-soins',
-    ),
+    // Portes Services et Démarches : photo choisie qui montre le sujet (pas une fiche au hasard).
+    services: { ...door(['sante-soins', 'maison-travaux', 'droit-finance-conseil', 'transports-mobilite']), photo: { src: PHOTOS['hopital-moderne'].src, credit: PHOTOS['hopital-moderne'].credit }, example: null },
     decouvrir: door(['culture-nature-loisirs', 'restaurants-gastronomie']),
-    demarches: door(['administrations-services-publics']),
+    demarches: { ...door(['administrations-services-publics']), photo: { src: PHOTOS['grande-poste'].src, credit: PHOTOS['grande-poste'].credit }, example: null },
     annonces: (() => {
       const c = latest.find((x) => x.photo)
-      return { photo: c?.photo ? { src: c.photo, credit: null } : null, count: classified.total, example: null }
+      return { photo: c?.photo ? { src: c.photo, credit: null } : { src: PHOTOS['alger-ville'].src, credit: PHOTOS['alger-ville'].credit }, count: classified.total, example: null }
     })(),
     vivre: {
-      photo: city ? { src: city.cover, credit: city.credit } : null,
+      photo: city ? { src: city.cover, credit: city.credit } : { src: PHOTOS['alger-mer'].src, credit: PHOTOS['alger-mer'].credit },
       count: 0,
       example: null,
     },
@@ -193,30 +195,16 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-          <Carousel label="Vie musulmane" variant="tiles">
-            {musulmane.entries.map(([href, , title, sub], i) => {
+          <TileCarousel
+            label="Vie musulmane"
+            tiles={musulmane.entries.map(([href, icon, title, sub]): Tile => {
               const category = new URL(href, 'https://mydalil.com').searchParams.get('category')
               const p = category ? byCategory(category) : undefined
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className="city-tile envie-tile"
-                  data-reveal
-                  style={{ ['--i' as string]: i % 6 }}
-                >
-                  <div
-                    className="city-tile-img"
-                    style={p ? { backgroundImage: `url(${p.photo})` } : undefined}
-                  />
-                  <div className="city-tile-body">
-                    <h3>{title}</h3>
-                    <p>{sub}</p>
-                  </div>
-                </Link>
-              )
+              // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
+              const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
+              return { href, title, sub, photo: own ?? MUSULMANE_PHOTO[title] ?? null, icon }
             })}
-          </Carousel>
+          />
         </section>
       )}
 

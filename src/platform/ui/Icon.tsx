@@ -95,6 +95,11 @@ const P: Record<string, React.ReactNode> = {
       <circle cx="17" cy="18" r="1.6" />
     </>
   ),
+  mosque: <path d="M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5M4 21V10M20 21V10" />,
+  book: <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5ZM4 19a2 2 0 0 1 2-2h13M9 7h6" />,
+  books: <path d="M4 4h4v16H4zM10 4h4v16h-4zM15.5 5.2l3.9-1 3.6 15.5-3.9 1z" />,
+  moon: <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" />,
+  kaaba: <path d="M4 7l8-3 8 3v12l-8 3-8-3V7ZM4 7l8 3 8-3M12 10v12M4 11l8 3 8-3" />,
   briefcase: (
     <>
       <rect x="3" y="7" width="18" height="13" rx="2" />
