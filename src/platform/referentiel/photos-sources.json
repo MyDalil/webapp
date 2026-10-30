@@ -262,5 +262,13 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "page": "https://commons.wikimedia.org/wiki/File:Cimeti%C3%A8re_des_Thaalba_%C3%A0_Alger_2.JPG",
   "alt": "Cimetière des Thaalba, Alger"
+ },
+ "djamaa-el-kebir": {
+  "file": "Djamaâ el Kebir.jpg",
+  "author": "Benzita Abdelhadi",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Djama%C3%A2_el_Kebir.jpg",
+  "alt": "Djamaâ El Kebir, la Grande Mosquée d’Alger"
  }
 }

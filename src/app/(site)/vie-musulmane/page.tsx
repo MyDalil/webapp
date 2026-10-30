@@ -19,7 +19,7 @@ export const revalidate = 3600
  */
 /** Photo libre de repli quand la catégorie n’a pas encore de photo de lieu (même sujet seulement). */
 // Photos choisies (Rad, 2026-10-30 : des images, pas des pictogrammes) ; prioritaires sur la photo d’une fiche au hasard.
-const FALLBACK: Record<string, string> = { Mosquées: PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src, 'Écoles coraniques': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Associations caritatives et entraide': PHOTOS.iftar.src, 'Pompes funèbres musulmanes et toilette mortuaire': PHOTOS.cimetiere.src }
+const FALLBACK: Record<string, string> = { 'Hajj & Omra': PHOTOS.kaaba.src, 'Écoles coraniques': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Associations caritatives et entraide': PHOTOS.iftar.src, 'Pompes funèbres musulmanes et toilette mortuaire': PHOTOS.cimetiere.src }
 
 export default async function VieMusulmane() {
   const rubric = RUBRICS.find((r) => r.key === 'musulmane')
@@ -29,7 +29,7 @@ export default async function VieMusulmane() {
       const category = new URL(href, 'https://www.mydalil.com').searchParams.get('category')
       const r = category ? await searchPlaces({ sector: 'mosquees-priere', category }, 1) : null
       const p = r?.places[0]
-      return { href, icon, title, sub, count: r?.total ?? null, photo: FALLBACK[category ?? title] ?? (p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null), cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
+      return { href, icon, title, sub, count: r?.total ?? null, photo: FALLBACK[category ?? title] ?? (p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : PHOTOS['djamaa-el-kebir'].src), cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
     }),
   )
   // Photo d’en-tête : seulement une photo libre créditée (licence).

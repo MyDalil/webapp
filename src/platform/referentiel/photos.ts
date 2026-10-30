@@ -50,6 +50,7 @@ export const PHOTOS = {
   'librairie-islamique': { src: '/images/photos/librairie-islamique.webp', alt: "Vitrine d’une librairie islamique", credit: "Vitrine d’une librairie islamique · Maison Méditerranéenne Des Sciences de l'Homme Phonothèque, Anouk Cohen · Licence Ouverte" },
   'iftar': { src: '/images/photos/iftar.webp', alt: "Rupture du jeûne collective devant une mosquée", credit: "Rupture du jeûne collective devant une mosquée · Shyjith Kaiprath Rajan · CC BY-SA 4.0" },
   'cimetiere': { src: '/images/photos/cimetiere.webp', alt: "Cimetière des Thaalba, Alger", credit: "Cimetière des Thaalba, Alger · Reda Kerbush · CC BY-SA 3.0" },
+  'djamaa-el-kebir': { src: '/images/photos/djamaa-el-kebir.webp', alt: "Djamaâ El Kebir, la Grande Mosquée d’Alger", credit: "Djamaâ El Kebir, la Grande Mosquée d’Alger · Benzita Abdelhadi · CC BY-SA 4.0" },
 } satisfies Record<string, Photo>
 
 export type PhotoKey = keyof typeof PHOTOS

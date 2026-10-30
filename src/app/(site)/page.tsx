@@ -75,7 +75,7 @@ function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
   )
 }
 
-const MUSULMANE_PHOTO: Record<string, string> = { 'Mosquées & salles de prière': PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src, 'Enseignement coranique': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Entraide & associations': PHOTOS.iftar.src, 'Funérailles musulmanes': PHOTOS.cimetiere.src }
+const MUSULMANE_PHOTO: Record<string, string> = { 'Hajj & Omra': PHOTOS.kaaba.src, 'Enseignement coranique': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Entraide & associations': PHOTOS.iftar.src, 'Funérailles musulmanes': PHOTOS.cimetiere.src }
 
 export default async function Home() {
   const [{ top, cities }, all, destination, counts, latest, classified] = await Promise.all([
@@ -190,9 +190,6 @@ export default async function Home() {
                 <p className="eyebrow">Vie musulmane</p>
                 <h2>Prier, apprendre, s’entraider.</h2>
               </div>
-              <Link className="button outline" href={musulmane.href ?? '/guides/vie-musulmane'}>
-                Le guide de la vie musulmane
-              </Link>
             </div>
           </div>
           <TileCarousel
@@ -202,7 +199,7 @@ export default async function Home() {
               const p = category ? byCategory(category) : undefined
               // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
               const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
-              return { href, title, sub, photo: MUSULMANE_PHOTO[title] ?? own ?? null, icon }
+              return { href, title, sub, photo: MUSULMANE_PHOTO[title] ?? own ?? PHOTOS['djamaa-el-kebir'].src, icon }
             })}
           />
         </section>
@@ -252,9 +249,6 @@ export default async function Home() {
               <p className="eyebrow">Découvrir</p>
               <h2>Tourisme, sorties et divertissement.</h2>
             </div>
-            <Link className="button outline" href="/explorer">
-              Tout découvrir
-            </Link>
           </div>
         </div>
         <Carousel label="Par envie" variant="tiles">
@@ -338,9 +332,6 @@ export default async function Home() {
               <p className="eyebrow">Démarches</p>
               <h2>Vos papiers, étape par étape.</h2>
             </div>
-            <Link className="button outline" href="/demarches">
-              Toutes les démarches
-            </Link>
           </div>
         </div>
         <GuideTiles slugs={DEMARCHES} label="Guides des démarches" />
@@ -409,9 +400,6 @@ export default async function Home() {
               <p className="eyebrow">Vivre en Algérie</p>
               <h2>Logement, école, banque : les repères.</h2>
             </div>
-            <Link className="button outline" href="/installation">
-              Votre installation
-            </Link>
           </div>
         </div>
         <GuideTiles slugs={VIVRE} label="Guides de la vie pratique" />
