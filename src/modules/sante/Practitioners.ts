@@ -1,3 +1,5 @@
+import { revalidatePath } from 'next/cache'
+import type { CollectionAfterChangeHook } from 'payload'
 import type { Access, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { isStaff } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
@@ -15,12 +17,22 @@ const prepare: CollectionBeforeValidateHook = ({ data }) => {
   return data
 }
 
+/** Fiche praticien mise en cache 1 h : rafraîchie tout de suite à l’enregistrement. */
+const refreshPage: CollectionAfterChangeHook = ({ doc }) => {
+  try {
+    revalidatePath(`/praticiens/${doc.slug}`)
+  } catch {
+    // Hors requête Next (import, CLI) : rien à rafraîchir.
+  }
+  return doc
+}
+
 export const Practitioners: CollectionConfig = {
   slug: 'practitioners',
   labels: { singular: 'Praticien', plural: 'Praticiens' },
   admin: { group: 'Santé', useAsTitle: 'name', defaultColumns: ['name', 'specialties', 'city', 'status', 'identityVerified'] },
   access: { read: readPublished, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { beforeValidate: [prepare], afterChange: [indexPractitioner], afterDelete: [unindexPractitioner] },
+  hooks: { beforeValidate: [prepare], afterChange: [indexPractitioner, refreshPage], afterDelete: [unindexPractitioner] },
   fields: [
     {
       type: 'tabs',

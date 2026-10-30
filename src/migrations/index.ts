@@ -41,6 +41,7 @@ import * as migration_20261027_130000_accompagnement from './20261027_130000_acc
 import * as migration_20261027_131000_packs_initiaux from './20261027_131000_packs_initiaux';
 import * as migration_20261027_140000_packs_par_personne from './20261027_140000_packs_par_personne';
 import * as migration_20261027_141000_packs_demarches from './20261027_141000_packs_demarches';
+import * as migration_20261030_160000_adresses_sans_slug from './20261030_160000_adresses_sans_slug';
 
 export const migrations = [
   {
@@ -257,5 +258,10 @@ export const migrations = [
     up: migration_20261027_141000_packs_demarches.up,
     down: migration_20261027_141000_packs_demarches.down,
     name: '20261027_141000_packs_demarches',
+  },
+  {
+    up: migration_20261030_160000_adresses_sans_slug.up,
+    down: migration_20261030_160000_adresses_sans_slug.down,
+    name: '20261030_160000_adresses_sans_slug',
   },
 ];

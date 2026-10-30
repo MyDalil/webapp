@@ -6,19 +6,13 @@ import { criteriaFor, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
+import { slugify } from '@/platform/referentiel/slug'
 
-const slugify = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
 const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
   if (!data) return data
-  if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`)
+  if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`) || `lieu-${Date.now().toString(36)}`
   data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)
   return data
