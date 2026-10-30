@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getShowcase, getWilayaPlaces, wilayaBySlug, type PlaceCard } from '@/modules/annuaire'
-import { Carousel } from '@/platform/ui/Carousel'
+import { PlacePanel } from '@/modules/annuaire/ui'
+import { categoryPath } from '@/platform/referentiel/slug'
+import { SECTORS } from '@/platform/referentiel/catalog'
 
 export const revalidate = 3600
 
@@ -17,8 +19,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const w = wilayaBySlug((await params).slug)
   return w ? { title: `${w.name} — que voir, que faire · DALIL`, description: `Les lieux à découvrir dans la wilaya de ${w.name}, avec leurs sources et leur statut de vérification.` } : {}
 }
-
-const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée DALIL', labelled: 'Label Excellence' }
 
 export default async function City({ params }: Props) {
   const w = wilayaBySlug((await params).slug)
@@ -57,19 +57,7 @@ export default async function City({ params }: Props) {
               </div>
             </div>
           </div>
-          <Carousel label={category}>
-            {list.map((p, i) => (
-              <Link key={p.slug} href={`/adresses/${p.slug}`} className="place-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
-                <div className="place-tile-img" style={{ backgroundImage: `url(${p.photo})` }} />
-                <div className="place-tile-body">
-                  <span className="chip">{p.category}</span>
-                  <h3>{p.name}</h3>
-                  <p>{p.city}</p>
-                  <small className={`status-dot status-${p.status}`}>{STATUS[p.status]}</small>
-                </div>
-              </Link>
-            ))}
-          </Carousel>
+          <PlacePanel places={list.slice(0, 8)} more={SECTORS.find((x) => x.slug === list[0]?.sector)?.categories.includes(category) ? { href: categoryPath(list[0].sector, category, w.code), label: list.length > 8 ? `Les ${list.length} adresses « ${category} »` : `${category} : voir sur la carte` } : undefined} />
         </section>
       ))}
     </div>

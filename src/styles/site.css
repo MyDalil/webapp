@@ -111,3 +111,14 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .filter-panel select { padding-left: 13px; padding-right: 34px; background-position: right 11px center; }
 .filter-panel input::placeholder { color: var(--muted); font-weight: 500; }
 .filter-panel .button.wide { margin-top: 6px; padding-inline: 12px; text-align: center; white-space: nowrap; font-size: .95rem; }
+
+/* Carte unique d’une adresse hors annuaire (villes, accueil, santé) : mêmes lignes que les pages de catégorie. */
+.place-panel { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.place-panel-list { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.place-panel-list .place-row:last-child { border-bottom: 0; }
+.place-panel-more { display: inline-block; margin-top: 12px; font-weight: 700; color: var(--green); text-decoration: none; }
+@media (min-width: 900px) {
+  .place-panel-list { display: grid; grid-template-columns: 1fr 1fr; }
+  .place-panel-list .place-row:nth-child(odd) { border-right: 1px solid var(--line); }
+  .place-panel-list .place-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+}

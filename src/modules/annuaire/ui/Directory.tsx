@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Icon } from '@/platform/ui/Icon'
-import { SaveButton } from '@/modules/membres/ui'
+import { PlaceRow } from './PlaceRow'
 import type { PlaceCard } from '../queries'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { WILAYAS } from '@/platform/referentiel/catalog'
@@ -272,19 +272,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
         <div className="place-list">
           {results.length ? (
             results.map((p) => (
-              <article className="place-row" key={p.slug}>
-                <div className="place-thumb" style={{ backgroundImage: `url(${p.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                <Link className="place-main" href={`/adresses/${p.slug}`}>
-                  <span className="place-type">
-                    {p.category} · {p.city}
-                  </span>
-                  <h3>{p.name}</h3>
-                  <p>
-                    {p.sectorTitle} · <b className={`status-${p.status}`}>{STATUS[p.status]}</b>
-                  </p>
-                </Link>
-                <SaveButton itemType="listing" itemKey={p.slug} label={p.name} />
-              </article>
+              <PlaceRow key={p.slug} p={p} />
             ))
           ) : (
             <div className="empty-state">

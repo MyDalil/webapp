@@ -42,6 +42,7 @@ import * as migration_20261027_131000_packs_initiaux from './20261027_131000_pac
 import * as migration_20261027_140000_packs_par_personne from './20261027_140000_packs_par_personne';
 import * as migration_20261027_141000_packs_demarches from './20261027_141000_packs_demarches';
 import * as migration_20261030_160000_adresses_sans_slug from './20261030_160000_adresses_sans_slug';
+import * as migration_20261030_170000_lieux_de_culte_non_musulmans from './20261030_170000_lieux_de_culte_non_musulmans';
 
 export const migrations = [
   {
@@ -263,5 +264,10 @@ export const migrations = [
     up: migration_20261030_160000_adresses_sans_slug.up,
     down: migration_20261030_160000_adresses_sans_slug.down,
     name: '20261030_160000_adresses_sans_slug',
+  },
+  {
+    up: migration_20261030_170000_lieux_de_culte_non_musulmans.up,
+    down: migration_20261030_170000_lieux_de_culte_non_musulmans.down,
+    name: '20261030_170000_lieux_de_culte_non_musulmans',
   },
 ];

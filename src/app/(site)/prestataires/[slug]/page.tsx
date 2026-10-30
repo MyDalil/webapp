@@ -7,6 +7,9 @@ import { RequestForm } from '@/modules/services/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel } from '@/platform/referentiel/languages'
+import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { SaveButton } from '@/modules/membres/ui'
+import { PlaceActions } from '@/modules/annuaire/ui'
 
 export const dynamic = 'force-dynamic'
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ activite?: string }> }
@@ -29,46 +32,41 @@ export default async function ProviderPage({ params, searchParams }: Props) {
   const wilaya = WILAYAS.find((w) => String(w.code) === p.wilaya)?.name
   const zone = p.wholeWilaya ? communesOf(p.wilaya) : [...new Set([p.baseCommune, ...(p.communes ?? [])].filter(Boolean) as string[])].map((id) => ({ id, name: communeName(id) ?? id }))
   const zoneLabel = p.wholeWilaya ? `Toute la wilaya de ${wilaya}` : zone.map((z) => z.name).join(', ') || wilaya
+  const cats = (p.categories ?? []).map(categoryLabel)
+  const facts = [
+    { label: 'Zone', value: zoneLabel },
+    p.gender && { label: 'Prestataire', value: GENDERS.find((g) => g.value === p.gender)?.label },
+    p.clientele && p.clientele !== 'all' && { label: 'Clientèle', value: CLIENTELE.find((x) => x.value === p.clientele)?.label },
+    p.languages?.length && { label: 'Langues', value: p.languages.map(languageLabel).join(', ') },
+    p.experienceYears && { label: 'Expérience', value: `${p.experienceYears} an${p.experienceYears > 1 ? 's' : ''}` },
+    c.missionsDone && { label: 'Missions', value: `${c.missionsDone} réalisée${c.missionsDone > 1 ? 's' : ''} via DALIL` },
+  ].filter((f): f is { label: string; value: string } => Boolean(f && f.value))
+  const checks = [c.checks.identity ? 'Identité vérifiée' : 'Identité en cours de vérification', c.checks.legal && (p.legalForm === 'registre-commerce' ? 'Registre de commerce vérifié' : 'Auto-entrepreneur vérifié'), isSensitive((p.activities ?? []) as string[]) && c.checks.background && 'Casier judiciaire vérifié'].filter(Boolean) as string[]
   return (
-    <div className="praticien-page container">
-      <Link className="back-link" href="/services">
-        ← Tous les services
-      </Link>
-      <div className="praticien-layout">
-        <div className="praticien-main">
-          <header className="praticien-head">
-            <div className="praticien-photo large" style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined} aria-hidden="true">
-              {!c.photo && p.displayName.charAt(0)}
-            </div>
-            <div>
-              <h1>{p.displayName}</h1>
-              <p>{(p.categories ?? []).map(categoryLabel).join(' · ')}</p>
-              <p className="provider-rating">
-                {c.rating ? (
-                  <>
-                    <b>★ {c.rating.toLocaleString('fr-FR', { minimumFractionDigits: 1 })}</b> · {c.reviews} avis vérifié{c.reviews > 1 ? 's' : ''}
-                  </>
-                ) : (
-                  'Nouveau sur DALIL'
-                )}
-                {c.missionsDone ? ` · ${c.missionsDone} mission${c.missionsDone > 1 ? 's' : ''} réalisée${c.missionsDone > 1 ? 's' : ''}` : ''}
-              </p>
-              <div className="praticien-tags">
-                {c.checks.identity ? <span className="chip">Identité vérifiée</span> : <span className="chip chip-plain">Identité en cours de vérification</span>}
-                {c.checks.legal && <span className="chip">{p.legalForm === 'registre-commerce' ? 'Registre de commerce vérifié' : 'Auto-entrepreneur vérifié'}</span>}
-                {isSensitive((p.activities ?? []) as string[]) && c.checks.background && <span className="chip">Casier judiciaire vérifié</span>}
-              </div>
-            </div>
-          </header>
+    <div className="pl">
+      <nav className="pl-crumbs" aria-label="Fil d’Ariane">
+        <Link href="/services">Services</Link>
+        {p.categories?.[0] && (
+          <>
+            {' '}
+            › <Link href={`/services/${p.categories[0]}`}>{cats[0]}</Link>
+          </>
+        )}
+      </nav>
+
+      <div className="pl-grid">
+        <div className="pl-main">
+          <PhotoGallery photos={c.photo ? [{ url: c.photo, alt: p.displayName, credit: null, href: null }] : []} title={p.displayName} />
           {p.demo && (example ? <p className="praticien-notice">Fiche d’exemple : elle montre à quoi ressemble un prestataire DALIL. Les demandes sont désactivées. Elle disparaît dès qu’un vrai prestataire rejoint cette catégorie.</p> : <p className="praticien-notice">Fiche de démonstration : envoyez une demande pour tester, aucune mission n’aura lieu.</p>)}
+
           {p.bio && (
-            <section className="account-block">
+            <section className="pl-section">
               <h2>Présentation</h2>
-              <p className="praticien-bio">{p.bio}</p>
-              <small className="muted-line">Informations déclarées par le prestataire.</small>
+              <p className="pl-text">{p.bio}</p>
             </section>
           )}
-          <section className="account-block">
+
+          <section className="pl-section">
             <h2>Prestations et tarifs</h2>
             <ul className="provider-offers is-large">
               {c.offers.map((o) => (
@@ -80,40 +78,20 @@ export default async function ProviderPage({ params, searchParams }: Props) {
             </ul>
             <small className="muted-line">Prix indicatifs déclarés par le prestataire, confirmés ensemble avant la mission. À régler directement au prestataire{p.payment ? ` (${p.payment})` : ''} : DALIL n’encaisse rien.</small>
           </section>
-          <section className="account-block praticien-facts">
-            <h2>Informations pratiques</h2>
-            <dl>
-              <dt>Zone</dt>
-              <dd>{zoneLabel}</dd>
-              {p.gender && (
-                <>
-                  <dt>Prestataire</dt>
-                  <dd>{GENDERS.find((g) => g.value === p.gender)?.label}</dd>
-                </>
-              )}
-              {p.clientele && p.clientele !== 'all' && (
-                <>
-                  <dt>Clientèle</dt>
-                  <dd>{CLIENTELE.find((x) => x.value === p.clientele)?.label}</dd>
-                </>
-              )}
-              {!!p.languages?.length && (
-                <>
-                  <dt>Langues</dt>
-                  <dd>{p.languages.map(languageLabel).join(', ')}</dd>
-                </>
-              )}
-              {!!p.experienceYears && (
-                <>
-                  <dt>Expérience</dt>
-                  <dd>
-                    {p.experienceYears} an{p.experienceYears > 1 ? 's' : ''}
-                  </dd>
-                </>
-              )}
-            </dl>
+
+          <section className="pl-section">
+            <h2>En bref</h2>
+            <ul className="pl-facts">
+              {facts.map((f) => (
+                <li key={f.label}>
+                  <span>{f.label}</span>
+                  <b>{f.value}</b>
+                </li>
+              ))}
+            </ul>
           </section>
-          <section className="account-block">
+
+          <section className="pl-section">
             <h2>Avis{reviews.length ? ` (${reviews.length})` : ''}</h2>
             {reviews.length ? (
               <ul className="review-list">
@@ -143,11 +121,32 @@ export default async function ProviderPage({ params, searchParams }: Props) {
             )}
             <small className="muted-line">Avis vérifiés : seuls les clients d’une mission réalisée via DALIL peuvent en laisser un.</small>
           </section>
+
+          <footer className="pl-sources">
+            <span>Informations déclarées par le prestataire, contrôlées par DALIL.</span>
+            <Link href="/feedback">Signaler une erreur</Link>
+          </footer>
         </div>
-        <aside className="praticien-aside">
+
+        <aside className="pl-side">
+          <div className="pl-card pl-id">
+            <span className="pl-tag">
+              {cats[0] ?? 'Services'} · {wilaya ?? 'Algérie'}
+            </span>
+            <h1>{p.displayName}</h1>
+            <p className="pl-alt">
+              {c.rating ? `★ ${c.rating.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} · ${c.reviews} avis vérifié${c.reviews > 1 ? 's' : ''}` : 'Nouveau sur DALIL'}
+            </p>
+            <p className={`pl-status is-${c.checks.identity ? 'verified' : 'checking'}`}>{checks.join(' · ')}</p>
+            <div className="pl-actions">
+              <span />
+              <SaveButton itemType="provider" itemKey={p.slug ?? ''} label={p.displayName} variant="button" />
+              <PlaceActions name={p.displayName} />
+            </div>
+          </div>
           <Suspense>
             {example ? (
-              <div className="account-block">
+              <div className="pl-card">
                 <h2>Fiche d’exemple</h2>
                 <p className="muted-line">Les demandes sont désactivées sur cette fiche.</p>
                 <Link className="button primary" href="/espace-pro?espace=services">

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitioners, specialtyLabel } from '@/modules/sante'
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
+import { PlacePanel } from '@/modules/annuaire/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 export const metadata: Metadata = { title: 'Trouver un praticien · DALIL', description: 'Prenez rendez-vous en ligne avec un médecin ou un praticien vérifié par DALIL, au cabinet ou en visio.' }
@@ -11,8 +12,6 @@ type Q = { specialite?: string; wilaya?: string; mode?: string; langue?: string;
 const TZ = 'Africa/Algiers'
 const nextLabel = (iso: string) => new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: TZ }).format(new Date(iso))
 const groups = [...new Set(SPECIALTIES.map((s) => s.group))]
-const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée DALIL', labelled: 'Label Excellence' }
-
 /**
  * Aucun praticien réservable : jamais une page vide (décision de Rad, 2026-10-26).
  * On montre de vrais établissements de santé de l’annuaire (sources ouvertes, statut affiché) : la wilaya choisie d’abord.
@@ -136,19 +135,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
             <h2>Pas encore de praticien réservable en ligne ici.</h2>
             <p>Les praticiens rejoignent DALIL au fur et à mesure, après vérification. En attendant, voici des établissements de santé{wilaya ? ` à ${wilaya} et alentour` : ''}.</p>
             {!!nearby.length && (
-              <ul className="service-tiles health-fallback">
-                {nearby.map((p) => (
-                  <li key={p.slug}>
-                    <Link href={`/adresses/${p.slug}`} className="service-tile">
-                      <b>{p.name}</b>
-                      <span>
-                        {p.category} · {p.city}
-                      </span>
-                      <small className={`status-dot status-${p.status}`}>{STATUS[p.status]}</small>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <PlacePanel places={nearby} />
             )}
             <p>
               <Link href={`/annuaire/sante-soins${q.wilaya ? `?wilaya=${q.wilaya}` : ''}`}>Tous les établissements de santé ›</Link>

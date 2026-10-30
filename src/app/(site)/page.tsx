@@ -7,7 +7,7 @@ import {
   getShowcase,
   type PlaceCard,
 } from '@/modules/annuaire'
-import { HomeEntries, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
+import { HomeEntries, PlacePanel, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
 import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as SERVICE_CATEGORIES } from '@/modules/services'
@@ -48,34 +48,6 @@ const SANTE = [
 const DEMARCHES = ['documents-et-demarches', 'travail-et-entreprise', 'preparer-son-installation']
 const VIVRE = ['logement', 'ecole-et-famille', 'budget-et-banque']
 
-const STATUS: Record<string, string> = {
-  spotted: 'À vérifier',
-  checking: 'En vérification',
-  verified: 'Vérifiée DALIL',
-  labelled: 'Label Excellence',
-}
-
-function PlaceTile({ p, i }: { p: PlaceCard; i: number }) {
-  return (
-    <Link
-      href={`/adresses/${p.slug}`}
-      className="city-tile top-tile"
-      data-reveal
-      style={{ ['--i' as string]: i % 6 }}
-    >
-      <div className="city-tile-img" style={{ backgroundImage: `url(${p.photo})` }} />
-      <div className="city-tile-body">
-        <span className="chip">{p.category}</span>
-        <h3>{p.name}</h3>
-        <p>
-          {p.city}
-          {p.wilaya && p.wilaya !== p.city ? ` · ${p.wilaya}` : ''}
-        </p>
-        <small className={`status-dot status-${p.status}`}>{STATUS[p.status]}</small>
-      </div>
-    </Link>
-  )
-}
 
 function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
   const list = slugs.map((s) => GUIDES.find((g) => g.slug === s)).filter((g) => g !== undefined)
@@ -324,11 +296,7 @@ export default async function Home() {
           <h3>Les incontournables</h3>
           <Link href="/que-faire-ce-week-end">Que faire ce week-end ?</Link>
         </div>
-        <Carousel label="Lieux incontournables" variant="tiles">
-          {top.map((p, i) => (
-            <PlaceTile key={p.slug} p={p} i={i} />
-          ))}
-        </Carousel>
+        <PlacePanel places={top.slice(0, 8)} more={{ href: '/annuaire/culture-nature-loisirs', label: 'Tous les lieux à découvrir' }} />
         <div className="container xp-subhead" data-reveal>
           <h3>Par ville</h3>
         </div>
