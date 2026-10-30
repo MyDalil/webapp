@@ -17,7 +17,13 @@ const ALGERIA: [[number, number], [number, number]] = [
 ]
 const GREEN = '#006b3c'
 const dark = () => document.documentElement.dataset.theme === 'dark'
-const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark() ? 'dark' : 'positron'}`
+// OpenFreeMap (gratuit, sans clé, usage commercial permis) : « Liberty » en clair, « Dark » en sombre.
+const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark() ? 'dark' : 'liberty'}`
+// Noms en français d’abord, puis en lettres latines, puis le nom local (décision de Rad, 2026-10-30).
+const FR_LABEL = ['coalesce', ['get', 'name:fr'], ['get', 'name:latin'], ['get', 'name']] as unknown as maplibregl.ExpressionSpecification
+const frenchLabels = (m: MLMap) => {
+  for (const l of m.getStyle().layers) if (l.type === 'symbol' && /name/.test(JSON.stringify(l.layout?.['text-field'] ?? '')) && l.source !== 'places') m.setLayoutProperty(l.id, 'text-field', FR_LABEL)
+}
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 
 const toGeoJSON = (places: Pin[]): GeoJSON.FeatureCollection => ({
@@ -78,7 +84,10 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
     if (!box.current || map.current) return
     const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, attributionControl: { compact: true } })
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
-    m.on('style.load', () => addLayers(m, data.current))
+    m.on('style.load', () => {
+      frenchLabels(m)
+      addLayers(m, data.current)
+    })
     m.on('click', 'clusters', async (e) => {
       const f = e.features?.[0]
       if (!f) return
