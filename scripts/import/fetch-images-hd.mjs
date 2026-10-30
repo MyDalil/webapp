@@ -6,11 +6,9 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  // Vie musulmane (2026-10-30) : photos des sujets encore sans image.
-  coran: ['Quranic schools', 'Kuttab', 'Children reading the Quran', 'Mushaf', 'Quran stands', 'People reading the Quran'],
-  librairie: ['Bookshops in Algeria', 'Islamic bookshops', 'Bookstores in Algiers', 'Salon international du livre d\'Alger', 'Bookshops in Morocco', 'Arabic books'],
-  entraide: ['Iftar', 'Ramadan in Algeria', 'Mass iftar', 'Charity in Islam', 'Zakat'],
-  funerailles: ['Cemeteries in Algeria', 'El Alia Cemetery', 'Muslim cemeteries', 'Islamic funerals', 'Cemeteries in Algiers'],
+  // Vie musulmane (2026-10-30), second passage.
+  coran: ['Quran', 'Reading of the Quran', 'Qur\'an recitation', 'Mushafs', 'Quran in mosques', 'Interior of mosques in Algeria'],
+  entraide: ['Ramadan', 'Food donation', 'Volunteering', 'Humanitarian aid', 'Charity', 'Croissant-Rouge algérien', 'Algerian Red Crescent'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
@@ -22,7 +20,8 @@ async function api(params) {
   return {}
 }
 const strip = (h) => (h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
-const manifest = {}
+import { existsSync, readFileSync } from 'node:fs'
+const manifest = existsSync(path.join(OUT, 'manifest.json')) ? JSON.parse(readFileSync(path.join(OUT, 'manifest.json'), 'utf8')).topics : {}
 for (const [key, cats] of Object.entries(CATS)) {
   const found = []
   const seen = new Set()
