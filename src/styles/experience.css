@@ -210,3 +210,15 @@
 .xp { overflow-x: clip; }
 .xp-tile .city-tile-body p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .xp-tile .city-tile-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Rythme des rubriques (Rad, 2026-10-30) : aérer sans éloigner — on atteint les dernières sections sans long défilement. */
+.xp .section { padding-block: 52px; }
+.xp .section + .section:not(.section-tint) { padding-top: 28px; }
+.xp .section-head { margin-bottom: 22px; }
+.xp .carousel-controls { margin-top: 4px; }
+.xp .xp-subhead { margin-top: 28px; }
+@media (max-width: 760px) {
+  .xp .section { padding-block: 36px; }
+  .xp .section + .section:not(.section-tint) { padding-top: 20px; }
+  .xp .section-head { margin-bottom: 16px; }
+}

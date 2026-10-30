@@ -46,6 +46,10 @@ export const PHOTOS = {
   'epices': { src: '/images/photos/epices.webp', alt: "Marchand d’épices", credit: "Marchand d’épices · Adil massil · CC BY-SA 4.0" },
   'hopital-moderne': { src: '/images/photos/hopital-moderne.webp', alt: "Hôpital d’ophtalmologie", credit: "Hôpital d’ophtalmologie · habib kaki · CC BY 3.0" },
   'canyon': { src: '/images/photos/canyon.webp', alt: "Gorges de Menaa, Aurès", credit: "Gorges de Menaa, Aurès · Blackmysterieux · CC BY-SA 4.0" },
+  'coran': { src: '/images/photos/coran.webp', alt: "Lecture du Coran", credit: "Lecture du Coran · Abdelrahman sadek ABDO · CC BY-SA 4.0" },
+  'librairie-islamique': { src: '/images/photos/librairie-islamique.webp', alt: "Vitrine d’une librairie islamique", credit: "Vitrine d’une librairie islamique · Maison Méditerranéenne Des Sciences de l'Homme Phonothèque, Anouk Cohen · Licence Ouverte" },
+  'iftar': { src: '/images/photos/iftar.webp', alt: "Rupture du jeûne collective devant une mosquée", credit: "Rupture du jeûne collective devant une mosquée · Shyjith Kaiprath Rajan · CC BY-SA 4.0" },
+  'cimetiere': { src: '/images/photos/cimetiere.webp', alt: "Cimetière des Thaalba, Alger", credit: "Cimetière des Thaalba, Alger · Reda Kerbush · CC BY-SA 3.0" },
 } satisfies Record<string, Photo>
 
 export type PhotoKey = keyof typeof PHOTOS

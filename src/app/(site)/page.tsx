@@ -75,7 +75,7 @@ function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
   )
 }
 
-const MUSULMANE_PHOTO: Record<string, string> = { 'Mosquées & salles de prière': PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src }
+const MUSULMANE_PHOTO: Record<string, string> = { 'Mosquées & salles de prière': PHOTOS.djamaa.src, 'Hajj & Omra': PHOTOS.kaaba.src, 'Enseignement coranique': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Entraide & associations': PHOTOS.iftar.src, 'Funérailles musulmanes': PHOTOS.cimetiere.src }
 
 export default async function Home() {
   const [{ top, cities }, all, destination, counts, latest, classified] = await Promise.all([
@@ -202,7 +202,7 @@ export default async function Home() {
               const p = category ? byCategory(category) : undefined
               // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
               const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
-              return { href, title, sub, photo: own ?? MUSULMANE_PHOTO[title] ?? null, icon }
+              return { href, title, sub, photo: MUSULMANE_PHOTO[title] ?? own ?? null, icon }
             })}
           />
         </section>

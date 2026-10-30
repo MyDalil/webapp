@@ -230,5 +230,37 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "page": "https://commons.wikimedia.org/wiki/File:Menaa.jpg",
   "alt": "Gorges de Menaa, Aurès"
+ },
+ "coran": {
+  "file": "تلاوه القرأن الكريم قبل اقامه اذان الغرب من داخل جامع الازهر.jpg",
+  "author": "Abdelrahman sadek ABDO",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:%D8%AA%D9%84%D8%A7%D9%88%D9%87_%D8%A7%D9%84%D9%82%D8%B1%D8%A3%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_%D9%82%D8%A8%D9%84_%D8%A7%D9%82%D8%A7%D9%85%D9%87_%D8%A7%D8%B0%D8%A7%D9%86_%D8%A7%D9%84%D8%BA%D8%B1%D8%A8_%D9%85%D9%86_%D8%AF%D8%A7%D8%AE%D9%84_%D8%AC%D8%A7%D9%85%D8%B9_%D8%A7%D9%84%D8%A7%D8%B2%D9%87%D8%B1.jpg",
+  "alt": "Lecture du Coran"
+ },
+ "librairie-islamique": {
+  "file": "Fonds ANR LIV-REL - Maroc - Vitrine d’une librairie dans le quartier des Habous à Casablanca (MédiHAL 5239572).jpg",
+  "author": "Maison Méditerranéenne Des Sciences de l'Homme Phonothèque, Anouk Cohen",
+  "license": "Licence Ouverte",
+  "licenseUrl": "https://www.etalab.gouv.fr/licence-ouverte-open-licence",
+  "page": "https://commons.wikimedia.org/wiki/File:Fonds_ANR_LIV-REL_-_Maroc_-_Vitrine_d%E2%80%99une_librairie_dans_le_quartier_des_Habous_%C3%A0_Casablanca_(M%C3%A9diHAL_5239572).jpg",
+  "alt": "Vitrine d’une librairie islamique"
+ },
+ "iftar": {
+  "file": "Breaking Fast Together.jpg",
+  "author": "Shyjith Kaiprath Rajan",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Breaking_Fast_Together.jpg",
+  "alt": "Rupture du jeûne collective devant une mosquée"
+ },
+ "cimetiere": {
+  "file": "Cimetière des Thaalba à Alger 2.JPG",
+  "author": "Reda Kerbush",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cimeti%C3%A8re_des_Thaalba_%C3%A0_Alger_2.JPG",
+  "alt": "Cimetière des Thaalba, Alger"
  }
 }
