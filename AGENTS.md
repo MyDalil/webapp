@@ -80,7 +80,7 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
 
 ## Surveillance
-- `.github/workflows/surveillance.yml` (depuis `main`, toutes les 10 min) : accueil, `/api/sante` (application + base), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour.
+- `.github/workflows/surveillance.yml` (depuis `main`, chaque lundi) : accueil, `/api/sante` (application + base), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour.
 - Erreurs serveur : /admin › Pilotage › Erreurs du site, alerte email à la première occurrence.
 
 ## Migrations de données

@@ -1,9 +1,9 @@
 name: Surveillance du site
-# Toutes les 10 minutes (actif depuis `main`) : accueil, état application + base (/api/sante), plan du site.
+# Une fois par semaine, le lundi (actif depuis `main`) : accueil, état application + base (/api/sante), plan du site.
 # Panne confirmée (2 essais) → issue « Site indisponible » (GitHub prévient par email) ; retour à la normale → issue commentée et fermée.
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '7 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read
