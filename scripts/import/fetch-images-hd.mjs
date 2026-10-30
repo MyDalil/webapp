@@ -6,18 +6,7 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  // Services à domicile (2026-10-30) : une photo par métier.
-  menage: ['Housekeeping', 'Cleaning', 'Cleaning products', 'Vacuum cleaners in use'],
-  bricolage: ['Hand tools', 'Handymen', 'Do it yourself', 'Workbenches'],
-  demenagement: ['Moving (relocation)', 'Moving vans', 'Cardboard boxes'],
-  jardinage: ['Gardening', 'Gardeners at work', 'Pruning'],
-  enfants: ['Playgrounds in Algeria', 'Playgrounds', 'Toys'],
-  animaux: ['Dog walking', 'Cats in Algeria', 'Pet sitting'],
-  informatique: ['Computer repair', 'Laptops', 'Computer workstations'],
-  aide: ['Home care', 'Elderly care', 'Caregivers'],
-  cours: ['Tutoring', 'Students studying', 'Homework'],
-  sport: ['Fitness centers', 'Weight training', 'Gyms'],
-  plomberie: ['Plumbing', 'Plumbers', 'Electricians at work'],
+  aide2: ['Elderly people', 'Old age', 'Grandmothers', 'Walking aids', 'Wheelchairs'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
