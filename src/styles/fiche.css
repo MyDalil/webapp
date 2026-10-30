@@ -65,7 +65,7 @@
   .pl-main > * { order: 4; }
   .pl-main > .pg { order: 1; }
   .pl-side > .pl-id { order: 2; }
-  .pl-side > .pl-card:not(.pl-id) { order: 3; }
+  .pl-side > .pl-card:not(.pl-id), .pl-side > .pl-book { order: 3; }
   .pl-near { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
