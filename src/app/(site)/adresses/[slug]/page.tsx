@@ -14,7 +14,7 @@ import { coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wil
 type Props = { params: Promise<{ slug: string }> }
 
 /** Pages générées au build puis rafraîchies à chaque enregistrement dans /admin ; nouvelles fiches servies à la demande. */
-export const revalidate = 300
+export const revalidate = 86400
 export const dynamicParams = true
 export const generateStaticParams = async () => (await getPlaceSlugs()).map((slug) => ({ slug }))
 

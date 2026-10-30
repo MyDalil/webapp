@@ -18,7 +18,7 @@ import { Icon } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 
-export const revalidate = 300
+export const revalidate = 3600
 
 /**
  * Accueil (ordre validé par Rad, 2026-10-21) : Vie musulmane, Services — Santé en tête —, Découvrir,

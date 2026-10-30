@@ -7,7 +7,7 @@ import { Directory } from '@/modules/annuaire/ui'
 
 type Props = { params: Promise<{ sector: string }> }
 
-export const revalidate = 300
+export const revalidate = 3600
 export const dynamicParams = false
 export const generateStaticParams = () => SECTORS.map((s) => ({ sector: s.slug }))
 

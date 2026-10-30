@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 /** Rafraîchi à chaque enregistrement dans /admin ; filet de sécurité toutes les 5 minutes. */
-export const revalidate = 300
+export const revalidate = 3600
 
 export default async function AnnuairePage() {
   const { places, total } = await searchPlaces({})

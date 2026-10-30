@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getShowcase, getWilayaPlaces, wilayaBySlug, type PlaceCard } from '@/modules/annuaire'
 import { Carousel } from '@/platform/ui/Carousel'
 
-export const revalidate = 300
+export const revalidate = 3600
 
 type Props = { params: Promise<{ slug: string }> }
 

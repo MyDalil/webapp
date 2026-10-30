@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Un conseiller vous aide à préparer et vérifier votre dossier. Les démarches restent gratuites sur les sites officiels.',
   robots: { index: false },
 }
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 /** Liste des packs. Introuvable tant que l’offre est cachée (production avant le lancement). */
 export default async function Accompagnement() {

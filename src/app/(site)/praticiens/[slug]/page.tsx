@@ -7,7 +7,7 @@ import { SlotPicker } from '@/modules/sante/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { videoEnabled } from '@/platform/video'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -3,7 +3,7 @@ import { getPlaces, getUpcomingEvents } from '@/modules/annuaire'
 import { WeekendExplorer } from '@/modules/annuaire/ui'
 
 export const metadata: Metadata = { title: 'Que faire ce week-end ?', description: 'Événements, sorties et lieux à visiter ce week-end en Algérie, par wilaya, avec des informations datées et sourcées.' }
-export const revalidate = 300
+export const revalidate = 3600
 
 export default async function Weekend() {
   const [events, places] = await Promise.all([getUpcomingEvents(), getPlaces()])

@@ -1,6 +1,6 @@
 import { getFeaturedDestination, getPlaces, getShowcase } from '@/modules/annuaire'
 
-export const revalidate = 300
+export const revalidate = 3600
 
 type Slide = { photo: string; place: string; href: string; credit: string | null }
 
