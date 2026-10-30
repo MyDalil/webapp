@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-10-30T21:44:35.102Z",
+ "fetchedAt": "2026-10-30T21:51:13.176Z",
  "source": "Wikimedia Commons (licences libres)",
  "topics": {
   "coran": [
@@ -548,6 +548,152 @@
     "licenseUrl": null,
     "page": "https://commons.wikimedia.org/wiki/File:Moorish_family_in_the_cemetery,_Algiers,_Algeria-LCCN2001697847.jpg",
     "category": "Cemeteries in Algiers"
+   }
+  ],
+  "mosquee": [
+   {
+    "name": "1.jpg",
+    "file": "Algeria. Algiers Mosque LCCN2004674269.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Algeria._Algiers_Mosque_LCCN2004674269.jpg/1920px-Algeria._Algiers_Mosque_LCCN2004674269.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 5962,
+    "height": 7251,
+    "author": "Miscellaneous Items in High Demand, PPOC, Library of Congress",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "page": "https://commons.wikimedia.org/wiki/File:Algeria._Algiers_Mosque_LCCN2004674269.jpg",
+    "category": "Great Mosque of Algiers"
+   },
+   {
+    "name": "2.jpg",
+    "file": "Alger - la mosquée - btv1b90474837.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Alger_-_la_mosqu%C3%A9e_-_btv1b90474837.jpg/1920px-Alger_-_la_mosqu%C3%A9e_-_btv1b90474837.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 7000,
+    "height": 5281,
+    "author": "Agence de presse Meurisse. Agence photographique (commanditaire)",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "page": "https://commons.wikimedia.org/wiki/File:Alger_-_la_mosqu%C3%A9e_-_btv1b90474837.jpg",
+    "category": "Great Mosque of Algiers"
+   },
+   {
+    "name": "3.jpg",
+    "file": "Ketchaoua Mosque architecture – Algiers 10.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_10.jpg/1920px-Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 4284,
+    "height": 5712,
+    "author": "Rachid Hamatou",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_10.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "4.jpg",
+    "file": "Ketchaoua Mosque architecture – Algiers 11.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_11.jpg/1920px-Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 4284,
+    "height": 5712,
+    "author": "Rachid Hamatou",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_11.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "5.jpg",
+    "file": "Ketchaoua Mosque architecture – Algiers 12.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_12.jpg/1920px-Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_12.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 4284,
+    "height": 5712,
+    "author": "Rachid Hamatou",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_12.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "6.jpg",
+    "file": "Ketchaoua Mosque architecture – Algiers 14.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_14.jpg/1920px-Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_14.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 4284,
+    "height": 5712,
+    "author": "Rachid Hamatou",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_14.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "7.jpg",
+    "file": "Ketchaoua Mosque architecture – Algiers 13.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_13.jpg/1920px-Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_13.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 4284,
+    "height": 5712,
+    "author": "Rachid Hamatou",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_architecture_%E2%80%93_Algiers_13.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "8.jpg",
+    "file": "Augustin Régis Mosque courtyard in Algiers.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Augustin_R%C3%A9gis_Mosque_courtyard_in_Algiers.jpg/1920px-Augustin_R%C3%A9gis_Mosque_courtyard_in_Algiers.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 5000,
+    "height": 4486,
+    "author": "Creator:Augustin Régis",
+    "license": "Public domain",
+    "licenseUrl": null,
+    "page": "https://commons.wikimedia.org/wiki/File:Augustin_R%C3%A9gis_Mosque_courtyard_in_Algiers.jpg",
+    "category": "Great Mosque of Algiers"
+   },
+   {
+    "name": "9.jpg",
+    "file": "Chapiteau d'une colonne du mihrab de la mosquée Ketchoua à Alger, période ottomane.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Chapiteau_d%27une_colonne_du_mihrab_de_la_mosqu%C3%A9e_Ketchoua_%C3%A0_Alger%2C_p%C3%A9riode_ottomane.jpg/1920px-Chapiteau_d%27une_colonne_du_mihrab_de_la_mosqu%C3%A9e_Ketchoua_%C3%A0_Alger%2C_p%C3%A9riode_ottomane.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 3851,
+    "height": 4984,
+    "author": "Riad Salih",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chapiteau_d%27une_colonne_du_mihrab_de_la_mosqu%C3%A9e_Ketchoua_%C3%A0_Alger,_p%C3%A9riode_ottomane.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "10.jpg",
+    "file": "Ketchaoua Mosque 3, Algiers, Algeria.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Ketchaoua_Mosque_3%2C_Algiers%2C_Algeria.jpg/1920px-Ketchaoua_Mosque_3%2C_Algiers%2C_Algeria.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 5184,
+    "height": 3456,
+    "author": "Credits to Reda Kerbush / Wikimedia Commons",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_3,_Algiers,_Algeria.jpg",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "11.jpg",
+    "file": "Ketchaoua Mosque 4, Algiers, Algeria.JPG",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Ketchaoua_Mosque_4%2C_Algiers%2C_Algeria.JPG/1920px-Ketchaoua_Mosque_4%2C_Algiers%2C_Algeria.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 5184,
+    "height": 3456,
+    "author": "Credits to Reda Kerbush / Wikimedia Commons",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ketchaoua_Mosque_4,_Algiers,_Algeria.JPG",
+    "category": "Ketchaoua Mosque"
+   },
+   {
+    "name": "12.jpg",
+    "file": "Djamaâ el Kebir.jpg",
+    "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Djama%C3%A2_el_Kebir.jpg/1920px-Djama%C3%A2_el_Kebir.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 5184,
+    "height": 3456,
+    "author": "Benzita Abdelhadi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Djama%C3%A2_el_Kebir.jpg",
+    "category": "Great Mosque of Algiers"
    }
   ]
  }
