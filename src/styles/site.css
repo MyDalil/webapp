@@ -124,3 +124,7 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 }
 .sr-list > li.sr-place { padding: 0; }
 .sr-list > li.sr-place .place-row { padding: 12px 14px; }
+.map-lang { display: flex; }
+.map-lang button { width: 34px !important; height: 30px !important; font: 700 12px/1 var(--font, Inter, sans-serif); color: #14201b; }
+.map-lang button + button { border-left: 1px solid #ddd !important; border-top: 0 !important; }
+.map-lang button[aria-pressed="true"] { background: #006b3c; color: #fff; }

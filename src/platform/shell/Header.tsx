@@ -181,7 +181,13 @@ export function Header() {
             </button>
             <div className="utility-menu language-menu" data-menu="language" hidden={menu !== 'language'}>
               {LANGS.map((l) => (
-                <Link key={l.code} href={l.href} role="button" data-language={l.code} onClick={() => l.code !== 'fr' && toast(`${l.label} — version en préparation`)}>
+                <Link key={l.code} href={l.href} role="button" data-language={l.code} onClick={() => {
+                    // Langue retenue aussi pour les noms des cartes (annuaire › DirectoryMap).
+                    try {
+                      localStorage.setItem('dalil-map-lang', l.code)
+                    } catch {}
+                    if (l.code !== 'fr') toast(`${l.label} — version en préparation`)
+                  }}>
                   <span>{l.flag}</span> {l.label} {l.code === lang && <b>✓</b>}
                 </Link>
               ))}

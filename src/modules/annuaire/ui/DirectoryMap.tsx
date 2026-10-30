@@ -19,10 +19,59 @@ const GREEN = '#006b3c'
 const dark = () => document.documentElement.dataset.theme === 'dark'
 // OpenFreeMap (gratuit, sans clé, usage commercial permis) : « Liberty » en clair, « Dark » en sombre.
 const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark() ? 'dark' : 'liberty'}`
-// Noms en français d’abord, puis en lettres latines, puis le nom local (décision de Rad, 2026-10-30).
-const FR_LABEL = ['coalesce', ['get', 'name:fr'], ['get', 'name:latin'], ['get', 'name']] as unknown as maplibregl.ExpressionSpecification
-const frenchLabels = (m: MLMap) => {
-  for (const l of m.getStyle().layers) if (l.type === 'symbol' && /name/.test(JSON.stringify(l.layout?.['text-field'] ?? '')) && l.source !== 'places') m.setLayoutProperty(l.id, 'text-field', FR_LABEL)
+// Noms de la carte en français, arabe ou anglais (Rad, 2026-10-30) ; repli : lettres latines, puis nom local.
+type MapLang = 'fr' | 'ar' | 'en'
+const LANG_KEY = 'dalil-map-lang'
+const LABELS: Record<MapLang, unknown[]> = {
+  fr: ['coalesce', ['get', 'name:fr'], ['get', 'name:latin'], ['get', 'name']],
+  en: ['coalesce', ['get', 'name:en'], ['get', 'name_en'], ['get', 'name:latin'], ['get', 'name']],
+  ar: ['coalesce', ['get', 'name:ar'], ['get', 'name']],
+}
+const initialLang = (): MapLang => {
+  const path = window.location.pathname
+  const fromPath: MapLang | null = path === '/ar' || path.startsWith('/ar/') ? 'ar' : path === '/en' || path.startsWith('/en/') ? 'en' : null
+  try {
+    if (fromPath) {
+      localStorage.setItem(LANG_KEY, fromPath)
+      return fromPath
+    }
+    const v = localStorage.getItem(LANG_KEY)
+    if (v === 'ar' || v === 'en' || v === 'fr') return v
+  } catch {}
+  return fromPath ?? 'fr'
+}
+const applyLabels = (m: MLMap, lang: MapLang) => {
+  for (const l of m.getStyle().layers)
+    if (l.type === 'symbol' && /name/.test(JSON.stringify(l.layout?.['text-field'] ?? '')) && l.source !== 'places') m.setLayoutProperty(l.id, 'text-field', LABELS[lang] as maplibregl.ExpressionSpecification)
+}
+/** Choix de la langue de la carte : FR · ع · EN, mémorisé pour les autres cartes du site. */
+class LangControl implements maplibregl.IControl {
+  private box?: HTMLDivElement
+  constructor(private get: () => MapLang, private set: (l: MapLang) => void) {}
+  onAdd() {
+    const box = document.createElement('div')
+    box.className = 'maplibregl-ctrl maplibregl-ctrl-group map-lang'
+    box.setAttribute('role', 'group')
+    box.setAttribute('aria-label', 'Langue de la carte')
+    for (const [code, label, name] of [['fr', 'FR', 'Français'], ['ar', 'ع', 'العربية'], ['en', 'EN', 'English']] as const) {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.textContent = label
+      b.title = name
+      b.setAttribute('aria-label', `Carte en ${name}`)
+      b.setAttribute('aria-pressed', String(this.get() === code))
+      b.onclick = () => {
+        this.set(code)
+        box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+      }
+      box.appendChild(b)
+    }
+    this.box = box
+    return box
+  }
+  onRemove() {
+    this.box?.remove()
+  }
 }
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 
@@ -84,8 +133,22 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
     if (!box.current || map.current) return
     const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, attributionControl: { compact: true } })
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
+    let lang = initialLang()
+    m.addControl(
+      new LangControl(
+        () => lang,
+        (l) => {
+          lang = l
+          try {
+            localStorage.setItem(LANG_KEY, l)
+          } catch {}
+          applyLabels(m, l)
+        },
+      ),
+      'top-right',
+    )
     m.on('style.load', () => {
-      frenchLabels(m)
+      applyLabels(m, lang)
       addLayers(m, data.current)
     })
     m.on('click', 'clusters', async (e) => {
