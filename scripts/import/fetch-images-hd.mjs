@@ -6,9 +6,8 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  // Vie musulmane (2026-10-30), second passage.
-  coran: ['Quran', 'Reading of the Quran', 'Qur\'an recitation', 'Mushafs', 'Quran in mosques', 'Interior of mosques in Algeria'],
-  entraide: ['Ramadan', 'Food donation', 'Volunteering', 'Humanitarian aid', 'Charity', 'Croissant-Rouge algérien', 'Algerian Red Crescent'],
+  // Mosquée emblématique de jour pour la porte « Mosquées » (2026-10-30).
+  mosquee: ['Djamaa el Djazaïr', 'Great Mosque of Algiers (Djamaa El Djazair)', 'Ketchaoua Mosque', 'Emir Abdelkader Mosque', 'Great Mosque of Algiers', 'Great Mosque of Tlemcen', 'Sidi Boumediene Mosque'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
