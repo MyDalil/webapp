@@ -1,9 +1,9 @@
 name: Surveillance du site
-# Toutes les 10 minutes (actif depuis `main`) : accueil, état application + base (/api/sante), plan du site.
+# Une fois par semaine, le lundi (actif depuis `main`) : accueil, état application + base (/api/sante), plan du site.
 # Panne confirmée (2 essais) → issue « Site indisponible » (GitHub prévient par email) ; retour à la normale → issue commentée et fermée.
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '7 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
           fail=""
           for path in / /api/sante /sitemap.xml; do
             for attempt in 1 2; do
-              read code time < <(probe "$SITE$path")
+              res=$(probe "$SITE$path"); code=${res%% *}; time=${res##* }
               if [ "$path" = /api/sante ] && [ "$code" = 404 ]; then code=200; echo "::notice::/api/sante pas encore déployée"; fi
               if [ "$path" = /api/sante ] && [ "$code" = 200 ] && ! grep -q '"ok":true' /tmp/body && grep -q '"ok"' /tmp/body; then code=503; fi
               [ "$code" = 200 ] && break
