@@ -270,5 +270,93 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "page": "https://commons.wikimedia.org/wiki/File:Djama%C3%A2_el_Kebir.jpg",
   "alt": "Djamaâ El Kebir, la Grande Mosquée d’Alger"
+ },
+ "svc-menage": {
+  "file": "(PHOTO4) USO Services on Facebook Live (6175620).jpg",
+  "author": "Pfc. Robert Wormley",
+  "license": "Public domain",
+  "licenseUrl": null,
+  "page": "https://commons.wikimedia.org/wiki/File:(PHOTO4)_USO_Services_on_Facebook_Live_(6175620).jpg",
+  "alt": "Produits d’entretien sur un plan de travail"
+ },
+ "svc-bricolage": {
+  "file": "Broken hammer DIY.jpg",
+  "author": "Lorax",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Broken_hammer_DIY.jpg",
+  "alt": "Marteau, clous et planches"
+ },
+ "svc-demenagement": {
+  "file": "MTA Hoffman Drive 87 - LIE.jpg",
+  "author": "Tdorante10",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:MTA_Hoffman_Drive_87_-_LIE.jpg",
+  "alt": "Camion de déménagement"
+ },
+ "svc-jardinage": {
+  "file": "Child gardening in a lush green backyard.jpg",
+  "author": "Shixart1985",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Child_gardening_in_a_lush_green_backyard.jpg",
+  "alt": "Plantation au jardin"
+ },
+ "svc-garde-enfants": {
+  "file": "2025-05-08 12 47 52 Toys in the interior of Playpad Bucks in Middletown Township, Bucks County, Pennsylvania.jpg",
+  "author": "Famartin",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:2025-05-08_12_47_52_Toys_in_the_interior_of_Playpad_Bucks_in_Middletown_Township,_Bucks_County,_Pennsylvania.jpg",
+  "alt": "Salle de jeux pour enfants"
+ },
+ "svc-garde-animaux": {
+  "file": "AS IT WAS A BEAUTIFUL DAY I WALKED ALONG THE GRAND CANAL (THE TRAM STOP AT CHARLEMONT TO THE ROBERT EMMET BRIDGE AT HAROLDS CROSS)-149437.jpg",
+  "author": "William Murphy",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:AS_IT_WAS_A_BEAUTIFUL_DAY_I_WALKED_ALONG_THE_GRAND_CANAL_(THE_TRAM_STOP_AT_CHARLEMONT_TO_THE_ROBERT_EMMET_BRIDGE_AT_HAROLDS_CROSS)-149437.jpg",
+  "alt": "Promenade d’un chien"
+ },
+ "svc-informatique": {
+  "file": "Angry woman using laptop at home while sitting on couch.jpg",
+  "author": "Shixart1985",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Angry_woman_using_laptop_at_home_while_sitting_on_couch.jpg",
+  "alt": "Assistance informatique à domicile"
+ },
+ "svc-aide-domicile": {
+  "file": "Moscow, Nakhimovsky Prospect, people, Apr 2026 05.jpg",
+  "author": "Retired electrician",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "page": "https://commons.wikimedia.org/wiki/File:Moscow,_Nakhimovsky_Prospect,_people,_Apr_2026_05.jpg",
+  "alt": "Personne âgée en promenade"
+ },
+ "svc-cours": {
+  "file": "Khadim pmp.jpg",
+  "author": "Khadim pmp",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Khadim_pmp.jpg",
+  "alt": "Étudiant au travail à son bureau"
+ },
+ "svc-sport": {
+  "file": "Fit young man doing deadlift exercise in gym.jpg",
+  "author": "Nenad Stojkovic",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Fit_young_man_doing_deadlift_exercise_in_gym.jpg",
+  "alt": "Entraînement avec haltères"
+ },
+ "svc-artisans": {
+  "file": "Cameroon male plumbier at work 04.jpg",
+  "author": "Gatien TITCHO SEUMO",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cameroon_male_plumbier_at_work_04.jpg",
+  "alt": "Artisans au travail"
  }
 }

@@ -17,7 +17,7 @@ export function HubView({ hub }: { hub: Hub }) {
         </form>
       </XpHero>
       {hub.sections.map((s, i) => (
-        <section key={s.title} className={`section${i % 2 ? ' section-tint' : ''}`}>
+        <section key={s.title} id={s.id} className={`section${i % 2 ? ' section-tint' : ''}`}>
           <SectionHead eyebrow={hub.eyebrow} title={s.title} />
           <TileCarousel
             label={s.title}

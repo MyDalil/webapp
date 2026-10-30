@@ -51,6 +51,17 @@ export const PHOTOS = {
   'iftar': { src: '/images/photos/iftar.webp', alt: "Rupture du jeûne collective devant une mosquée", credit: "Rupture du jeûne collective devant une mosquée · Shyjith Kaiprath Rajan · CC BY-SA 4.0" },
   'cimetiere': { src: '/images/photos/cimetiere.webp', alt: "Cimetière des Thaalba, Alger", credit: "Cimetière des Thaalba, Alger · Reda Kerbush · CC BY-SA 3.0" },
   'djamaa-el-kebir': { src: '/images/photos/djamaa-el-kebir.webp', alt: "Djamaâ El Kebir, la Grande Mosquée d’Alger", credit: "Djamaâ El Kebir, la Grande Mosquée d’Alger · Benzita Abdelhadi · CC BY-SA 4.0" },
+  'svc-menage': { src: '/images/photos/svc-menage.webp', alt: "Produits d’entretien sur un plan de travail", credit: "Produits d’entretien sur un plan de travail · Pfc. Robert Wormley · Public domain" },
+  'svc-bricolage': { src: '/images/photos/svc-bricolage.webp', alt: "Marteau, clous et planches", credit: "Marteau, clous et planches · Lorax · CC BY 3.0" },
+  'svc-demenagement': { src: '/images/photos/svc-demenagement.webp', alt: "Camion de déménagement", credit: "Camion de déménagement · Tdorante10 · CC BY-SA 4.0" },
+  'svc-jardinage': { src: '/images/photos/svc-jardinage.webp', alt: "Plantation au jardin", credit: "Plantation au jardin · Shixart1985 · CC BY 2.0" },
+  'svc-garde-enfants': { src: '/images/photos/svc-garde-enfants.webp', alt: "Salle de jeux pour enfants", credit: "Salle de jeux pour enfants · Famartin · CC BY-SA 4.0" },
+  'svc-garde-animaux': { src: '/images/photos/svc-garde-animaux.webp', alt: "Promenade d’un chien", credit: "Promenade d’un chien · William Murphy · CC BY-SA 2.0" },
+  'svc-informatique': { src: '/images/photos/svc-informatique.webp', alt: "Assistance informatique à domicile", credit: "Assistance informatique à domicile · Shixart1985 · CC BY 2.0" },
+  'svc-aide-domicile': { src: '/images/photos/svc-aide-domicile.webp', alt: "Personne âgée en promenade", credit: "Personne âgée en promenade · Retired electrician · CC0" },
+  'svc-cours': { src: '/images/photos/svc-cours.webp', alt: "Étudiant au travail à son bureau", credit: "Étudiant au travail à son bureau · Khadim pmp · CC BY-SA 4.0" },
+  'svc-sport': { src: '/images/photos/svc-sport.webp', alt: "Entraînement avec haltères", credit: "Entraînement avec haltères · Nenad Stojkovic · CC BY 2.0" },
+  'svc-artisans': { src: '/images/photos/svc-artisans.webp', alt: "Artisans au travail", credit: "Artisans au travail · Gatien TITCHO SEUMO · CC BY-SA 4.0" },
 } satisfies Record<string, Photo>
 
 export type PhotoKey = keyof typeof PHOTOS

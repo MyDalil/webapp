@@ -46,7 +46,7 @@ export const RUBRICS: Rubric[] = [
     match: ['/services', '/prestataires', '/praticiens', '/annuaire/maison-travaux', '/annuaire/droit-finance-conseil', '/annuaire/transports-mobilite'],
     entries: [
       ['/praticiens', 'health', 'Santé : prendre rendez-vous', 'Médecins et praticiens vérifiés'],
-      ['/services', 'wrench', 'Services à domicile', 'Ménage, bricolage, cours…'],
+      ['/services#domicile', 'wrench', 'Services à domicile', 'Ménage, bricolage, cours…'],
       ['/annuaire/maison-travaux', 'hammer', 'Maison & travaux', 'Artisans, entretien'],
       ['/annuaire/droit-finance-conseil', 'scale', 'Droit & finance', 'Avocats, comptables, banques'],
       ['/annuaire/transports-mobilite', 'truck', 'Transports & mobilité', 'Déménagement, taxis'],
@@ -102,7 +102,7 @@ export const RUBRICS: Rubric[] = [
   {
     key: 'vivre',
     label: 'Vivre en Algérie',
-    href: '/installation',
+    href: '/vie-pratique',
     match: ['/installation', '/vie-pratique', '/guides/logement', '/guides/ecole-et-famille', '/guides/sante', '/guides/transport', '/guides/budget-et-banque', '/guides/internet-et-telecoms'],
     entries: [
       ['/guides/logement', 'home', 'Logement', 'Louer, acheter, choisir son quartier'],
@@ -116,14 +116,14 @@ export const RUBRICS: Rubric[] = [
   {
     key: 'plus',
     label: 'Plus',
-    match: ['/actualites', '/guides', '/business-emploi', '/label', '/proposer', '/boutique'],
+    match: ['/actualites', '/guides', '/business-emploi', '/label', '/proposer', '/boutique', '/accompagnement'],
     entries: [
       ['/actualites', 'news', 'Actualités', 'Ce qui change'],
       ['/guides', 'book', 'Guides', 'Comprendre et préparer'],
       ['/business-emploi', 'briefcase', 'Business & Emploi', 'Investir, créer, travailler'],
       ['/label#methode', 'shield', 'Critères de vérification', 'Notre exigence de qualité'],
       ['/proposer', 'upload', 'Contribuer', 'Partager une information'],
-      ['/boutique', 'compass', 'Accompagnements', 'Avancer avec un parcours clair'],
+      ['/accompagnement', 'compass', 'Accompagnements', 'Un conseiller pour vos démarches'],
     ],
     feature: { title: 'Des lieux qui méritent votre temps', href: '/annuaire', kicker: 'À la une' },
     extra: ['/espace-pro', 'Espace professionnel'],
