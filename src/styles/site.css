@@ -127,4 +127,4 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .map-lang { display: flex; }
 .map-lang button { width: 34px !important; height: 30px !important; font: 700 12px/1 var(--font, Inter, sans-serif); color: #14201b; }
 .map-lang button + button { border-left: 1px solid #ddd !important; border-top: 0 !important; }
-.map-lang button[aria-pressed="true"] { background: #006b3c; color: #fff; }
+.maplibregl-ctrl-group.map-lang button[aria-pressed="true"], .maplibregl-ctrl-group.map-lang button[aria-pressed="true"]:hover { background: #006b3c !important; color: #fff !important; }
