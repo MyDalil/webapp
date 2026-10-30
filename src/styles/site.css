@@ -128,3 +128,12 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .map-lang button { width: 34px !important; height: 30px !important; font: 700 12px/1 var(--font, Inter, sans-serif); color: #14201b; }
 .map-lang button + button { border-left: 1px solid #ddd !important; border-top: 0 !important; }
 .maplibregl-ctrl-group.map-lang button[aria-pressed="true"], .maplibregl-ctrl-group.map-lang button[aria-pressed="true"]:hover { background: #006b3c !important; color: #fff !important; }
+
+/* Vignettes sans photo : pictogramme blanc sur la couleur de la rubrique (jamais une case grise). */
+.place-thumb.is-icon { display: grid; place-items: center; background: var(--c, #006b3c); color: #fff; }
+.place-thumb.is-icon svg { width: 42%; height: 42%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.classified-card-img.is-empty { display: grid; place-items: center; background: linear-gradient(150deg, #d9467f, #9d174d); }
+.classified-card-icon { color: #fff; width: 30%; }
+.classified-card-icon svg { width: 100%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.vm-img.is-icon { display: grid; place-items: center; background: linear-gradient(150deg, #0f7a4a, #07140f); color: rgba(255, 255, 255, .92); }
+.vm-img.is-icon svg { width: 34%; height: 34%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }

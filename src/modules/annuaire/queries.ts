@@ -215,7 +215,7 @@ export type CityTile = { code: string; name: string; slug: string; cover: string
 /** Vitrine : meilleures fiches illustrées et wilayas qui ont des lieux à montrer. */
 export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTile[]; total: number }> {
   const all = await getPlaces()
-  const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
+  const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup') && !p.cover.includes('/images/lieu'))
   const byWilaya = new Map<string, PlaceCard[]>()
   for (const p of illustrated) if (p.wilaya) byWilaya.set(p.wilaya, [...(byWilaya.get(p.wilaya) ?? []), p])
   const counts = await getPlaceCounts()

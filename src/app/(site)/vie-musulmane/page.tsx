@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Icon } from '@/platform/ui/Icon'
 import Link from 'next/link'
 import { searchPlaces } from '@/modules/annuaire'
 import { NearMe } from '@/modules/recherche/ui'
@@ -23,11 +24,11 @@ export default async function VieMusulmane() {
   const rubric = RUBRICS.find((r) => r.key === 'musulmane')
   const entries = rubric?.entries ?? []
   const tiles = await Promise.all(
-    entries.map(async ([href, , title, sub]) => {
+    entries.map(async ([href, icon, title, sub]) => {
       const category = new URL(href, 'https://www.mydalil.com').searchParams.get('category')
       const r = category ? await searchPlaces({ sector: 'mosquees-priere', category }, 1) : null
       const p = r?.places[0]
-      return { href, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : (FALLBACK[category ?? title] ?? null), cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
+      return { href, icon, title, sub, count: r?.total ?? null, photo: p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : (FALLBACK[category ?? title] ?? null), cover: p?.cover ?? null, credit: p?.credit ?? null, name: p?.name ?? '' }
     }),
   )
   // Photo d’en-tête : seulement une photo libre créditée (licence).
@@ -55,7 +56,9 @@ export default async function VieMusulmane() {
             {tiles.map((t) => (
               <li key={t.href}>
                 <Link href={t.href} className="vm-tile">
-                  <span className="vm-img" style={t.photo ? { backgroundImage: `url(${t.photo})` } : undefined} />
+                  <span className={`vm-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${t.photo})` } : undefined}>
+                    {!t.photo && <Icon name={t.icon} />}
+                  </span>
                   <span className="vm-body">
                     <b>{t.title}</b>
                     <small>

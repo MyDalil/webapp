@@ -1,3 +1,4 @@
+import { Icon } from '@/platform/ui/Icon'
 import Link from 'next/link'
 import { CATEGORIES, DEALS, category, classifiedCounts, searchClassifieds, type ClassifiedCard, type SearchQuery } from '@/modules/annonces'
 import { WILAYAS } from '@/platform/referentiel/catalog'
@@ -5,11 +6,18 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 const WILAYA_LIST = [...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 const day = (iso: string) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 
+const CLASSIFIED_ICON: Record<string, string> = { immobilier: 'home', emploi: 'briefcase', vehicules: 'car', objets: 'grid' }
+
 export function ClassifiedTile({ c }: { c: ClassifiedCard }) {
   return (
     <li>
       <Link href={c.href} className="classified-card">
         <div className={`classified-card-img${c.photo ? '' : ' is-empty'}`} style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined}>
+          {!c.photo && (
+            <span className="classified-card-icon" aria-hidden="true">
+              <Icon name={CLASSIFIED_ICON[c.category] ?? 'grid'} />
+            </span>
+          )}
           {c.photos > 1 && <small>{c.photos} photos</small>}
         </div>
         <div className="classified-card-body">
