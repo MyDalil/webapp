@@ -1,9 +1,4 @@
-Relevé : 2026-10-30 15:39:40 UTC
+Relevé : 2026-10-30 15:50:10 UTC
 Stockage photos : introuvable
-== /api/sante → 402
-Payment required
-
-DEPLOYMENT_DISABLED
-
-cle1::d8s2x-1793374782077-f230d0637dc5
-
+== /api/sante → 200
+{"ok":true,"base":"ok","ms":1568,"version":"4d3b312"}
