@@ -6,33 +6,11 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  'grande-poste': ['Grande Poste d\'Alger'],
-  'hotel-ville-oran': ['Hôtel de ville d\'Oran', 'Town hall of Oran'],
-  'banque-algerie': ['Bank of Algeria', 'Banque d\'Algérie'],
-  metro: ['Algiers Metro', 'Métro d\'Alger'],
-  tram: ['Algiers tramway', 'Tramway d\'Alger', 'Constantine tramway', 'Oran tramway'],
-  telepherique: ['Aerial tramways in Algeria', 'Téléphérique de Constantine'],
-  port: ['Port of Algiers', 'Port d\'Alger'],
-  aeroport: ['Houari Boumediene Airport', 'Algiers Houari Boumediene Airport'],
-  universite: ['University of Algiers', 'Université d\'Alger'],
-  casbah: ['Casbah of Algiers'],
-  djamaa: ['Djamaa el Djazaïr'],
-  maqam: ['Maqam Echahid'],
-  constantine: ['Sidi M\'Cid Bridge', 'Bridges in Constantine'],
-  notre: ['Notre-Dame d\'Afrique'],
-  ferries: ['Algérie Ferries', 'Ships of Algérie Ferries'],
-  gouvernement: ['Palais du Gouvernement (Algiers)'],
-  qualite: ['Quality images of Algeria'],
-  featured: ['Featured pictures of Algeria'],
-  hajj: ['Featured pictures of the Kaaba', 'Masjid al-Haram'],
-  alger: ['Views of Algiers', 'Bay of Algiers'],
-  oran: ['Views of Oran'],
-  ghardaia: ['Ghardaïa'],
-  souk: ['Markets in Algeria', 'Souks in Algeria'],
-  ecole: ['Schools in Algeria', 'Primary schools in Algeria'],
-  hopital: ['Hospitals in Algeria'],
-  logement: ['Residential buildings in Algiers', 'Apartment buildings in Algeria'],
-  artisanat: ['Handicrafts of Algeria', 'Pottery of Algeria', 'Carpets of Algeria'],
+  // Vie musulmane (2026-10-30) : photos des sujets encore sans image.
+  coran: ['Quranic schools', 'Kuttab', 'Children reading the Quran', 'Mushaf', 'Quran stands', 'People reading the Quran'],
+  librairie: ['Bookshops in Algeria', 'Islamic bookshops', 'Bookstores in Algiers', 'Salon international du livre d\'Alger', 'Bookshops in Morocco', 'Arabic books'],
+  entraide: ['Iftar', 'Ramadan in Algeria', 'Mass iftar', 'Charity in Islam', 'Zakat'],
+  funerailles: ['Cemeteries in Algeria', 'El Alia Cemetery', 'Muslim cemeteries', 'Islamic funerals', 'Cemeteries in Algiers'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
@@ -52,7 +30,7 @@ for (const [key, cats] of Object.entries(CATS)) {
     const j = await api({ action: 'query', generator: 'categorymembers', gcmtitle: 'Category:' + c, gcmtype: 'file', gcmlimit: '60', prop: 'imageinfo', iiprop: 'url|size|extmetadata|mime', iiurlwidth: '1920' })
     for (const pg of j.query?.pages || []) {
       const ii = pg.imageinfo?.[0]
-      if (!ii || seen.has(pg.title) || !/image\/(jpeg|png|webp)/.test(ii.mime) || ii.width < 1600 || ii.width < ii.height * 1.2) continue
+      if (!ii || seen.has(pg.title) || !/image\/(jpeg|png|webp)/.test(ii.mime) || ii.width < 1200) continue
       const m = ii.extmetadata || {}
       const license = strip(m.LicenseShortName?.value)
       if (!license || /non-free|fair use/i.test(license)) continue
