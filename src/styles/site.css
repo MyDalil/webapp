@@ -137,3 +137,4 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .classified-card-icon svg { width: 100%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .vm-img.is-icon { display: grid; place-items: center; background: linear-gradient(150deg, #0f7a4a, #07140f); color: rgba(255, 255, 255, .92); }
 .vm-img.is-icon svg { width: 34%; height: 34%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.city-tile-img.is-icon.is-annonce { background: linear-gradient(150deg, #d9467f, #9d174d); }

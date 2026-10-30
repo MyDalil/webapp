@@ -379,7 +379,15 @@ export default async function Home() {
             <Carousel label="Dernières annonces" variant="tiles">
               {latest.map((c, i) => (
                 <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
-                  <div className="city-tile-img" style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined} />
+                  {c.photo ? (
+                    <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
+                  ) : (
+                    <div className="city-tile-img is-icon is-annonce">
+                      <span className="xp-tile-icon" aria-hidden="true">
+                        <Icon name={({ immobilier: 'home', emploi: 'briefcase', vehicules: 'car' } as Record<string, string>)[c.category] ?? 'grid'} />
+                      </span>
+                    </div>
+                  )}
                   <div className="city-tile-body">
                     <span className="chip">{c.example ? `Exemple · ${c.subLabel}` : c.subLabel}</span>
                     <h3>{c.title}</h3>
