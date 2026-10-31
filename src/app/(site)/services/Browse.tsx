@@ -16,7 +16,7 @@ const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
   informatique: 'svc-informatique',
   'aide-domicile': 'svc-aide-domicile',
   'cours-particuliers': 'svc-cours',
-  'cours-coraniques': 'coran',
+  'cours-coraniques': 'svc-coran',
   'coach-sportif': 'svc-sport',
 }
 
