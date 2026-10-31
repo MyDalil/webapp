@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { setWilaya, useWilaya } from './wilaya'
 import { NavIcon } from './NavIcon'
+import { shellText, type Lang } from '../i18n'
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
@@ -11,7 +12,8 @@ const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
  * Sélecteur de wilaya de l’en-tête : facultatif, « Toute l’Algérie » par défaut.
  * `open` / `onToggle` viennent de l’en-tête (un seul menu ouvert à la fois).
  */
-export function WilayaPicker({ open, onToggle, inline = false }: { open: boolean; onToggle: (open: boolean) => void; inline?: boolean }) {
+export function WilayaPicker({ open, onToggle, inline = false, lang = 'fr' }: { open: boolean; onToggle: (open: boolean) => void; inline?: boolean; lang?: Lang }) {
+  const t = shellText(lang)
   const current = useWilaya()
   const [q, setQ] = useState('')
   const input = useRef<HTMLInputElement>(null)
@@ -31,24 +33,24 @@ export function WilayaPicker({ open, onToggle, inline = false }: { open: boolean
   }
   return (
     <div className={`wilaya-wrap ${inline ? 'is-inline' : ''}`}>
-      <button className="wilaya-pill" type="button" data-menu-trigger="wilaya" aria-expanded={open} aria-haspopup="dialog" aria-label={`Wilaya : ${current?.name ?? 'Toute l’Algérie'}. Changer`} onClick={() => onToggle(!open)}>
+      <button className="wilaya-pill" type="button" data-menu-trigger="wilaya" aria-expanded={open} aria-haspopup="dialog" aria-label={`${t.wilaya} : ${current?.name ?? t.allAlgeria}. ${t.change}`} onClick={() => onToggle(!open)}>
         <NavIcon name="pin" />
         <span>
-          {inline && 'Ma wilaya : '}
-          {current?.name ?? 'Toute l’Algérie'}
+          {inline && t.myWilaya}
+          {current?.name ?? t.allAlgeria}
         </span>
         <svg className="chev" viewBox="0 0 16 16" aria-hidden="true">
           <path d="m4 6 4 4 4-4" />
         </svg>
       </button>
       {open && (
-        <div className="utility-menu wilaya-menu" data-menu="wilaya" role="dialog" aria-label="Choisir une wilaya">
-          <p className="wilaya-help">Facultatif : DALIL met en avant les lieux, services et sorties de cette wilaya. Aucune géolocalisation.</p>
-          <input ref={input} type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher une wilaya" aria-label="Rechercher une wilaya" />
-          <div className="wilaya-list" role="listbox" aria-label="Wilayas">
+        <div className="utility-menu wilaya-menu" data-menu="wilaya" role="dialog" aria-label={t.chooseWilaya}>
+          <p className="wilaya-help">{t.wilayaHelp}</p>
+          <input ref={input} type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.wilayaSearch} aria-label={t.wilayaSearch} />
+          <div className="wilaya-list" role="listbox" aria-label={t.wilayas}>
             {!q && (
               <button type="button" role="option" aria-selected={!current} onClick={() => choose(null)}>
-                <span>Toute l’Algérie</span>
+                <span>{t.allAlgeria}</span>
                 {!current && <b>✓</b>}
               </button>
             )}
@@ -59,7 +61,7 @@ export function WilayaPicker({ open, onToggle, inline = false }: { open: boolean
                 {current?.code === w.code && <b>✓</b>}
               </button>
             ))}
-            {!list.length && <p className="wilaya-empty">Aucune wilaya ne correspond.</p>}
+            {!list.length && <p className="wilaya-empty">{t.wilayaEmpty}</p>}
           </div>
         </div>
       )}

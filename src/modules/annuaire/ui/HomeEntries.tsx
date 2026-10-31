@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Carousel } from '@/platform/ui/Carousel'
+import { count, type Lang } from '@/platform/i18n'
 
 type Photo = { src: string; credit: string | null } | null
 /** Une porte : photo d’une fiche DALIL publiée, nombre de fiches et un exemple (format « Par ville »). */
@@ -9,7 +10,13 @@ export type EntryStat = { photo: Photo; count: number; example: string | null }
 export type EntryKey = 'musulmane' | 'services' | 'decouvrir' | 'demarches' | 'annonces' | 'vivre'
 export type EntryPhotos = Record<EntryKey, EntryStat>
 
-const fiches = (n: number) => `${n} fiche${n > 1 ? 's' : ''}`
+const fiches = (n: number, l: Lang) => count(n, l, { fr: ['fiche', 'fiches'], en: ['listing', 'listings'], ar: ['عنوان واحد', 'عنوانان', 'عناوين', 'عنوانًا'] })
+
+/** Titres et lignes des portes en anglais et en arabe (mêmes mots que le menu). */
+const DOOR_T: Record<'en' | 'ar', Record<EntryKey, [title: string, line?: string]>> = {
+  en: { musulmane: ['Muslim life'], services: ['Services', 'Verified doctors, tradespeople and providers'], decouvrir: ['Discover'], demarches: ['Paperwork'], annonces: ['Classifieds', 'Property, jobs, vehicles, items'], vivre: ['Living in Algeria', 'Housing, school, banking, transport'] },
+  ar: { musulmane: ['الحياة الإسلامية'], services: ['الخدمات', 'أطباء وحرفيون ومقدّمو خدمات موثَّقون'], decouvrir: ['اكتشف'], demarches: ['الإجراءات'], annonces: ['الإعلانات', 'عقار، عمل، مركبات، أغراض'], vivre: ['العيش في الجزائر', 'السكن، المدرسة، البنك، النقل'] },
+}
 
 /**
  * Portes sous le premier écran (ordre validé par Rad, 2026-10-21) : une porte par rubrique du menu,
@@ -34,11 +41,12 @@ const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
   },
 ]
 
-export function HomeEntries({ stats }: { stats: EntryPhotos }) {
+export function HomeEntries({ stats, lang = 'fr' }: { stats: EntryPhotos; lang?: Lang }) {
   return (
-    <Carousel label="Les rubriques de DALIL" variant="tiles">
+    <Carousel label={{ fr: 'Les rubriques de DALIL', en: 'DALIL sections', ar: 'أقسام دليل' }[lang]} variant="tiles">
       {DOORS.map((d, i) => {
         const s = stats[d.key]
+        const [title, line] = lang === 'fr' ? [d.title, d.line] : DOOR_T[lang][d.key]
         return (
           <div
             key={d.key}
@@ -52,10 +60,10 @@ export function HomeEntries({ stats }: { stats: EntryPhotos }) {
                 style={s.photo ? { backgroundImage: `url(${s.photo.src})` } : undefined}
               />
               <div className="city-tile-body">
-                <h3>{d.title}</h3>
+                <h3>{title}</h3>
                 <p>
-                  {d.line ??
-                    [s.count ? fiches(s.count) : null, s.example].filter(Boolean).join(' · ')}
+                  {line ??
+                    [s.count ? fiches(s.count, lang) : null, s.example].filter(Boolean).join(' · ')}
                 </p>
               </div>
             </Link>

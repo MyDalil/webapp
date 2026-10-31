@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { langOf, shellText } from '../i18n'
 
 /** Cercle « Créer mon compte gratuitement » : suit la navigation tant que le visiteur n’a pas de compte. */
 export function JoinCircle() {
   const pathname = usePathname()
+  const t = shellText(langOf(pathname || '/'))
   const [hidden, setHidden] = useState(false)
   // Mobile : le cercle s’efface quand on descend (lecture) et revient quand on remonte.
   const [away, setAway] = useState(false)
@@ -32,13 +34,13 @@ export function JoinCircle() {
   // Résultats de recherche aussi : la bulle masquait les dernières fiches sur mobile.
   if (hidden || detail || pathname?.startsWith('/connexion') || pathname?.startsWith('/recherche')) return null
   return (
-    <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}${pathname === '/' ? ' is-home' : ''}`} aria-label="Créer mon compte gratuitement">
+    <Link href="/connexion/particulier?tab=signup" className={`join-circle${away ? ' is-away' : ''}${pathname === '/' || pathname === '/en' || pathname === '/ar' ? ' is-home' : ''}`} aria-label={t.joinAria}>
       <span>
-        Créer
+        {t.joinA}
         <br />
-        mon compte
+        {t.joinB}
         <br />
-        <small>gratuitement</small>
+        <small>{t.joinC}</small>
       </span>
     </Link>
   )

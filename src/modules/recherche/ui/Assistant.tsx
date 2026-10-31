@@ -6,6 +6,13 @@ import { toast } from '@/platform/shell/toast'
 import { preferredLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
 import { useWilaya } from '@/platform/shell/wilaya'
+import { langOf } from '@/platform/i18n'
+
+const ASSIST = {
+  fr: { listening: 'Je vous écoute…', busy: 'DALIL réfléchit…', answer: 'Votre réponse…', ask: 'Demandez à DALIL…', open: 'Ouvrir l’assistant DALIL', send: 'Envoyer' },
+  en: { listening: 'Listening…', busy: 'DALIL is thinking…', answer: 'Your answer…', ask: 'Ask DALIL…', open: 'Open the DALIL assistant', send: 'Send' },
+  ar: { listening: 'أنا أستمع…', busy: 'دليل يفكّر…', answer: 'إجابتك…', ask: 'اسأل دليل…', open: 'فتح مساعد دليل', send: 'إرسال' },
+}
 
 type Turn = { q: string; intent: Intent }
 
@@ -17,6 +24,7 @@ type Turn = { q: string; intent: Intent }
 export function Assistant() {
   const router = useRouter()
   const path = usePathname()
+  const A = ASSIST[langOf(path || '/')]
   const [expanded, setExpanded] = useState(false)
   const [text, setText] = useState('')
   const [lang, setLang] = useState<DictationLang>('fr-FR')
@@ -142,7 +150,7 @@ export function Assistant() {
 
   return (
     <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact ? 'is-compact' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
-      <button className="assistant-orb" type="button" aria-label="Ouvrir l’assistant DALIL" onClick={() => setExpanded(!expanded)}>
+      <button className="assistant-orb" type="button" aria-label={A.open} onClick={() => setExpanded(!expanded)}>
         <span aria-hidden="true">✦</span>
       </button>
       <form className={`assistant-bar is-chat${listening ? ' is-listening' : ''}${text.trim() ? ' has-text' : ''}`} onSubmit={submit}>
@@ -217,7 +225,7 @@ export function Assistant() {
           maxLength={600}
           onChange={(e) => setText(e.target.value)}
           onFocus={() => turns.length && setPanel(true)}
-          placeholder={listening ? 'Je vous écoute…' : busy ? 'DALIL réfléchit…' : intent?.question ? 'Votre réponse…' : 'Demandez à DALIL…'}
+          placeholder={listening ? A.listening : busy ? A.busy : intent?.question ? A.answer : A.ask}
           autoComplete="off"
         />
         {listening && (
@@ -235,7 +243,7 @@ export function Assistant() {
             <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" />
           </svg>
         </button>
-        <button className="assistant-send" type="submit" aria-label="Envoyer" disabled={busy || listening || !text.trim()}>
+        <button className="assistant-send" type="submit" aria-label={A.send} disabled={busy || listening || !text.trim()}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 19V5M5 12l7-7 7 7" />
           </svg>

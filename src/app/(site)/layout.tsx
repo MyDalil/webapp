@@ -6,6 +6,10 @@ import '@fontsource/inter/700.css'
 import '@fontsource/manrope/500.css'
 import '@fontsource/manrope/600.css'
 import '@fontsource/manrope/700.css'
+import '@fontsource/ibm-plex-sans-arabic/arabic-400.css'
+import '@fontsource/ibm-plex-sans-arabic/arabic-500.css'
+import '@fontsource/ibm-plex-sans-arabic/arabic-600.css'
+import '@fontsource/ibm-plex-sans-arabic/arabic-700.css'
 import '@/styles/legacy.css'
 import '@/styles/mockup.css'
 import '@/styles/site.css'
@@ -27,7 +31,8 @@ import { Toast } from '@/platform/shell/Toast'
 import { Motion } from '@/platform/ui/Motion'
 import { JoinCircle } from '@/platform/shell/JoinCircle'
 import { Tree } from '@/modules/contenus/ui'
-import { SHELL } from '@/modules/contenus'
+import { SHELL, footerFor } from '@/modules/contenus'
+import { ByLang } from '@/platform/ui/ByLang'
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://mydalil.com'
 
@@ -48,7 +53,7 @@ export const viewport: Viewport = {
   ],
 }
 
-const themeScript = `(function(){try{var t=localStorage.getItem('dalil-theme');if(t){document.documentElement.dataset.theme=t;document.documentElement.classList.toggle('dark',t==='dark')}}catch(e){}})()`
+const themeScript = `(function(){try{var p=location.pathname,h=document.documentElement;if(p==='/ar'||p.indexOf('/ar/')===0){h.lang='ar';h.dir='rtl'}else if(p==='/en'||p.indexOf('/en/')===0){h.lang='en'}}catch(e){}try{var t=localStorage.getItem('dalil-theme');if(t){document.documentElement.dataset.theme=t;document.documentElement.classList.toggle('dark',t==='dark')}}catch(e){}})()`
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -65,7 +70,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <div className="legacy site-footer-wrap">
-          <Tree nodes={[SHELL.footer]} />
+          <ByLang fr={<Tree nodes={[SHELL.footer]} />} en={<Tree nodes={[footerFor('en')]} />} ar={<Tree nodes={[footerFor('ar')]} />} />
         </div>
         <Assistant />
         <Toast />

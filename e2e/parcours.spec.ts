@@ -27,6 +27,20 @@ test.describe('Pages publiques', () => {
   })
 })
 
+test.describe('Langues', () => {
+  test('/en et /ar : même accueil, traduit, arabe de droite à gauche', async ({ page }) => {
+    const errors = watchErrors(page)
+    await page.goto('/en')
+    await expect(page.locator('h1').first()).toHaveText('Algeria, closer to you.')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+    await page.goto('/ar')
+    await expect(page.locator('h1').first()).toHaveText('الجزائر، أقرب إليك.')
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
+    await expect(page.locator('.section-head h2').first()).toHaveText('ماذا تودّ أن تفعل اليوم؟')
+    expect(errors).toEqual([])
+  })
+})
+
 test.describe('Menu', () => {
   test('menu latéral : rubriques, thème, fermeture hors du panneau et par Échap', async ({ page }) => {
     const errors = watchErrors(page)

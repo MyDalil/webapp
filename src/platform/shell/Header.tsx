@@ -6,7 +6,9 @@ import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { toast } from './toast'
-import { RUBRICS, rubricOf, type Rubric } from './nav'
+import { rubricOf, type Rubric } from './nav'
+import { rubricsFor } from './navI18n'
+import { homeHref, langOf, shellText, type Lang } from '../i18n'
 import { NavIcon } from './NavIcon'
 import { QuickFind } from './QuickFind'
 import { WilayaPicker } from './WilayaPicker'
@@ -22,14 +24,14 @@ const LANGS = [
 ]
 
 /** Menu latéral (maquette « Menu — mobile » validée par Rad, 2026-10-31) : couleur, pictogramme et résumé de chaque rubrique. */
-const SHEET: Record<Rubric['key'], { color: string; ink?: string; hint: string; label?: string; icon: string }> = {
-  musulmane: { color: '#0F7A4A', hint: 'Mosquées, Hajj, entraide', icon: 'M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5' },
-  services: { color: '#1A56DB', hint: 'Médecins, artisans, aide à domicile', icon: 'M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11ZM8 12h2l1-2 2 4 1-2h2' },
-  decouvrir: { color: '#C2410C', hint: 'Sites, sorties, week-end', icon: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15.5 8.5l-2 5-5 2 2-5 5-2Z' },
-  demarches: { color: '#6D28D9', hint: 'Papiers, administrations, consulats', icon: 'M14 3H6v18h12V7l-4-4ZM14 3v4h4M9 13h6M9 17h6' },
-  annonces: { color: '#BE185D', hint: 'Immobilier, emploi, véhicules, objets', icon: 'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9-9-9ZM7.5 6v3' },
-  vivre: { color: '#FACC15', ink: '#14201B', hint: 'Logement, école, banque, transports', icon: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z' },
-  plus: { color: '#2A3A33', hint: 'Guides, actualités, critères, contribuer', label: 'Guides & infos', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5ZM4 19a2 2 0 0 1 2-2h13M9 7h6' },
+const SHEET: Record<Rubric['key'], { color: string; ink?: string; icon: string }> = {
+  musulmane: { color: '#0F7A4A', icon: 'M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5' },
+  services: { color: '#1A56DB', icon: 'M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11ZM8 12h2l1-2 2 4 1-2h2' },
+  decouvrir: { color: '#C2410C', icon: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15.5 8.5l-2 5-5 2 2-5 5-2Z' },
+  demarches: { color: '#6D28D9', icon: 'M14 3H6v18h12V7l-4-4ZM14 3v4h4M9 13h6M9 17h6' },
+  annonces: { color: '#BE185D', icon: 'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9-9-9ZM7.5 6v3' },
+  vivre: { color: '#FACC15', ink: '#14201B', icon: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z' },
+  plus: { color: '#2A3A33', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5ZM4 19a2 2 0 0 1 2-2h13M9 7h6' },
 }
 
 type Theme = 'light' | 'dark'
@@ -42,7 +44,10 @@ export function Header() {
   const hover = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [mobile, setMobile] = useState(false)
   const ref = useRef<HTMLElement>(null)
-  const lang = path === '/ar' || path.startsWith('/ar/') ? 'ar' : path === '/en' || path.startsWith('/en/') ? 'en' : 'fr'
+  const lang: Lang = langOf(path)
+  const t = shellText(lang)
+  const RUBRICS = rubricsFor(lang)
+  const home = homeHref(lang)
   const current = LANGS.find((l) => l.code === lang)!
 
   const [who, setWho] = useState<string | null>(null)
@@ -57,9 +62,17 @@ export function Header() {
   // En-tête qui s’affine dès que la page défile.
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 12))
 
+  // Langue et sens d’écriture du document suivent la page (/ar : de droite à gauche).
+  useEffect(() => {
+    const html = document.documentElement
+    html.lang = lang
+    if (lang === 'ar') html.dir = 'rtl'
+    else html.removeAttribute('dir')
+    setRtl(lang === 'ar')
+  }, [lang])
+
   useEffect(() => {
     setMounted(true)
-    setRtl(document.documentElement.dir === 'rtl')
     setThemeState(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
   }, [])
 
@@ -134,7 +147,7 @@ export function Header() {
     try {
       localStorage.setItem('dalil-map-lang', l.code)
     } catch {}
-    if (l.code !== 'fr') toast(`${l.label} — version en préparation`)
+    if (l.code !== 'fr') toast(`${l.label} — ${shellText(l.code as Lang).soon}`)
   }
   const close = () => setMobile(false)
 
@@ -164,7 +177,7 @@ export function Header() {
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`} id="site-header" ref={ref} onPointerLeave={hoverLeave} onPointerEnter={hoverStay}>
       <div className="header-inner">
-        <Link className="brand" href="/" aria-label="DALIL, Guide & Services, accueil">
+        <Link className="brand" href={home} aria-label={t.home}>
           <span className="brand-mark" aria-hidden="true">
             D
           </span>
@@ -174,7 +187,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="primary-nav" aria-label="Navigation principale">
+        <nav className="primary-nav" aria-label={t.nav}>
           {RUBRICS.map((r) => (
             <div className="menu-wrap" key={r.key}>
               <button
@@ -213,10 +226,10 @@ export function Header() {
                         </li>
                       ))}
                     </ul>
-                    <Feature rubric={r} slides={slides?.[r.key] ?? []} onGo={() => setMenu(null)} />
+                    <Feature rubric={r} slides={slides?.[r.key] ?? []} onGo={() => setMenu(null)} t={t} />
                   </div>
                   <div className="mega2-foot">
-                    <QuickFind onDone={() => setMenu(null)} />
+                    <QuickFind onDone={() => setMenu(null)} lang={lang} />
                     {r.extra && (
                       <Link className="mega2-extra" href={r.extra[0]} onClick={() => setMenu(null)}>
                         {r.extra[1]} →
@@ -229,9 +242,9 @@ export function Header() {
         </nav>
 
         <div className="header-actions">
-          <WilayaPicker open={menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
+          <WilayaPicker lang={lang} open={menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
           <div className="utility-wrap">
-            <button className="icon-button flag-button" type="button" data-menu-trigger="language" aria-label="Changer de langue" aria-expanded={menu === 'language'} onClick={() => setMenu(menu === 'language' ? null : 'language')}>
+            <button className="icon-button flag-button" type="button" data-menu-trigger="language" aria-label={t.changeLang} aria-expanded={menu === 'language'} onClick={() => setMenu(menu === 'language' ? null : 'language')}>
               {current.flag}
             </button>
             <div className="utility-menu language-menu" data-menu="language" hidden={menu !== 'language'}>
@@ -242,7 +255,7 @@ export function Header() {
               ))}
             </div>
           </div>
-          <button className="icon-button theme-button" type="button" aria-label="Changer d’apparence" onClick={toggleTheme}>
+          <button className="icon-button theme-button" type="button" aria-label={t.changeTheme} onClick={toggleTheme}>
             <svg className="sun" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="4" />
               <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
@@ -250,17 +263,17 @@ export function Header() {
           </button>
           {who ? (
             <Link className="login-button" href={who}>
-              Mon espace
+              {t.mySpace}
             </Link>
           ) : (
             <Link className="login-button" href="/connexion">
-              Connexion
+              {t.connexion}
             </Link>
           )}
-          <Link className="icon-button account-button" href={who ?? '/connexion'} aria-label={who ? 'Mon espace' : 'Se connecter'}>
+          <Link className="icon-button account-button" href={who ?? '/connexion'} aria-label={who ? t.mySpace : t.signIn}>
             <UserIcon />
           </Link>
-          <button ref={burger} className="hamburger" type="button" aria-label={mobile ? 'Fermer la navigation' : 'Ouvrir la navigation'} aria-expanded={mobile} aria-controls="nav-sheet" onClick={() => setMobile(!mobile)}>
+          <button ref={burger} className="hamburger" type="button" aria-label={mobile ? t.closeNav : t.openNav} aria-expanded={mobile} aria-controls="nav-sheet" onClick={() => setMobile(!mobile)}>
             <span></span>
             <span></span>
             <span></span>
@@ -278,7 +291,7 @@ export function Header() {
               className="nav-sheet-panel"
               role="dialog"
               aria-modal="true"
-              aria-label="Menu"
+              aria-label={t.menu}
               initial={false}
               animate={{ x: mobile ? 0 : rtl ? '-100%' : '100%' }}
               transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 40, mass: 0.9 }}
@@ -293,16 +306,16 @@ export function Header() {
               }}
             >
               <div className="nav-sheet-top">
-                <Link className="nav-sheet-brand" href="/" onClick={close} aria-label="DALIL, accueil">
+                <Link className="nav-sheet-brand" href={home} onClick={close} aria-label={t.home}>
                   <span className="brand-mark" aria-hidden="true">
                     D
                   </span>
                   <b>DALIL</b>
                 </Link>
-                <Link className="nav-sheet-round" href={who ?? '/connexion'} onClick={close} aria-label={who ? 'Mon espace' : 'Mon compte'}>
+                <Link className="nav-sheet-round" href={who ?? '/connexion'} onClick={close} aria-label={who ? t.mySpace : t.myAccount}>
                   <UserIcon />
                 </Link>
-                <button ref={closeBtn} className="nav-sheet-close" type="button" aria-label="Fermer le menu" onClick={close}>
+                <button ref={closeBtn} className="nav-sheet-close" type="button" aria-label={t.closeMenu} onClick={close}>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M6 6l12 12M18 6 6 18" />
                   </svg>
@@ -316,14 +329,14 @@ export function Header() {
                     <path d="m20 20-4-4" />
                   </svg>
                   <label className="sr-only" htmlFor="nav-sheet-q">
-                    Rechercher sur DALIL
+                    {t.searchDalil}
                   </label>
-                  <input id="nav-sheet-q" name="q" type="search" placeholder="Rechercher sur DALIL" enterKeyHint="search" autoComplete="off" />
+                  <input id="nav-sheet-q" name="q" type="search" placeholder={t.searchDalil} enterKeyHint="search" autoComplete="off" />
                 </form>
-                <WilayaPicker inline open={mobile && menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
+                <WilayaPicker lang={lang} inline open={mobile && menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
               </div>
 
-              <nav className="nav-sheet-list" aria-label="Rubriques">
+              <nav className="nav-sheet-list" aria-label={t.rubrics}>
                 {RUBRICS.map((r) => {
                   const v = SHEET[r.key]
                   const open = drawer === r.key
@@ -336,8 +349,8 @@ export function Header() {
                           </svg>
                         </span>
                         <span className="nav-sheet-txt">
-                          <b>{v.label ?? r.label}</b>
-                          <small>{v.hint}</small>
+                          <b>{r.sheet}</b>
+                          <small>{r.hint}</small>
                         </span>
                         <svg className="nav-sheet-chev" viewBox="0 0 24 24" aria-hidden="true">
                           <path d="m6 9 6 6 6-6" />
@@ -352,7 +365,7 @@ export function Header() {
                         ))}
                         {r.href && (
                           <Link className="nav-sheet-all" href={r.href} onClick={close}>
-                            Toute la rubrique
+                            {t.allRubric}
                             <span aria-hidden="true">›</span>
                           </Link>
                         )}
@@ -362,43 +375,43 @@ export function Header() {
                 })}
               </nav>
 
-              <section className="nav-sheet-account" aria-label="Mon compte">
-                <b>Mon compte DALIL</b>
+              <section className="nav-sheet-account" aria-label={t.myAccount}>
+                <b>{t.accountTitle}</b>
                 {who ? (
                   <Link className="nav-sheet-primary" href={who} onClick={close}>
-                    Mon espace
+                    {t.mySpace}
                   </Link>
                 ) : (
                   <>
                     <Link className="nav-sheet-primary" href="/connexion" onClick={close}>
-                      Se connecter
+                      {t.signIn}
                     </Link>
                     <Link className="nav-sheet-secondary" href="/connexion/particulier?tab=signup" onClick={close}>
-                      Créer un compte gratuit
+                      {t.createFree}
                     </Link>
                     <Link className="nav-sheet-pro" href="/connexion/professionnel" onClick={close}>
-                      Vous êtes professionnel ? <span>Espace pro ›</span>
+                      {t.proQ} <span>{t.proLink}</span>
                     </Link>
                   </>
                 )}
               </section>
 
               <div className="nav-sheet-foot">
-                <div className="nav-sheet-seg" role="group" aria-label="Langue">
+                <div className="nav-sheet-seg" role="group" aria-label={t.language}>
                   {LANGS.map((l) => (
                     <Link key={l.code} href={l.href} className={l.code === lang ? 'is-on' : ''} aria-current={l.code === lang ? 'true' : undefined} aria-label={l.label} title={l.label} onClick={() => chooseLang(l)}>
                       <span aria-hidden="true">{l.flag}</span>
                     </Link>
                   ))}
                 </div>
-                <div className="nav-sheet-seg" role="group" aria-label="Apparence">
-                  <button type="button" className={theme === 'light' ? 'is-on' : ''} aria-pressed={theme === 'light'} aria-label="Mode clair" title="Mode clair" onClick={() => applyTheme('light')}>
+                <div className="nav-sheet-seg" role="group" aria-label={t.appearance}>
+                  <button type="button" className={theme === 'light' ? 'is-on' : ''} aria-pressed={theme === 'light'} aria-label={t.light} title={t.light} onClick={() => applyTheme('light')}>
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <circle cx="12" cy="12" r="4" />
                       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
                     </svg>
                   </button>
-                  <button type="button" className={theme === 'dark' ? 'is-on' : ''} aria-pressed={theme === 'dark'} aria-label="Mode sombre" title="Mode sombre" onClick={() => applyTheme('dark')}>
+                  <button type="button" className={theme === 'dark' ? 'is-on' : ''} aria-pressed={theme === 'dark'} aria-label={t.dark} title={t.dark} onClick={() => applyTheme('dark')}>
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
                     </svg>
@@ -414,7 +427,7 @@ export function Header() {
 }
 
 /** Carte « à la une » du méga-menu : photo d’une fiche DALIL, lieu, titre, flèche ; points pour changer de photo (jamais automatique). */
-function Feature({ rubric, slides, onGo }: { rubric: Rubric; slides: Slide[]; onGo: () => void }) {
+function Feature({ rubric, slides, onGo, t }: { rubric: Rubric; slides: Slide[]; onGo: () => void; t: ReturnType<typeof shellText> }) {
   const [i, setI] = useState(0)
   const s = slides[i] ?? slides[0]
   const href = rubric.key === 'decouvrir' && s ? s.href : rubric.feature.href
@@ -431,9 +444,9 @@ function Feature({ rubric, slides, onGo }: { rubric: Rubric; slides: Slide[]; on
           <strong>{rubric.feature.title}</strong>
         </Link>
         {slides.length > 1 && (
-          <div className="mega2-dots" role="group" aria-label="Photos à la une">
+          <div className="mega2-dots" role="group" aria-label={t.featurePhotos}>
             {slides.map((x, k) => (
-              <button key={x.href + k} type="button" aria-label={`Photo ${k + 1} sur ${slides.length} : ${x.place}`} aria-pressed={k === i} onClick={() => setI(k)} />
+              <button key={x.href + k} type="button" aria-label={`${t.photoOf(k + 1, slides.length)} : ${x.place}`} aria-pressed={k === i} onClick={() => setI(k)} />
             ))}
           </div>
         )}
