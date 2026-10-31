@@ -3,8 +3,8 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 const OUT = 'data/images-unsplash'
 const C = {
-  // Étape 2 — À domicile, sans visage.
-  domicile: ['1562259929-b4e1fd3aef09', '1768839725085-829e6ac7ac26', '1789656435285-02cd411e5ffd', '1646640246129-dc3b66f383a2', '1625559424722-7b7d1199ad6e', '1627905646269-7f034dcc5738', '1758273238415-01ec03d9ef27', '1426927308491-6380b6a9936f', '1501087063833-3773ee886f20'],
+  // Étape 2 bis — À domicile en couleur (gants + perceuse).
+  domicile2: ['1646898644803-42f361bc95e2', '1641371227964-5051504ec380', '1636029697866-214ee5315764', '1625562888409-14b30c2b17b5', '1644308392725-69b682ae63a4', '1785484267196-3f7325819b26'],
 }
 import { existsSync, readFileSync } from 'node:fs'
 const manifest = existsSync(path.join(OUT, 'manifest.json')) ? JSON.parse(readFileSync(path.join(OUT, 'manifest.json'), 'utf8')) : {}
