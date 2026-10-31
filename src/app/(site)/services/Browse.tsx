@@ -1,8 +1,24 @@
+import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import Link from 'next/link'
 import { CATEGORIES, categoryCounts, categoryLabel, searchProviders, type ProviderCard } from '@/modules/services'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel, LANGUAGES } from '@/platform/referentiel/languages'
+
+/** Photo de chaque métier (Wikimedia Commons, crédits sur /credits-photos). */
+const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
+  menage: 'svc-menage',
+  bricolage: 'svc-bricolage',
+  demenagement: 'svc-demenagement',
+  jardinage: 'svc-jardinage',
+  'garde-enfants': 'svc-garde-enfants',
+  'garde-animaux': 'svc-garde-animaux',
+  informatique: 'svc-informatique',
+  'aide-domicile': 'svc-aide-domicile',
+  'cours-particuliers': 'svc-cours',
+  'cours-coraniques': 'coran',
+  'coach-sportif': 'svc-sport',
+}
 
 export type BrowseQuery = { categorie?: string; activite?: string; wilaya?: string; commune?: string; genre?: string; langue?: string }
 const WILAYA_LIST = [...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
@@ -151,7 +167,8 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
           <ul className="service-tiles">
             {CATEGORIES.map((c) => (
               <li key={c.value}>
-                <Link href={`/services/${c.value}`} className="service-tile">
+                <Link href={`/services/${c.value}`} className="service-tile has-photo">
+                  {SERVICE_PHOTO[c.value] && <i className="service-tile-img" style={{ backgroundImage: `url(${PHOTOS[SERVICE_PHOTO[c.value]!].src})` }} aria-hidden="true" />}
                   <b>{c.label}</b>
                   <span>{c.activities.slice(0, 3).map(([, l]) => l).join(' · ')}</span>
                   <small>{counts[c.value] ? `${counts[c.value]} prestataire${counts[c.value] > 1 ? 's' : ''}` : 'Voir un exemple'}</small>

@@ -249,6 +249,9 @@ export default async function Home() {
               <p className="eyebrow">Découvrir</p>
               <h2>Tourisme, sorties et divertissement.</h2>
             </div>
+            <Link className="button outline" href="/explorer">
+              Tout découvrir
+            </Link>
           </div>
         </div>
         <Carousel label="Par envie" variant="tiles">
@@ -332,6 +335,9 @@ export default async function Home() {
               <p className="eyebrow">Démarches</p>
               <h2>Vos papiers, étape par étape.</h2>
             </div>
+            <Link className="button outline" href="/demarches">
+              Toutes les démarches
+            </Link>
           </div>
         </div>
         <GuideTiles slugs={DEMARCHES} label="Guides des démarches" />
@@ -400,6 +406,9 @@ export default async function Home() {
               <p className="eyebrow">Vivre en Algérie</p>
               <h2>Logement, école, banque : les repères.</h2>
             </div>
+            <Link className="button outline" href="/installation">
+              Votre installation
+            </Link>
           </div>
         </div>
         <GuideTiles slugs={VIVRE} label="Guides de la vie pratique" />

@@ -28,7 +28,7 @@ const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
   { key: 'annonces', href: '/annonces', title: 'Annonces', line: 'Immobilier, emploi, véhicules, objets' },
   {
     key: 'vivre',
-    href: '/vie-pratique',
+    href: '/installation',
     title: 'Vivre en Algérie',
     line: 'Logement, école, banque, transports',
   },

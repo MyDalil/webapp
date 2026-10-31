@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { listPacks } from '@/modules/accompagnement'
 import { Transparency, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
@@ -14,21 +15,7 @@ export const revalidate = 3600
 /** Liste des packs. Introuvable tant que l’offre est cachée (production avant le lancement). */
 export default async function Accompagnement() {
   const packs = await listPacks()
-  // Offre pas encore lancée : page « À venir » (décision de Rad : tout ce qui est payant affiche « À venir »), jamais une erreur 404.
-  if (!packs.length)
-    return (
-      <section className="sr ac-page" aria-label="Accompagnement">
-        <header className="sr-head">
-          <p className="sr-eyebrow">Accompagnement · À venir</p>
-          <h1>Un conseiller pour votre démarche.</h1>
-          <p className="sr-meta">Bientôt : un conseiller DALIL vous aide et vérifie votre dossier. En attendant, chaque démarche a son guide gratuit.</p>
-        </header>
-        <Transparency />
-        <p className="sr-note">
-          <Link href="/demarches">Voir les démarches et leurs guides gratuits ›</Link>
-        </p>
-      </section>
-    )
+  if (!packs.length) notFound()
   return (
     <section className="sr ac-page" aria-label="Accompagnement">
       <header className="sr-head">

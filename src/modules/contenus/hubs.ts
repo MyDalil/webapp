@@ -6,55 +6,11 @@ import type { PhotoKey } from '@/platform/referentiel/photos'
 
 export type HubPhoto = PhotoKey
 export type HubCard = { href: string; title: string; sub: string; photo?: HubPhoto; icon: string; tone: 'vert' | 'sable' | 'ciel'; links?: [string, string][] }
-export type Hub = { route: string; eyebrow: string; title: string; accent: string; lead: string; photo: HubPhoto; search: string; sections: { title: string; id?: string; cards: HubCard[] }[] }
+export type Hub = { route: string; eyebrow: string; title: string; accent: string; lead: string; photo: HubPhoto; search: string; sections: { title: string; cards: HubCard[] }[] }
 
 const CNL = '/annuaire/culture-nature-loisirs'
 
 export const HUBS: Hub[] = [
-  {
-    // Rubrique Services (plan revu avec Rad, 2026-10-30) : santé d’abord, puis services à domicile (liste des prestataires après le clic).
-    route: '/services',
-    eyebrow: 'Services',
-    title: 'De quoi avez-vous',
-    accent: 'besoin',
-    lead: 'Médecins, artisans, aide à domicile : des professionnels vérifiés par DALIL, près de chez vous.',
-    photo: 'hopital-moderne',
-    search: 'Pédiatre, plombier, ménage…',
-    sections: [
-      {
-        title: 'Santé',
-        cards: [
-          { href: '/praticiens', title: 'Prendre rendez-vous', sub: 'Médecins et praticiens vérifiés, au cabinet ou en visio.', photo: 'hopital-moderne', icon: 'health', tone: 'ciel' },
-          { href: '/annuaire/sante-soins', title: 'Établissements de santé', sub: 'Hôpitaux, cliniques, pharmacies et laboratoires.', photo: 'pharmacie', icon: 'health', tone: 'ciel' },
-        ],
-      },
-      {
-        title: 'À domicile',
-        id: 'domicile',
-        cards: [
-          { href: '/services/menage', title: 'Ménage', sub: 'Ménage régulier, grand ménage, fin de chantier.', photo: 'svc-menage', icon: 'home', tone: 'ciel' },
-          { href: '/services/bricolage', title: 'Bricolage', sub: 'Montage, plomberie, électricité, peinture.', photo: 'svc-bricolage', icon: 'briefcase', tone: 'sable' },
-          { href: '/services/demenagement', title: 'Déménagement', sub: 'Aide au déménagement, transport en fourgon.', photo: 'svc-demenagement', icon: 'truck', tone: 'sable' },
-          { href: '/services/jardinage', title: 'Jardinage', sub: 'Tonte, taille, entretien du jardin.', photo: 'svc-jardinage', icon: 'heart', tone: 'vert' },
-          { href: '/services/garde-enfants', title: 'Garde d’enfants', sub: 'Baby-sitting, sortie d’école, aide aux devoirs.', photo: 'svc-garde-enfants', icon: 'users', tone: 'ciel' },
-          { href: '/services/garde-animaux', title: 'Garde d’animaux', sub: 'Garde, promenade, visites.', photo: 'svc-garde-animaux', icon: 'heart', tone: 'vert' },
-          { href: '/services/informatique', title: 'Informatique', sub: 'Dépannage, internet et wifi, smartphone.', photo: 'svc-informatique', icon: 'grid', tone: 'ciel' },
-          { href: '/services/aide-domicile', title: 'Aide à domicile', sub: 'Compagnie, courses, repas des personnes âgées.', photo: 'svc-aide-domicile', icon: 'users', tone: 'sable' },
-          { href: '/services/cours-particuliers', title: 'Cours particuliers', sub: 'Soutien scolaire, langues, préparation aux examens.', photo: 'svc-cours', icon: 'school', tone: 'ciel' },
-          { href: '/services/cours-coraniques', title: 'Cours coraniques', sub: 'Lecture du Coran, tajwid, mémorisation.', photo: 'coran', icon: 'book', tone: 'vert' },
-          { href: '/services/coach-sportif', title: 'Coach sportif', sub: 'Remise en forme, musculation, yoga.', photo: 'svc-sport', icon: 'heart', tone: 'sable' },
-        ],
-      },
-      {
-        title: 'Professionnels',
-        cards: [
-          { href: '/annuaire/maison-travaux', title: 'Maison & travaux', sub: 'Artisans, entreprises du bâtiment, entretien.', photo: 'svc-artisans', icon: 'briefcase', tone: 'sable' },
-          { href: '/annuaire/droit-finance-conseil', title: 'Droit & finance', sub: 'Avocats, notaires, comptables, banques.', photo: 'banque-algerie', icon: 'cash', tone: 'vert' },
-          { href: '/annuaire/transports-mobilite', title: 'Transports & mobilité', sub: 'Taxis, location de voitures, gares.', photo: 'tramway', icon: 'car', tone: 'ciel' },
-        ],
-      },
-    ],
-  },
   {
     route: '/explorer',
     eyebrow: 'L’Algérie, selon vos envies',
