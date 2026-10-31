@@ -358,5 +358,53 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "page": "https://commons.wikimedia.org/wiki/File:Cameroon_male_plumbier_at_work_04.jpg",
   "alt": "Artisans au travail"
+ },
+ "sante-consultation": {
+  "file": "pexels:4021779",
+  "author": "Pexels",
+  "license": "Licence Pexels",
+  "licenseUrl": "https://www.pexels.com/license/",
+  "page": "https://www.pexels.com/photo/4021779/",
+  "alt": "Médecin, stéthoscope"
+ },
+ "sante-specialistes": {
+  "file": "1704455306251-b4634215d98f",
+  "author": "Unsplash",
+  "license": "Licence Unsplash",
+  "licenseUrl": "https://unsplash.com/license",
+  "page": "https://unsplash.com/photos/1704455306251-b4634215d98f",
+  "alt": "Cabinet de soins"
+ },
+ "domicile-travaux": {
+  "file": "1644308392725-69b682ae63a4",
+  "author": "Unsplash",
+  "license": "Licence Unsplash",
+  "licenseUrl": "https://unsplash.com/license",
+  "page": "https://unsplash.com/photos/1644308392725-69b682ae63a4",
+  "alt": "Mains gantées et visseuse"
+ },
+ "domicile-entretien": {
+  "file": "1740657254989-42fe9c3b8cce",
+  "author": "Unsplash",
+  "license": "Licence Unsplash",
+  "licenseUrl": "https://unsplash.com/license",
+  "page": "https://unsplash.com/photos/1740657254989-42fe9c3b8cce",
+  "alt": "Nettoyage, gants jaunes"
+ },
+ "domicile-famille": {
+  "file": "1687946803051-51da173a9f55",
+  "author": "Unsplash",
+  "license": "Licence Unsplash",
+  "licenseUrl": "https://unsplash.com/license",
+  "page": "https://unsplash.com/photos/1687946803051-51da173a9f55",
+  "alt": "Chambre d’enfant"
+ },
+ "domicile-cours": {
+  "file": "1785780224428-1e71ec3a1199",
+  "author": "Unsplash",
+  "license": "Licence Unsplash",
+  "licenseUrl": "https://unsplash.com/license",
+  "page": "https://unsplash.com/photos/1785780224428-1e71ec3a1199",
+  "alt": "Travail sur cahier"
  }
 }

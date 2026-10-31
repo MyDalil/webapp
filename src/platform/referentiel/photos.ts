@@ -62,6 +62,12 @@ export const PHOTOS = {
   'svc-cours': { src: '/images/photos/svc-cours.webp', alt: "Étudiant au travail à son bureau", credit: "Étudiant au travail à son bureau · Khadim pmp · CC BY-SA 4.0" },
   'svc-sport': { src: '/images/photos/svc-sport.webp', alt: "Entraînement avec haltères", credit: "Entraînement avec haltères · Nenad Stojkovic · CC BY 2.0" },
   'svc-artisans': { src: '/images/photos/svc-artisans.webp', alt: "Artisans au travail", credit: "Artisans au travail · Gatien TITCHO SEUMO · CC BY-SA 4.0" },
+  'sante-consultation': { src: '/images/photos/sante-consultation.webp', alt: "Médecin, stéthoscope", credit: "Médecin, stéthoscope · Pexels · Licence Pexels" },
+  'sante-specialistes': { src: '/images/photos/sante-specialistes.webp', alt: "Cabinet de soins", credit: "Cabinet de soins · Unsplash · Licence Unsplash" },
+  'domicile-travaux': { src: '/images/photos/domicile-travaux.webp', alt: "Mains gantées et visseuse", credit: "Mains gantées et visseuse · Unsplash · Licence Unsplash" },
+  'domicile-entretien': { src: '/images/photos/domicile-entretien.webp', alt: "Nettoyage, gants jaunes", credit: "Nettoyage, gants jaunes · Unsplash · Licence Unsplash" },
+  'domicile-famille': { src: '/images/photos/domicile-famille.webp', alt: "Chambre d’enfant", credit: "Chambre d’enfant · Unsplash · Licence Unsplash" },
+  'domicile-cours': { src: '/images/photos/domicile-cours.webp', alt: "Travail sur cahier", credit: "Travail sur cahier · Unsplash · Licence Unsplash" },
 } satisfies Record<string, Photo>
 
 export type PhotoKey = keyof typeof PHOTOS

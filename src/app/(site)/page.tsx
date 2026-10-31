@@ -7,13 +7,12 @@ import {
   getShowcase,
   type PlaceCard,
 } from '@/modules/annuaire'
-import { HomeEntries, PlacePanel, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
+import { HomeEntries, type EntryPhotos, type EntryStat } from '@/modules/annuaire/ui'
 import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
-import { CATEGORIES as SERVICE_CATEGORIES } from '@/modules/services'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
-import { TileCarousel, type Tile } from '@/platform/ui/Xp'
+import { SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
 import { PHOTOS } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon } from '@/platform/ui/Icon'
@@ -37,16 +36,6 @@ const ENVIES = [
 ] as const
 
 /** Santé d’abord : les spécialités les plus demandées, chacune ouvre la liste des praticiens filtrée. */
-const SANTE = [
-  ['medecine-generale', 'Médecin généraliste'],
-  ['pediatrie', 'Pédiatre'],
-  ['gynecologie', 'Gynécologue'],
-  ['dentiste', 'Chirurgien-dentiste'],
-  ['ophtalmologie', 'Ophtalmologue'],
-  ['kinesitherapie', 'Kinésithérapeute'],
-  ['psychologie', 'Psychologue'],
-] as const
-
 const DEMARCHES = ['documents-et-demarches', 'travail-et-entreprise', 'preparer-son-installation']
 const VIVRE = ['logement', 'ecole-et-famille', 'budget-et-banque']
 
@@ -205,41 +194,30 @@ export default async function Home() {
         </section>
       )}
 
-      <section className="section container xp-split" data-reveal>
-        <div>
-          <p className="eyebrow">Services · Santé</p>
-          <h2>Prenez rendez-vous avec un praticien.</h2>
-          <p>Praticiens vérifiés par DALIL. Choisissez une spécialité, puis un créneau.</p>
-          <div className="xp-links">
-            {SANTE.map(([value, label]) => (
-              <Link key={value} href={`/praticiens?specialite=${value}`}>
-                {label}
-              </Link>
-            ))}
-          </div>
-          <div className="xp-actions">
-            <Link className="button primary" href="/praticiens">
-              Tous les praticiens
-            </Link>
-          </div>
-        </div>
-        <div>
-          <p className="eyebrow">Services · À domicile</p>
-          <h2>Faites appel à un prestataire vérifié.</h2>
-          <p>Prestataires vérifiés, demande sous 24 h.</p>
-          <div className="xp-links">
-            {SERVICE_CATEGORIES.map((c) => (
-              <Link key={c.value} href={`/services/${c.value}`}>
-                {c.label}
-              </Link>
-            ))}
-          </div>
-          <div className="xp-actions">
-            <Link className="button primary" href="/services">
-              Tous les services
-            </Link>
-          </div>
-        </div>
+      {/* Santé et À domicile en carrousels photo (Rad, 2026-10-31) : grandes tuiles regroupées, photos sans visage. */}
+      <section className="section">
+        <SectionHead eyebrow="Santé" title="Un médecin, sans attendre." />
+        <TileCarousel
+          label="Santé"
+          tiles={[
+            { href: '/praticiens?specialite=medecine-generale', title: 'Consultation', sub: 'Médecin généraliste, rendez-vous en ligne', photo: PHOTOS['sante-consultation'].src, icon: 'health' },
+            { href: '/praticiens', title: 'Spécialistes', sub: 'Pédiatre, gynécologue, dentiste, ophtalmologue, kiné, psychologue', photo: PHOTOS['sante-specialistes'].src, icon: 'health' },
+            { href: '/annuaire/sante-soins', title: 'Pharmacies & hôpitaux', sub: 'Pharmacies, cliniques, hôpitaux, laboratoires', photo: PHOTOS.pharmacie.src, icon: 'health' },
+          ]}
+        />
+      </section>
+
+      <section className="section section-tint">
+        <SectionHead eyebrow="À domicile" title="Un pro chez vous, en confiance." />
+        <TileCarousel
+          label="À domicile"
+          tiles={[
+            { href: '/services/bricolage', title: 'Travaux', sub: 'Bricolage, déménagement, jardinage', photo: PHOTOS['domicile-travaux'].src, icon: 'briefcase' },
+            { href: '/services/menage', title: 'Entretien', sub: 'Ménage, informatique', photo: PHOTOS['domicile-entretien'].src, icon: 'home' },
+            { href: '/services/garde-enfants', title: 'Famille', sub: 'Garde d’enfants, aide à domicile, animaux', photo: PHOTOS['domicile-famille'].src, icon: 'users' },
+            { href: '/services/cours-particuliers', title: 'Cours & sport', sub: 'Cours particuliers, cours coraniques, coach sportif', photo: PHOTOS['domicile-cours'].src, icon: 'school' },
+          ]}
+        />
       </section>
 
       <section className="section xp-band">
@@ -281,7 +259,7 @@ export default async function Home() {
           <h3>Les incontournables</h3>
           <Link href="/que-faire-ce-week-end">Que faire ce week-end ?</Link>
         </div>
-        <PlacePanel places={top.slice(0, 8)} more={{ href: '/annuaire/culture-nature-loisirs', label: 'Tous les lieux à découvrir' }} />
+        <TileCarousel label="Lieux incontournables" tiles={top.slice(0, 10).map((p): Tile => ({ href: `/adresses/${p.slug}`, title: p.name, sub: p.city, chip: p.category, photo: p.cover, icon: 'pin' }))} />
         <div className="container xp-subhead" data-reveal>
           <h3>Par ville</h3>
         </div>
