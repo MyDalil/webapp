@@ -1,0 +1,22 @@
+name: Photos Unsplash
+on:
+  workflow_dispatch:
+  push:
+    branches: [import-data]
+    paths: [scripts/import/fetch-unsplash.mjs]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: import-data }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-unsplash.mjs
+      - run: |
+          git config user.name "dalil-import"; git config user.email "salam@mydalil.com"
+          git add -f data/images-unsplash && git commit -m "Données : photos Unsplash [skip ci]" || true
+          git pull --rebase origin import-data && git push origin HEAD:import-data
