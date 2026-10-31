@@ -3,10 +3,10 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 const OUT = 'data/images-unsplash'
 const C = {
-  // Étape 1 — Santé : photographes, Maghreb / monde musulman, lumière naturelle.
-  sante1: [
-    'pexels:32254660', 'pexels:33055498', 'pexels:38250872', 'pexels:20335832', 'pexels:38250863', 'pexels:37272329',
-    '1712215544003-af10130f8eb3', '1730597842283-943c7986ee2c', '1625134673337-519d4d10b313',
+  // Étape 1 bis — Santé sans visage (Rad, 2026-10-31).
+  sante2: [
+    'pexels:4021779', 'pexels:6097773', 'pexels:38250867', 'pexels:8376307', 'pexels:5619462', 'pexels:36595248',
+    'pexels:7789616', 'pexels:14267573', 'pexels:21628873', '1532938911079-1b06ac7ceec7', '1625134673337-519d4d10b313', '1584982751601-97dcc096659c',
   ],
 }
 import { existsSync, readFileSync } from 'node:fs'
