@@ -69,6 +69,7 @@ export const PHOTOS = {
   'domicile-famille': { src: '/images/photos/domicile-famille.webp', alt: "Chambre d’enfant", credit: "Chambre d’enfant · Unsplash · Licence Unsplash" },
   'domicile-cours': { src: '/images/photos/domicile-cours.webp', alt: "Travail sur cahier", credit: "Travail sur cahier · Unsplash · Licence Unsplash" },
   'svc-coran': { src: '/images/photos/svc-coran.webp', alt: "Coran sur un pupitre en bois, dattes", credit: "Coran sur un pupitre en bois, dattes · Unsplash · Licence Unsplash" },
+  'annonces-vehicules': { src: '/images/photos/annonces-vehicules.webp', alt: "Boulevard à arcades d’Alger", credit: "Boulevard à arcades d’Alger · Unsplash · Licence Unsplash" },
 } satisfies Record<string, Photo>
 
 export type PhotoKey = keyof typeof PHOTOS

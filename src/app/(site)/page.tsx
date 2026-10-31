@@ -1,3 +1,4 @@
+import { GUIDE_VISUALS } from '@/modules/contenus'
 import Link from 'next/link'
 import {
   cityPhoto,
@@ -12,8 +13,8 @@ import { HomeSearch } from '@/modules/recherche/ui'
 import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
-import { SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
-import { PHOTOS } from '@/platform/referentiel/photos'
+import { ParallaxBand, SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
+import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
@@ -40,27 +41,18 @@ const DEMARCHES = ['documents-et-demarches', 'travail-et-entreprise', 'preparer-
 const VIVRE = ['logement', 'ecole-et-famille', 'budget-et-banque']
 
 
+const ANNONCE_PHOTO: Record<string, PhotoKey> = { immobilier: 'alger-ville', emploi: 'oran-panorama', vehicules: 'annonces-vehicules', objets: 'marche' }
+
 function GuideTiles({ slugs, label }: { slugs: string[]; label: string }) {
   const list = slugs.map((s) => GUIDES.find((g) => g.slug === s)).filter((g) => g !== undefined)
   return (
-    <Carousel label={label} variant="wide">
-      {list.map((g, i) => (
-        <Link
-          key={g.slug}
-          href={`/guides/${g.slug}`}
-          className="guide-tile"
-          data-reveal
-          style={{ ['--i' as string]: i % 6 }}
-        >
-          <span className="chip">{g.category}</span>
-          <h3>{g.title}</h3>
-          <p>{g.summary}</p>
-          <b>
-            Lire le guide <Icon name="arrow" />
-          </b>
-        </Link>
-      ))}
-    </Carousel>
+    <TileCarousel
+      label={label}
+      tiles={list.map((g): Tile => {
+        const v = GUIDE_VISUALS[g.slug]
+        return { href: `/guides/${g.slug}`, title: g.title, sub: g.summary, chip: g.category, photo: v?.photo ? PHOTOS[v.photo].src : PHOTOS['alger-mer'].src, icon: v?.icon ?? 'file' }
+      })}
+    />
   )
 }
 
@@ -227,9 +219,6 @@ export default async function Home() {
               <p className="eyebrow">Découvrir</p>
               <h2>Tourisme, sorties et divertissement.</h2>
             </div>
-            <Link className="button outline" href="/explorer">
-              Tout découvrir
-            </Link>
           </div>
         </div>
         <Carousel label="Par envie" variant="tiles">
@@ -313,9 +302,6 @@ export default async function Home() {
               <p className="eyebrow">Démarches</p>
               <h2>Vos papiers, étape par étape.</h2>
             </div>
-            <Link className="button outline" href="/demarches">
-              Toutes les démarches
-            </Link>
           </div>
         </div>
         <GuideTiles slugs={DEMARCHES} label="Guides des démarches" />
@@ -333,18 +319,19 @@ export default async function Home() {
               Déposer une annonce
             </Link>
           </div>
-          <ul className="service-tiles" data-reveal>
-            {CLASSIFIED_CATEGORIES.map((c) => (
-              <li key={c.value}>
-                <Link href={`/annonces/${c.value}`} className="service-tile">
-                  <b>{c.label}</b>
-                  <span>{c.subs.slice(0, 3).map(([, l]) => l).join(' · ')}</span>
-                  <small>{classified.byCategory[c.value] ? `${classified.byCategory[c.value]} annonce${classified.byCategory[c.value] > 1 ? 's' : ''}` : 'Soyez le premier à publier'}</small>
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
+        <TileCarousel
+          label="Annonces"
+          tiles={CLASSIFIED_CATEGORIES.map(
+            (c): Tile => ({
+              href: `/annonces/${c.value}`,
+              title: c.label,
+              sub: `${c.subs.slice(0, 3).map(([, l]) => l).join(' · ')} — ${classified.byCategory[c.value] ? `${classified.byCategory[c.value]} annonce${classified.byCategory[c.value] > 1 ? 's' : ''}` : 'soyez le premier à publier'}`,
+              photo: PHOTOS[ANNONCE_PHOTO[c.value] ?? 'alger-ville'].src,
+              icon: 'grid',
+            }),
+          )}
+        />
         {!!latest.length && (
           <>
             <div className="container xp-subhead" data-reveal>
@@ -384,48 +371,32 @@ export default async function Home() {
               <p className="eyebrow">Vivre en Algérie</p>
               <h2>Logement, école, banque : les repères.</h2>
             </div>
-            <Link className="button outline" href="/installation">
-              Votre installation
-            </Link>
           </div>
         </div>
         <GuideTiles slugs={VIVRE} label="Guides de la vie pratique" />
       </section>
 
-      <section className="section container xp-split" data-reveal>
-        <div>
-          <p className="eyebrow">Professionnels</p>
-          <h2>Présentez votre établissement.</h2>
-          <p>
-            Revendiquez votre fiche, répondez aux demandes et aux avis. La vérification DALIL reste
-            indépendante de tout abonnement.
-          </p>
-          <div className="xp-actions">
-            <Link className="button primary" href="/professionnels/rejoindre">
-              Rejoindre l’annuaire
-            </Link>
-            <Link className="button outline" href="/label">
-              Le label DALIL
-            </Link>
-          </div>
+      <ParallaxBand photo={PHOTOS['ghardaia-marche'].src} credit={PHOTOS['ghardaia-marche'].credit} eyebrow="Professionnels" title="Présentez votre établissement." text="Revendiquez votre fiche, répondez aux demandes et aux avis. La vérification DALIL reste indépendante de tout abonnement.">
+        <div className="xp-actions">
+          <Link className="button primary" href="/professionnels/rejoindre">
+            Rejoindre l’annuaire
+          </Link>
+          <Link className="button light" href="/label">
+            Le label DALIL
+          </Link>
         </div>
-        <div>
-          <p className="eyebrow">Portail d’installation</p>
-          <h2>Votre installation, étape par étape.</h2>
-          <p>
-            Repérez les démarches utiles, préparez votre arrivée et retrouvez les guides adaptés à
-            votre situation, que vous partiez seul ou en famille.
-          </p>
-          <div className="xp-actions">
-            <Link className="button primary" href="/installation">
-              Commencer
-            </Link>
-            <Link className="button outline" href="/diagnostic">
-              Créer mon parcours
-            </Link>
-          </div>
+      </ParallaxBand>
+
+      <ParallaxBand photo={PHOTOS['alger-mer'].src} credit={PHOTOS['alger-mer'].credit} eyebrow="Portail d’installation" title="Votre installation, étape par étape." text="Repérez les démarches utiles, préparez votre arrivée et retrouvez les guides adaptés à votre situation, que vous partiez seul ou en famille.">
+        <div className="xp-actions">
+          <Link className="button primary" href="/installation">
+            Commencer
+          </Link>
+          <Link className="button light" href="/diagnostic">
+            Créer mon parcours
+          </Link>
         </div>
-      </section>
+      </ParallaxBand>
 
       <section className="xp-community">
         <div className="container" data-reveal>
