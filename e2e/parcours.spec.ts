@@ -27,6 +27,29 @@ test.describe('Pages publiques', () => {
   })
 })
 
+test.describe('Menu', () => {
+  test('menu latéral : rubriques, thème, fermeture hors du panneau et par Échap', async ({ page }) => {
+    const errors = watchErrors(page)
+    await page.setViewportSize({ width: Math.min(page.viewportSize()!.width, 1280), height: 860 })
+    await page.goto('/')
+    const sheet = page.locator('#nav-sheet')
+    await page.getByRole('button', { name: 'Ouvrir la navigation' }).click()
+    await expect(sheet).toHaveClass(/is-open/)
+    await page.locator('.nav-sheet-row').first().click()
+    await expect(page.locator('.nav-sheet-sub').first()).toBeVisible()
+    await page.getByRole('button', { name: 'Mode sombre' }).click()
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    await page.getByRole('button', { name: 'Mode clair' }).click()
+    await page.mouse.click(10, 300)
+    await expect(sheet).not.toHaveClass(/is-open/)
+    await page.getByRole('button', { name: 'Ouvrir la navigation' }).click()
+    await expect(sheet).toHaveClass(/is-open/)
+    await page.keyboard.press('Escape')
+    await expect(sheet).not.toHaveClass(/is-open/)
+    expect(errors).toEqual([])
+  })
+})
+
 test.describe('Annuaire', () => {
   test('de l’annuaire à une fiche adresse', async ({ page }) => {
     const errors = watchErrors(page)

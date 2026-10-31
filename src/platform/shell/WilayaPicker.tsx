@@ -33,7 +33,10 @@ export function WilayaPicker({ open, onToggle, inline = false }: { open: boolean
     <div className={`wilaya-wrap ${inline ? 'is-inline' : ''}`}>
       <button className="wilaya-pill" type="button" data-menu-trigger="wilaya" aria-expanded={open} aria-haspopup="dialog" aria-label={`Wilaya : ${current?.name ?? 'Toute l’Algérie'}. Changer`} onClick={() => onToggle(!open)}>
         <NavIcon name="pin" />
-        <span>{current?.name ?? 'Toute l’Algérie'}</span>
+        <span>
+          {inline && 'Ma wilaya : '}
+          {current?.name ?? 'Toute l’Algérie'}
+        </span>
         <svg className="chev" viewBox="0 0 16 16" aria-hidden="true">
           <path d="m4 6 4 4 4-4" />
         </svg>
