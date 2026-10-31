@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useEffect, useState } from 'react'
 
 type A = {

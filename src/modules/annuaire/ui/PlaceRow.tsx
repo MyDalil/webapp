@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { SaveButton } from '@/modules/membres/ui'
 import { Icon } from '@/platform/ui/Icon'
 

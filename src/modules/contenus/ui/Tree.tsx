@@ -1,5 +1,5 @@
 import { createElement, Fragment, type ReactNode } from 'react'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import type { Node } from '../content'
 import { ISLANDS } from './islands'
 

@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useEffect, useState, type FormEvent } from 'react'
 import { AppointmentList } from './MyAppointments'
 import { DAYS, LANGUAGES, SPECIALTIES } from '../specialties'

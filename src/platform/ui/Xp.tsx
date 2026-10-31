@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import type { ReactNode } from 'react'
 import { Carousel } from './Carousel'
 import { Icon } from './Icon'

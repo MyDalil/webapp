@@ -8,8 +8,21 @@ type T = { en: string; ar: string }
 
 export const langOf = (path: string): Lang =>
   path === '/ar' || path.startsWith('/ar/') ? 'ar' : path === '/en' || path.startsWith('/en/') ? 'en' : 'fr'
+export const LANGS_ALL: Lang[] = ['fr', 'en', 'ar']
+export const isLang = (x: unknown): x is Lang => x === 'fr' || x === 'en' || x === 'ar'
 export const isRtl = (l: Lang) => l === 'ar'
 export const homeHref = (l: Lang) => (l === 'fr' ? '/' : `/${l}`)
+
+/** Chemin sans préfixe de langue (/en/annuaire, /fr/annuaire → /annuaire). */
+export const stripLang = (path: string) => path.replace(/^\/(fr|en|ar)(?=\/|$|\?|#)/, '') || '/'
+
+/** Lien interne dans la langue voulue : français à la racine, /en/… et /ar/… sinon. Liens externes, /api, /admin et fichiers inchangés. */
+export function langPath(l: Lang, href: string): string {
+  if (!href.startsWith('/') || href.startsWith('//') || /^\/(api|admin|_next|images|mockup|favicon|og\.png)(\/|$|\?|\.)/.test(href)) return href
+  const bare = stripLang(href)
+  if (l === 'fr') return bare
+  return bare === '/' ? `/${l}` : /^\/[?#]/.test(bare) ? `/${l}${bare.slice(1)}` : `/${l}${bare}`
+}
 export const tr = (fr: string, d: Record<string, T>, l: Lang) => (l === 'fr' ? fr : (d[fr]?.[l] ?? fr))
 
 /** Pluriel simple : n + mot (fr/en), formes arabes 1 / 2 / 3-10 / 11+. */

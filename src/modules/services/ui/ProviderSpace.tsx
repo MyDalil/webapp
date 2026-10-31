@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from '../activities'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, type FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { useWilaya } from './wilaya'
 import { NavIcon } from './NavIcon'
@@ -10,7 +10,7 @@ import { sectorTitle, shellText, type Lang } from '../i18n'
 /** Barre « Trouvez rapidement » des méga-menus : wilaya + catégorie + recherche → annuaire filtré. */
 export function QuickFind({ onDone, lang = 'fr' }: { onDone?: () => void; lang?: Lang }) {
   const t = shellText(lang)
-  const router = useRouter()
+  const router = useLangRouter()
   const chosen = useWilaya()
   const [wilaya, setWilaya] = useState('')
   const [sector, setSector] = useState('')

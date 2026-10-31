@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { Icon } from '@/platform/ui/Icon'
 import { PlaceRow } from './PlaceRow'
 import type { PlaceCard } from '../queries'

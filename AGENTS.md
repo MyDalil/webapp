@@ -17,7 +17,7 @@ Stack : Next.js 16 + Payload CMS 3 + Neon Postgres + Vercel (Blob pour les photo
 ## Organisation : un module par métier
 ```
 src/
-  app/              routage Next.js uniquement (pages publiques, /api, /admin) — fin, il appelle les modules
+  app/              routage Next.js uniquement (pages publiques sous (site)/[lang] : fr à la racine, /en, /ar ; /api, /admin) — fin, il appelle les modules
   platform/         socle partagé, ne dépend d’aucun métier
     access.ts         rôles et droits (patron, admin, editor, conseiller) ; agents IA à part ; un compte public n’est jamais staff
     audit/            journal d’audit en ajout seul (toutes collections)
@@ -86,6 +86,12 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 ## Migrations de données
 - Une migration qui écrit des données (`payload.create`, `importPlaces`…) enveloppe son `up` dans `deferred('<nom>', …)` (`src/platform/deferredData.ts`).
 - Raison : elle écrit avec le schéma d’aujourd’hui ; sur une base qui rattrape plusieurs migrations (production à la fusion, base neuve, CI), elle tournerait avant les colonnes ajoutées ensuite. Elle est notée pendant `payload migrate`, puis exécutée par `pnpm migrate:data` quand tout le schéma est en place.
+
+## Langues
+- Pages publiques sous `src/app/(site)/[lang]/` : `/x` est réécrit en `/fr/x` (`next.config.ts`, sans fonction), `/fr/x` redirige vers `/x`, l’anglais et l’arabe sont servis sous `/en/x` et `/ar/x`.
+- Liens : `@/platform/ui/Link` (jamais `next/link` directement) et `useLangRouter()` gardent la langue ; `usePath()` donne le chemin sans préfixe ; `useLang()` la langue (fixée par le serveur).
+- Rafraîchir une page publiée : `revalidateLangs(chemin)` (les trois langues).
+- Arabe : `dir="rtl"` posé par la mise en page ; noms, adresses et horaires jamais traduits.
 
 ## Référencement
 - `/sitemap.xml` (index) → `/sitemaps/pages.xml`, `professionnels.xml`, `annonces.xml`, `adresses-N.xml` : calculé à la lecture (cache 1 h), contenus publiés seulement (`src/modules/recherche/sitemap.ts`).

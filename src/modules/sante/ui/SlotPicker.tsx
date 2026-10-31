@@ -1,8 +1,9 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { SmartText } from '@/platform/ui/SmartText'
 
 type Mode = 'cabinet' | 'visio'
@@ -23,7 +24,7 @@ const todayAlgiers = () => new Date(Date.now() + 3600e3).toISOString().slice(0, 
 
 /** Prise de rendez-vous façon Doctolib : choix du type, des jours, du créneau, puis confirmation. */
 export function SlotPicker({ slug, name, modes, visioSoon, cancelNoticeHours }: { slug: string; name: string; modes: Mode[]; visioSoon: boolean; cancelNoticeHours: number }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const params = useSearchParams()
   const replaces = params.get('replaces')
   const [mode, setMode] = useState<Mode>(modes[0] ?? 'cabinet')

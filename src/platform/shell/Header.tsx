@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { toast } from './toast'
+import Link from '@/platform/ui/Link'
+import { useLang, usePath } from '@/platform/ui/lang'
 import { rubricOf, type Rubric } from './nav'
 import { rubricsFor } from './navI18n'
-import { homeHref, langOf, shellText, type Lang } from '../i18n'
+import { homeHref, langPath, shellText, type Lang } from '../i18n'
 import { NavIcon } from './NavIcon'
 import { QuickFind } from './QuickFind'
 import { WilayaPicker } from './WilayaPicker'
@@ -37,14 +36,14 @@ const SHEET: Record<Rubric['key'], { color: string; ink?: string; icon: string }
 type Theme = 'light' | 'dark'
 
 export function Header() {
-  const path = usePathname() || '/'
+  const path = usePath()
   const [menu, setMenu] = useState<Menu>(null)
   const [slides, setSlides] = useState<Record<string, Slide[]> | null>(null)
   const [drawer, setDrawer] = useState<Rubric['key'] | null>(null)
   const hover = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [mobile, setMobile] = useState(false)
   const ref = useRef<HTMLElement>(null)
-  const lang: Lang = langOf(path)
+  const lang: Lang = useLang()
   const t = shellText(lang)
   const RUBRICS = rubricsFor(lang)
   const home = homeHref(lang)
@@ -55,21 +54,12 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const burger = useRef<HTMLButtonElement>(null)
   const closeBtn = useRef<HTMLButtonElement>(null)
-  const [rtl, setRtl] = useState(false)
+  const rtl = lang === 'ar'
   const [scrolled, setScrolled] = useState(false)
   const reduce = useReducedMotion()
   const { scrollY } = useScroll()
   // En-tête qui s’affine dès que la page défile.
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 12))
-
-  // Langue et sens d’écriture du document suivent la page (/ar : de droite à gauche).
-  useEffect(() => {
-    const html = document.documentElement
-    html.lang = lang
-    if (lang === 'ar') html.dir = 'rtl'
-    else html.removeAttribute('dir')
-    setRtl(lang === 'ar')
-  }, [lang])
 
   useEffect(() => {
     setMounted(true)
@@ -147,7 +137,6 @@ export function Header() {
     try {
       localStorage.setItem('dalil-map-lang', l.code)
     } catch {}
-    if (l.code !== 'fr') toast(`${l.label} — ${shellText(l.code as Lang).soon}`)
   }
   const close = () => setMobile(false)
 
@@ -249,9 +238,9 @@ export function Header() {
             </button>
             <div className="utility-menu language-menu" data-menu="language" hidden={menu !== 'language'}>
               {LANGS.map((l) => (
-                <Link key={l.code} href={l.href} role="button" data-language={l.code} onClick={() => chooseLang(l)}>
+                <a key={l.code} href={langPath(l.code as Lang, path)} hrefLang={l.code} role="button" data-language={l.code} onClick={() => chooseLang(l)}>
                   <span>{l.flag}</span> {l.label} {l.code === lang && <b>✓</b>}
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -323,7 +312,7 @@ export function Header() {
               </div>
 
               <div className="nav-sheet-tools">
-                <form className="nav-sheet-search" action="/recherche" role="search" onSubmit={close}>
+                <form className="nav-sheet-search" action={langPath(lang, '/recherche')} role="search" onSubmit={close}>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="11" cy="11" r="7" />
                     <path d="m20 20-4-4" />
@@ -399,9 +388,9 @@ export function Header() {
               <div className="nav-sheet-foot">
                 <div className="nav-sheet-seg" role="group" aria-label={t.language}>
                   {LANGS.map((l) => (
-                    <Link key={l.code} href={l.href} className={l.code === lang ? 'is-on' : ''} aria-current={l.code === lang ? 'true' : undefined} aria-label={l.label} title={l.label} onClick={() => chooseLang(l)}>
+                    <a key={l.code} href={langPath(l.code as Lang, path)} hrefLang={l.code} className={l.code === lang ? 'is-on' : ''} aria-current={l.code === lang ? 'true' : undefined} aria-label={l.label} title={l.label} onClick={() => chooseLang(l)}>
                       <span aria-hidden="true">{l.flag}</span>
-                    </Link>
+                    </a>
                   ))}
                 </div>
                 <div className="nav-sheet-seg" role="group" aria-label={t.appearance}>

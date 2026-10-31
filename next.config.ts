@@ -20,6 +20,23 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  // Langues : le français est servi à la racine (/x → /fr/x en interne), l’anglais et l’arabe sous /en et /ar.
+  async redirects() {
+    return [
+      { source: '/fr', destination: '/', permanent: true },
+      { source: '/fr/:path*', destination: '/:path*', permanent: true },
+    ]
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [
+        { source: '/', destination: '/fr' },
+        { source: '/:path((?!(?:fr|en|ar|api|admin|_next|sitemaps)(?:/|$)).*)', destination: '/fr/:path' },
+      ],
+      fallback: [],
+    }
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

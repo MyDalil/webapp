@@ -81,4 +81,6 @@ export const indexXml = (files: string[]) =>
     .join('\n')}\n</sitemapindex>\n`
 
 /** Robots : tout bloqué hors production (preview, branches) ; en production, espaces privés et outils exclus. */
-export const ROBOTS_DISALLOW = ['/admin', '/api/', '/mon-compte', '/espace', '/espace-pro', '/missions', '/connexion', '/onboarding', '/test', '/newsletter/', '/annonces/deposer', '/annonces/messagerie', '/recherche', '/professionnels/espace']
+const PRIVATE = ['/mon-compte', '/espace', '/espace-pro', '/missions', '/connexion', '/onboarding', '/test', '/newsletter/', '/annonces/deposer', '/annonces/messagerie', '/recherche', '/professionnels/espace']
+/** Espaces privés et outils, dans les trois langues (/x, /en/x, /ar/x). */
+export const ROBOTS_DISALLOW = ['/admin', '/api/', ...PRIVATE, ...PRIVATE.map((p) => `/en${p}`), ...PRIVATE.map((p) => `/ar${p}`)]

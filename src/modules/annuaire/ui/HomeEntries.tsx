@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { Carousel } from '@/platform/ui/Carousel'
 import { count, type Lang } from '@/platform/i18n'
 

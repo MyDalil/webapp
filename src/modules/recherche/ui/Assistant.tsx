@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { toast } from '@/platform/shell/toast'
 import { preferredLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
 import { useWilaya } from '@/platform/shell/wilaya'
-import { langOf } from '@/platform/i18n'
+import { useLang, usePath } from '@/platform/ui/lang'
 
 const ASSIST = {
   fr: { listening: 'Je vous écoute…', busy: 'DALIL réfléchit…', answer: 'Votre réponse…', ask: 'Demandez à DALIL…', open: 'Ouvrir l’assistant DALIL', send: 'Envoyer' },
@@ -22,9 +22,9 @@ type Turn = { q: string; intent: Intent }
  * page, pré-remplie. Rien ne se fait sans un clic de la personne.
  */
 export function Assistant() {
-  const router = useRouter()
-  const path = usePathname()
-  const A = ASSIST[langOf(path || '/')]
+  const router = useLangRouter()
+  const path = usePath()
+  const A = ASSIST[useLang()]
   const [expanded, setExpanded] = useState(false)
   const [text, setText] = useState('')
   const [lang, setLang] = useState<DictationLang>('fr-FR')

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 
 type Guide = { slug: string; title: string; category: string; summary: string; keywords: string[] }
 type Result = { labels: string[]; criteria: string[]; questions: string[]; results: Guide[]; regulatedWork: boolean }

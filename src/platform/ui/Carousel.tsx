@@ -1,13 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { usePathname } from 'next/navigation'
-import { langOf, shellText } from '../i18n'
+import { shellText } from '../i18n'
+import { useLang } from './lang'
 
 /** Carrousel horizontal natif (défilement par aimantation), flèches au clavier et à la souris, glisser au doigt. */
 export function Carousel({ label, children, variant = 'cards' }: { label: string; children: ReactNode; variant?: 'cards' | 'wide' | 'tiles' }) {
   const track = useRef<HTMLDivElement>(null)
-  const t = shellText(langOf(usePathname() || '/'))
+  const t = shellText(useLang())
   // De droite à gauche (arabe) : scrollLeft devient négatif, le sens des flèches s’inverse.
   const rtl = () => !!track.current && getComputedStyle(track.current).direction === 'rtl'
   const [edge, setEdge] = useState({ start: true, end: false })

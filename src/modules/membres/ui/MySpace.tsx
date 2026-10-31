@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useState, type FormEvent } from 'react'
 import { toast } from '@/platform/shell/toast'
 

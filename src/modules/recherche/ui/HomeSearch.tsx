@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import Link from '@/platform/ui/Link'
+import { useLangRouter } from '@/platform/ui/lang'
 import { Icon } from '@/platform/ui/Icon'
 import { NearMe } from './NearMe'
 import { readWilaya } from '@/platform/shell/wilaya'
@@ -43,7 +43,7 @@ const SUGGESTIONS: [href: string, fr: string, en: string, ar: string][] = [
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
 export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
   const u = UI[lang]
-  const router = useRouter()
+  const router = useLangRouter()
   // Téléphone : texte d’exemple court, jamais coupé.
   const [short, setShort] = useState(false)
   useEffect(() => {

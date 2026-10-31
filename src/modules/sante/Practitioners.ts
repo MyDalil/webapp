@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache'
+import { revalidateLangs } from '@/platform/revalidate'
 import type { CollectionAfterChangeHook } from 'payload'
 import type { Access, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { isStaff } from '@/platform/access'
@@ -20,7 +20,7 @@ const prepare: CollectionBeforeValidateHook = ({ data }) => {
 /** Fiche praticien mise en cache 1 h : rafraîchie tout de suite à l’enregistrement. */
 const refreshPage: CollectionAfterChangeHook = ({ doc }) => {
   try {
-    revalidatePath(`/praticiens/${doc.slug}`)
+    revalidateLangs(`/praticiens/${doc.slug}`)
   } catch {
     // Hors requête Next (import, CLI) : rien à rafraîchir.
   }

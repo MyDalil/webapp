@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { useState } from 'react'
 import { toast } from '@/platform/shell/toast'
 import type { Lang } from '@/platform/i18n'
@@ -21,7 +21,7 @@ export function positionParam(lat: number, lng: number) {
  * Texte cherché : `text` (page de résultats) ou le champ `inputId` lu au clic (accueil). Sans texte : mosquées.
  */
 export function NearMe({ text = '', inputId, className = '', label, lang = 'fr' }: { text?: string; inputId?: string; className?: string; label?: string; lang?: Lang }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const [busy, setBusy] = useState(false)
   const go = () => {
     if (!('geolocation' in navigator)) return toast(NEAR[lang].noGeo)

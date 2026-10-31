@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import type { Pack } from '../offer'
 import { NO_GUARANTEE, TRANSPARENCY, WHY } from '../texts'
 

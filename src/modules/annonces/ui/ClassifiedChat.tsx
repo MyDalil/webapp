@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SmartText } from '@/platform/ui/SmartText'
 

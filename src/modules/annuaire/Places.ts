@@ -1,5 +1,5 @@
 import type { CollectionAfterChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
-import { revalidatePath } from 'next/cache'
+import { revalidateLangs } from '@/platform/revalidate'
 import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, verificationTab } from '@/modules/confiance'
@@ -22,10 +22,10 @@ const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
 const refresh: CollectionAfterChangeHook = ({ doc, previousDoc, req }) => {
   if (req.context?.skipRevalidate) return doc
   try {
-    revalidatePath('/annuaire')
-    revalidatePath(`/annuaire/${doc.sector}`)
-    revalidatePath(`/adresses/${doc.slug}`)
-    if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidatePath(`/adresses/${previousDoc.slug}`)
+    revalidateLangs('/annuaire')
+    revalidateLangs(`/annuaire/${doc.sector}`)
+    revalidateLangs(`/adresses/${doc.slug}`)
+    if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidateLangs(`/adresses/${previousDoc.slug}`)
   } catch {
     // hors contexte Next (migrations, scripts) : rien à rafraîchir
   }

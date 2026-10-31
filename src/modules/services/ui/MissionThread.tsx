@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MissionView } from '../marketplace'
 import { shrinkImage } from '@/platform/ui/shrink'

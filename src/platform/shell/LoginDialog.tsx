@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 
 export function openLogin() {
   window.dispatchEvent(new Event('dalil:login'))

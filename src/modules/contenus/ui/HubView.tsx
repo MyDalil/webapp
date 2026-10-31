@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import type { Hub } from '../hubs'
 import { PHOTOS } from '@/platform/referentiel/photos'
 import { Icon } from '@/platform/ui/Icon'
