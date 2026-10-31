@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { toast } from './toast'
@@ -49,10 +50,16 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const burger = useRef<HTMLButtonElement>(null)
   const closeBtn = useRef<HTMLButtonElement>(null)
-  const touch = useRef<{ x: number; y: number } | null>(null)
+  const [rtl, setRtl] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const reduce = useReducedMotion()
+  const { scrollY } = useScroll()
+  // En-tête qui s’affine dès que la page défile.
+  useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 12))
 
   useEffect(() => {
     setMounted(true)
+    setRtl(document.documentElement.dir === 'rtl')
     setThemeState(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
   }, [])
 
@@ -130,21 +137,6 @@ export function Header() {
     if (l.code !== 'fr') toast(`${l.label} — version en préparation`)
   }
   const close = () => setMobile(false)
-  // Geste de fermeture : glisser le panneau vers son bord (droite, ou gauche en arabe).
-  const onTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0]
-    touch.current = { x: t.clientX, y: t.clientY }
-  }
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const start = touch.current
-    touch.current = null
-    if (!start) return
-    const t = e.changedTouches[0]
-    const dx = t.clientX - start.x
-    const dy = t.clientY - start.y
-    const rtl = document.documentElement.dir === 'rtl'
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && (rtl ? dx < 0 : dx > 0)) close()
-  }
 
   useEffect(() => {
     if (!menu || slides || menu === 'language' || menu === 'wilaya') return
@@ -170,7 +162,7 @@ export function Header() {
   const hoverStay = () => hover.current && clearTimeout(hover.current)
 
   return (
-    <header className="site-header" id="site-header" ref={ref} onPointerLeave={hoverLeave} onPointerEnter={hoverStay}>
+    <header className={`site-header${scrolled ? ' is-scrolled' : ''}`} id="site-header" ref={ref} onPointerLeave={hoverLeave} onPointerEnter={hoverStay}>
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="DALIL, Guide & Services, accueil">
           <span className="brand-mark" aria-hidden="true">
@@ -281,7 +273,25 @@ export function Header() {
           <div id="nav-sheet" className={`nav-sheet ${mobile ? 'is-open' : ''}`} aria-hidden={!mobile} inert={!mobile}>
             {/* Toucher, faire défiler ou glisser hors du panneau ferme le menu. */}
             <div className="nav-sheet-backdrop" onClick={close} onWheel={close} onTouchMove={close} />
-            <div className="nav-sheet-panel" role="dialog" aria-modal="true" aria-label="Menu" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            {/* Panneau à ressort (Motion) : on le glisse vers son bord pour le fermer ; le défilement vertical reste libre. */}
+            <motion.div
+              className="nav-sheet-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              initial={false}
+              animate={{ x: mobile ? 0 : rtl ? '-100%' : '100%' }}
+              transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 40, mass: 0.9 }}
+              drag="x"
+              dragDirectionLock
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={rtl ? { left: 0.5, right: 0 } : { left: 0, right: 0.5 }}
+              onDragEnd={(_, info) => {
+                const d = rtl ? -info.offset.x : info.offset.x
+                const v = rtl ? -info.velocity.x : info.velocity.x
+                if (d > 80 || v > 500) close()
+              }}
+            >
               <div className="nav-sheet-top">
                 <Link className="nav-sheet-brand" href="/" onClick={close} aria-label="DALIL, accueil">
                   <span className="brand-mark" aria-hidden="true">
@@ -395,7 +405,7 @@ export function Header() {
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>,
           document.body,
         )}

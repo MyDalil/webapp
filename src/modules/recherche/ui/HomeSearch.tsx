@@ -17,19 +17,30 @@ import { preferredLang, startDictation, type Dictation } from '@/platform/ui/spe
 type Item = { type: string; url: string; title: string; subtitle: string | null; badge: string | null }
 const KIND: Record<string, string> = { rubrique: 'Rubrique', categorie: 'Catégorie', adresse: 'Adresse', praticien: 'Praticien', prestataire: 'Prestataire', annonce: 'Annonce', guide: 'Guide' }
 
+/** Exemples : jamais deux de la même rubrique à la suite (Rad, 2026-10-31). */
 const SUGGESTIONS: [href: string, label: string][] = [
   ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger'],
+  ['/services/bricolage?activite=electricite', 'Électricien'],
+  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée'],
+  ['/guides/documents-et-demarches', 'Passeport et papiers'],
   ['/praticiens?specialite=pediatrie', 'Pédiatre'],
+  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement'],
   ['/services/bricolage?activite=plomberie', 'Plombier'],
   ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie'],
-  ['/guides/documents-et-demarches', 'Passeport et papiers'],
-  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement'],
-  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée'],
 ]
 
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
 export function HomeSearch() {
   const router = useRouter()
+  // Téléphone : texte d’exemple court, jamais coupé.
+  const [short, setShort] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 600px)')
+    const on = () => setShort(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
   const ref = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
   const [listening, setListening] = useState(false)
@@ -106,18 +117,19 @@ export function HomeSearch() {
       <label className="sr-only" htmlFor="home-search">
         Que recherchez-vous ?
       </label>
-      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder="Un lieu, une démarche, une activité…" />
+      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder={short ? 'Que cherchez-vous ?' : 'Un lieu, une démarche, une activité…'} />
       <button type="button" className={`search-mic ${listening ? 'recording' : ''}`} aria-pressed={listening} aria-label={listening ? 'Arrêter la dictée' : 'Recherche vocale'} onClick={mic}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="9" y="3" width="6" height="12" rx="3" />
           <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" />
         </svg>
       </button>
-      <button className="button primary" type="submit">
-        Rechercher
+      <button className="button primary search-go" type="submit" aria-label="Rechercher">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
       </button>
     </form>
-    <NearMe inputId="home-search" className="near-me-home" />
     {shown.length > 0 && (
       <ul id="home-search-list" className="search-suggest" role="listbox" aria-label="Propositions">
         {shown.map((it, i) => (
@@ -138,7 +150,8 @@ export function HomeSearch() {
     )}
     </div>
     <p className="xp-suggest">
-      <span>Par exemple :</span>
+      <NearMe inputId="home-search" className="near-me-home" />
+      <span className="sr-only">Par exemple :</span>
       {SUGGESTIONS.map(([href, label]) => (
         <Link key={href} href={href}>
           {label}

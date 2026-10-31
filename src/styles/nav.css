@@ -222,14 +222,13 @@ html[data-theme="dark"] .we-when button[aria-checked="true"], html[data-theme="d
 /* Téléphone : l’icône compte remplace le gros bouton « Connexion ». */
 @media (max-width: 920px) { .header-actions .account-button { display: inline-grid; } .header-actions a.login-button { display: none; } }
 html.nav-sheet-lock, html.nav-sheet-lock body { overflow: hidden; }
-.nav-sheet { position: fixed; inset: 0; z-index: 1000; visibility: hidden; pointer-events: none; transition: visibility 0s linear .28s; }
+.nav-sheet { position: fixed; inset: 0; z-index: 1000; visibility: hidden; pointer-events: none; transition: visibility 0s linear .45s; }
 .nav-sheet.is-open { visibility: visible; pointer-events: auto; transition: none; }
 .nav-sheet-backdrop { position: absolute; inset: 0; background: rgba(4, 12, 9, .55); opacity: 0; transition: opacity .28s ease; touch-action: none; }
 .nav-sheet.is-open .nav-sheet-backdrop { opacity: 1; }
-.nav-sheet-panel { position: absolute; inset-block: 0; inset-inline-end: 0; width: min(440px, calc(100% - 40px)); display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; background: var(--bg); color: var(--text); box-shadow: -18px 0 60px rgba(0, 0, 0, .28); transform: translateX(100%); transition: transform .28s cubic-bezier(.2, .8, .2, 1); font-family: Inter, system-ui, sans-serif; }
-[dir="rtl"] .nav-sheet-panel { transform: translateX(-100%); box-shadow: 18px 0 60px rgba(0, 0, 0, .28); }
-.nav-sheet.is-open .nav-sheet-panel { transform: none; }
-@media (prefers-reduced-motion: reduce) { .nav-sheet-panel, .nav-sheet-backdrop { transition: none; } }
+.nav-sheet-panel { position: absolute; inset-block: 0; inset-inline-end: 0; width: min(440px, calc(100% - 40px)); display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; background: var(--bg); color: var(--text); box-shadow: -18px 0 60px rgba(0, 0, 0, .28); touch-action: pan-y; font-family: Inter, system-ui, sans-serif; }
+[dir="rtl"] .nav-sheet-panel { box-shadow: 18px 0 60px rgba(0, 0, 0, .28); }
+@media (prefers-reduced-motion: reduce) { .nav-sheet-backdrop { transition: none; } }
 .nav-sheet svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .nav-sheet-top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 8px; min-height: 64px; padding: 0 12px 0 16px; border-bottom: 1px solid var(--line); background: var(--bg); }
