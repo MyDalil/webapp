@@ -160,7 +160,7 @@ test.describe('Aucune catégorie vide', () => {
 
   test('praticiens : sans résultat, des établissements de santé réels', async ({ page }) => {
     await page.goto('/praticiens?specialite=orthophonie&wilaya=16')
-    await expect(page.locator('.praticien-card, .health-fallback a').first()).toBeVisible()
+    await expect(page.locator('.praticien-card, .praticiens-empty .place-panel a').first()).toBeVisible()
   })
 })
 
