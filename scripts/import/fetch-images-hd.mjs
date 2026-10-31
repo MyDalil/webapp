@@ -6,14 +6,9 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  // Spécialités de santé (accueil, 2026-10-31).
-  generaliste: ['Stethoscopes', 'General practitioners', 'Medical examinations'],
-  pediatre: ['Pediatrics', 'Pediatricians', 'Pediatric examinations'],
-  gynecologue: ['Obstetric ultrasonography', 'Prenatal care', 'Pregnant women'],
-  dentiste: ['Dental chairs', 'Dental offices', 'Dentistry', 'Dentists at work'],
-  ophtalmologue: ['Ophthalmology', 'Eye examinations', 'Slit lamps', 'Eye charts'],
-  kine: ['Physical therapy', 'Physiotherapists', 'Rehabilitation medicine'],
-  psychologue: ['Psychotherapy', 'Counseling', 'Mental health'],
+  // Santé : seulement des images labellisées Commons (qualité, valeur, mise en avant), au niveau des photos du site.
+  qmed: ['Quality images of medicine', 'Featured pictures of medicine', 'Valued images of medicine', 'Quality images of healthcare'],
+  qhop: ['Quality images of hospitals', 'Featured pictures of hospitals', 'Hospitals in Algeria', 'Hospitals in Algiers'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
@@ -48,7 +43,7 @@ for (const [key, cats] of Object.entries(CATS)) {
   const dir = path.join(OUT, key)
   mkdirSync(dir, { recursive: true })
   manifest[key] = []
-  for (const [n, f] of found.slice(0, 12).entries()) {
+  for (const [n, f] of found.slice(0, 40).entries()) {
     const res = await fetch(f.thumb, { headers: { 'user-agent': UA } })
     if (!res.ok) continue
     const name = `${n + 1}.jpg`
