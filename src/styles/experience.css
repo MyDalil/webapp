@@ -222,3 +222,31 @@
   .xp .section + .section:not(.section-tint) { padding-top: 20px; }
   .xp .section-head { margin-bottom: 16px; }
 }
+
+/* Newsletter de l’accueil (Rad, 2026-10-31) : fond vert profond, un seul champ arrondi avec le bouton intégré. */
+.honeypot { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none; }
+.xp-community { background: linear-gradient(150deg, #0f7a4a, #0b4f33 70%); }
+.xp-community .eyebrow.inverse { color: rgba(255, 255, 255, .8); }
+.xp-community .newsletter { display: grid; gap: 10px; }
+.xp-community .newsletter label { position: relative; display: flex; align-items: center; height: 58px; padding: 0 6px 0 20px; border-radius: 999px; background: #fff; box-shadow: 0 18px 40px -22px rgba(0, 0, 0, .5); }
+.xp-community .newsletter input[type="email"] { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #0b1410; font: 500 1rem/1 inherit; }
+.xp-community .newsletter input[type="email"]::placeholder { color: #6b7a72; }
+.xp-community .newsletter button { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 0; border-radius: 50%; background: #0f7a4a; color: #fff; cursor: pointer; transition: transform .2s; }
+.xp-community .newsletter button:hover { transform: scale(1.06); }
+.xp-community .newsletter button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.xp-community .newsletter small { color: rgba(255, 255, 255, .82); font-size: .85rem; padding-left: 20px; }
+
+/* Barre DALIL façon messagerie (ChatGPT, Wispr Flow) : champ, micro, et l’envoi n’apparaît qu’avec du texte. */
+.assistant-bar.is-chat .assistant-send { display: none; }
+.assistant-bar.is-chat.has-text .assistant-send { display: grid; }
+.assistant-bar.is-chat input { min-width: 0; text-overflow: ellipsis; }
+.assistant-bar.is-chat .dock-icon { width: 40px; height: 40px; border-radius: 50%; }
+.assistant-bar.is-chat .dock-icon.recording { background: #e5484d; color: #fff; }
+.assistant-wave { display: inline-flex; align-items: center; gap: 3px; height: 22px; margin-right: 6px; }
+.assistant-wave i { width: 3px; height: 100%; border-radius: 2px; background: var(--green); animation: dalil-wave 1s ease-in-out infinite; }
+.assistant-wave i:nth-child(2) { animation-delay: .15s; }
+.assistant-wave i:nth-child(3) { animation-delay: .3s; }
+.assistant-wave i:nth-child(4) { animation-delay: .45s; }
+.assistant-wave i:nth-child(5) { animation-delay: .6s; }
+@keyframes dalil-wave { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .assistant-wave i { animation: none; transform: scaleY(.6); } }

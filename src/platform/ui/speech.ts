@@ -36,6 +36,11 @@ export function preferredLang(): DictationLang {
   try {
     const saved = localStorage.getItem(LANG_KEY)
     if (DICTATION_LANGS.some((l) => l.value === saved)) return saved as DictationLang
+    // Langue choisie dans le menu du site (FR · عربي · EN) : la même pour la carte et la dictée.
+    const site = localStorage.getItem('dalil-map-lang')
+    if (site === 'ar') return 'ar-DZ'
+    if (site === 'en') return 'en-US'
+    if (site === 'fr') return 'fr-FR'
   } catch {}
   const doc = typeof document !== 'undefined' ? document.documentElement.lang : ''
   return doc.startsWith('ar') ? 'ar-DZ' : doc.startsWith('en') ? 'en-US' : 'fr-FR'

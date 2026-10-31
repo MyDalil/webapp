@@ -404,7 +404,7 @@ export default async function Home() {
             <p className="eyebrow inverse">Communauté DALIL</p>
             <h2>Recevez les nouveautés et les guides du mois.</h2>
           </div>
-          <NewsletterForm />
+          <NewsletterForm title={null} note="Aucun spam. Désinscription en un clic." />
         </div>
       </section>
     </div>

@@ -6,14 +6,16 @@ import { proofHeaders } from '@/platform/security/proofClient'
 export function NewsletterForm({
   source = 'website',
   title = 'Recevoir les prochaines ouvertures',
+  note = '',
   successMessage = 'Inscription enregistrée. Bienvenue dans l’accès prioritaire.',
 }: {
   source?: string
-  title?: string
+  title?: string | null
+  note?: string
   successMessage?: string
 }) {
   const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [msg, setMsg] = useState('Aucun spam. Désinscription immédiate.')
+  const [msg, setMsg] = useState(note || 'Aucun spam. Désinscription immédiate.')
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -40,13 +42,15 @@ export function NewsletterForm({
 
   return (
     <form className="newsletter" onSubmit={onSubmit} aria-busy={state === 'loading'}>
-      <strong>{title}</strong>
+      {title && <strong>{title}</strong>}
       <label>
         <span className="sr-only">Votre adresse email</span>
         <input type="email" name="email" required placeholder="votre@email.com" />
         <input className="honeypot" name="website" tabIndex={-1} autoComplete="off" />
         <button type="submit" aria-label="S’inscrire" disabled={state === 'loading'}>
-          →
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </button>
       </label>
       <small className={state === 'error' ? 'form-error' : state === 'success' ? 'form-success' : ''}>{msg}</small>
