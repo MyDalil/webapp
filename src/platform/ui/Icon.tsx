@@ -61,6 +61,45 @@ const P: Record<string, React.ReactNode> = {
     </>
   ),
   upload: <path d="M12 16V3M7 8l5-5 5 5M4 14v7h16v-7" />,
+  passport: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M9 16h6" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </>
+  ),
+  cash: (
+    <>
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <circle cx="12" cy="12" r="2.5" />
+      <path d="M6 9v.01M18 15v.01" />
+    </>
+  ),
+  clipboard: (
+    <>
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <path d="M9 4h6v3H9zM9 12h6M9 16h4" />
+    </>
+  ),
+  shield: <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z" />,
+  truck: (
+    <>
+      <path d="M3 6h11v10H3zM14 10h4l3 3v3h-7" />
+      <circle cx="7" cy="18" r="1.6" />
+      <circle cx="17" cy="18" r="1.6" />
+    </>
+  ),
+  mosque: <path d="M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5M4 21V10M20 21V10" />,
+  book: <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5ZM4 19a2 2 0 0 1 2-2h13M9 7h6" />,
+  books: <path d="M4 4h4v16H4zM10 4h4v16h-4zM15.5 5.2l3.9-1 3.6 15.5-3.9 1z" />,
+  moon: <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" />,
+  kaaba: <path d="M4 7l8-3 8 3v12l-8 3-8-3V7ZM4 7l8 3 8-3M12 10v12M4 11l8 3 8-3" />,
   briefcase: (
     <>
       <rect x="3" y="7" width="18" height="13" rx="2" />

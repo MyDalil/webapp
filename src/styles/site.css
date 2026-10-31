@@ -111,3 +111,35 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .filter-panel select { padding-left: 13px; padding-right: 34px; background-position: right 11px center; }
 .filter-panel input::placeholder { color: var(--muted); font-weight: 500; }
 .filter-panel .button.wide { margin-top: 6px; padding-inline: 12px; text-align: center; white-space: nowrap; font-size: .95rem; }
+
+/* Carte unique d’une adresse hors annuaire (villes, accueil, santé) : mêmes lignes que les pages de catégorie. */
+.place-panel { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.place-panel-list { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.place-panel-list .place-row:last-child { border-bottom: 0; }
+.place-panel-more { display: inline-block; margin-top: 12px; font-weight: 700; color: var(--green); text-decoration: none; }
+@media (min-width: 900px) {
+  .place-panel-list { display: grid; grid-template-columns: 1fr 1fr; }
+  .place-panel-list .place-row:nth-child(odd) { border-right: 1px solid var(--line); }
+  .place-panel-list .place-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+}
+.sr-list > li.sr-place { padding: 0; }
+.sr-list > li.sr-place .place-row { padding: 12px 14px; }
+.map-lang { display: flex; }
+.map-lang button { width: 34px !important; height: 30px !important; font: 700 12px/1 var(--font, Inter, sans-serif); color: #14201b; }
+.map-lang button + button { border-left: 1px solid #ddd !important; border-top: 0 !important; }
+.maplibregl-ctrl-group.map-lang button[aria-pressed="true"], .maplibregl-ctrl-group.map-lang button[aria-pressed="true"]:hover { background: #006b3c !important; color: #fff !important; }
+
+/* Vignettes sans photo : pictogramme blanc sur la couleur de la rubrique (jamais une case grise). */
+.place-thumb.is-icon { display: grid; place-items: center; background: var(--c, #006b3c); color: #fff; }
+.place-thumb.is-icon svg { width: 42%; height: 42%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.classified-card-img.is-empty { display: grid; place-items: center; background: linear-gradient(150deg, #d9467f, #9d174d); }
+.classified-card-icon { color: #fff; width: 30%; }
+.classified-card-icon svg { width: 100%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.vm-img.is-icon { display: grid; place-items: center; background: linear-gradient(150deg, #0f7a4a, #07140f); color: rgba(255, 255, 255, .92); }
+.vm-img.is-icon svg { width: 34%; height: 34%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.city-tile-img.is-icon.is-annonce { background: linear-gradient(150deg, #d9467f, #9d174d); }
+
+/* Accueil : la grande newsletter suffit ; pas de doublon dans le pied de page, pas de filet clair entre les deux (Rad, 2026-10-31). */
+body:has(.xp-community) .site-footer .newsletter { display: none; }
+body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer { border-top: 0 !important; box-shadow: none; }
+.site-footer-wrap .site-footer { border-top-color: var(--line); }

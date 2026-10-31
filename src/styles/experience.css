@@ -165,3 +165,88 @@
 .xp-suggest { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; font-size: .88rem; color: rgba(255, 255, 255, .86); }
 .xp-suggest a { padding: 5px 12px; border: 1px solid rgba(255, 255, 255, .4); border-radius: 99px; color: #fff; background: rgba(0, 0, 0, .18); backdrop-filter: blur(6px); }
 .xp-suggest a:hover, .xp-suggest a:focus-visible { background: rgba(255, 255, 255, .18); border-color: #fff; }
+
+/* ——— Rubriques au format de l’accueil (Démarches, Guides, Explorer…) ——— */
+.xp-hero-actions { display: grid; gap: 12px; max-width: 640px; margin-top: 22px; }
+.xp-hero-actions .dm-search { width: 100%; min-height: 56px; }
+.xp-tile-wrap { display: grid; gap: 10px; }
+.xp-tile { height: 100%; }
+.city-tile-img.is-icon { background: linear-gradient(150deg, #0f7a4a 0%, #0b4f33 70%); display: grid; place-items: center; }
+.xp-tile-icon { display: grid; place-items: center; width: 42%; margin-top: -22%; color: rgba(255, 255, 255, .9); }
+.xp-tile-icon svg { width: 100%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.xp-tile-footer { display: flex; gap: 8px; }
+.xp-tile-footer > * { flex: 1 1 0; min-width: 0; min-height: 42px; font-size: .82rem; padding: 0 6px; justify-content: center; }
+.xp-chips { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 4px max(20px, calc((100vw - 1200px) / 2)) 10px; }
+.xp-chips::-webkit-scrollbar { display: none; }
+.xp-chip { flex: none; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 18px 0 8px; border-radius: 999px; background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 10px 30px -22px rgba(10, 30, 20, .45); color: var(--text); text-decoration: none; font-weight: 650; transition: transform .3s var(--ease-out); }
+.xp-chip:hover { transform: translateY(-2px); }
+.xp-chip .dm-cat-icon { width: 38px; height: 38px; border-radius: 50%; }
+.xp-chip small { display: block; color: var(--muted); font-size: .74rem; font-weight: 500; }
+.xp-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; max-width: 900px; margin: 22px 0 0; padding: 0; list-style: none; }
+.xp-steps li { display: grid; gap: 6px; padding: 18px; border-radius: 18px; background: rgba(255, 255, 255, .1); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, .18); }
+.xp-steps b { color: #fff; font-size: 1.02rem; }
+.xp-steps small { color: rgba(255, 255, 255, .82); font-size: .9rem; line-height: 1.5; }
+.xp-steps .xp-step-n { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #9be3bd; color: #0b2a1c; font-weight: 800; font-size: .85rem; }
+.xp-narrow { max-width: 860px; }
+.xp-body { display: grid; gap: 28px; padding-block: 40px 64px; }
+@media (max-width: 720px) {
+  .xp-steps { grid-template-columns: 1fr; }
+  .xp-hero-actions { margin-top: 16px; }
+  .xp-body { padding-block: 28px 48px; gap: 22px; }
+}
+.xp-chips-top { padding-top: 18px; }
+.xp-chip.is-text { padding: 0 18px; min-height: 44px; font-size: .9rem; }
+.xp-tile-footer .sr-pill { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-badge.is-light { background: rgba(255, 255, 255, .16); color: #fff; border: 1px solid rgba(255, 255, 255, .28); }
+.dm-fav.is-light .sr-pill, .dm-fav.is-light button { background: rgba(255, 255, 255, .92); color: var(--green); border: 0; }
+.xp-hero-city .xp-hero-content h1 { font-size: clamp(2.2rem, 5.4vw, 4.4rem); max-width: 18ch; }
+.xp-hero-city .xp-hero-img:not([style*="url(undefined)"]) { }
+.xp-hero-img.is-plain { background: radial-gradient(circle at 80% 20%, rgba(155, 227, 189, .25), transparent 45%), linear-gradient(150deg, #0f7a4a, #07140f 75%); }
+@media (min-width: 900px) {
+  .xp-few .carousel-track { grid-auto-flow: row; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; padding-inline: 20px; overflow: visible; }
+  .xp-few .city-tile { aspect-ratio: 4 / 3; }
+  .xp-few .carousel-controls { display: none; }
+}
+.xp { overflow-x: clip; }
+.xp-tile .city-tile-body p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.xp-tile .city-tile-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Rythme des rubriques (Rad, 2026-10-30) : aérer sans éloigner — on atteint les dernières sections sans long défilement. */
+.xp .section { padding-block: 52px; }
+.xp .section + .section:not(.section-tint) { padding-top: 28px; }
+.xp .section-head { margin-bottom: 22px; }
+.xp .carousel-controls { margin-top: 4px; }
+.xp .xp-subhead { margin-top: 28px; }
+@media (max-width: 760px) {
+  .xp .section { padding-block: 36px; }
+  .xp .section + .section:not(.section-tint) { padding-top: 20px; }
+  .xp .section-head { margin-bottom: 16px; }
+}
+
+/* Newsletter de l’accueil (Rad, 2026-10-31) : fond vert profond, un seul champ arrondi avec le bouton intégré. */
+.honeypot { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none; }
+.xp-community { background: linear-gradient(150deg, #0f7a4a, #0b4f33 70%); }
+.xp-community .eyebrow.inverse { color: rgba(255, 255, 255, .8); }
+.xp-community .newsletter { display: grid; gap: 10px; }
+.xp-community .newsletter label { position: relative; display: flex; align-items: center; height: 58px; padding: 0 6px 0 20px; border-radius: 999px; background: #fff; box-shadow: 0 18px 40px -22px rgba(0, 0, 0, .5); }
+.xp-community .newsletter input[type="email"] { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #0b1410; font: 500 1rem/1 inherit; }
+.xp-community .newsletter input[type="email"]::placeholder { color: #6b7a72; }
+.xp-community .newsletter button { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 0; border-radius: 50%; background: #0f7a4a; color: #fff; cursor: pointer; transition: transform .2s; }
+.xp-community .newsletter button:hover { transform: scale(1.06); }
+.xp-community .newsletter button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.xp-community .newsletter small { color: rgba(255, 255, 255, .82); font-size: .85rem; padding-left: 20px; }
+
+/* Barre DALIL façon messagerie (ChatGPT, Wispr Flow) : champ, micro, et l’envoi n’apparaît qu’avec du texte. */
+.assistant-bar.is-chat .assistant-send { display: none; }
+.assistant-bar.is-chat.has-text .assistant-send { display: grid; }
+.assistant-bar.is-chat input { min-width: 0; text-overflow: ellipsis; }
+.assistant-bar.is-chat .dock-icon { width: 40px; height: 40px; border-radius: 50%; }
+.assistant-bar.is-chat .dock-icon.recording { background: #e5484d; color: #fff; }
+.assistant-wave { display: inline-flex; align-items: center; gap: 3px; height: 22px; margin-right: 6px; }
+.assistant-wave i { width: 3px; height: 100%; border-radius: 2px; background: var(--green); animation: dalil-wave 1s ease-in-out infinite; }
+.assistant-wave i:nth-child(2) { animation-delay: .15s; }
+.assistant-wave i:nth-child(3) { animation-delay: .3s; }
+.assistant-wave i:nth-child(4) { animation-delay: .45s; }
+.assistant-wave i:nth-child(5) { animation-delay: .6s; }
+@keyframes dalil-wave { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .assistant-wave i { animation: none; transform: scaleY(.6); } }

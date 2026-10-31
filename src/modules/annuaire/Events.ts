@@ -1,5 +1,5 @@
 import type { CollectionAfterChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
-import { revalidatePath } from 'next/cache'
+import { revalidateLangs } from '@/platform/revalidate'
 import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { EVENT_TYPES } from './weekend'
@@ -25,8 +25,8 @@ const confirmedNeedsSource = (value: unknown, { siblingData }: { siblingData?: {
 const refresh: CollectionAfterChangeHook = ({ doc, req }) => {
   if (req.context?.skipRevalidate) return doc
   try {
-    revalidatePath('/que-faire-ce-week-end')
-    revalidatePath('/')
+    revalidateLangs('/que-faire-ce-week-end')
+    revalidateLangs('/')
   } catch {}
   return doc
 }

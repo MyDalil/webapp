@@ -1,7 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link from '@/platform/ui/Link'
+import { useSearchParams } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { useState, type FormEvent } from 'react'
 
 type Kind = 'particulier' | 'pro'
@@ -16,7 +17,7 @@ const errorOf = (d: { error?: string; errors?: { message?: string }[]; message?:
 
 /** Connexion, création de compte et mot de passe oublié, pour un particulier ou un professionnel. */
 export function AuthPanel({ kind }: { kind: Kind }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const params = useSearchParams()
   // Retour après connexion : uniquement une page de DALIL (jamais un autre site).
   const asked = params.get('next') ?? ''
@@ -121,7 +122,7 @@ export function AuthPanel({ kind }: { kind: Kind }) {
 
 /** Nouveau mot de passe depuis le lien reçu par email. */
 export function ResetPassword({ token }: { token: string }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const [msg, setMsg] = useState<string | null>(null)
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

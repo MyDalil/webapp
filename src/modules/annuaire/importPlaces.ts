@@ -1,3 +1,4 @@
+import { latinize } from '@/platform/referentiel/slug'
 import type { Payload, PayloadRequest } from 'payload'
 import { sql } from '@payloadcms/db-postgres'
 import { scorePlace } from './ranking'
@@ -32,7 +33,7 @@ export type ImportRecord = {
 }
 
 const key = (s?: string | null) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’'`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
-const slugify = (s: string) => key(s).replace(/ /g, '-')
+const slugify = (s: string) => key(latinize(s)).replace(/ /g, '-')
 const code = (name: string | null) => {
   const w = WILAYAS.find((x) => key(x.name) === key(name))
   return w ? String(w.code) : undefined

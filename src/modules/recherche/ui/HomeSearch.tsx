@@ -1,38 +1,59 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import Link from '@/platform/ui/Link'
+import { useLangRouter } from '@/platform/ui/lang'
 import { Icon } from '@/platform/ui/Icon'
 import { NearMe } from './NearMe'
 import { readWilaya } from '@/platform/shell/wilaya'
 import { toast } from '@/platform/shell/toast'
 import { simpleClean } from '@/platform/ai/clean'
 import { preferredLang, startDictation, type Dictation } from '@/platform/ui/speech'
-import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
+import type { Lang } from '@/platform/i18n'
 
 /**
  * Suggestions sous la barre (validées par Rad, 2026-10-21) : hors tourisme d’abord, selon les recherches
  * des Algériens (santé, artisans, papiers). Chaque lien ouvre directement le bon résultat.
  */
 type Item = { type: string; url: string; title: string; subtitle: string | null; badge: string | null }
-const KIND: Record<string, string> = { rubrique: 'Rubrique', categorie: 'Catégorie', adresse: 'Adresse', praticien: 'Praticien', prestataire: 'Prestataire', annonce: 'Annonce', guide: 'Guide' }
+const KIND: Record<Lang, Record<string, string>> = {
+  fr: { rubrique: 'Rubrique', categorie: 'Catégorie', adresse: 'Adresse', praticien: 'Praticien', prestataire: 'Prestataire', annonce: 'Annonce', guide: 'Guide' },
+  en: { rubrique: 'Section', categorie: 'Category', adresse: 'Address', praticien: 'Practitioner', prestataire: 'Provider', annonce: 'Ad', guide: 'Guide' },
+  ar: { rubrique: 'قسم', categorie: 'فئة', adresse: 'عنوان', praticien: 'ممارس', prestataire: 'مقدّم خدمة', annonce: 'إعلان', guide: 'دليل' },
+}
 
-const SUGGESTIONS: [href: string, label: string][] = [
-  ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger'],
-  ['/praticiens?specialite=pediatrie', 'Pédiatre'],
-  ['/services/bricolage?activite=plomberie', 'Plombier'],
-  ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie'],
-  ['/guides/documents-et-demarches', 'Passeport et papiers'],
-  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement'],
-  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée'],
+const UI = {
+  fr: { label: 'Que recherchez-vous ?', long: 'Un lieu, une démarche, une activité…', short: 'Que cherchez-vous ?', mic: 'Recherche vocale', stop: 'Arrêter la dictée', search: 'Rechercher', list: 'Propositions', all: (q: string) => `Voir tous les résultats pour « ${q} »`, ex: 'Par exemple :' },
+  en: { label: 'What are you looking for?', long: 'A place, a procedure, an activity…', short: 'What are you looking for?', mic: 'Voice search', stop: 'Stop dictation', search: 'Search', list: 'Suggestions', all: (q: string) => `See all results for “${q}”`, ex: 'For example:' },
+  ar: { label: 'عمّ تبحث؟', long: 'مكان، إجراء، نشاط…', short: 'عمّ تبحث؟', mic: 'البحث الصوتي', stop: 'إيقاف الإملاء', search: 'بحث', list: 'اقتراحات', all: (q: string) => `عرض كل النتائج لـ «${q}»`, ex: 'مثلًا:' },
+}
+
+/** Exemples : jamais deux de la même rubrique à la suite (Rad, 2026-10-31). */
+const SUGGESTIONS: [href: string, fr: string, en: string, ar: string][] = [
+  ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger', 'Dentist in Algiers', 'طبيب أسنان في العاصمة'],
+  ['/services/bricolage?activite=electricite', 'Électricien', 'Electrician', 'كهربائي'],
+  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée', 'Mosque', 'مسجد'],
+  ['/guides/documents-et-demarches', 'Passeport et papiers', 'Passport & papers', 'جواز السفر والوثائق'],
+  ['/praticiens?specialite=pediatrie', 'Pédiatre', 'Paediatrician', 'طبيب أطفال'],
+  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement', 'Flat to rent', 'شقة للكراء'],
+  ['/services/bricolage?activite=plomberie', 'Plombier', 'Plumber', 'سبّاك'],
+  ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie', 'Pharmacy', 'صيدلية'],
 ]
 
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
-export function HomeSearch() {
-  const router = useRouter()
+export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
+  const u = UI[lang]
+  const router = useLangRouter()
+  // Téléphone : texte d’exemple court, jamais coupé.
+  const [short, setShort] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 600px)')
+    const on = () => setShort(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
   const ref = useRef<HTMLInputElement>(null)
-  const docRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
   const [listening, setListening] = useState(false)
   // Propositions pendant la frappe (index de recherche) : clavier ↑ ↓ Entrée, Échap pour fermer.
@@ -77,13 +98,6 @@ export function HomeSearch() {
     router.push(q ? `/recherche?q=${encodeURIComponent(q)}${w ? `&w=${w.code}` : ''}` : '/recherche')
   }
 
-  // Trombone : choisir le document ici, il est lu sur la recherche guidée.
-  function pickDoc(f?: File) {
-    if (!f) return
-    setPendingDoc(f)
-    router.push('/recherche')
-  }
-
   // Micro : dictée en direct dans le champ, nettoyée à la fin.
   function mic() {
     if (listening) return dictation.current?.stop()
@@ -113,30 +127,27 @@ export function HomeSearch() {
         <Icon name="search" />
       </span>
       <label className="sr-only" htmlFor="home-search">
-        Que recherchez-vous ?
+        {u.label}
       </label>
-      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder="Un lieu, une démarche, une activité…" />
-      <input ref={docRef} type="file" accept={ACCEPT_DOC} hidden onChange={(e) => pickDoc(e.target.files?.[0])} />
-      <button type="button" className="search-attach" aria-label="Joindre un document" title="PDF ou fichier texte, 5 Mo maximum" onClick={() => docRef.current?.click()}>
-        <Icon name="file" />
-      </button>
-      <button type="button" className={`search-mic ${listening ? 'recording' : ''}`} aria-pressed={listening} aria-label={listening ? 'Arrêter la dictée' : 'Recherche vocale'} onClick={mic}>
+      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder={short ? u.short : u.long} />
+      <button type="button" className={`search-mic ${listening ? 'recording' : ''}`} aria-pressed={listening} aria-label={listening ? u.stop : u.mic} onClick={mic}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="9" y="3" width="6" height="12" rx="3" />
           <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" />
         </svg>
       </button>
-      <button className="button primary" type="submit">
-        Rechercher
+      <button className="button primary search-go" type="submit" aria-label={u.search}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
       </button>
     </form>
-    <NearMe inputId="home-search" className="near-me-home" />
     {shown.length > 0 && (
-      <ul id="home-search-list" className="search-suggest" role="listbox" aria-label="Propositions">
+      <ul id="home-search-list" className="search-suggest" role="listbox" aria-label={u.list}>
         {shown.map((it, i) => (
           <li key={it.url} id={`home-search-${i}`} role="option" aria-selected={i === active}>
             <Link href={it.url} className={i === active ? 'is-active' : undefined}>
-              <span className="search-suggest-kind">{KIND[it.type] ?? ''}</span>
+              <span className="search-suggest-kind">{KIND[lang][it.type] ?? ''}</span>
               <b>{it.title}</b>
               {it.subtitle && <small>{it.subtitle}</small>}
             </Link>
@@ -144,17 +155,18 @@ export function HomeSearch() {
         ))}
         <li role="option" aria-selected={false}>
           <Link href={`/recherche?q=${encodeURIComponent(text.trim())}`} className="search-suggest-all">
-            Voir tous les résultats pour « {text.trim()} »
+            {u.all(text.trim())}
           </Link>
         </li>
       </ul>
     )}
     </div>
     <p className="xp-suggest">
-      <span>Par exemple :</span>
-      {SUGGESTIONS.map(([href, label]) => (
+      <NearMe inputId="home-search" className="near-me-home" lang={lang} />
+      <span className="sr-only">{u.ex}</span>
+      {SUGGESTIONS.map(([href, fr, en, ar]) => (
         <Link key={href} href={href}>
-          {label}
+          {{ fr, en, ar }[lang]}
         </Link>
       ))}
     </p>

@@ -67,3 +67,4 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - **Jamais** de données Google copiées (licence) ; jamais d’alcool, de musique, de culte non musulman ni de zaouïa (filtres à la sélection et `exclusions.ts` à l’import).
 - **Doublons** : même nom proche à moins de 80 m ; même catégorie à moins de 15 m (même écriture) ou 80 m (arabe / latin).
 - **À ne pas refaire** : dédoublonner par nom seul dans une wilaya (toutes les « Mosquée · nom à compléter » d’une wilaya fusionnaient).
+- 2026-10-30 — Carte : OpenFreeMap « Liberty » (clair) et « Dark » (sombre), noms en français, arabe ou anglais (bouton FR · ع · EN sur chaque carte, choix mémorisé ; /ar et /en le règlent aussi), repli lettres latines puis nom local. Raison : la carte grise « Positron » aux noms anglais faisait amateur (Rad). MapTiler écarté (offre gratuite non commerciale, 5 000 sessions/mois) ; VersaTiles écarté (arabe mal rendu, lettres détachées).

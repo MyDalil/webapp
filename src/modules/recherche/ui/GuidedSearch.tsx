@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { takePendingDoc } from './pendingDoc'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 
 type Guide = { slug: string; title: string; category: string; summary: string; keywords: string[] }
 type Result = { labels: string[]; criteria: string[]; questions: string[]; results: Guide[]; regulatedWork: boolean }
@@ -101,12 +100,6 @@ export function GuidedSearch({ guides, initialQuery = '', compact = false }: { g
     setQuery(initialQuery)
     setResult(initialQuery ? orient(initialQuery, guides) : null)
   }, [initialQuery, guides])
-
-  useEffect(() => {
-    const f = takePendingDoc()
-    if (f) void readFile(f)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     const s = seq
@@ -231,10 +224,6 @@ export function GuidedSearch({ guides, initialQuery = '', compact = false }: { g
         )}
         <div className="composer-toolbar">
           <div>
-            <input ref={fileRef} type="file" accept=".pdf,.txt,.md,.csv" hidden onChange={(e) => void readFile(e.target.files?.[0])} />
-            <button type="button" className="composer-icon" aria-label="Joindre un document" title="PDF ou fichier texte, 5 Mo maximum" onClick={() => fileRef.current?.click()} disabled={reading}>
-              <Icon kind="attach" />
-            </button>
             <button type="button" className={`composer-icon ${listening ? 'recording' : ''}`} aria-label={listening ? 'Arrêter la dictée' : 'Dicter ma recherche'} aria-pressed={listening} onClick={dictate}>
               <Icon kind="mic" />
             </button>

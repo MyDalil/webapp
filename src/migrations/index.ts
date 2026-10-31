@@ -37,6 +37,12 @@ import * as migration_20261027_090000_index_position from './20261027_090000_ind
 import * as migration_20261027_120000_source_overture from './20261027_120000_source_overture';
 import * as migration_20261027_121000_import_overture from './20261027_121000_import_overture';
 import * as migration_20261027_122000_import_mosquees from './20261027_122000_import_mosquees';
+import * as migration_20261027_130000_accompagnement from './20261027_130000_accompagnement';
+import * as migration_20261027_131000_packs_initiaux from './20261027_131000_packs_initiaux';
+import * as migration_20261027_140000_packs_par_personne from './20261027_140000_packs_par_personne';
+import * as migration_20261027_141000_packs_demarches from './20261027_141000_packs_demarches';
+import * as migration_20261030_160000_adresses_sans_slug from './20261030_160000_adresses_sans_slug';
+import * as migration_20261030_170000_lieux_de_culte_non_musulmans from './20261030_170000_lieux_de_culte_non_musulmans';
 
 export const migrations = [
   {
@@ -197,41 +203,71 @@ export const migrations = [
   {
     up: migration_20261026_203255_faits_lieux.up,
     down: migration_20261026_203255_faits_lieux.down,
-    name: '20261026_203255_faits_lieux'
+    name: '20261026_203255_faits_lieux',
   },
   {
     up: migration_20261026_213000_faits_lieux_donnees.up,
     down: migration_20261026_213000_faits_lieux_donnees.down,
-    name: '20261026_213000_faits_lieux_donnees'
+    name: '20261026_213000_faits_lieux_donnees',
   },
   {
     up: migration_20261026_230000_retraits.up,
     down: migration_20261026_230000_retraits.down,
-    name: '20261026_230000_retraits'
+    name: '20261026_230000_retraits',
   },
   {
     up: migration_20261026_235900_suppression_retraits.up,
     down: migration_20261026_235900_suppression_retraits.down,
-    name: '20261026_235900_suppression_retraits'
+    name: '20261026_235900_suppression_retraits',
   },
   {
     up: migration_20261027_090000_index_position.up,
     down: migration_20261027_090000_index_position.down,
-    name: '20261027_090000_index_position'
+    name: '20261027_090000_index_position',
   },
   {
     up: migration_20261027_120000_source_overture.up,
     down: migration_20261027_120000_source_overture.down,
-    name: '20261027_120000_source_overture'
+    name: '20261027_120000_source_overture',
   },
   {
     up: migration_20261027_121000_import_overture.up,
     down: migration_20261027_121000_import_overture.down,
-    name: '20261027_121000_import_overture'
+    name: '20261027_121000_import_overture',
   },
   {
     up: migration_20261027_122000_import_mosquees.up,
     down: migration_20261027_122000_import_mosquees.down,
-    name: '20261027_122000_import_mosquees'
+    name: '20261027_122000_import_mosquees',
+  },
+  {
+    up: migration_20261027_130000_accompagnement.up,
+    down: migration_20261027_130000_accompagnement.down,
+    name: '20261027_130000_accompagnement',
+  },
+  {
+    up: migration_20261027_131000_packs_initiaux.up,
+    down: migration_20261027_131000_packs_initiaux.down,
+    name: '20261027_131000_packs_initiaux',
+  },
+  {
+    up: migration_20261027_140000_packs_par_personne.up,
+    down: migration_20261027_140000_packs_par_personne.down,
+    name: '20261027_140000_packs_par_personne',
+  },
+  {
+    up: migration_20261027_141000_packs_demarches.up,
+    down: migration_20261027_141000_packs_demarches.down,
+    name: '20261027_141000_packs_demarches',
+  },
+  {
+    up: migration_20261030_160000_adresses_sans_slug.up,
+    down: migration_20261030_160000_adresses_sans_slug.down,
+    name: '20261030_160000_adresses_sans_slug',
+  },
+  {
+    up: migration_20261030_170000_lieux_de_culte_non_musulmans.up,
+    down: migration_20261030_170000_lieux_de_culte_non_musulmans.down,
+    name: '20261030_170000_lieux_de_culte_non_musulmans',
   },
 ];

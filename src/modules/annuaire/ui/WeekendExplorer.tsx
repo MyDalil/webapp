@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { useEffect, useMemo, useState } from 'react'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { useWilaya } from '@/platform/shell/wilaya'

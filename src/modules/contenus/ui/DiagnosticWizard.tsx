@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { openLogin } from '@/platform/shell/LoginDialog'
-import Link from 'next/link'
+import Link from '@/platform/ui/Link'
 import { GUIDES } from '@/platform/referentiel/catalog'
 
 const QUESTIONS: { key: string; title: string; options: [string, string][] }[] = [

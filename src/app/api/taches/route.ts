@@ -15,8 +15,10 @@ export async function GET(req: Request) {
   if (!ok) return fail('Accès refusé.', 401)
   const result = { rendezVous: await sendReminders(), services: await dailyServicesTasks(), photosProposeesSupprimees: await purgeContributionPhotos(), annonces: await dailyClassifiedTasks() }
   await purgeRateLimits()
-  // Index de recherche reconstruit chaque jour : annonces expirées retirées, imports en masse pris en compte.
-  const recherche = await rebuildIndex(await payload(), [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], { adresses: reindexPlaces, praticiens: reindexPractitioners, prestataires: reindexProviders, annonces: reindexClassifieds }).catch((e: Error) => ({ erreur: e.message }))
+  // Index de recherche : tenu à jour à chaque enregistrement (crochets des métiers). Reconstruction complète une fois
+  // par semaine seulement (vendredi, heure d’Alger), filet de sécurité qui économise le calcul de la base.
+  const friday = new Date().toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'Africa/Algiers' }) === 'Friday'
+  const recherche = !friday ? 'à jour (reconstruction le vendredi)' : await rebuildIndex(await payload(), [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], { adresses: reindexPlaces, praticiens: reindexPractitioners, prestataires: reindexProviders, annonces: reindexClassifieds }).catch((e: Error) => ({ erreur: e.message }))
   const sauvegarde = await dailyBackup().catch((e: Error) => ({ erreur: e.message }))
   return json({ ...result, recherche, sauvegarde })
 }

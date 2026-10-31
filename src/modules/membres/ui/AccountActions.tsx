@@ -1,11 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { useState } from 'react'
 
 /** Déconnexion, export des données (droit d’accès) et suppression définitive du compte (droit à l’effacement). */
 export function AccountActions() {
-  const router = useRouter()
+  const router = useLangRouter()
   const [busy, setBusy] = useState(false)
   const logout = async () => {
     await fetch('/api/members/logout', { method: 'POST', credentials: 'include' })

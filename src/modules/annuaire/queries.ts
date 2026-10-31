@@ -215,7 +215,7 @@ export type CityTile = { code: string; name: string; slug: string; cover: string
 /** Vitrine : meilleures fiches illustrées et wilayas qui ont des lieux à montrer. */
 export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTile[]; total: number }> {
   const all = await getPlaces()
-  const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup'))
+  const illustrated = all.filter((p) => p.cover && !p.cover.startsWith('/mockup') && !p.cover.includes('/images/lieu'))
   const byWilaya = new Map<string, PlaceCard[]>()
   for (const p of illustrated) if (p.wilaya) byWilaya.set(p.wilaya, [...(byWilaya.get(p.wilaya) ?? []), p])
   const counts = await getPlaceCounts()
@@ -223,6 +223,19 @@ export async function getShowcase(): Promise<{ top: PlaceCard[]; cities: CityTil
     .map(([name, list]) => ({ code: '', name, slug: wilayaSlug(name), cover: list[0].cover, credit: list[0].credit, count: counts.wilaya[name] ?? list.length, highlight: list[0].name }))
     .sort((a, b) => b.count - a.count)
   return { top: illustrated.slice(0, 14), cities, total: counts.total || all.length }
+}
+
+/** Cartes d’adresses par slug, dans l’ordre demandé (résultats de recherche affichés avec la carte unique). */
+export async function cardsBySlugs(slugs: string[]): Promise<PlaceCard[]> {
+  if (!slugs.length) return []
+  try {
+    const payload = await client()
+    const { docs } = await payload.find({ collection: 'places', where: { and: [{ _status: { equals: 'published' } }, { slug: { in: slugs } }] }, depth: 1, limit: slugs.length, overrideAccess: false })
+    const by = new Map(docs.map((d) => [d.slug, toCard(d)]))
+    return slugs.flatMap((s) => (by.has(s) ? [by.get(s)!] : []))
+  } catch {
+    return []
+  }
 }
 
 /** Lieux d’une wilaya, déjà classés par score. */

@@ -113,3 +113,9 @@
   .mission-facts dd { margin-bottom: 10px; }
   .doc-upload { flex-direction: column; align-items: flex-start; }
 }
+
+/* Métiers illustrés (Rad, 2026-10-31 : des images partout). */
+.service-tile.has-photo { overflow: hidden; padding: 0 0 20px; align-content: start; }
+.service-tile.has-photo > :not(.service-tile-img) { padding-inline: 20px; }
+.service-tile-img { display: block; aspect-ratio: 16 / 10; margin-bottom: 8px; background: var(--surface-2) center / cover no-repeat; transition: transform .6s var(--ease-out, ease); }
+.service-tile.has-photo:hover .service-tile-img { transform: scale(1.04); }

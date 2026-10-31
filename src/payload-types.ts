@@ -80,6 +80,8 @@ export interface Config {
     'provider-documents': ProviderDocument;
     classifieds: Classified;
     'classified-messages': ClassifiedMessage;
+    packs: Pack;
+    'demandes-accompagnement': DemandesAccompagnement;
     media: Media;
     submissions: Submission;
     'contribution-photos': ContributionPhoto;
@@ -113,6 +115,8 @@ export interface Config {
     'provider-documents': ProviderDocumentsSelect<false> | ProviderDocumentsSelect<true>;
     classifieds: ClassifiedsSelect<false> | ClassifiedsSelect<true>;
     'classified-messages': ClassifiedMessagesSelect<false> | ClassifiedMessagesSelect<true>;
+    packs: PacksSelect<false> | PacksSelect<true>;
+    'demandes-accompagnement': DemandesAccompagnementSelect<false> | DemandesAccompagnementSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
@@ -140,10 +144,12 @@ export interface Config {
   globals: {
     'featured-destination': FeaturedDestination;
     controls: Control;
+    accompagnement: Accompagnement;
   };
   globalsSelect: {
     'featured-destination': FeaturedDestinationSelect<false> | FeaturedDestinationSelect<true>;
     controls: ControlsSelect<false> | ControlsSelect<true>;
+    accompagnement: AccompagnementSelect<false> | AccompagnementSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1455,6 +1461,100 @@ export interface ClassifiedMessage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packs".
+ */
+export interface Pack {
+  id: number;
+  title: string;
+  slug: string;
+  /**
+   * Ex. : Certificat de changement de résidence (CCR).
+   */
+  demarche: string;
+  /**
+   * Chemin de la page du guide gratuit, ex. /demarches/ccr ou /guides/logement.
+   */
+  guide: string;
+  summary: string;
+  includes?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Vide : « Tarif annoncé au lancement ».
+   */
+  priceEur?: number | null;
+  /**
+   * Vide : « Équivalent en dinars annoncé au lancement ».
+   */
+  priceDa?: number | null;
+  /**
+   * Coché : le demandeur choisit le nombre de personnes et le total se calcule.
+   */
+  perPerson?: boolean | null;
+  active?: boolean | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demandes-accompagnement".
+ */
+export interface DemandesAccompagnement {
+  id: number;
+  pack: number | Pack;
+  name: string;
+  email: string;
+  phone?: string | null;
+  country?: string | null;
+  persons?: number | null;
+  message?: string | null;
+  status: 'attente' | 'a-contacter' | 'en-cours' | 'terminee' | 'annulee';
+  advisor?: (number | null) | User;
+  /**
+   * Jamais envoyées au demandeur.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  /**
+   * Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.
+   */
+  telegramId?: string | null;
+  role: 'patron' | 'admin' | 'editor' | 'conseiller';
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
@@ -1579,38 +1679,6 @@ export interface TelegramPost {
   error?: string | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  name: string;
-  /**
-   * Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.
-   */
-  telegramId?: string | null;
-  role: 'patron' | 'admin' | 'editor';
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1914,6 +1982,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'classified-messages';
         value: number | ClassifiedMessage;
+      } | null)
+    | ({
+        relationTo: 'packs';
+        value: number | Pack;
+      } | null)
+    | ({
+        relationTo: 'demandes-accompagnement';
+        value: number | DemandesAccompagnement;
       } | null)
     | ({
         relationTo: 'media';
@@ -2449,6 +2525,48 @@ export interface ClassifiedMessagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packs_select".
+ */
+export interface PacksSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  demarche?: T;
+  guide?: T;
+  summary?: T;
+  includes?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  priceEur?: T;
+  priceDa?: T;
+  perPerson?: T;
+  active?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "demandes-accompagnement_select".
+ */
+export interface DemandesAccompagnementSelect<T extends boolean = true> {
+  pack?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  country?: T;
+  persons?: T;
+  message?: T;
+  status?: T;
+  advisor?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -2865,6 +2983,28 @@ export interface Control {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accompagnement".
+ */
+export interface Accompagnement {
+  id: number;
+  mode: 'cache' | 'liste-attente' | 'ouvert';
+  /**
+   * Aucun compte marchand pour l’instant : laisser décoché. Le conseiller communique les modalités de paiement.
+   */
+  paymentEnabled?: boolean | null;
+  /**
+   * Format international, ex. +213…
+   */
+  whatsapp?: string | null;
+  /**
+   * Vide : salam@mydalil.com.
+   */
+  notifyEmail?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "featured-destination_select".
  */
 export interface FeaturedDestinationSelect<T extends boolean = true> {
@@ -2891,6 +3031,19 @@ export interface ControlsSelect<T extends boolean = true> {
   maintenance?: T;
   agentsMonthlyBudgetUsd?: T;
   telegramChannelId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accompagnement_select".
+ */
+export interface AccompagnementSelect<T extends boolean = true> {
+  mode?: T;
+  paymentEnabled?: T;
+  whatsapp?: T;
+  notifyEmail?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

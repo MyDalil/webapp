@@ -27,6 +27,43 @@ test.describe('Pages publiques', () => {
   })
 })
 
+test.describe('Langues', () => {
+  test('/en et /ar : même accueil, traduit, arabe de droite à gauche', async ({ page }) => {
+    const errors = watchErrors(page)
+    await page.goto('/en')
+    await expect(page.locator('h1').first()).toHaveText('Algeria, closer to you.')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+    await page.goto('/ar')
+    await expect(page.locator('h1').first()).toHaveText('الجزائر، أقرب إليك.')
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
+    await expect(page.locator('.section-head h2').first()).toHaveText('ماذا تودّ أن تفعل اليوم؟')
+    expect(errors).toEqual([])
+  })
+})
+
+test.describe('Menu', () => {
+  test('menu latéral : rubriques, thème, fermeture hors du panneau et par Échap', async ({ page }) => {
+    const errors = watchErrors(page)
+    await page.setViewportSize({ width: Math.min(page.viewportSize()!.width, 1280), height: 860 })
+    await page.goto('/')
+    const sheet = page.locator('#nav-sheet')
+    await page.getByRole('button', { name: 'Ouvrir la navigation' }).click()
+    await expect(sheet).toHaveClass(/is-open/)
+    await page.locator('.nav-sheet-row').first().click()
+    await expect(page.locator('.nav-sheet-sub').first()).toBeVisible()
+    await page.getByRole('button', { name: 'Mode sombre' }).click()
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    await page.getByRole('button', { name: 'Mode clair' }).click()
+    await page.mouse.click(10, 300)
+    await expect(sheet).not.toHaveClass(/is-open/)
+    await page.getByRole('button', { name: 'Ouvrir la navigation' }).click()
+    await expect(sheet).toHaveClass(/is-open/)
+    await page.keyboard.press('Escape')
+    await expect(sheet).not.toHaveClass(/is-open/)
+    expect(errors).toEqual([])
+  })
+})
+
 test.describe('Annuaire', () => {
   test('de l’annuaire à une fiche adresse', async ({ page }) => {
     const errors = watchErrors(page)
@@ -137,7 +174,7 @@ test.describe('Aucune catégorie vide', () => {
 
   test('praticiens : sans résultat, des établissements de santé réels', async ({ page }) => {
     await page.goto('/praticiens?specialite=orthophonie&wilaya=16')
-    await expect(page.locator('.praticien-card, .health-fallback a').first()).toBeVisible()
+    await expect(page.locator('.praticien-card, .praticiens-empty .place-panel a').first()).toBeVisible()
   })
 })
 
@@ -185,4 +222,49 @@ test.describe('Recherche complète', () => {
     await expect(page.locator('h1').first()).toContainText('Oran')
     await expect(page.locator('a[href^="/adresses/"]').first()).toBeVisible()
   })
+})
+
+test('démarches : catégories, démarches phares et deux options (hors production)', async ({ page, baseURL }) => {
+  test.skip(/mydalil\.com/.test(baseURL ?? ''), 'offre cachée en production')
+  await page.goto('/demarches')
+  await expect(page.getByText(/portail d’information indépendant/).first()).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Guide gratuit' }).first()).toBeVisible()
+  // Offre payante pas encore « Ouverte » dans /admin : bouton « À venir », sans lien.
+  await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
+  await expect(page.getByRole('heading', { name: 'Que voulez-vous faire ?' })).toBeVisible()
+  await page.getByRole('link', { name: /Passeport biométrique/ }).first().click()
+  await expect(page.getByRole('heading', { name: 'Points clés' })).toBeVisible()
+  await expect(page.getByRole('button', { name: /Pack Accompagnement Premium/ }).first()).toContainText('À venir')
+  await page.goto('/accompagnement/passeport')
+  await expect(page.getByText('Nombre de personnes')).toBeVisible()
+  await page.getByRole('button', { name: 'Une personne de plus' }).click()
+  await expect(page.locator('.ac-stepper output')).toHaveText('2')
+})
+
+test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est ouvert', async ({ page }) => {
+  const errors = watchErrors(page)
+  await page.goto('/demarches/ccr')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Certificat de changement de résidence')
+  await expect(page.getByText(/Dernière vérification/)).toBeVisible()
+  await expect(page.getByText(/3 ans sans interruption/).first()).toBeVisible()
+  await expect(page.locator('#source-1')).toBeVisible()
+  // L’offre payante est cachée en production avant le lancement ; ailleurs, elle s’affiche avec la transparence.
+  // Offre visible (hors production) : transparence et bouton payant « À venir » tant qu’elle n’est pas ouverte.
+  const offer = page.getByRole('button', { name: /Pack Accompagnement Premium/ })
+  if (await offer.count()) {
+    await expect(page.getByText(/portail d’information indépendant/)).toBeVisible()
+    await expect(offer.first()).toContainText('À venir')
+  }
+  expect(errors).toEqual([])
+})
+
+test('accompagnement : inscription sur la liste d’attente @ecriture', async ({ page, request }) => {
+  const r = await request.get('/accompagnement/ccr')
+  test.skip(r.status() === 404 || (await r.text()).includes('À venir'), 'offre cachée ou à venir')
+  await page.setExtraHTTPHeaders(freshIp())
+  await page.goto('/accompagnement/ccr')
+  await page.locator('.ac-form input[name=name]').fill('Test Parcours')
+  await page.locator('.ac-form input[name=email]').fill('parcours@example.com')
+  await page.getByRole('button', { name: /liste d’attente|Envoyer ma demande/ }).click()
+  await expect(page.getByText(/C’est noté|Demande reçue/)).toBeVisible()
 })

@@ -36,3 +36,4 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Catégorie + nom + lieu (« mosquée cheick brahim ibrahimi draria ») : adresses proches de la catégorie, les plus ressemblantes au nom d’abord (`categoryPrefix`, `nameMatch`, fautes légères tolérées, testés).
 - Page /recherche : une colonne centrée, liste groupée à filets fins (icône, nom, catégorie · commune, distance), actions de même hauteur, pistes et wilayas en défilement horizontal, « Afficher N de plus » (`styles/recherche.css`).
 - Communes écrites en arabe par la source affichées en lettres latines (`latinCity`).
+- 2026-10-31 — Barres de recherche et barre « Demandez à DALIL » sans pièce jointe ni bouton de langue (Rad : standard ChatGPT / Wispr Flow) : champ, micro (dictée dans la langue du site), envoi visible seulement avec du texte. Fichiers, photos et photos de profil : uniquement dans les profils membres et professionnels.

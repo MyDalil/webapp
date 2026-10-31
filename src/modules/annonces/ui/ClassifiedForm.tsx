@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { shrinkImage } from '@/platform/ui/shrink'
 import { SmartText } from '@/platform/ui/SmartText'
@@ -14,7 +14,7 @@ export type FormInitial = { id: number; values: Values; photos: { id: number; th
  * Photos réduites dans le navigateur. Description avec dictée (champ commun SmartText).
  */
 export function ClassifiedForm({ wilayas, initial, defaultCategory }: { wilayas: { code: number; name: string }[]; initial?: FormInitial; defaultCategory?: string }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const v = initial?.values ?? {}
   const [cat, setCat] = useState(String(v.category ?? defaultCategory ?? ''))
   const [priceMode, setPriceMode] = useState(String(v.priceMode ?? 'fixed'))

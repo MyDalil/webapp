@@ -1,24 +1,18 @@
 import type { CollectionAfterChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
-import { revalidatePath } from 'next/cache'
+import { revalidateLangs } from '@/platform/revalidate'
 import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
+import { slugify } from '@/platform/referentiel/slug'
 
-const slugify = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
 const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
   if (!data) return data
-  if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`)
+  if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`) || `lieu-${Date.now().toString(36)}`
   data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)
   return data
@@ -28,10 +22,10 @@ const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
 const refresh: CollectionAfterChangeHook = ({ doc, previousDoc, req }) => {
   if (req.context?.skipRevalidate) return doc
   try {
-    revalidatePath('/annuaire')
-    revalidatePath(`/annuaire/${doc.sector}`)
-    revalidatePath(`/adresses/${doc.slug}`)
-    if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidatePath(`/adresses/${previousDoc.slug}`)
+    revalidateLangs('/annuaire')
+    revalidateLangs(`/annuaire/${doc.sector}`)
+    revalidateLangs(`/adresses/${doc.slug}`)
+    if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidateLangs(`/adresses/${previousDoc.slug}`)
   } catch {
     // hors contexte Next (migrations, scripts) : rien à rafraîchir
   }

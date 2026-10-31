@@ -68,4 +68,4 @@ export async function deleteSession() {
 }
 
 export const pathFor = (itemType: string, itemKey: string) =>
-  itemType === 'guide' ? `/guides/${itemKey}` : itemType === 'listing' ? `/adresses/${itemKey}` : itemType === 'professional' ? `/professionnels/${itemKey}` : `/annuaire`
+  itemType === 'guide' ? `/guides/${itemKey}` : itemType === 'listing' ? `/adresses/${itemKey}` : itemType === 'practitioner' ? `/praticiens/${itemKey}` : itemType === 'provider' ? `/prestataires/${itemKey}` : itemType === 'professional' ? `/professionnels/${itemKey}` : `/annuaire`

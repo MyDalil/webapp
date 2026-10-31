@@ -52,3 +52,4 @@ node_modules/
 # Jeux bruts d’import : archivés dans Vercel Blob et sur la branche import-data, jamais dans le code du site
 /src/modules/annuaire/data/osm-places.json
 /src/modules/annuaire/data/open-places.json
+.reindex-needed

@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 
 export type Slide = { src: string; title: string; place: string; href: string; credit: string | null }
 
-/** Fond de héros : photos en fondu enchaîné avec léger zoom (effet Ken Burns), crédit et lien vers le lieu. */
+/** Fond de héros : photos en fondu enchaîné avec léger zoom (effet Ken Burns), parallaxe au défilement (Motion), crédit et lien vers le lieu. */
 export function Slideshow({ slides, interval = 6500 }: { slides: Slide[]; interval?: number }) {
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -14,13 +15,18 @@ export function Slideshow({ slides, interval = 6500 }: { slides: Slide[]; interv
     return () => clearInterval(t)
   }, [paused, slides.length, interval])
   const s = slides[i]
+  // La photo défile moins vite que la page : profondeur douce, coupée si l’appareil demande moins d’animations.
+  const box = useRef<HTMLDivElement>(null)
+  const reduce = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: box, offset: ['start start', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', reduce ? '0%' : '22%'])
   return (
     <>
-      <div className="slideshow" aria-hidden="true">
+      <motion.div ref={box} className="slideshow" aria-hidden="true" style={{ y }}>
         {slides.map((x, k) => (
           <div key={x.src} className={`slide ${k === i ? 'is-active' : ''}`} style={{ backgroundImage: `url(${x.src})` }} />
         ))}
-      </div>
+      </motion.div>
       {s && (
         <div className="slideshow-meta">
           <a href={s.href} className="slideshow-place">

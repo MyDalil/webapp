@@ -1,8 +1,12 @@
 import { SECTORS, WILAYAS } from './catalog'
 
-/** Adresse lisible d’un libellé : « Hôpitaux » → « hopitaux », « Tizi Ouzou » → « tizi-ouzou ». */
+// Translittération simple de l’arabe, pour que les noms en arabe aient aussi une adresse de page lisible.
+const AR: Record<string, string> = { ا: 'a', أ: 'a', إ: 'i', آ: 'a', ء: '', ؤ: 'o', ئ: 'i', ب: 'b', ت: 't', ة: 'a', ث: 'th', ج: 'dj', ح: 'h', خ: 'kh', د: 'd', ذ: 'dh', ر: 'r', ز: 'z', س: 's', ش: 'ch', ص: 's', ض: 'd', ط: 't', ظ: 'dh', ع: 'a', غ: 'gh', ف: 'f', ق: 'k', ك: 'k', ل: 'l', م: 'm', ن: 'n', ه: 'h', و: 'ou', ى: 'a', ي: 'i', 'ڨ': 'g', 'ڤ': 'v', 'پ': 'p' }
+export const latinize = (s: string) => s.replace(/[\u0600-\u06FF]/g, (c) => AR[c] ?? '')
+
+/** Adresse lisible d’un libellé : « Hôpitaux » → « hopitaux », « Tizi Ouzou » → « tizi-ouzou », « ثانوية » → « thanouia ». */
 export const slugify = (s: string) =>
-  s
+  latinize(s)
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()

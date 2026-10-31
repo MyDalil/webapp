@@ -1,12 +1,18 @@
 'use client'
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useLangRouter } from '@/platform/ui/lang'
 import { toast } from '@/platform/shell/toast'
-import { ACCEPT_DOC, setPendingDoc } from './pendingDoc'
-import { DICTATION_LANGS, preferredLang, rememberLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
+import { preferredLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
 import { useWilaya } from '@/platform/shell/wilaya'
+import { useLang, usePath } from '@/platform/ui/lang'
+
+const ASSIST = {
+  fr: { listening: 'Je vous écoute…', busy: 'DALIL réfléchit…', answer: 'Votre réponse…', ask: 'Demandez à DALIL…', open: 'Ouvrir l’assistant DALIL', send: 'Envoyer' },
+  en: { listening: 'Listening…', busy: 'DALIL is thinking…', answer: 'Your answer…', ask: 'Ask DALIL…', open: 'Open the DALIL assistant', send: 'Send' },
+  ar: { listening: 'أنا أستمع…', busy: 'دليل يفكّر…', answer: 'إجابتك…', ask: 'اسأل دليل…', open: 'فتح مساعد دليل', send: 'إرسال' },
+}
 
 type Turn = { q: string; intent: Intent }
 
@@ -16,8 +22,9 @@ type Turn = { q: string; intent: Intent }
  * page, pré-remplie. Rien ne se fait sans un clic de la personne.
  */
 export function Assistant() {
-  const router = useRouter()
-  const path = usePathname()
+  const router = useLangRouter()
+  const path = usePath()
+  const A = ASSIST[useLang()]
   const [expanded, setExpanded] = useState(false)
   const [text, setText] = useState('')
   const [lang, setLang] = useState<DictationLang>('fr-FR')
@@ -32,12 +39,6 @@ export function Assistant() {
   const [context, setContext] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
-  const docRef = useRef<HTMLInputElement>(null)
-  const pickDoc = (f?: File) => {
-    if (!f) return
-    setPendingDoc(f)
-    router.push('/recherche')
-  }
   // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
   const [tucked, setTucked] = useState(false)
   // Fiches détaillées : l’assistant se replie en bouton rond pour ne jamais masquer le contenu (crédits photo).
@@ -143,21 +144,16 @@ export function Assistant() {
     if (dictation.current) setListening(true)
   }
 
-  function cycleLang() {
-    const i = DICTATION_LANGS.findIndex((l) => l.value === lang)
-    const next = DICTATION_LANGS[(i + 1) % DICTATION_LANGS.length].value
-    setLang(next)
-    rememberLang(next)
-  }
+
 
   if (path === '/recherche') return null
 
   return (
     <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact ? 'is-compact' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
-      <button className="assistant-orb" type="button" aria-label="Ouvrir l’assistant DALIL" onClick={() => setExpanded(!expanded)}>
+      <button className="assistant-orb" type="button" aria-label={A.open} onClick={() => setExpanded(!expanded)}>
         <span aria-hidden="true">✦</span>
       </button>
-      <form className="assistant-bar has-lang" onSubmit={submit}>
+      <form className={`assistant-bar is-chat${listening ? ' is-listening' : ''}${text.trim() ? ' has-text' : ''}`} onSubmit={submit}>
         {panel && turns.length > 0 && (
           <div className="assistant-card assistant-panel" role="dialog" aria-label="Conversation avec DALIL">
             <div className="assistant-panel-head">
@@ -229,27 +225,27 @@ export function Assistant() {
           maxLength={600}
           onChange={(e) => setText(e.target.value)}
           onFocus={() => turns.length && setPanel(true)}
-          placeholder={listening ? 'Je vous écoute…' : busy ? 'DALIL réfléchit…' : intent?.question ? 'Votre réponse…' : 'Demandez à DALIL…'}
+          placeholder={listening ? A.listening : busy ? A.busy : intent?.question ? A.answer : A.ask}
           autoComplete="off"
         />
-        <button className="dock-lang" type="button" aria-label="Langue de la dictée" title="Langue de la dictée" onClick={cycleLang} disabled={listening}>
-          {DICTATION_LANGS.find((l) => l.value === lang)?.label}
-        </button>
-        <input ref={docRef} type="file" accept={ACCEPT_DOC} hidden onChange={(e) => pickDoc(e.target.files?.[0])} />
-        <button className="dock-icon" type="button" aria-label="Ajouter un document" title="PDF ou fichier texte, 5 Mo maximum" onClick={() => docRef.current?.click()}>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 1 1-2.8-2.8l8.5-8.5" />
-          </svg>
-        </button>
+        {listening && (
+          <span className="assistant-wave" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
+        )}
         <button className={`dock-icon ${listening ? 'recording' : ''}`} type="button" aria-pressed={listening} aria-label={listening ? 'Arrêter la dictée' : 'Parler à DALIL'} onClick={mic} disabled={busy}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <rect x="9" y="3" width="6" height="12" rx="3" />
             <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" />
           </svg>
         </button>
-        <button className="assistant-send" type="submit" aria-label="Envoyer" disabled={busy || listening}>
+        <button className="assistant-send" type="submit" aria-label={A.send} disabled={busy || listening || !text.trim()}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m5 12 14-7-4 14-3-6-7-1Z" />
+            <path d="M12 19V5M5 12l7-7 7 7" />
           </svg>
         </button>
       </form>

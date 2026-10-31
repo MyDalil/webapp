@@ -1,7 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import Link from '@/platform/ui/Link'
+import { useLangRouter } from '@/platform/ui/lang'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SmartText } from '@/platform/ui/SmartText'
 
@@ -22,7 +22,7 @@ const DAYS = 14
 
 /** Demande de mission : prestation, durée, jour et heure, adresse, description. Le prestataire répond sous 24 h. */
 export function RequestForm({ slug, name, offers, communes, clientele, initialActivity }: { slug: string; name: string; offers: Offer[]; communes: { id: string; name: string }[]; clientele: 'all' | 'women' | 'men'; initialActivity?: string }) {
-  const router = useRouter()
+  const router = useLangRouter()
   const [activity, setActivity] = useState(offers.find((o) => o.activity === initialActivity)?.activity ?? offers[0]?.activity)
   const offer = offers.find((o) => o.activity === activity)
   const [hours, setHours] = useState(offer?.pricing === 'hour' ? Math.max(1, Math.round(offer.hours)) : 2)

@@ -4,10 +4,11 @@ import type { Access, FieldAccess } from 'payload'
  * Rôles de l’équipe (collection « users ») :
  * - patron : tous les droits d’un administrateur, plus les droits réservés (canal Telegram, Vie musulmane, rôle patron) ;
  * - admin : publie et gère tout ;
- * - editor : prépare, ne publie pas.
+ * - editor : prépare, ne publie pas ;
+ * - conseiller : traite les demandes d’accompagnement, et rien d’autre (jamais staff).
  * Les agents IA sont dans la collection « agents » : ils ne sont jamais staff et ne publient jamais.
  */
-type Role = 'patron' | 'admin' | 'editor'
+type Role = 'patron' | 'admin' | 'editor' | 'conseiller'
 
 /** Seuls les comptes de l’équipe (collection « users ») ont un rôle ; un compte public n’est jamais staff. */
 const hasRole = (user: unknown, roles: Role[]) => {
@@ -20,6 +21,8 @@ export const isPatronUser = (user: unknown) => hasRole(user, ['patron'])
 /** Compte de l’équipe avec les droits d’administration (patron compris ; jamais un compte public). */
 export const isAdminUser = (user: unknown) => hasRole(user, ['patron', 'admin'])
 export const isStaffUser = (user: unknown) => hasRole(user, ['patron', 'admin', 'editor'])
+/** Conseiller d’accompagnement : voit seulement les demandes d’accompagnement (moindre privilège). */
+export const isAdvisorUser = (user: unknown) => hasRole(user, ['conseiller'])
 
 /** Agent IA authentifié par sa clé API (collection « agents »). */
 export const isAgent = (user: unknown): user is { id: number; collection: 'agents'; slug: string; name: string } =>
@@ -32,6 +35,8 @@ export const isMember = (user: unknown): user is { id: number; collection: 'memb
 export const isPatron: Access = ({ req: { user } }) => isPatronUser(user)
 export const isAdmin: Access = ({ req: { user } }) => isAdminUser(user)
 export const isStaff: Access = ({ req: { user } }) => isStaffUser(user)
+/** Administration ou conseiller d’accompagnement. */
+export const isAdminOrAdvisor: Access = ({ req: { user } }) => isAdminUser(user) || isAdvisorUser(user)
 export const isAdminField: FieldAccess = ({ req: { user } }) => isAdminUser(user)
 export const isPatronField: FieldAccess = ({ req: { user } }) => isPatronUser(user)
 
