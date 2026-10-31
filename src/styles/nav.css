@@ -293,3 +293,5 @@ html[data-theme="dark"] .nav-sheet-primary { color: #07140e; }
 .nav-sheet-seg > .is-on { background: var(--green); color: #fff; opacity: 1; filter: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .18); }
 html[data-theme="dark"] .nav-sheet-seg > .is-on { color: #07140e; }
 .nav-sheet-seg > a.is-on { background: var(--surface); box-shadow: 0 0 0 2px var(--green); }
+/* Bouton menu aussi sur grand écran (Rad, 2026-10-31) : le même panneau partout, à côté de la barre horizontale. */
+.header-actions .hamburger { display: block; }
