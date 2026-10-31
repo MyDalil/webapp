@@ -138,3 +138,8 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 .vm-img.is-icon { display: grid; place-items: center; background: linear-gradient(150deg, #0f7a4a, #07140f); color: rgba(255, 255, 255, .92); }
 .vm-img.is-icon svg { width: 34%; height: 34%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .city-tile-img.is-icon.is-annonce { background: linear-gradient(150deg, #d9467f, #9d174d); }
+
+/* Accueil : la grande newsletter suffit ; pas de doublon dans le pied de page, pas de filet clair entre les deux (Rad, 2026-10-31). */
+body:has(.xp-community) .site-footer .newsletter { display: none; }
+body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer { border-top: 0 !important; box-shadow: none; }
+.site-footer-wrap .site-footer { border-top-color: var(--line); }
