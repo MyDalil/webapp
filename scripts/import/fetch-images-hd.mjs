@@ -6,7 +6,14 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'data/images-hd'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const CATS = {
-  aide2: ['Elderly people', 'Old age', 'Grandmothers', 'Walking aids', 'Wheelchairs'],
+  // Spécialités de santé (accueil, 2026-10-31).
+  generaliste: ['Stethoscopes', 'General practitioners', 'Medical examinations'],
+  pediatre: ['Pediatrics', 'Pediatricians', 'Pediatric examinations'],
+  gynecologue: ['Obstetric ultrasonography', 'Prenatal care', 'Pregnant women'],
+  dentiste: ['Dental chairs', 'Dental offices', 'Dentistry', 'Dentists at work'],
+  ophtalmologue: ['Ophthalmology', 'Eye examinations', 'Slit lamps', 'Eye charts'],
+  kine: ['Physical therapy', 'Physiotherapists', 'Rehabilitation medicine'],
+  psychologue: ['Psychotherapy', 'Counseling', 'Mental health'],
 }
 async function api(params) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...params })
