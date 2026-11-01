@@ -94,7 +94,7 @@ export async function suggest(q: string): Promise<SearchHit[]> {
   const query = place.rest || text
   const [cats, content] = await Promise.all([
     querySearch(p, query, { types: ['categorie', 'rubrique'], limit: 4 }).catch(() => [] as SearchHit[]),
-    querySearch(p, query, { types: ['adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 6 }).catch(() => [] as SearchHit[]),
+    querySearch(p, query, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 8 }).catch(() => [] as SearchHit[]),
   ])
-  return [...cats, ...content].slice(0, 8)
+  return [...cats, ...content].slice(0, 10)
 }

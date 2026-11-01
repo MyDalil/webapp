@@ -14,7 +14,25 @@ const ASSIST = {
   ar: { listening: 'أنا أستمع…', busy: 'دليل يفكّر…', answer: 'إجابتك…', ask: 'اسأل دليل…', open: 'فتح مساعد دليل', send: 'إرسال' },
 }
 
-type Turn = { q: string; intent: Intent }
+type Hit = { type: string; url: string; title: string; subtitle: string | null; badge: string | null }
+type Turn = { q: string; intent: Intent; hits: Hit[] }
+
+const KIND: Record<string, string> = { demarche: 'Démarche', consulat: 'Consulat', adresse: 'Adresse', praticien: 'Praticien', prestataire: 'Prestataire', annonce: 'Annonce', guide: 'Guide', categorie: 'Catégorie', rubrique: 'Rubrique' }
+const hitsFor = async (q: string): Promise<Hit[]> => {
+  const r = await fetch(`/api/recherche?q=${encodeURIComponent(q.slice(0, 80))}`).catch(() => null)
+  const d = r && r.ok ? await r.json().catch(() => ({})) : {}
+  return (d.items ?? []) as Hit[]
+}
+/** Exemples de départ selon la page (la barre vide propose ses premières idées). */
+const EXAMPLES: [RegExp, string[]][] = [
+  [/^\/demarches/, ['Renouveler mon passeport', 'Acte de naissance 12S', 'Créer mon entreprise']],
+  [/^\/(praticiens|annuaire\/sante)/, ['Dentiste à Alger', 'Pédiatre en visio', 'Pharmacie de garde']],
+  [/^\/(services|prestataires)/, ['Plombier à Oran', 'Femme de ménage', 'Cours de maths']],
+  [/^\/(vie-musulmane|annuaire\/mosquees)/, ['Mosquée près de moi', 'École coranique', 'Préparer la Omra']],
+  [/./, ['Renouveler mon passeport', 'Dentiste à Alger', 'Que faire ce week-end ?']],
+]
+/** Phrase claire de ce que DALIL a compris (au lieu d’une simple étiquette). */
+const sentence = (it: Intent) => (it.target === 'recherche' ? `Résultats pour « ${it.text} »` : it.chips.join(' · '))
 
 /**
  * Barre « Demandez à DALIL » : une seule barre, texte ou voix. La dictée devient un brouillon propre et modifiable ;
@@ -37,6 +55,16 @@ export function Assistant() {
   const wilaya = useWilaya()
   const logRef = useRef<HTMLDivElement>(null)
   const [context, setContext] = useState('')
+  const [sugg, setSugg] = useState<Hit[]>([])
+  const [focused, setFocused] = useState(false)
+  const examples = (EXAMPLES.find(([re]) => re.test(path ?? '/')) ?? EXAMPLES[EXAMPLES.length - 1])[1]
+  // Propositions pendant la frappe (dès 2 lettres, pause de 250 ms).
+  useEffect(() => {
+    const q = text.trim()
+    if (listening || busy || q.length < 2 || context) return setSugg([])
+    const t = window.setTimeout(async () => setSugg((await hitsFor(q)).slice(0, 6)), 250)
+    return () => window.clearTimeout(t)
+  }, [text, listening, busy, context])
   const inputRef = useRef<HTMLInputElement>(null)
   const dictation = useRef<Dictation | null>(null)
   // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
@@ -45,14 +73,19 @@ export function Assistant() {
   const compact = /^\/(adresses|prestataires|missions)\/|^\/praticiens\/[^/]+|^\/annonces\/[^/]+\/[^/]+|^\/guides\/[^/]+/.test(path ?? '')
   useEffect(() => {
     setTucked(false)
-    if (path !== '/') return
+    // Une seule barre visible à la fois : tant qu’une barre de recherche de la page est à l’écran, la barre DALIL se replie en bouton ✦.
     let obs: IntersectionObserver | null = null
     let raf = 0
+    let tries = 0
     const watch = () => {
-      const hero = document.querySelector('.search-bar')
-      if (!hero) return void (raf = requestAnimationFrame(watch))
-      obs = new IntersectionObserver(([e]) => setTucked(e.isIntersecting), { threshold: 0.01 })
-      obs.observe(hero)
+      const bars = document.querySelectorAll('.search-bar, .dm-search, .tb-search, .cs-search, .filter-panel .field-icon, .xp-hero form[role="search"]')
+      if (!bars.length) return void (tries++ < 60 && (raf = requestAnimationFrame(watch)))
+      const seen = new Set<Element>()
+      obs = new IntersectionObserver((es) => {
+        es.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)))
+        setTucked(seen.size > 0)
+      }, { threshold: 0.01 })
+      bars.forEach((b) => obs!.observe(b))
     }
     watch()
     return () => {
@@ -90,10 +123,10 @@ export function Assistant() {
   useEffect(() => setLang(preferredLang()), [])
   useEffect(() => () => dictation.current?.stop(), [])
 
-  async function submit(e: FormEvent) {
-    e.preventDefault()
+  async function submit(e?: FormEvent, forced?: string) {
+    e?.preventDefault()
     if (listening) return stopListening()
-    const q = text.trim()
+    const q = (forced ?? text).trim()
     if (!q) return toast('Posez votre question à DALIL')
     // Réponse à une question de DALIL : on la joint à la demande précédente.
     const full = context ? `${context} ${q}` : q
@@ -106,7 +139,10 @@ export function Assistant() {
     const it = d.intent as Intent | null
     if (!it) return
     setIntent(it)
-    setTurns((t) => [...t, { q, intent: it }])
+    setSugg([])
+    // Réponse directe : les meilleurs résultats du site s’affichent dans le panneau, sans changer de page.
+    const hits = it.question ? [] : (await hitsFor(it.text || q)).slice(0, 5)
+    setTurns((t) => [...t, { q, intent: it, hits }])
     setPanel(true)
     setText('')
     if (it.question) {
@@ -159,7 +195,7 @@ export function Assistant() {
   if (path === '/recherche') return null
 
   return (
-    <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact ? 'is-compact' : ''} ${tucked && !expanded && !text ? 'is-tucked' : ''}`} aria-hidden={tucked && !expanded && !text ? true : undefined}>
+    <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact || (tucked && !expanded && !text && !panel) ? 'is-compact' : ''}`}>
       <button className="assistant-orb" type="button" aria-label={A.open} onClick={() => setExpanded(!expanded)}>
         <span aria-hidden="true">✦</span>
       </button>
@@ -168,10 +204,6 @@ export function Assistant() {
           <div className="assistant-card assistant-panel" role="dialog" aria-label="Conversation avec DALIL">
             <div className="assistant-panel-head">
               <strong>DALIL</strong>
-              <small>
-                Contexte : {document.title.replace(/ · DALIL$/, '')}
-                {wilaya ? ` · ${wilaya.name}` : ''}
-              </small>
               <button type="button" className="assistant-link" onClick={reset}>
                 Nouvelle demande
               </button>
@@ -186,21 +218,37 @@ export function Assistant() {
                   {t.intent.question ? (
                     <div className="assistant-reply">
                       <p className="assistant-q">{t.intent.question}</p>
-                      {i === turns.length - 1 && <small>Répondez dans la barre, puis envoyez.</small>}
+                      {i === turns.length - 1 && (t.intent.options?.length ? (
+                        <div className="assistant-options">
+                          {t.intent.options.map((o) => (
+                            <button key={o} type="button" className="assistant-option" onClick={() => submit(undefined, o)}>
+                              {o}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <small>Répondez dans la barre, puis envoyez.</small>
+                      ))}
                     </div>
                   ) : (
                     <div className="assistant-reply">
-                      <small>DALIL a compris :</small>
-                      <div className="assistant-chips">
-                        {t.intent.chips.map((c) => (
-                          <span key={c} className="chip">
-                            {c}
-                          </span>
-                        ))}
-                      </div>
+                      <p className="assistant-sentence">{sentence(t.intent)}</p>
+                      {!!t.hits.length && (
+                        <ul className="assistant-hits">
+                          {t.hits.map((h) => (
+                            <li key={h.url}>
+                              <button type="button" onClick={() => go({ ...t.intent, url: h.url })}>
+                                <small>{KIND[h.type] ?? h.type}{h.badge ? ` · ${h.badge}` : ''}</small>
+                                <b>{h.title}</b>
+                                {h.subtitle && <span>{h.subtitle}</span>}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                       <div className="assistant-actions">
                         <button type="button" className="button primary" onClick={() => go(t.intent)}>
-                          Voir les résultats
+                          {t.hits.length ? 'Tous les résultats' : 'Voir les résultats'}
                         </button>
                         {i === turns.length - 1 && (
                           <button
@@ -222,6 +270,28 @@ export function Assistant() {
             </div>
           </div>
         )}
+        {focused && !panel && (sugg.length > 0 || (!text.trim() && !turns.length)) && (
+          <div className="assistant-card assistant-sugg" role="listbox" aria-label="Propositions">
+            {sugg.length ? (
+              sugg.map((h) => (
+                <button key={h.url} type="button" role="option" aria-selected="false" onMouseDown={(e) => e.preventDefault()} onClick={() => router.push(h.url)}>
+                  <small>{KIND[h.type] ?? h.type}</small>
+                  <b>{h.title}</b>
+                  {h.subtitle && <span>{h.subtitle}</span>}
+                </button>
+              ))
+            ) : (
+              <div className="assistant-examples">
+                <small>Exemples :</small>
+                {examples.map((x) => (
+                  <button key={x} type="button" className="assistant-option" onMouseDown={(e) => e.preventDefault()} onClick={() => submit(undefined, x)}>
+                    {x}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         <label className="sr-only" htmlFor="assistant-input">
           Que recherchez-vous ?
         </label>
@@ -234,7 +304,8 @@ export function Assistant() {
           readOnly={busy}
           maxLength={600}
           onChange={(e) => setText(e.target.value)}
-          onFocus={() => turns.length && setPanel(true)}
+          onFocus={() => (setFocused(true), turns.length && setPanel(true))}
+          onBlur={() => setFocused(false)}
           onPointerDown={() => listening && stopListening()}
           placeholder={listening ? A.listening : busy ? A.busy : intent?.question ? A.answer : A.ask}
           autoComplete="off"

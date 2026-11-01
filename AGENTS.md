@@ -13,6 +13,7 @@ Stack : Next.js 16 + Payload CMS 3 + Neon Postgres + Vercel (Blob pour les photo
 5. **Les données vivent dans Neon, pas dans la mémoire des agents.** Les fichiers `AGENTS.md`/`DECISIONS.md` contiennent des règles et des décisions, jamais des fiches, horaires ou statuts.
 6. **Aucune opération destructive en production** sans vérification préalable et possibilité de restauration.
 7. Secrets uniquement dans les variables Vercel, jamais dans le code ni dans ces fichiers.
+8. **Finesse visuelle (règle permanente de Rad).** Le site doit paraître fin, classe, aux bonnes proportions : tout aligné sur une grille, cases petites et élégantes, pictogrammes en couleur, une seule barre de recherche visible à la fois. Toute modification d’interface applique le skill `ui-ux-pro-max` (liste de contrôle avant livraison) et se vérifie à 375 px et à 1440 px.
 
 ## Organisation : un module par métier
 ```

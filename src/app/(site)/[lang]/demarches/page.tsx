@@ -11,6 +11,7 @@ import { RUBRICS } from '@/platform/shell/nav'
 import { Icon } from '@/platform/ui/Icon'
 import { ParallaxBand, SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 import { MicButton } from '@/platform/ui/MicButton'
+import { ThemeRails } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -92,28 +93,13 @@ export default async function Demarches() {
       <XpHero slides={slides} eyebrow="Démarches" title={<>Vos démarches, <em className="hub-accent">sans stress</em>.</>} lead="Quoi faire, quelles pièces préparer, où aller : étape par étape, avec les sources officielles.">
         <form action="/recherche" className="dm-search" role="search">
           <Icon name="search" />
-          <input name="q" type="search" placeholder="Passeport, CCR, registre de commerce…" aria-label="Rechercher une démarche" />
+          <input name="q" type="search" placeholder="Que voulez-vous faire ? Ex. renouveler mon passeport" aria-label="Que voulez-vous faire ?" />
           <MicButton />
+          <button type="submit" className="dm-search-go">Rechercher</button>
         </form>
-        <NearMe text="administration" label="Administrations autour de moi" className="near-me-home" />
+        <ThemeRails themes={themes} lead={<NearMe text="administration" label="Autour de moi" className="theme-chip" />} />
       </XpHero>
 
-      <section className="section">
-        <SectionHead eyebrow="Par thème" title="Que voulez-vous faire ?" text="Choisissez un thème : DALIL liste les démarches qui vous concernent." />
-        <nav className="xp-chips" aria-label="Thèmes">
-          {themes.map((c) => (
-            <Link key={c.key} href={`/demarches/theme/${c.key}`} className="xp-chip">
-              <span className={`dm-cat-icon is-${c.color}`}>
-                <Icon name={c.icon} />
-              </span>
-              <span>
-                {c.label}
-                <small>{c.sub}</small>
-              </span>
-            </Link>
-          ))}
-        </nav>
-      </section>
 
       <section className="section section-tint">
         <SectionHead eyebrow="Démarches phares" title="Les plus demandées, pas à pas." text="Pièces, coûts, délais et guichets, vérifiés sur les sources officielles." />

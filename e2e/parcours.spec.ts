@@ -121,8 +121,8 @@ test.describe('Formulaires @ecriture', () => {
 test.describe('Démarches officielles', () => {
   test('un thème liste ses démarches avec le lien du site officiel', async ({ page }) => {
     await page.goto('/demarches/theme/etat-civil')
-    await expect(page.locator('.op-row').first()).toBeVisible()
-    await expect(page.locator('.op-go').first()).toHaveAttribute('href', /^https:\/\/[a-z0-9.-]+\.dz\//)
+    await expect(page.locator('.tb-row').first()).toBeVisible()
+    await expect(page.locator('.tb-cta.is-online').first()).toHaveAttribute('href', /^https:\/\/[a-z0-9.-]+\.dz\//)
   })
   test('fiche : renouvellement du passeport en ligne', async ({ page }) => {
     await page.goto('/demarches/renouvellement-passeport-a-distance-diaspora')

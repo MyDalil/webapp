@@ -82,7 +82,8 @@ export function toCard(p: Place): PlaceCard {
     sectorTitle: sectorTitle(p.sector),
     place: p.place ?? '',
     status: p.verification ?? 'spotted',
-    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 960, external(p)[0].width) : cityPhoto(p.city)),
+    // Vignette : la vraie photo du lieu, sinon rien (pictogramme de la catégorie) — jamais la photo de la ville.
+    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 960, external(p)[0].width) : ''),
     cover: coverOf(p),
     credit: coverCredit(p)?.text ?? null,
     score: p.score ?? 0,
@@ -102,7 +103,9 @@ const sized = (url: string, w: number, original?: number | null) => {
   const fit = STEPS.filter((x) => x <= w && (!original || x <= original)).pop() ?? 960
   return url.split('?')[0].replace(/\/(\d+)px-/, `/${fit}px-`)
 }
-const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url)
+/** Photos d’événements ou de personnes (réunions, visites officielles, période Covid) : jamais en couverture d’un lieu. */
+const PEOPLE_PHOTO = /secretary|meet_and_greet|employees|families|covid|mask|delegation|ceremony|minister|ministre|president|ambassador|meeting|visit_of|_visits_|conference/i
+const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url && !PEOPLE_PHOTO.test(x.url))
 export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1920, external(p)[0].width) : cityPhoto(p.city))
 /** Crédit de la couverture quand elle vient d’une source libre (obligatoire par la licence). */
 export const coverCredit = (p: Place) => {

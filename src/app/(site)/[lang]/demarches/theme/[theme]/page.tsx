@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from '@/platform/ui/Link'
-import { DEMARCHES, THEMES, listProcedures, themeByKey } from '@/modules/contenus'
-import { ProcedureRows } from '@/modules/contenus/ui'
+import { DEMARCHES, THEMES, listProcedures, themeByKey, topicsOf } from '@/modules/contenus'
+import { ThemeBrowser, type BrowserItem } from '@/modules/contenus/ui'
 import { XpHero } from '@/platform/ui/Xp'
 import { PHOTOS } from '@/platform/referentiel/photos'
 
@@ -26,10 +26,11 @@ export default async function ThemePage({ params }: Props) {
   const items = (await listProcedures(t.key)).sort((a, b) => Number(Boolean(b.online)) - Number(Boolean(a.online)) || a.title.localeCompare(b.title, 'fr'))
   const featured = DEMARCHES.filter((d) => FEATURED[t.key]?.includes(d.slug))
   const photo = PHOTOS[HERO[t.key] ?? 'grande-poste']
+  const themeImg = photo
   return (
     <div className="xp">
       <XpHero compact photo={photo.src} credit={photo.credit} eyebrow="Démarches" title={t.label} lead={t.lead} back={{ href: '/demarches', label: 'Toutes les démarches' }} />
-      <div className="container xp-narrow xp-body">
+      <div className="container xp-body">
         {!!featured.length && (
           <section className="sr-group">
             <h2>Guides complets</h2>
@@ -52,9 +53,16 @@ export default async function ThemePage({ params }: Props) {
           </section>
         )}
         <section className="sr-group">
-          <h2>Toutes les démarches</h2>
-          <p className="section-lead">Les démarches faisables en ligne sont en premier, avec un accès direct au site officiel.</p>
-          {items.length ? <ProcedureRows items={items} /> : <p className="sr-note">Les démarches de ce thème arrivent. En attendant, consultez les sites officiels sur la page Démarches.</p>}
+          {items.length ? (
+            <ThemeBrowser
+              label={t.label}
+              fallback={{ photo: themeImg.src, tone: t.tone }}
+              topics={topicsOf(t.key).map((x) => ({ key: x.key, title: x.title, sub: x.sub, match: x.match.source, photo: (PHOTOS[x.photo as keyof typeof PHOTOS] ?? themeImg).src, tone: x.tone ?? t.tone }))}
+              items={items.map((p): BrowserItem => ({ slug: p.slug, title: p.title, summary: p.summary, online: Boolean(p.online), onlineUrl: p.onlineUrl ?? null, platform: p.platform ?? null, where: p.where ?? null, audience: (p.audience ?? []) as string[] }))}
+            />
+          ) : (
+            <p className="sr-note">Les démarches de ce thème arrivent. En attendant, consultez les sites officiels sur la page Démarches.</p>
+          )}
         </section>
         {t.key === 'consulaire-diaspora' && (
           <p className="sr-note">

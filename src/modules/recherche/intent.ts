@@ -9,7 +9,7 @@ import { LANGUAGES, languageLabel } from '@/platform/referentiel/languages'
  * Compréhension d’une demande faite à la barre « Demandez à DALIL » : on ne fait qu’ouvrir la bonne page pré-remplie,
  * jamais d’action à la place de la personne. Toute valeur proposée par l’IA est revérifiée contre les référentiels.
  */
-export type Intent = { target: 'services' | 'praticiens' | 'annuaire' | 'recherche'; url: string; chips: string[]; question: string | null; text: string }
+export type Intent = { target: 'services' | 'praticiens' | 'annuaire' | 'recherche'; url: string; chips: string[]; question: string | null; text: string; options?: string[] }
 
 const norm = (s: string) =>
   s
@@ -48,14 +48,16 @@ Pages et filtres autorisés :
 - "recherche" (guides, démarches, tout le reste)
 Filtres communs : wilaya (nom), commune (nom), langue ∈ {${LANGUAGES.map((l) => l.value).join(', ')}}, genre ∈ {femme, homme} (seulement si la personne le demande), quand (texte libre court, ex. « samedi matin »).
 
-Réponds uniquement par un objet JSON : {"texte":"…","page":"services|praticiens|annuaire|recherche","filtres":{…},"question":null}`
+Avec une question, donne aussi 2 à 4 réponses courtes possibles dans "options" (ex. ["Primaire","Collège","Lycée"]).
+Réponds uniquement par un objet JSON : {"texte":"…","page":"services|praticiens|annuaire|recherche","filtres":{…},"question":null,"options":[]}`
 
 /** Valide la réponse de l’IA et construit l’adresse de la page pré-remplie. */
 export function intentFrom(raw: unknown, fallbackText: string): Intent {
-  const o = (raw && typeof raw === 'object' ? raw : {}) as { texte?: unknown; page?: unknown; filtres?: Record<string, unknown>; question?: unknown }
+  const o = (raw && typeof raw === 'object' ? raw : {}) as { texte?: unknown; page?: unknown; filtres?: Record<string, unknown>; question?: unknown; options?: unknown }
   const f = o.filtres && typeof o.filtres === 'object' ? o.filtres : {}
   const text = typeof o.texte === 'string' && o.texte.trim() ? o.texte.trim().slice(0, 600) : fallbackText
   const question = typeof o.question === 'string' && o.question.trim() ? o.question.trim().slice(0, 200) : null
+  const options = question && Array.isArray(o.options) ? o.options.filter((x): x is string => typeof x === 'string' && Boolean(x.trim())).slice(0, 4).map((x) => x.trim().slice(0, 40)) : undefined
   const wilaya = findWilaya(f.wilaya)
   const commune = findCommune(f.commune, wilaya?.code)
   const langue = pick(f.langue, LANGUAGES.map((l) => l.value))
@@ -74,21 +76,21 @@ export function intentFrom(raw: unknown, fallbackText: string): Intent {
     const act = ACTIVITIES.find((a) => a.value === f.activite) ?? null
     const cat = act?.category ?? CATEGORIES.find((c) => c.value === f.categorie)?.value ?? null
     if (cat)
-      return { target: 'services', text, question, chips: [act ? activityLabel(act.value) : categoryLabel(cat), ...place, ...extra], url: `/services/${cat}${qs({ activite: act?.value, wilaya: wilayaParam, commune: commune?.id, genre, langue })}` }
+      return { target: 'services', text, question, options, chips: [act ? activityLabel(act.value) : categoryLabel(cat), ...place, ...extra], url: `/services/${cat}${qs({ activite: act?.value, wilaya: wilayaParam, commune: commune?.id, genre, langue })}` }
   }
   if (page === 'praticiens') {
     const spec = SPECIALTIES.find((s) => s.value === f.specialite)?.value ?? null
     const mode = pick(f.mode, ['cabinet', 'visio'] as const)
-    return { target: 'praticiens', text, question, chips: [spec ? specialtyLabel(spec) : 'Praticiens', ...place, ...(mode === 'visio' ? ['En visio'] : []), ...extra], url: `/praticiens${qs({ specialite: spec, wilaya: wilayaParam, mode, langue })}` }
+    return { target: 'praticiens', text, question, options, chips: [spec ? specialtyLabel(spec) : 'Praticiens', ...place, ...(mode === 'visio' ? ['En visio'] : []), ...extra], url: `/praticiens${qs({ specialite: spec, wilaya: wilayaParam, mode, langue })}` }
   }
   if (page === 'annuaire') {
     const sector = SECTORS.find((s) => s.slug === f.secteur) ?? SECTORS.find((s) => s.categories.includes(String(f.categorie ?? '')))
     if (sector) {
       const category = sector.categories.includes(String(f.categorie ?? '')) ? String(f.categorie) : null
-      return { target: 'annuaire', text, question, chips: [category ?? sector.title, ...place], url: `/annuaire/${sector.slug}${qs({ category, ville: commune?.name ?? wilaya?.name })}` }
+      return { target: 'annuaire', text, question, options, chips: [category ?? sector.title, ...place], url: `/annuaire/${sector.slug}${qs({ category, ville: commune?.name ?? wilaya?.name })}` }
     }
   }
-  return { target: 'recherche', text, question, chips: ['Recherche'], url: `/recherche${qs({ q: text })}` }
+  return { target: 'recherche', text, question, options, chips: ['Recherche'], url: `/recherche${qs({ q: text })}` }
 }
 
 /** Sans IA (visiteur sans compte, quota ou plafond atteint) : repérage par mots-clés des activités, spécialités et lieux. */
