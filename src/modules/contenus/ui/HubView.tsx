@@ -38,7 +38,6 @@ export function HubView({ hub }: { hub: Hub }) {
                           <Icon name={iconFor(label)} />
                         </span>
                         <span className="xp-sublink-txt">{label}</span>
-                        <span className="sr-chev" aria-hidden="true">›</span>
                       </Link>
                     ))}
                   </>
