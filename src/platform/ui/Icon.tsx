@@ -261,7 +261,7 @@ export function Icon({ name }: { name: keyof typeof P | string }) {
 }
 
 /** Couleur fixe d’un pictogramme (palette --p1…--p8 de v1.css) : un même sujet garde la même couleur partout. */
-const TONE: Record<string, number> = { pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, sparkle: 6, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 5, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
+const TONE: Record<string, number> = { pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, sparkle: 6, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 3, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
 export function iconTone(name: string): string {
   const n = TONE[name] ?? ([...name].reduce((a, c) => a + c.charCodeAt(0), 0) % 8) + 1
   return `var(--p${n})`

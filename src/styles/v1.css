@@ -326,7 +326,9 @@ html[data-theme="dark"] .sr-icon.is-online { color: #05140d; }
 .city-tile-img.is-icon, .vm-img.is-icon, .dm-card-media:has(.visual-icon), .visual:has(.visual-icon) {
   background: linear-gradient(150deg, color-mix(in srgb, var(--ic, var(--p1)) 92%, #fff 8%), color-mix(in srgb, var(--ic, var(--p1)) 55%, #07140f 45%)) !important;
 }
-.city-tile-img.is-icon.is-annonce { background: linear-gradient(150deg, #d9467f, #9d174d) !important; }
+.city-tile-img.is-icon.is-annonce { background: radial-gradient(120% 90% at 30% 15%, color-mix(in srgb, var(--ic, var(--p5)) 70%, #fff 6%), color-mix(in srgb, var(--ic, var(--p5)) 38%, #07140f 62%)) !important; }
+.city-tile-img.is-annonce .xp-tile-icon { width: 76px; height: 76px; margin-top: -30%; border-radius: 22px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .22); backdrop-filter: blur(6px); }
+.city-tile-img.is-annonce .xp-tile-icon svg { width: 36px; stroke-width: 1.7; }
 
 /* Liens d’action secondaires et « voir plus » : couleur de l’élément. */
 .sr-chev { color: var(--ic, var(--muted)); }
@@ -367,3 +369,15 @@ html[data-theme="dark"] .sr-pill.is-primary .ico-dot { background: rgba(5, 20, 1
 /* Recherche de l’accueil : l’anneau de focus entoure toute la barre, pas le seul champ. */
 .search-bar input:focus, .search-bar input:focus-visible { outline: none; box-shadow: none; }
 .search-bar:focus-within { box-shadow: 0 0 0 3px rgba(56, 209, 129, .45), 0 18px 50px -18px rgba(0, 0, 0, .6); }
+
+/* Tuiles en rangée : titre réservé sur deux lignes, étiquettes et prix alignés d’une carte à l’autre. */
+.top-tile:not(.entry-tile) .city-tile-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+.top-tile:not(.entry-tile) .city-tile-body { grid-template-columns: minmax(0, 1fr); justify-content: stretch; align-content: end; }
+.top-tile:not(.entry-tile) .city-tile-body > .chip { justify-self: start; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top-tile:not(.entry-tile) .city-tile-body > p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.xp-tile-wrap { grid-template-columns: minmax(0, 1fr); min-width: 0; }
+.top-tile, .city-tile-body { min-width: 0; }
+/* Portes de l’accueil : ligne de sous-titre toujours réservée, titres alignés. Tuiles « envies » : titre réservé sur deux lignes. */
+.entry-tile .city-tile-body p { height: calc(2 * 1.271rem); min-height: 0; }
+.envie-tile .city-tile-body h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+.xp-tile-wrap { align-content: start; } .xp-tile-wrap > .xp-tile { width: 100%; max-width: 100%; height: auto; }

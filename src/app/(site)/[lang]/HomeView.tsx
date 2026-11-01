@@ -16,11 +16,14 @@ import { Carousel } from '@/platform/ui/Carousel'
 import { ParallaxBand, SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, iconFor, iconTone } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 import { categoryLabel, count, type Lang } from '@/platform/i18n'
 import { HOME_T, CLASSIFIED_T, GUIDE_T, DESTINATION_DEFAULT, MUSULMANE_T } from './homeText'
+
+/** Pictogramme d’une annonce : celui de sa sous-catégorie (même couleur partout sur le site). */
+const adIcon = (c: { category: string; subLabel: string }) => iconFor(c.subLabel, ({ immobilier: 'home', emploi: 'briefcase', vehicules: 'car' } as Record<string, string>)[c.category] ?? 'tag')
 
 /**
  * Accueil (ordre validé par Rad, 2026-10-21) : Vie musulmane, Services — Santé en tête —, Découvrir,
@@ -355,13 +358,13 @@ export async function HomeView({ lang }: { lang: Lang }) {
             </div>
             <Carousel label={T.latestAds} variant="tiles">
               {latest.map((c, i) => (
-                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
                   {c.photo ? (
                     <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
                   ) : (
                     <div className="city-tile-img is-icon is-annonce">
                       <span className="xp-tile-icon" aria-hidden="true">
-                        <Icon name={({ immobilier: 'home', emploi: 'briefcase', vehicules: 'car' } as Record<string, string>)[c.category] ?? 'grid'} />
+                        <Icon name={adIcon(c)} />
                       </span>
                     </div>
                   )}
