@@ -8,7 +8,7 @@ import { NearMe } from '@/modules/recherche/ui'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { RUBRICS } from '@/platform/shell/nav'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { ParallaxBand, SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 import { MicButton } from '@/platform/ui/MicButton'
 import { ThemeRails } from '@/modules/contenus/ui'
@@ -68,12 +68,12 @@ export default async function Demarches() {
       footer: (
         <>
           <Link href={`/demarches/${d.slug}#guide`} className="sr-pill">
-            Guide gratuit
+            <IconLabel label="Guide gratuit" icon="book" />
           </Link>
           {pack &&
             (open ? (
               <Link href={`/accompagnement/${pack}`} className="sr-pill is-primary" aria-label={`Pack Accompagnement Premium : ${d.short}`}>
-                Se faire accompagner
+                <IconLabel label="Se faire accompagner" icon="users" />
               </Link>
             ) : (
               <SoonButton label="Pack" />

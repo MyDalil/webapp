@@ -7,7 +7,7 @@ import { Choice, Transparency } from '@/modules/accompagnement/ui'
 import { FavoriteButton } from '@/modules/membres/ui'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS } from '@/platform/referentiel/photos'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { Visual } from '@/platform/ui/Visual'
 import { XpHero } from '@/platform/ui/Xp'
 
@@ -87,10 +87,10 @@ export default async function GuidePage({ params }: Props) {
 
       <div className="dm-actions">
         <Link href="/onboarding" className="sr-pill is-primary">
-          Construire mon parcours
+          <IconLabel label="Construire mon parcours" icon="pin" />
         </Link>
         <Link href="/proposer" className="sr-pill">
-          Signaler une information à compléter
+          <IconLabel label="Signaler une information à compléter" icon="clipboard" />
         </Link>
       </div>
 

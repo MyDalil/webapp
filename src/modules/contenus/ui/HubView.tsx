@@ -1,7 +1,7 @@
 import Link from '@/platform/ui/Link'
 import type { Hub } from '../hubs'
 import { PHOTOS } from '@/platform/referentiel/photos'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, iconFor, iconTone } from '@/platform/ui/Icon'
 import { SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 import { MicButton } from '@/platform/ui/MicButton'
 
@@ -33,8 +33,12 @@ export function HubView({ hub }: { hub: Hub }) {
                 footer: c.links ? (
                   <>
                     {c.links.map(([href, label]) => (
-                      <Link key={href + label} href={href} className="sr-pill">
-                        {label}
+                      <Link key={href + label} href={href} className="xp-sublink" style={{ ['--ic' as string]: iconTone(iconFor(label)) }}>
+                        <span className="xp-sublink-ico" aria-hidden="true">
+                          <Icon name={iconFor(label)} />
+                        </span>
+                        <span className="xp-sublink-txt">{label}</span>
+                        <span className="sr-chev" aria-hidden="true">›</span>
                       </Link>
                     ))}
                   </>

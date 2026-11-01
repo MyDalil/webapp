@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import Link from '@/platform/ui/Link'
+import { IconLabel } from '@/platform/ui/Icon'
 
 type Guide = { slug: string; title: string; category: string; summary: string; keywords: string[] }
 type Result = { labels: string[]; criteria: string[]; questions: string[]; results: Guide[]; regulatedWork: boolean }
@@ -248,7 +249,7 @@ export function GuidedSearch({ guides, initialQuery = '', compact = false }: { g
                 textRef.current?.focus()
               }}
             >
-              {ex}
+              <IconLabel label={ex} />
             </button>
           ))}
         </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { MicButton } from '@/platform/ui/MicButton'
 
 export type Rep = { slug: string; name: string; country: string; city: string; kind: string; continent?: string | null; address?: string | null; phone?: string | null; email?: string | null; website?: string | null; jurisdiction?: string | null; onlineServices?: { title: string; url: string }[] | null }
@@ -47,17 +47,17 @@ export function ConsulatFinder({ reps }: { reps: Rep[] }) {
                 <div className="cs-actions">
                   {r.website && (
                     <a className="sr-pill is-primary" href={r.website} target="_blank" rel="noopener noreferrer">
-                      Site officiel ↗
+                      <IconLabel label="Site officiel ↗" icon="globe" />
                     </a>
                   )}
                   {r.phone && (
                     <a className="sr-pill" href={`tel:${r.phone.replace(/[^\d+]/g, '')}`}>
-                      {r.phone}
+                      <IconLabel label={r.phone} icon="phone" />
                     </a>
                   )}
                   {r.email && (
                     <a className="sr-pill" href={`mailto:${r.email}`}>
-                      Email
+                      <IconLabel label="Email" icon="mail" />
                     </a>
                   )}
                 </div>

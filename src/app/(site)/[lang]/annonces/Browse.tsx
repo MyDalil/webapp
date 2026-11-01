@@ -1,4 +1,4 @@
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import Link from '@/platform/ui/Link'
 import { CATEGORIES, DEALS, category, classifiedCounts, searchClassifieds, type ClassifiedCard, type SearchQuery } from '@/modules/annonces'
 import { WILAYAS } from '@/platform/referentiel/catalog'
@@ -128,7 +128,7 @@ export async function Browse({ q, fixedCategory }: { q: SearchQuery; fixedCatego
           <div className="activity-chips">
             {current.subs.map(([v, l]) => (
               <Link key={v} className={`chip ${q.type === v ? '' : 'chip-plain'}`} href={`/annonces/${current.value}?type=${v}${q.wilaya ? `&wilaya=${q.wilaya}` : ''}`}>
-                {l}
+                <IconLabel label={l} />
               </Link>
             ))}
           </div>
