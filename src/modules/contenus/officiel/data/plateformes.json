@@ -1,0 +1,195 @@
+{
+ "plateformes": [
+  {
+   "slug": "dzair-digital-services",
+   "nom": "Dzair Digital Services (portail unique de l’État)",
+   "url": "https://dzds.dz/",
+   "organisme": "Premier ministère",
+   "services": [
+    "Actes d’état civil",
+    "Attestations fiscales",
+    "Attestations CNAS et CASNOS",
+    "Allocation chômage",
+    "Factures Sonelgaz",
+    "Apostille"
+   ],
+   "sources": [
+    {
+     "url": "https://www.aps.dz/fr/algerie/education-et-technologie/mrfcgg84-amorce-d-une-nouvelle-ere-de-services-publics-plus-integres-et-plus-performants",
+     "titre": "APS — Portail national des services numériques",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.algerie360.com/dzair-digital-services-documents-en-ligne/",
+     "titre": "Algérie360 — Dzair Digital Services",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "guichet-electronique-interieur",
+   "nom": "Guichet électronique du ministère de l’Intérieur",
+   "url": "https://prestations.interieur.gov.dz/guichet/",
+   "organisme": "Ministère de l’Intérieur",
+   "services": [
+    "Rectification des actes d’état civil",
+    "Aides au logement (LPA, LPL, rural)",
+    "Activités réglementées",
+    "Équipements sensibles"
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/equipements-sensibles/",
+     "titre": "Ministère de l’Intérieur — Équipements sensibles (lien vers le guichet)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "etat-civil-en-ligne",
+   "nom": "État civil en ligne (Intérieur)",
+   "url": "https://etatcivil.interieur.gov.dz/ActeNaissance/",
+   "organisme": "Ministère de l’Intérieur",
+   "services": [
+    "Acte de naissance",
+    "Acte de mariage"
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/13/acte-de-naissance/",
+     "titre": "Ministère de l’Intérieur — Acte de naissance",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "anae",
+   "nom": "ANAE — Agence nationale de l'auto-entrepreneur",
+   "url": "https://anae.dz/fr/",
+   "organisme": "ANAE, sous tutelle du ministre chargé de l'économie de la connaissance, des startups et des micro-entreprises",
+   "services": [
+    "Inscription au registre national et carte d'auto-entrepreneur (https://anae.dz/user/ae/register)",
+    "Liste officielle des activités éligibles, 110 activités en 8 domaines (https://activities.anae.dz/)",
+    "Statut de micro-importateur : licence générale, prédéclaration des marchandises (https://anae.dz/micro-importer/guide)",
+    "Annuaire public des auto-entrepreneurs",
+    "Proposition d'une nouvelle activité"
+   ],
+   "sources": [
+    {
+     "url": "https://anae.dz/fr/",
+     "titre": "ANAE — Accueil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://activities.anae.dz/",
+     "titre": "ANAE — Liste des activités",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://anae.dz/micro-importer/guide",
+     "titre": "ANAE — Guide de la micro-importation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "startup-dz",
+   "nom": "Startup.dz",
+   "url": "https://startup.dz/",
+   "organisme": "Ministère chargé de l'économie de la connaissance et des startups",
+   "services": [
+    "Label Startup — demande et renouvellement (https://startup.dz/label-startup/)",
+    "Label Projet innovant (https://startup.dz/label-projet/)",
+    "Label Incubateur (https://startup.dz/label-incubateur/)",
+    "Label Scale-up (https://startup.dz/demander-le-label-scale-up/)",
+    "Mise à jour des informations des startups labellisées",
+    "Accès à l'Algerian Startup Fund (financement en fonds propres) et au réseau Algeria Venture"
+   ],
+   "sources": [
+    {
+     "url": "https://startup.dz/",
+     "titre": "Startup.dz — Accueil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://startup.dz/pour-les-startups/",
+     "titre": "Startup.dz — Pour les startups",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "cnas-el-hanaa",
+   "nom": "Espace El Hanaa (CNAS)",
+   "url": "https://elhanaa.cnas.dz/",
+   "organisme": "Caisse nationale des assurances sociales des travailleurs salariés (CNAS)",
+   "services": [
+    "Compte assuré : historique des remboursements, informations de l'assuré et des ayants droit, notifications",
+    "Attestation de non-affiliation (https://elhanaa.cnas.dz/attestation_no_affiliation.xhtml)",
+    "Application Android EL HANAA Mobile"
+   ],
+   "sources": [
+    {
+     "url": "https://elhanaa.cnas.dz/",
+     "titre": "CNAS — Espace El Hanaa",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://elhanaa.cnas.dz/attestation_no_affiliation.xhtml",
+     "titre": "CNAS El Hanaa — Attestation de non affiliation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "mae-services-algeriens",
+   "nom": "Services aux Algériens — ministère des Affaires étrangères",
+   "url": "https://www.mfa.gov.dz/fr/services-for-algerians",
+   "organisme": "Ministère des Affaires étrangères",
+   "services": [
+    "État civil",
+    "Légalisation des documents et orientation vers l'apostille (https://www.mfa.gov.dz/fr/services-for-algerians/legalisation-of-documents-1)",
+    "Service T@SDIK — légalisation par la poste (https://www.mfa.gov.dz/fr/services-for-algerians/service-tsdik)",
+    "Passeport d'urgence",
+    "Certificat de radiation et certificat de changement de résidence (https://www.mfa.gov.dz/fr/services-for-algerians/certificate-of-change-of-residence-and-de-registration)",
+    "Prise de rendez-vous en ligne",
+    "Permanences consulaires",
+    "Affaires sociales et juridiques"
+   ],
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians",
+     "titre": "MAE — Services aux Algériens",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "services-interieur",
+   "nom": "Services en ligne du ministère de l'Intérieur",
+   "url": "https://services.interieur.gov.dz/en/",
+   "organisme": "Ministère de l'Intérieur, des Collectivités locales et de l'Aménagement du territoire",
+   "services": [
+    "Actes d'état civil : naissance, mariage, décès",
+    "Prise de rendez-vous",
+    "Annuaire des communes (« Ma commune ») et monographie des wilayas",
+    "Demande de CNIBE pour les titulaires d'un passeport biométrique",
+    "Suivi des demandes de CNIBE, passeport et permis de conduire biométrique",
+    "Permis de conduire pour les Algériens établis à l'étranger",
+    "Extrait de naissance spécial 12-S pour les Algériens de l'étranger",
+    "Dépôt en ligne de dossiers (plus de 60 démarches selon le ministère)",
+    "Inscription des associations communales et comités de quartier",
+    "Lecture électronique des données de la CNIBE",
+    "Requêtes et réclamations",
+    "Applications mobiles : Allô-Chorta, Ndif, indicateurs socio-économiques, authentification des actes d'état civil"
+   ],
+   "sources": [
+    {
+     "url": "https://services.interieur.gov.dz/en/",
+     "titre": "Ministère de l'Intérieur — Services en ligne",
+     "consulte": "2026-11-01"
+    }
+   ]
+  }
+ ]
+}

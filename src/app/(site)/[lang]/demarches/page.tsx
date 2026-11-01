@@ -1,15 +1,17 @@
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { searchPlaces } from '@/modules/annuaire'
-import { DEMARCHES, DEMARCHE_CATEGORIES, GUIDE_VISUALS, OFFICIAL_SITES, OFFICIAL_SITES_CHECKED } from '@/modules/contenus'
+import { DEMARCHES, GUIDE_VISUALS, OFFICIAL_SITES, OFFICIAL_SITES_CHECKED, THEMES, listPlatforms, themesWithContent } from '@/modules/contenus'
 import { offerState, packsByGuide } from '@/modules/accompagnement'
 import { SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
 import { NearMe } from '@/modules/recherche/ui'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { RUBRICS } from '@/platform/shell/nav'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { ParallaxBand, SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
+import { MicButton } from '@/platform/ui/MicButton'
+import { ThemeRails } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie · DALIL',
@@ -48,6 +50,9 @@ export default async function Demarches() {
     }),
   )
   const packs = await packsByGuide()
+  const [platforms, filled] = await Promise.all([listPlatforms(), themesWithContent()])
+  // Thèmes avec des démarches ; tant que la base est vide, tous les thèmes restent visibles (pages d’attente).
+  const themes = filled.size ? THEMES.filter((t) => filled.has(t.key)) : THEMES
   const open = (await offerState()).mode === 'ouvert'
 
   const slides = (['grande-poste', 'passeport', 'ferry', 'alger-mer'] as PhotoKey[]).map((k) => ({ src: PHOTOS[k].src, title: PHOTOS[k].alt, place: 'Démarches', href: '/demarches', credit: PHOTOS[k].credit }))
@@ -63,12 +68,12 @@ export default async function Demarches() {
       footer: (
         <>
           <Link href={`/demarches/${d.slug}#guide`} className="sr-pill">
-            Guide gratuit
+            <IconLabel label="Guide gratuit" icon="book" />
           </Link>
           {pack &&
             (open ? (
               <Link href={`/accompagnement/${pack}`} className="sr-pill is-primary" aria-label={`Pack Accompagnement Premium : ${d.short}`}>
-                Se faire accompagner
+                <IconLabel label="Se faire accompagner" icon="users" />
               </Link>
             ) : (
               <SoonButton label="Pack" />
@@ -88,30 +93,16 @@ export default async function Demarches() {
       <XpHero slides={slides} eyebrow="Démarches" title={<>Vos démarches, <em className="hub-accent">sans stress</em>.</>} lead="Quoi faire, quelles pièces préparer, où aller : étape par étape, avec les sources officielles.">
         <form action="/recherche" className="dm-search" role="search">
           <Icon name="search" />
-          <input name="q" type="search" placeholder="Passeport, CCR, registre de commerce…" aria-label="Rechercher une démarche" />
+          <input name="q" type="search" placeholder="Que voulez-vous faire ? Ex. renouveler mon passeport" aria-label="Que voulez-vous faire ?" />
+          <MicButton />
+          <button type="submit" className="dm-search-go">Rechercher</button>
         </form>
-        <NearMe text="administration" label="Administrations autour de moi" className="near-me-home" />
+        <ThemeRails themes={themes} lead={<NearMe text="administration" label="Autour de moi" className="theme-chip" />} />
       </XpHero>
 
-      <section className="section">
-        <SectionHead eyebrow="Par thème" title="Que voulez-vous faire ?" />
-        <nav className="xp-chips" aria-label="Thèmes">
-          {DEMARCHE_CATEGORIES.map((c) => (
-            <Link key={c.key} href={c.href} className="xp-chip">
-              <span className={`dm-cat-icon is-${c.color}`}>
-                <Icon name={c.icon} />
-              </span>
-              <span>
-                {c.label}
-                <small>{c.sub}</small>
-              </span>
-            </Link>
-          ))}
-        </nav>
-      </section>
 
       <section className="section section-tint">
-        <SectionHead eyebrow="Démarches phares" title="Les plus demandées, pas à pas." />
+        <SectionHead eyebrow="Démarches phares" title="Les plus demandées, pas à pas." text="Pièces, coûts, délais et guichets, vérifiés sur les sources officielles." />
         <TileCarousel label="Démarches phares" tiles={phares} />
         {packs.size > 0 && (
           <div className="container xp-narrow">
@@ -120,7 +111,7 @@ export default async function Demarches() {
         )}
       </section>
 
-      <ParallaxBand photo={band.src} credit={band.credit} eyebrow="Comment DALIL vous aide" title="Moins d’allers-retours, plus de clarté.">
+      <ParallaxBand photo={band.src} credit={band.credit} eyebrow="Comment DALIL vous aide" title="Moins d’allers-retours, plus de clarté." text="Trois étapes pour préparer votre dossier sans perdre de temps.">
         <ol className="xp-steps">
           {HELP.map((h, i) => (
             <li key={h.title}>
@@ -133,7 +124,7 @@ export default async function Demarches() {
       </ParallaxBand>
 
       <section className="section">
-        <SectionHead eyebrow="Les essentiels" title="Les bons interlocuteurs." />
+        <SectionHead eyebrow="Les essentiels" title="Les bons interlocuteurs." text="Mairies, daïras, consulats et services publics : à qui s’adresser." />
         <TileCarousel label="Les essentiels" tiles={essentials} />
       </section>
 
@@ -141,6 +132,7 @@ export default async function Demarches() {
         <SectionHead
           eyebrow="Guides pratiques"
           title="Tout préparer, sujet par sujet."
+          text="Logement, école, santé, travail : un guide par sujet."
           action={
             <Link className="button outline" href="/guides">
               Tous les guides
@@ -151,12 +143,21 @@ export default async function Demarches() {
       </section>
 
       <section className="section container xp-narrow">
+        <Link href="/demarches/consulats" className="op-band">
+          <span className="dm-cat-icon is-sable" aria-hidden="true">
+            <Icon name="building" />
+          </span>
+          <span>
+            <b>Ambassades et consulats d’Algérie</b>
+            <small>Le poste qui couvre votre ville : adresse, contacts, site officiel et services en ligne.</small>
+          </span>
+          <span className="sr-chev" aria-hidden="true">›</span>
+        </Link>
         <div className="sr-group">
-          <h2>
-            Sites officiels <small>· relevés le {new Date(OFFICIAL_SITES_CHECKED).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
-          </h2>
+          <h2>Faire ses démarches en ligne</h2>
+          <p className="section-lead">Les sites officiels de l’État, gratuits. Relevés le {new Date(platforms[0]?.sources?.[0]?.checked ?? OFFICIAL_SITES_CHECKED).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
           <ul className="sr-list">
-            {OFFICIAL_SITES.map((s) => (
+            {(platforms.length ? platforms.map((p) => ({ need: p.name, what: (p.services ?? []).map((x) => x.text).slice(0, 6).join(', ') || p.organisme || '', site: p.organisme ?? p.url.replace(/^https?:\/\//, '').replace(/\/.*$/, ''), url: p.url, source: p.sources?.[0]?.title ?? '' })) : OFFICIAL_SITES).map((s) => (
               <li key={s.need}>
                 <a href={s.url} target="_blank" rel="noopener noreferrer" className="sr-row is-wrap" title={`Source de l’adresse : ${s.source}`}>
                   <span className="sr-icon" aria-hidden="true">

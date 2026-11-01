@@ -88,11 +88,13 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
       </section>
 
       <section className="section container">
-        <p className="praticiens-count">
-          {results.length} praticien{results.length > 1 ? 's' : ''}
-          {q.specialite ? ` · ${specialtyLabel(q.specialite)}` : ''}
-          {wilaya ? ` · ${wilaya}` : ''}
-        </p>
+        {results.length > 0 && (
+          <p className="praticiens-count">
+            {results.length} praticien{results.length > 1 ? 's' : ''}
+            {q.specialite ? ` · ${specialtyLabel(q.specialite)}` : ''}
+            {wilaya ? ` · ${wilaya}` : ''}
+          </p>
+        )}
         {results.length ? (
           <ul className="praticien-list">
             {results.map((p) => (

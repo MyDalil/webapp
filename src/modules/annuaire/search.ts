@@ -20,7 +20,7 @@ export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow
     title: p.name,
     subtitle: [p.category, latinCity(p.city)].filter(Boolean).join(' · '),
     wilaya: p.wilaya ?? null,
-    badge: STATUS[p.verification ?? 'spotted'] ?? null,
+    badge: p.verification === 'verified' || p.verification === 'labelled' ? STATUS[p.verification] : null,
     boost: (BOOST[p.verification ?? ''] ?? 0) + (p.favorite ? 0.2 : 0),
     lat: typeof p.lat === 'number' ? p.lat : null,
     lng: typeof p.lng === 'number' ? p.lng : null,

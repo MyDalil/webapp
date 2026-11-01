@@ -12,6 +12,7 @@ import { NavIcon } from './NavIcon'
 import { QuickFind } from './QuickFind'
 import { WilayaPicker } from './WilayaPicker'
 import { readWilaya, setWilaya, wilayaByCode } from './wilaya'
+import { MicButton } from '../ui/MicButton'
 
 type Slide = { photo: string; place: string; href: string; credit: string | null }
 type Menu = null | Rubric['key'] | 'language' | 'wilaya'
@@ -23,6 +24,12 @@ const LANGS = [
 ]
 
 /** Menu latéral (maquette « Menu — mobile » validée par Rad, 2026-10-31) : couleur, pictogramme et résumé de chaque rubrique. */
+/** Une couleur vive par entrée du méga-menu (lisible sur fond clair et sombre). */
+const ENTRY_TONES = ['#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#db2777', '#0891b2', '#ca8a04', '#dc2626', '#0d9488', '#4f46e5']
+
+/** Couleur des pictogrammes du méga-menu (ordinateur) : couleur de la rubrique, lisible sur fond clair et sombre. */
+const ICON_TONE: Record<Rubric['key'], string> = { musulmane: '#0F9D58', services: '#2F6BFF', decouvrir: '#EA580C', demarches: '#7C3AED', annonces: '#DB2777', vivre: '#CA8A04', plus: '#0F9D58' }
+
 const SHEET: Record<Rubric['key'], { color: string; ink?: string; icon: string }> = {
   musulmane: { color: '#0F7A4A', icon: 'M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5' },
   services: { color: '#1A56DB', icon: 'M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11ZM8 12h2l1-2 2 4 1-2h2' },
@@ -193,11 +200,11 @@ export function Header() {
                   <path d="m4 6 4 4 4-4" />
                 </svg>
               </button>
-                <div key={r.key} id={`mega-${r.key}`} className="mega2" data-menu={r.key} hidden={menu !== r.key} role="region" aria-label={r.label}>
+                <div key={r.key} id={`mega-${r.key}`} className="mega2" data-menu={r.key} hidden={menu !== r.key} role="region" aria-label={r.label} style={{ ['--rc' as string]: ICON_TONE[r.key] }}>
                   <div className="mega2-inner">
                     <ul className="mega2-grid">
-                      {r.entries.map(([href, icon, title, sub]) => (
-                        <li key={title}>
+                      {r.entries.map(([href, icon, title, sub], i) => (
+                        <li key={title} style={{ ['--rc' as string]: ENTRY_TONES[(RUBRICS.indexOf(r) * 2 + i) % ENTRY_TONES.length] }}>
                           <Link className="mega2-entry" href={href} onClick={() => setMenu(null)}>
                             <span className="mega2-ico">
                               <NavIcon name={icon} />
@@ -252,10 +259,12 @@ export function Header() {
           </button>
           {who ? (
             <Link className="login-button" href={who}>
+              <svg className="login-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
               {t.mySpace}
             </Link>
           ) : (
             <Link className="login-button" href="/connexion">
+              <svg className="login-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
               {t.connexion}
             </Link>
           )}
@@ -321,6 +330,7 @@ export function Header() {
                     {t.searchDalil}
                   </label>
                   <input id="nav-sheet-q" name="q" type="search" placeholder={t.searchDalil} enterKeyHint="search" autoComplete="off" />
+                  <MicButton />
                 </form>
                 <WilayaPicker lang={lang} inline open={mobile && menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
               </div>

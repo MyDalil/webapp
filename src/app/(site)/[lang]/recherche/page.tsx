@@ -8,7 +8,7 @@ import { PlaceRow } from '@/modules/annuaire/ui'
 import { NearMe } from '@/modules/recherche/ui'
 import { Icon } from '@/platform/ui/Icon'
 
-const ICON: Record<string, string> = { adresse: 'pin', praticien: 'health', prestataire: 'briefcase', annonce: 'grid', guide: 'file', categorie: 'list', rubrique: 'grid' }
+const ICON: Record<string, string> = { adresse: 'pin', praticien: 'health', prestataire: 'briefcase', annonce: 'grid', guide: 'file', demarche: 'file', consulat: 'building', categorie: 'list', rubrique: 'grid' }
 const distance = (d: number) => (d < 1 ? `${Math.max(50, Math.round(d * 20) * 50)} m` : `${d.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} km`)
 
 export const metadata: Metadata = { title: 'Que cherchez-vous en Algérie ?', robots: { index: false } }
@@ -104,7 +104,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         <b>{h.title}</b>
                         <small>
                           {h.subtitle}
-                          {h.badge && <em className={h.badge === 'Exemple' || h.badge === 'Démo' ? 'is-example' : ''}> · {h.badge}</em>}
+                          {h.badge && !/^(À vérifier|En vérification)$/.test(h.badge) && <em className={h.badge === 'Exemple' || h.badge === 'Démo' ? 'is-example' : ''}> · {h.badge}</em>}
                         </small>
                       </span>
                       {h.distanceKm != null && <span className="sr-dist">{distance(h.distanceKm)}</span>}

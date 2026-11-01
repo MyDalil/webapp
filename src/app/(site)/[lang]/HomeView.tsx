@@ -16,11 +16,14 @@ import { Carousel } from '@/platform/ui/Carousel'
 import { ParallaxBand, SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, iconFor, iconTone } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { RUBRICS } from '@/platform/shell/nav'
 import { categoryLabel, count, type Lang } from '@/platform/i18n'
 import { HOME_T, CLASSIFIED_T, GUIDE_T, DESTINATION_DEFAULT, MUSULMANE_T } from './homeText'
+
+/** Pictogramme d’une annonce : celui de sa sous-catégorie (même couleur partout sur le site). */
+const adIcon = (c: { category: string; subLabel: string }) => iconFor(c.subLabel, ({ immobilier: 'home', emploi: 'briefcase', vehicules: 'car' } as Record<string, string>)[c.category] ?? 'tag')
 
 /**
  * Accueil (ordre validé par Rad, 2026-10-21) : Vie musulmane, Services — Santé en tête —, Découvrir,
@@ -167,6 +170,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.rubricsEyebrow}</p>
               <h2>{T.rubricsTitle}</h2>
+              <p className="section-lead">{T.rubricsLead}</p>
             </div>
           </div>
         </div>
@@ -180,6 +184,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               <div>
                 <p className="eyebrow">{T.musulmaneEyebrow}</p>
                 <h2>{T.musulmaneTitle}</h2>
+                <p className="section-lead">{T.musulmaneLead}</p>
               </div>
             </div>
           </div>
@@ -199,7 +204,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
 
       {/* Santé et À domicile en carrousels photo (Rad, 2026-10-31) : grandes tuiles regroupées, photos sans visage. */}
       <section className="section">
-        <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} />
+        <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} text={T.santeLead} />
         <TileCarousel
           label={T.santeEyebrow}
           tiles={[
@@ -211,7 +216,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
       </section>
 
       <section className="section section-tint">
-        <SectionHead eyebrow={T.domicileEyebrow} title={T.domicileTitle} />
+        <SectionHead eyebrow={T.domicileEyebrow} title={T.domicileTitle} text={T.domicileLead} />
         <TileCarousel
           label={T.domicileEyebrow}
           tiles={[
@@ -229,6 +234,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.decouvrirEyebrow}</p>
               <h2>{T.decouvrirTitle}</h2>
+              <p className="section-lead">{T.decouvrirLead}</p>
             </div>
           </div>
         </div>
@@ -312,6 +318,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.demarchesEyebrow}</p>
               <h2>{T.demarchesTitle}</h2>
+              <p className="section-lead">{T.demarchesLead}</p>
             </div>
           </div>
         </div>
@@ -351,13 +358,13 @@ export async function HomeView({ lang }: { lang: Lang }) {
             </div>
             <Carousel label={T.latestAds} variant="tiles">
               {latest.map((c, i) => (
-                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6 }}>
+                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
                   {c.photo ? (
                     <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
                   ) : (
                     <div className="city-tile-img is-icon is-annonce">
                       <span className="xp-tile-icon" aria-hidden="true">
-                        <Icon name={({ immobilier: 'home', emploi: 'briefcase', vehicules: 'car' } as Record<string, string>)[c.category] ?? 'grid'} />
+                        <Icon name={adIcon(c)} />
                       </span>
                     </div>
                   )}
@@ -381,6 +388,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.vivreEyebrow}</p>
               <h2>{T.vivreTitle}</h2>
+              <p className="section-lead">{T.vivreLead}</p>
             </div>
           </div>
         </div>

@@ -13,6 +13,7 @@ Stack : Next.js 16 + Payload CMS 3 + Neon Postgres + Vercel (Blob pour les photo
 5. **Les données vivent dans Neon, pas dans la mémoire des agents.** Les fichiers `AGENTS.md`/`DECISIONS.md` contiennent des règles et des décisions, jamais des fiches, horaires ou statuts.
 6. **Aucune opération destructive en production** sans vérification préalable et possibilité de restauration.
 7. Secrets uniquement dans les variables Vercel, jamais dans le code ni dans ces fichiers.
+8. **Finesse visuelle (règle permanente de Rad).** Le site doit paraître fin, classe, aux bonnes proportions : tout aligné sur une grille, cases petites et élégantes, pictogrammes en couleur, une seule barre de recherche visible à la fois. Toute modification d’interface applique le skill `ui-ux-pro-max` (liste de contrôle avant livraison) et se vérifie à 375 px et à 1440 px.
 
 ## Organisation : un module par métier
 ```
@@ -37,6 +38,7 @@ src/
     index.ts          porte serveur
     ui.ts             porte des composants publics
     collections.ts    porte des données (schéma Payload)
+  rubriques/        mémoire et garde-fous par rubrique du menu et par catégorie (AGENTS.md, DECISIONS.md, SOURCES.md) — voir src/rubriques/AGENTS.md
   styles/           legacy.css (prototype, scopé .legacy) → mockup.css (maquette, prioritaire) → site.css (raccords)
   migrations/       historique du schéma, jamais modifié après coup
 ```
@@ -50,6 +52,7 @@ Les métiers communiquent par leurs portes et par les hooks Payload (événement
 
 ## Avant de travailler
 1. Identifier le module propriétaire de la demande, lire son `AGENTS.md` et son `DECISIONS.md`.
+   Pour un contenu (fiche, démarche, page de rubrique) : lire aussi `src/rubriques/<rubrique>/<catégorie>/AGENTS.md`.
 2. Lister les modules concernés et les dépendances à résoudre d’abord.
 3. Après le travail : `pnpm check` (frontières + types), `pnpm test`, `pnpm build`, `pnpm test:e2e`, test sur preview.
 4. Consigner toute décision durable dans le `DECISIONS.md` du module (date, décision, raison).
@@ -102,3 +105,13 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - `pnpm dev` / `pnpm build` (Postgres dans `.env`), `pnpm check` (frontières + types), `pnpm test` (Vitest), `pnpm test:e2e` (Playwright, après `pnpm build`).
 - Base neuve : `pnpm payload migrate && pnpm migrate:data`.
 - Schéma modifié → `pnpm payload migrate:create <nom>` puis commit ; migrations appliquées au build Vercel (`vercel-build`) et au démarrage (`prodMigrations`).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

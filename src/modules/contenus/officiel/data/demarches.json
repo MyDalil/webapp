@@ -1,0 +1,3069 @@
+{
+ "demarches": [
+  {
+   "slug": "renouvellement-passeport-a-distance-diaspora",
+   "titre": "Renouveler son passeport biométrique en ligne depuis l’étranger",
+   "categorie": "identite",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Les Algériens établis à l’étranger renouvellent leur passeport biométrique en ligne, sans se déplacer pour déposer le dossier.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://biometric-documents.interieur.gov.dz/",
+    "plateforme": "Renouvellement du passeport en ligne (Intérieur)"
+   },
+   "etapes": [
+    "Vérifiez que votre passeport est expiré ou expire dans les 6 prochains mois : seuls ces passeports sont concernés pour l’instant.",
+    "Créez votre espace personnel sur la plateforme, ou connectez-vous.",
+    "Téléversez la page d’information du passeport à renouveler.",
+    "Remplissez le formulaire : poste consulaire, adresse, téléphone.",
+    "Téléversez les autres pièces, vérifiez, puis confirmez la demande.",
+    "Le poste consulaire contrôle le dossier ; vous recevez un email de confirmation.",
+    "Payez, puis téléversez la preuve de paiement dans votre espace.",
+    "Après validation du paiement, le reçu de dépôt est disponible dans votre espace. Suivez la fabrication en ligne jusqu’au retrait."
+   ],
+   "pieces": [
+    "Page d’information du passeport à renouveler",
+    "Acte de naissance spécial 12S",
+    "Photo d’identité récente aux normes (fond clair uni, visage dégagé)",
+    "Justificatif de résidence ou d’adresse"
+   ],
+   "cout": "Selon l’âge et le type de passeport (barème légal en vigueur)",
+   "ou": "En ligne ; retrait au poste consulaire choisi",
+   "sources": [
+    {
+     "url": "https://biometric-documents.interieur.gov.dz/home",
+     "titre": "Ministère de l’Intérieur — plateforme de renouvellement du passeport",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://interieur.gov.dz/2026/06/24/le-ministre-de-linterieur-des-collectivites-locales-et-des-transports-supervise-le-lancement-officiel-du-service-de-renouvellement-a-distance-du-passeport-biometrique-destine-aux-membres-de/",
+     "titre": "Ministère de l’Intérieur — lancement du service (24 juin 2026)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "passeport-biometrique-algerie",
+   "titre": "Demander un passeport biométrique en Algérie",
+   "categorie": "identite",
+   "public": [
+    "residents"
+   ],
+   "resume": "Première demande ou renouvellement du passeport biométrique pour une personne qui réside en Algérie.",
+   "ou": "N’importe quelle commune de votre wilaya de résidence. En cas de refus, recours auprès de la daïra.",
+   "pieces": [
+    "Formulaire de demande rempli et signé (par le tuteur légal pour un mineur)",
+    "Certificat de nationalité, si votre carte d’identité biométrique n’a pas été établie avec ce certificat",
+    "Certificat de résidence, si vous n’avez pas de document biométrique ou si vous avez déménagé (pas exigé avant 19 ans)",
+    "Attestation de travail, de non-activité ou certificat de scolarité",
+    "Deux photos d’identité couleur récentes, identiques, sur fond blanc uni",
+    "Quittance fiscale selon le type de document et de procédure",
+    "Copie de la carte de groupe sanguin"
+   ],
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande de passeport",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/formulaire-demande-passeport.pdf"
+    },
+    {
+     "titre": "Annexe tuteur légal (mineurs)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/formulaire_Annexes-tuteur-legal.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 14-03 du 24 février 2014 relative aux titres et documents de voyage",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2014/F2014003.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 23-179 du 27 avril 2023 (remise et destruction du passeport)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2023/F2023031.pdf"
+    },
+    {
+     "titre": "Arrêté interministériel du 23 avril 2015 (pièces du dossier)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2015/F2015024.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/03/17/passeport-national/",
+     "titre": "Ministère de l’Intérieur — Passeport",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "passeport-urgence",
+   "titre": "Obtenir un passeport en urgence",
+   "categorie": "identite",
+   "public": [
+    "residents"
+   ],
+   "resume": "Procédure accélérée pour un passeport quand un départ urgent est justifié.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande (passeport et CNI biométriques)",
+     "url": "https://www.interieur.gov.dz/PublishingFiles/formulaire_Bio1.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/11/19/passeport-durgence/",
+     "titre": "Ministère de l’Intérieur — Passeport d’urgence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "carte-nationale-identite-biometrique",
+   "titre": "Demander la carte nationale d’identité biométrique",
+   "categorie": "identite",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Première demande ou renouvellement de la carte nationale d’identité biométrique électronique.",
+   "ou": "Une commune de votre wilaya de résidence ; le consulat pour les Algériens établis à l’étranger.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande (passeport et CNI biométriques)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2023/10/formulaire_Bio1.pdf"
+    },
+    {
+     "titre": "Formulaire CNI pour les titulaires d’un passeport biométrique",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2023/10/formulaire_Demande_CNIBE_30-08-2016.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret présidentiel n° 17-143 du 18 avril 2017 (carte nationale d’identité)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2017/F2017025.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 10-210 du 16 septembre 2010 (numéro d’identification national)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2010/F2010054.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/10/19/la-carte-nationale-didentite-3/",
+     "titre": "Ministère de l’Intérieur — La carte nationale d’identité",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "permis-de-conduire",
+   "titre": "Obtenir ou renouveler son permis de conduire",
+   "categorie": "vehicules-permis",
+   "public": [
+    "residents"
+   ],
+   "resume": "Dossier du permis de conduire (première demande, renouvellement, conversion) et âges minimums par catégorie.",
+   "ou": "La commune de votre lieu de résidence.",
+   "etapes": [
+    "Âge minimum : 16 ans (A1, F), 18 ans (A, B), 25 ans (C1, C2, D, E).",
+    "Réussir l’examen : l’examinateur remet un certificat d’aptitude provisoire.",
+    "Déposer le dossier à la commune."
+   ],
+   "pieces": [
+    "Formulaire de demande rempli et signé",
+    "Fiche de résidence en cours de validité",
+    "Certificat médical selon le modèle officiel",
+    "Deux photos d’identité (avec lunettes si besoin)",
+    "Copie de la carte de groupe sanguin",
+    "Certificat d’aptitude provisoire de l’examinateur",
+    "Timbre fiscal de 1 000 DA (permis classique) ou quittance de 1 000 DA (permis biométrique)"
+   ],
+   "cout": "1 000 DA (timbre ou quittance)",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande de permis de conduire",
+     "url": "https://www.interieur.gov.dz/images/Permis-conduire.pdf"
+    },
+    {
+     "titre": "Modèle de certificat médical",
+     "url": "https://www.interieur.gov.dz/images/001/model_du_certificat_mdical.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 01-14 du 19 août 2001 (circulation routière)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2001/F2001046.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 04-381 du 28 novembre 2004 (règles de circulation)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2004/F2004076.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/03/17/permis-de-conduire/",
+     "titre": "Ministère de l’Intérieur — Permis de conduire",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "immatriculation-vehicule",
+   "titre": "Immatriculer un véhicule (carte grise)",
+   "categorie": "vehicules-permis",
+   "public": [
+    "residents"
+   ],
+   "resume": "Immatriculation d’un véhicule neuf ou d’occasion et changement de propriétaire.",
+   "cout": "Droit de timbre fiscal",
+   "formulaires": [
+    {
+     "titre": "Déclaration de vente",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2023/10/acte-de-vente-sans-duree.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 23-317 du 6 septembre 2023 (fichier national d’immatriculation)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2023/F2023060.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 23-74 du 20 février 2023 (véhicules d’occasion importés)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2023/F2023011.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/03/17/carte-dimmatriculation-des-vehicules/",
+     "titre": "Ministère de l’Intérieur — Immatriculation de véhicules",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-fiche-residence",
+   "titre": "Obtenir un certificat ou une fiche de résidence",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Le certificat de résidence sert seulement aux dossiers de CNI, de passeport ou de création de parti. La fiche de résidence sert aux autres dossiers.",
+   "ou": "La commune de votre lieu de résidence.",
+   "pieces": [
+    "Une seule de ces pièces : deux derniers reçus de loyer, contrat de location ou arrêté d’attribution, dernière facture Sonelgaz ou d’eau, décision de logement de fonction, copie du titre de propriété, certificat d’hébergement"
+   ],
+   "formulaires": [
+    {
+     "titre": "Déclaration d’hébergement",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/declaration_hebergement.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Arrêté du 4 septembre 1988 (certificats de résidence et d’hébergement)",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/1988/F1988039.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/03/17/documents-de-residence/",
+     "titre": "Ministère de l’Intérieur — Documents de résidence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "sortie-mineur-etranger",
+   "titre": "Faire voyager un mineur à l’étranger",
+   "categorie": "voyage-circulation",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Documents exigés à la frontière pour un mineur de moins de 19 ans, avec un parent, seul, avec un tiers ou en kafala.",
+   "pieces": [
+    "Avec un parent : passeport valide du mineur et livret de famille (ou copie conforme)",
+    "Seul ou avec un tiers majeur : autorisation du tuteur légal, légalisée au commissariat, à la commune ou au consulat",
+    "En kafala : passeport du mineur, acte de kafala (juge ou notaire) et sa copie, laissée à la police"
+   ],
+   "etapes": [
+    "Une décision de justice peut interdire la sortie du mineur : elle est alors signalée à la police aux frontières."
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 15-12 du 15 juillet 2015 relative à la protection de l’enfant",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2015/F2015039.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/03/13/sortie-des-mineurs-a-letranger/",
+     "titre": "Ministère de l’Intérieur — Sortie des mineurs à l’étranger",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "permis-inhumation",
+   "titre": "Obtenir un permis d’inhumation",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Autorisation d’inhumer un défunt dans le cimetière d’une commune.",
+   "ou": "Le président de l’APC (mairie). La demande est faite par la famille.",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 16-77 du 24 février 2016 (inhumation, transport de corps, exhumation)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2016/F2016012.pdf"
+    },
+    {
+     "titre": "Ordonnance n° 75-79 du 15 décembre 1975 relative aux sépultures",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/1975/F1975103.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/08/demande-de-permis-dinhumation-des-defunts-algeriens-2/",
+     "titre": "Ministère de l’Intérieur — Permis d’inhumation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "transfert-corps-defunt",
+   "titre": "Transférer le corps d’un défunt vers une autre wilaya",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Autorisation de transporter un défunt vers une wilaya autre que celle du décès.",
+   "ou": "La commune (APC) du lieu de décès.",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 16-77 du 24 février 2016",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2016/F2016012.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/10/19/demande-de-transfert-de-corps-dune-personne-decedee/",
+     "titre": "Ministère de l’Intérieur — Transfert de corps",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "exhumation-reinhumation",
+   "titre": "Demander une exhumation en vue d’une ré-inhumation",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Autorisation de déplacer une sépulture. Elle peut être accordée quelle que soit la cause du décès après trois ans révolus.",
+   "ou": "La wilaya.",
+   "delai": "Possible quelle que soit la cause du décès après 3 ans révolus",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 16-77 du 24 février 2016",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2016/F2016012.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/10/19/demande-de-permis-dinhumation-des-defunts-algeriens/",
+     "titre": "Ministère de l’Intérieur — Exhumation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "apostille-documents",
+   "titre": "Faire apostiller un document public",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "L’apostille authentifie un document public algérien pour l’utiliser dans un pays signataire de la Convention de La Haye.",
+   "delai": "3 à 5 jours",
+   "formulaires": [
+    {
+     "titre": "Guide de l’apostille 2026 (Intérieur)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2026/07/Guide_Apostile_2026.pdf"
+    },
+    {
+     "titre": "Convention de La Haye (texte)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2026/07/lahai.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2026/07/07/contenu-informationnel-relatif-au-dispositif-dapostille-destine-aux-citoyens/",
+     "titre": "Ministère de l’Intérieur — Apostille",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "actes-etat-civil-commune",
+   "titre": "Obtenir un acte d’état civil (naissance, mariage, décès, livret, fiche familiale)",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Les actes d’état civil se demandent dans n’importe quelle commune du pays, ou en ligne pour certains actes.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://etatcivil.interieur.gov.dz/ActeNaissance/",
+    "plateforme": "État civil en ligne (Intérieur)"
+   },
+   "ou": "Le service d’état civil de n’importe quelle commune ou annexe administrative.",
+   "formulaires": [
+    {
+     "titre": "Demande de rendez-vous pour contracter mariage (arabe)",
+     "url": "https://www.interieur.gov.dz/images/pdf/etat_civile/Demande_prise_rendez-vous_mariage_ar.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Ordonnance n° 70-20 du 19 février 1970 relative à l’état civil",
+     "url": "https://www.joradp.dz/Jo6283/1970/021/Fp233.pdf"
+    },
+    {
+     "titre": "Loi n° 17-03 du 10 janvier 2017 (état civil)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2017/F2017002.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/etat-civil/",
+     "titre": "Ministère de l’Intérieur — État civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "acte-naissance-en-ligne",
+   "titre": "Demander un acte de naissance en ligne",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Copie ou extrait d’acte de naissance demandé sur le service en ligne du ministère de l’Intérieur.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://etatcivil.interieur.gov.dz/ActeNaissance/",
+    "plateforme": "État civil en ligne (Intérieur)"
+   },
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/13/acte-de-naissance/",
+     "titre": "Ministère de l’Intérieur — Acte de naissance",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "acte-mariage-en-ligne",
+   "titre": "Demander un acte de mariage en ligne",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Copie ou extrait d’acte de mariage demandé sur le service en ligne du ministère de l’Intérieur.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://etatcivil.interieur.gov.dz/ActeMariage/",
+    "plateforme": "État civil en ligne (Intérieur)"
+   },
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/12/acte-de-mariage/",
+     "titre": "Ministère de l’Intérieur — Acte de mariage",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "declaration-deces",
+   "titre": "Déclarer un décès",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Le décès est déclaré à l’état civil pour établir l’acte de décès.",
+   "ou": "La commune où le décès a eu lieu.",
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/11/acte-de-deces/",
+     "titre": "Ministère de l’Intérieur — Acte de décès",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "correction-acte-etat-civil",
+   "titre": "Faire corriger une erreur sur un acte d’état civil",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Rectification des erreurs de saisie sur un acte de naissance, de mariage ou de décès.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande de rectification (arabe)",
+     "url": "https://www.interieur.gov.dz/images/pdf/etat_civile/formulaire_demande__correction_ar.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/10/correction-des-actes-detat-civil/",
+     "titre": "Ministère de l’Intérieur — Correction des actes",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "livret-de-famille",
+   "titre": "Obtenir le livret de famille ou un duplicata",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Délivrance du livret de famille après le mariage, et duplicata en cas de perte.",
+   "ou": "Le service d’état civil de la commune.",
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/09/le-livret-de-famille/",
+     "titre": "Ministère de l’Intérieur — Le livret de famille",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "fiche-familiale-etat-civil",
+   "titre": "Obtenir une fiche familiale d’état civil",
+   "categorie": "etat-civil",
+   "public": [
+    "residents"
+   ],
+   "resume": "Document qui récapitule la composition de la famille, demandé dans de nombreux dossiers.",
+   "ou": "Le service d’état civil de la commune.",
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/10/19/la-fiche-familiale-de-letat-civil/",
+     "titre": "Ministère de l’Intérieur — Fiche familiale",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "mariage-mixte",
+   "titre": "Se marier avec un étranger en Algérie (mariage mixte)",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "etrangers"
+   ],
+   "resume": "Dossier d’autorisation pour un mariage entre un Algérien et un étranger célébré en Algérie.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande (mariage mixte)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/mariage-mixte.pdf"
+    },
+    {
+     "titre": "Formulaire d’hébergement (arabe-français)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/FORMULAIRE-DHBERGEMENT-AR-FR-7.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 08-11 du 25 juin 2008 (entrée, séjour et circulation des étrangers)",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2008/F2008036.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/mariage-mixte/",
+     "titre": "Ministère de l’Intérieur — Mariage mixte",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "commerce-non-sedentaire",
+   "titre": "Exercer un commerce non sédentaire (ambulant, marchés)",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "entreprises"
+   ],
+   "resume": "Conditions pour vendre sur les marchés ou de façon ambulante.",
+   "textes": [
+    {
+     "titre": "Loi n° 04-08 du 14 août 2004 (activités commerciales)",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/2004/F2004052.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 13-140 du 10 avril 2013 (activités non sédentaires)",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/2013/F2013021.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/commerce-non-sedentaire-2/",
+     "titre": "Ministère de l’Intérieur — Commerce non sédentaire",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "ecrivain-public",
+   "titre": "Exercer la profession d’écrivain public",
+   "categorie": "entreprise",
+   "public": [
+    "residents"
+   ],
+   "resume": "Autorisation pour exercer comme écrivain public.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "formulaires": [
+    {
+     "titre": "Circulaire n° 42 du 18 septembre 1970",
+     "url": "https://interieur.gov.dz/demarches-administratives/Circulaire%20n%C2%B0%2042%20du%2018%20septembre%201970.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/profession-decrivain-public/",
+     "titre": "Ministère de l’Intérieur — Écrivain public",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "confection-cachets",
+   "titre": "Ouvrir une activité de confection de cachets et griffes",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Autorisation obligatoire pour fabriquer des cachets et des griffes de signature.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande d’autorisation",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/FORMULAIRE-CONFECTION-DE-CACHETS-ET-DE-GRIFFES-DE-SIGNATURE.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 96-427 du 30 novembre 1996",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/1996/F1996074.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 22-248 du 30 juin 2022",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2022/F2022047.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/activite-de-confection-de-cachets-et-de-griffes-de-signature/",
+     "titre": "Ministère de l’Intérieur — Cachets et griffes",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "confection-embleme-national",
+   "titre": "Ouvrir une activité de confection de l’emblème national",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Autorisation pour fabriquer le drapeau national.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande d’autorisation",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/FORMULAIRE-CONFECTION-DE-LEMBLEME-NATIONAL.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 22-249 du 30 juin 2022",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2022/F2022047.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/activite-de-confection-de-lembleme-national/",
+     "titre": "Ministère de l’Intérieur — Emblème national",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "plaques-immatriculation-agrement",
+   "titre": "Fabriquer et poser des plaques d’immatriculation",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Agrément de la wilaya pour fabriquer et installer des plaques d’immatriculation.",
+   "delai": "15 jours au plus pour l’examen du dossier par la wilaya",
+   "ou": "La wilaya.",
+   "formulaires": [
+    {
+     "titre": "Modèle d’agrément",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2023/12/modele-agrement.pdf"
+    },
+    {
+     "titre": "Modèle d’autorisation",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2023/12/modele-autorisation.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 21-48 du 19 janvier 2021",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2021/F2021007.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/18/fabrication-et-installation-des-plaques-dimmatriculation/",
+     "titre": "Ministère de l’Intérieur — Plaques d’immatriculation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "gardiennage-transport-fonds",
+   "titre": "Autorisation de gardiennage et de transport de fonds",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Autorisations pour les sociétés de gardiennage et de transport de fonds ou de produits sensibles.",
+   "ou": "Direction de la réglementation de la wilaya, ou en ligne sur le guichet électronique.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "textes": [
+    {
+     "titre": "Décret législatif n° 93-16 du 4 décembre 1993",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/1993/F1993080.pdf"
+    },
+    {
+     "titre": "Décret exécutif n° 94-65 du 19 mars 1994",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/1994/F1994016.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/procedures-dobtention-des-autorisations-liees-aux-activites-de-gardiennage-de-transport-de-fonds-et-produits-sensibles/",
+     "titre": "Ministère de l’Intérieur — Gardiennage et transport de fonds",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "equipements-sensibles",
+   "titre": "Acquérir ou exploiter des équipements sensibles",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Agrément pour les activités liées aux équipements sensibles (télécommunications, sécurité).",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "formulaires": [
+    {
+     "titre": "Annexe 1 — demande d’agrément",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/Annexe1_FR_Dmde__Agrment.pdf"
+    },
+    {
+     "titre": "Annexe 2 — engagement",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/Annexe2_FR_ENGAGEMENT.pdf"
+    },
+    {
+     "titre": "Annexe 3 — notice de renseignements",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/Annexe3_FR_NOTICE_DE_RENSEIGNEMENTS-1.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 09-410 du 10 décembre 2009",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/2009/F2009073.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/equipements-sensibles/",
+     "titre": "Ministère de l’Intérieur — Équipements sensibles",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "creer-association",
+   "titre": "Créer une association",
+   "categorie": "associations",
+   "public": [
+    "residents"
+   ],
+   "resume": "Constitution, statuts et déclaration d’une association.",
+   "textes": [
+    {
+     "titre": "Loi n° 12-06 du 12 janvier 2012 relative aux associations",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/2012/F2012002.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/12/procedure-de-creation-dassociation/",
+     "titre": "Ministère de l’Intérieur — Création d’association",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "association-communale-comite-quartier",
+   "titre": "Créer une association communale ou un comité de quartier",
+   "categorie": "associations",
+   "public": [
+    "residents"
+   ],
+   "resume": "Procédure simplifiée pour les associations caritatives communales et les comités de quartier ou de village.",
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2020/11/16/facilitations-au-profit-des-porteurs-dinitiatives-afin-de-creer-des-associations-communales-a-but-caritatif-et-des-comites-de-quartiers-et-de-villages/",
+     "titre": "Ministère de l’Intérieur — Associations communales",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "suivi-activites-associations",
+   "titre": "Obligations d’une association (suivi, rapports)",
+   "categorie": "associations",
+   "public": [
+    "residents"
+   ],
+   "resume": "Ce qu’une association doit déclarer chaque année, et les cas de suspension.",
+   "textes": [
+    {
+     "titre": "Loi n° 12-06 du 12 janvier 2012",
+     "url": "https://www.joradp.dz/FTP/JO-FRANCAIS/2012/F2012002.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2023/12/13/suivie-des-activites-des-associations/",
+     "titre": "Ministère de l’Intérieur — Suivi des associations",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "agrement-bureau-etudes-amenagement",
+   "titre": "Agrément d’un bureau d’études en aménagement du territoire",
+   "categorie": "logement-urbanisme",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Agrément obligatoire pour les bureaux d’études en aménagement du territoire.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/Formulaire-de-demande.pdf"
+    },
+    {
+     "titre": "Cahier des charges",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/cahier-des-charges.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/la-procedure-dagrement-des-bureaux-detudes-en-amenagement-du-territoire/",
+     "titre": "Ministère de l’Intérieur — Agrément bureaux d’études",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "logement-lpa",
+   "titre": "Demander l’aide au logement promotionnel aidé (LPA)",
+   "categorie": "logement-urbanisme",
+   "public": [
+    "residents"
+   ],
+   "resume": "Aide de l’État pour acheter un logement LPA, selon le revenu du ménage.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "cout": "Aide de 700 000 DA si le revenu du ménage ne dépasse pas 4 fois le SNMG (barème de la fiche officielle)",
+   "formulaires": [
+    {
+     "titre": "Demande d’aide à l’accession à la propriété (LPA)",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2025/01/Dmde_Aide_AccesProprit_LPA.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/01/19/programme-lpa-nouvelle-formule/",
+     "titre": "Ministère de l’Intérieur — Programme LPA",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "logement-public-locatif",
+   "titre": "Demander un logement public locatif (LPL)",
+   "categorie": "logement-urbanisme",
+   "public": [
+    "residents"
+   ],
+   "resume": "Logement social en location pour les ménages aux revenus modestes.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "pieces": [
+    "Conditions citées : revenu du ménage de 24 000 DA au plus, et 5 ans de résidence dans la commune"
+   ],
+   "formulaires": [
+    {
+     "titre": "Demande de logement public locatif",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2025/01/Demande_Type_Logement_LPL.pdf"
+    },
+    {
+     "titre": "Déclaration sur l’honneur",
+     "url": "https://www.interieur.gov.dz/images/pdf/logement/DeclarationHon_LPL_AR_FR.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/01/19/logement-public-locatif-lpl/",
+     "titre": "Ministère de l’Intérieur — Logement public locatif",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "logement-rural",
+   "titre": "Demander l’aide à la construction d’un logement rural",
+   "categorie": "logement-urbanisme",
+   "public": [
+    "residents"
+   ],
+   "resume": "Aide financière de l’État pour construire un logement en zone rurale.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://prestations.interieur.gov.dz/guichet/",
+    "plateforme": "Guichet électronique (Intérieur)"
+   },
+   "cout": "Aide de 1 000 000 DA dans les 10 wilayas du Sud (montant indiqué par la fiche officielle)",
+   "formulaires": [
+    {
+     "titre": "Demande d’aide pour un logement rural",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2025/01/Demande_logement_rural.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2025/01/15/logement-rural/",
+     "titre": "Ministère de l’Intérieur — Logement rural",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "visa-regularisation",
+   "titre": "Demander un visa de régularisation",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Pour un étranger entré en Algérie sans le visa adapté à son séjour.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de visa de régularisation",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/FORMULAIRE_VISA_REGULARISATION.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 08-11 du 25 juin 2008",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2008/F2008036.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/visa-de-regularisation/",
+     "titre": "Ministère de l’Intérieur — Visa de régularisation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "prolongation-visa-sejour",
+   "titre": "Prolonger un visa ou un séjour en Algérie",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Demande de prolongation pour rester plus longtemps que la durée du visa.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de prolongation de visa",
+     "url": "https://www.interieur.gov.dz/images/Facilitations_administratives/FORMULAIRE_prolongation_de_visa.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 08-11 du 25 juin 2008",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2008/F2008036.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/prolongation-de-visa-ou-de-sejour-sur-le-territoire-national/",
+     "titre": "Ministère de l’Intérieur — Prolongation de visa",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "carte-resident-etranger",
+   "titre": "Demander la carte de résident étranger",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Titre de séjour pour un étranger qui s’installe en Algérie.",
+   "cout": "Timbre fiscal fixé par le code du timbre",
+   "formulaires": [
+    {
+     "titre": "Formulaire de carte de résident",
+     "url": "https://interieur.gov.dz/wp-content/uploads/2024/02/FORMULAIRE-CARTE-DE-RESIDENT-FR.2docx.pdf"
+    }
+   ],
+   "textes": [
+    {
+     "titre": "Loi n° 08-11 du 25 juin 2008",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2008/F2008036.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/carte-de-resident-etranger/",
+     "titre": "Ministère de l’Intérieur — Carte de résident étranger",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "carte-commercant-etranger",
+   "titre": "Demander la carte de commerçant étranger",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Carte professionnelle obligatoire pour un étranger qui exerce une activité commerciale.",
+   "cout": "Timbre fiscal fixé par le code du timbre",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 06-454 du 11 décembre 2006",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2006/F2006080.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/carte-professionnelle-carte-de-commercant-etranger/",
+     "titre": "Ministère de l’Intérieur — Carte de commerçant étranger",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "transfert-corps-etranger",
+   "titre": "Rapatrier le corps d’un ressortissant étranger",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Autorisation de transférer hors d’Algérie le corps d’un étranger décédé.",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 16-77 du 24 février 2016",
+     "url": "https://www.joradp.dz/FTP/jo-francais/2016/F2016012.pdf"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://interieur.gov.dz/2024/02/29/transfert-de-corps-dun-ressortissant-etranger/",
+     "titre": "Ministère de l’Intérieur — Transfert de corps d’un étranger",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "cni-biometrique-depuis-l-etranger",
+   "titre": "Obtenir la carte nationale d'identité biométrique depuis l'étranger",
+   "categorie": "identite",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un Algérien immatriculé au consulat et titulaire d'un passeport biométrique fait la demande de CNI biométrique en ligne. Il retire la carte au consulat.",
+   "en_ligne": {
+    "possible": true
+   },
+   "etapes": [
+    "Remplir la demande en ligne sur le portail du ministère de l'Intérieur.",
+    "Dès 12 ans, aller au consulat pour la prise d'empreintes. Sans rendez-vous à Milan.",
+    "Retirer la carte au consulat avec une pièce d'identité.",
+    "Remettre l'ancienne CNI, valide ou expirée. Sans cela, le consulat ne remet pas la nouvelle carte."
+   ],
+   "pieces": [
+    "Carte d'immatriculation consulaire valide.",
+    "Formulaire de renouvellement rempli et signé (liste du consulat de Milan).",
+    "Deux photos d'identité récentes (Milan) ou trois photos identiques (Washington).",
+    "Acte de naissance 12S (Milan).",
+    "Ancienne CNI."
+   ],
+   "cout": "Gratuit selon l'ambassade à Washington. Les autres pages consultées n'indiquent pas de coût.",
+   "ou": "Consulat de rattachement (immatriculation).",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/the-national-identity-card",
+     "titre": "Consulat d'Algérie à Nanterre — Carte nationale d'identité",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cgmilan.mfa.gov.dz/consular-services/the-national-identity-card",
+     "titre": "Consulat général d'Algérie à Milan — Carte nationale d'identité",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embwashington.mfa.gov.dz/consular-services/biometric-documents-1",
+     "titre": "Ambassade d'Algérie à Washington — Documents biométriques",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "passeport-biometrique-premiere-demande-etranger",
+   "titre": "Demander un premier passeport biométrique depuis l'étranger",
+   "categorie": "identite",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le demandeur dépose lui-même son dossier au consulat. Le passeport est fabriqué en Algérie. Il vaut 10 ans pour un adulte et 5 ans pour un mineur.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Obtenir l'acte de naissance 12S. Né à l'étranger : demander au consulat du lieu de naissance, après transcription de l'acte. Né en Algérie : demander à la commune de naissance ou en ligne.",
+    "Remplir, dater et signer le formulaire de demande.",
+    "Déposer le dossier en personne au consulat, du mardi au samedi (Nanterre).",
+    "Payer les droits de chancellerie.",
+    "Attendre le SMS du consulat. Suivre la disponibilité sur le service en ligne du consulat.",
+    "Retirer le passeport avec le récépissé de dépôt et l'ancien passeport. Le consulat rend l'acte 12S avec le NIN imprimé."
+   ],
+   "pieces": [
+    "Carte d'immatriculation consulaire valide (original et copie).",
+    "Formulaire de demande rempli, daté et signé.",
+    "Acte de naissance 12S (original et copie).",
+    "Extrait d'acte de mariage ou de jugement de divorce, si besoin.",
+    "Déclaration écrite du groupe sanguin, ou document qui le prouve.",
+    "Titre de séjour, ou carte d'identité française pour les binationaux.",
+    "Attestation de travail (personne en activité) ou certificat de scolarité (étudiant).",
+    "Justificatif de domicile, ou attestation d'hébergement légalisée en mairie.",
+    "Quatre photos d'identité numériques récentes et identiques.",
+    "Photocopie de l'ancien passeport.",
+    "Mineur : annexe du formulaire signée par le tuteur légal et autorisation du père ou du tuteur (Washington)."
+   ],
+   "cout": "En France (Nanterre) : 60 € pour un adulte, 30 € pour un étudiant ou un mineur. Aux États-Unis (Washington) : 75 $ (28 pages) ou 112,50 $ (48 pages) pour un adulte ; moitié prix pour un mineur ou un étudiant. Passeport non retiré et détruit : droit doublé pour la nouvelle demande, sauf force majeure.",
+   "delai": "Au moins 6 semaines entre la prise d'empreintes et la remise (Washington). Un passeport non retiré est détruit 6 mois après la notification.",
+   "ou": "Consulat de rattachement. Présence obligatoire dès 12 ans, au dépôt et au retrait.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/passport-first-issuance",
+     "titre": "Consulat d'Algérie à Nanterre — Première délivrance de passeport",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embwashington.mfa.gov.dz/consular-services/biometric-documents-1",
+     "titre": "Ambassade d'Algérie à Washington — Documents biométriques",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "passeport-biometrique-renouvellement-etranger",
+   "titre": "Renouveler son passeport biométrique au consulat",
+   "categorie": "identite",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le titulaire d'un passeport expiré, ou qui expire dans 6 mois, dépose une demande de renouvellement au consulat de rattachement.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Réunir les pièces et remplir le formulaire.",
+    "Déposer la demande en personne au consulat. Le consulat prend les photos et les empreintes.",
+    "Payer les droits.",
+    "Retirer le passeport au consulat. Certaines ambassades acceptent l'envoi postal (Washington, enveloppe prépayée)."
+   ],
+   "pieces": [
+    "Passeport expiré (original et copie).",
+    "Carte d'immatriculation consulaire valide.",
+    "Formulaire rempli et signé (par le tuteur légal pour un mineur).",
+    "Acte 12S original, si le passeport expiré ne vient pas de ce consulat (Londres).",
+    "Preuve de séjour légal dans le pays de résidence.",
+    "Quatre photos conformes (Londres) ou trois photos (Washington).",
+    "Attestation de travail ou certificat de scolarité.",
+    "Justificatif de domicile.",
+    "Passeport perdu, volé ou abîmé : déclaration de perte, et pénalité de 125 $ aux États-Unis."
+   ],
+   "cout": "Londres : 55 £, ou 27,50 £ pour un étudiant ou un mineur de moins de 19 ans (espèces). Washington : 75 $ ou 112,50 $ selon le nombre de pages ; moitié prix pour mineur ou étudiant.",
+   "delai": "Au moins 6 semaines (Washington).",
+   "ou": "Consulat de rattachement.",
+   "sources": [
+    {
+     "url": "https://cglondon.mfa.gov.dz/en/consular-services/passport-renewal",
+     "titre": "Consulat général d'Algérie à Londres — Renouvellement de passeport",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embwashington.mfa.gov.dz/consular-services/biometric-documents-1",
+     "titre": "Ambassade d'Algérie à Washington — Documents biométriques",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "declaration-perte-document-algerien-etranger",
+   "titre": "Déclarer la perte ou le vol d'un document algérien à l'étranger",
+   "categorie": "identite",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "La perte ou le vol d'un document algérien se déclare au consulat. Le demandeur vient en personne.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Déclarer la perte ou le vol à la police du pays de résidence.",
+    "Aller au consulat avec cette déclaration et une pièce d'identité algérienne."
+   ],
+   "pieces": [
+    "Pièce d'identité prouvant la nationalité algérienne.",
+    "Déclaration de perte ou de vol faite à la police locale."
+   ],
+   "ou": "Consulat de rattachement.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/declaration-of-loss",
+     "titre": "Consulat d'Algérie à Nanterre — Déclaration de perte",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "passeport-urgence-diaspora-en-algerie",
+   "titre": "Obtenir un passeport d'urgence pendant un séjour en Algérie",
+   "categorie": "voyage-circulation",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un Algérien immatriculé à l'étranger, en séjour en Algérie, avec un passeport perdu, volé, abîmé ou expiré, demande un passeport d'urgence pour rentrer dans son pays de résidence.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Payer le droit de timbre aux services des impôts.",
+    "Remplir le formulaire de passeport d'urgence.",
+    "Déposer le dossier au ministère des Affaires étrangères. Pour un mineur, le tuteur légal dépose la demande."
+   ],
+   "pieces": [
+    "Formulaire de demande rempli.",
+    "Passeport expiré, ou déclaration de perte, de vol ou de détérioration.",
+    "Deux photos d'identité sur fond blanc.",
+    "Preuve du paiement du droit de timbre.",
+    "Copie de la carte de séjour à l'étranger.",
+    "Tuteur absent : autorisation écrite légalisée. Jugement étranger de tutelle : exequatur algérien obligatoire."
+   ],
+   "cout": "6 000 DA pour un adulte, 3 000 DA pour un mineur.",
+   "ou": "Ministère des Affaires étrangères, 93 Plateau des Anassers, Kouba, Alger (guichet exact non précisé).",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/delivery-of-an-emergency-passport",
+     "titre": "MAE — Délivrance d'un passeport d'urgence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "laissez-passer-consulaire",
+   "titre": "Obtenir un laissez-passer consulaire pour rentrer en Algérie",
+   "categorie": "voyage-circulation",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un Algérien non immatriculé qui a perdu son passeport ou se l'est fait voler obtient un titre exceptionnel. Il vaut pour un seul voyage vers l'Algérie, par la route la plus directe.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Déclarer la perte ou le vol au commissariat le plus proche.",
+    "Obtenir la déclaration de perte ou de vol au consulat.",
+    "Déposer la demande au consulat au moins 72 heures avant le départ."
+   ],
+   "pieces": [
+    "Déclaration de perte ou de vol du consulat.",
+    "Preuve de nationalité : copie du passeport, CNI algérienne ou livret militaire avec photo.",
+    "Trois photos d'identité récentes, de face, 3,5 x 4,5 cm.",
+    "Titre de transport."
+   ],
+   "delai": "Dépôt au moins 72 heures avant le départ.",
+   "ou": "Consulat le plus proche.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/social-legal-affairs/consular-pass",
+     "titre": "Consulat d'Algérie à Nanterre — Laissez-passer consulaire",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "autorisation-parentale-voyage-mineur",
+   "titre": "Établir une autorisation de voyage pour un enfant mineur",
+   "categorie": "voyage-circulation",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un enfant qui voyage sans ses parents ou son tuteur légal a besoin d'une autorisation. Le père ou le tuteur légal la demande au consulat. Elle vaut 3 mois.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Télécharger et remplir le formulaire.",
+    "Aller au consulat avec le père ou le tuteur légal et les pièces."
+   ],
+   "pieces": [
+    "Pièce d'identité algérienne du père ou du tuteur légal.",
+    "Livret de famille ou copie intégrale de l'acte de naissance de l'enfant.",
+    "Enfant né à l'étranger : extrait de l'acte de naissance transcrit."
+   ],
+   "delai": "Validité : 3 mois à partir de la délivrance.",
+   "ou": "Consulat de rattachement.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/parental-authorization",
+     "titre": "Consulat d'Algérie à Nanterre — Autorisation parentale",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "acte-naissance-12s",
+   "titre": "Obtenir l'acte de naissance spécial 12S",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "L'acte 12S est obligatoire pour le passeport biométrique. Il est délivré une seule fois. Le lieu de naissance fixe le service compétent.",
+   "en_ligne": {
+    "possible": true
+   },
+   "etapes": [
+    "Né en Algérie : demander l'acte à la commune de naissance, ou en ligne sur la plateforme 12S du ministère de l'Intérieur.",
+    "Né à l'étranger, acte déjà transcrit : demander au consulat qui couvre le lieu de naissance.",
+    "Né à l'étranger, acte non transcrit : faire d'abord la transcription, puis la demande.",
+    "Le consulat transmet la demande par le ministère des Affaires étrangères au poste compétent si besoin."
+   ],
+   "pieces": [
+    "Formulaire de demande 12S rempli en arabe et en français (né à l'étranger).",
+    "Carte d'immatriculation consulaire.",
+    "Livret de famille (né aux États-Unis, page de Washington).",
+    "Copie de la pièce d'identité du demandeur ou du tuteur.",
+    "Acte non transcrit : acte de naissance original et fiche descriptive."
+   ],
+   "ou": "Commune de naissance (né en Algérie) ; consulat du lieu de naissance (né à l'étranger).",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://embwashington.mfa.gov.dz/consular-services/12s-birth-certificate",
+     "titre": "Ambassade d'Algérie à Washington — Acte de naissance 12S",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/passport-first-issuance",
+     "titre": "Consulat d'Algérie à Nanterre — Première délivrance de passeport",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "extraits-actes-etat-civil-consulat",
+   "titre": "Demander un extrait d'acte de naissance, de mariage ou de décès au consulat",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le service d'état civil du consulat délivre des fiches familiales et des extraits d'actes établis en Algérie ou par un poste consulaire. Il traduit aussi en français les actes rédigés en arabe.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Préparer le livret de famille et une pièce d'identité algérienne.",
+    "Faire la demande au service d'état civil du consulat."
+   ],
+   "pieces": [
+    "Livret de famille.",
+    "Pièce d'identité algérienne (aussi pour une traduction)."
+   ],
+   "ou": "Service d'état civil du consulat.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/extracts-of-civil-registration",
+     "titre": "Consulat d'Algérie à Nanterre — Extraits d'actes d'état civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "copie-acte-etabli-a-l-etranger-en-algerie",
+   "titre": "Obtenir en Algérie la copie d'un acte établi à l'étranger",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Un Algérien né ou marié à l'étranger, ou un parent au premier degré d'une personne décédée à l'étranger, obtient une copie de l'acte en Algérie.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Aller au service de l'état civil du ministère des Affaires étrangères, ou au service d'état civil d'une commune.",
+    "Présenter une pièce d'identité et/ou le livret de famille."
+   ],
+   "pieces": [
+    "Pièce d'identité et/ou livret de famille."
+   ],
+   "ou": "Service de l'état civil du MAE (Kouba, Alger) ou toute commune du territoire national.",
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/civil-status-1",
+     "titre": "MAE — État civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "transcription-acte-naissance-etranger",
+   "titre": "Faire transcrire un acte de naissance établi à l'étranger",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "La transcription est obligatoire avant toute demande de carte consulaire, de passeport, de CNI ou de 12S. Seule une personne de nationalité algérienne établie peut être transcrite.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Identifier le consulat compétent : celui du lieu de naissance, pas celui du domicile.",
+    "Déposer le dossier au consulat, ou au service d'état civil du MAE en Algérie, qui le transmet au poste compétent.",
+    "Parent naturalisé avec changement d'état civil : obtenir d'abord une ordonnance du tribunal de Sidi M'Hamed (Alger)."
+   ],
+   "pieces": [
+    "Deux copies intégrales de l'acte de naissance, originaux de moins de 3 mois (Lyon) ou de moins d'un an (MAE).",
+    "Livret de famille.",
+    "Pièce d'identité algérienne ou certificat de nationalité. À défaut : actes de naissance du père et du grand-père nés en Algérie.",
+    "Mère algérienne et père étranger : actes de naissance de la mère, du grand-père et de l'arrière-grand-père maternels (MAE).",
+    "Nationalité acquise par décret : copie du décret de naturalisation.",
+    "Mineur : pièce d'identité algérienne d'un parent. L'enfant n'a pas besoin de venir."
+   ],
+   "ou": "Consulat du lieu de naissance, ou service d'état civil du MAE.",
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/fr/consular-services/civil-status-1/ranscription-of-civil-records",
+     "titre": "Consulat général d'Algérie à Lyon — Transcription des actes de l'état civil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/civil-status-1",
+     "titre": "MAE — État civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "transcription-acte-mariage-etranger",
+   "titre": "Faire transcrire un mariage célébré à l'étranger",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le mariage célébré à l'étranger se transcrit au consulat du lieu du mariage. Certains cas exigent une ordonnance du tribunal de Sidi M'Hamed.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Déposer le dossier au consulat du lieu du mariage, ou au service d'état civil du MAE.",
+    "Mariage célébré par une chancellerie étrangère ou mariage religieux : obtenir d'abord une ordonnance de transcription du tribunal de Sidi M'Hamed (Alger)."
+   ],
+   "pieces": [
+    "Deux copies intégrales de l'acte de mariage (originaux).",
+    "Livret de famille et pièce d'identité algérienne.",
+    "Actes de naissance récents des deux époux, et actes du père et du grand-père de l'époux algérien (MAE).",
+    "Épouse algérienne et époux non musulman : attestation de conversion de l'époux. Le consulat refuse le dossier sans ce document.",
+    "Époux d'un pays multiconfessionnel : document qui indique sa confession, ou certificat de coutume (Lyon)."
+   ],
+   "ou": "Consulat du lieu du mariage, ou service d'état civil du MAE.",
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/fr/consular-services/civil-status-1/ranscription-of-civil-records",
+     "titre": "Consulat général d'Algérie à Lyon — Transcription des actes de l'état civil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/civil-status-1",
+     "titre": "MAE — État civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "transcription-acte-deces-etranger",
+   "titre": "Faire transcrire un décès survenu à l'étranger",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le décès d'un Algérien à l'étranger se transcrit au consulat du lieu du décès.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Déposer le dossier au consulat du lieu du décès, ou au service d'état civil du MAE."
+   ],
+   "pieces": [
+    "Deux copies intégrales de l'acte de décès (originaux).",
+    "Livret de famille.",
+    "Pièce d'identité algérienne du défunt et du demandeur.",
+    "Actes de naissance du défunt, de son père et de son grand-père (MAE)."
+   ],
+   "ou": "Consulat du lieu du décès, ou service d'état civil du MAE.",
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/fr/consular-services/civil-status-1/ranscription-of-civil-records",
+     "titre": "Consulat général d'Algérie à Lyon — Transcription des actes de l'état civil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/civil-status-1",
+     "titre": "MAE — État civil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "rectification-acte-etat-civil-transcrit",
+   "titre": "Faire rectifier une erreur dans un acte d'état civil transcrit",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Seul le tribunal de Sidi M'Hamed (Alger) rectifie un acte transcrit au consulat. Le consulat corrige ensuite l'acte sur la base de l'ordonnance.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Écrire une demande manuscrite au tribunal de Sidi M'Hamed.",
+    "Déposer la demande vous-même, ou par un mandataire avec une procuration consulaire.",
+    "Obtenir l'ordonnance de rectification.",
+    "Remettre l'ordonnance au consulat, qui corrige l'acte."
+   ],
+   "pieces": [
+    "Demande manuscrite au tribunal.",
+    "Pièce d'identité algérienne.",
+    "Acte transcrit avec l'erreur, en arabe.",
+    "Acte de la mairie étrangère traduit en arabe.",
+    "Acte de mariage ou fiche familiale des parents."
+   ],
+   "ou": "Tribunal de Sidi M'Hamed (Alger), puis consulat.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/fr/consular-services/civil-status-1/rectification-of-civil-records",
+     "titre": "Consulat général d'Algérie à Lyon — Rectification des actes d'état civil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/civil-status-1",
+     "titre": "MAE — État civil",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "livret-de-famille-consulat",
+   "titre": "Obtenir un livret de famille au consulat",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le consulat délivre le livret de famille sur demande, avec la copie intégrale de l'acte de mariage.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Déposer une demande au service d'état civil du consulat."
+   ],
+   "pieces": [
+    "Demande.",
+    "Pièce d'identité algérienne.",
+    "Copie intégrale de l'acte de mariage."
+   ],
+   "ou": "Service d'état civil du consulat.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/family-record-book",
+     "titre": "Consulat d'Algérie à Nanterre — Livret de famille",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "mentions-marginales-exequatur-divorce",
+   "titre": "Faire inscrire un mariage ou un divorce en marge de son acte de naissance",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Tout changement de situation familiale doit figurer sur les actes. Un divorce prononcé à l'étranger exige d'abord l'exequatur d'un tribunal algérien.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Mariage en France d'un Algérien né en Algérie : demander à la mairie française d'envoyer l'avis à la commune de naissance.",
+    "Né et marié à l'étranger : faire transcrire le mariage au consulat compétent.",
+    "Divorce étranger : demander l'exequatur au juge du statut personnel du tribunal du lieu de naissance (né en Algérie) ou au tribunal de Sidi M'Hamed (né à l'étranger).",
+    "Le tribunal envoie l'avis à la commune ou au poste consulaire, qui met à jour l'acte."
+   ],
+   "pieces": [
+    "Exequatur : demande manuscrite.",
+    "Grosse et copie du jugement de divorce définitif.",
+    "Acte de signification du jugement à l'autre partie.",
+    "Certificat de non-opposition, de non-appel et de non-pourvoi.",
+    "Acte de mariage transcrit, si mariage à l'étranger.",
+    "Copie d'une pièce d'identité algérienne.",
+    "Traduction en arabe de chaque pièce."
+   ],
+   "ou": "Tribunal algérien compétent, puis commune ou consulat.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/marginal-entries",
+     "titre": "Consulat d'Algérie à Nanterre — Mentions marginales",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-non-mariage-non-divorce",
+   "titre": "Obtenir un certificat de non-mariage, de non-divorce ou de non-remariage",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le consulat délivre ce certificat en présence du demandeur et de deux témoins immatriculés, qui engagent leur responsabilité.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Aller au consulat avec les pièces et deux témoins immatriculés."
+   ],
+   "pieces": [
+    "Carte d'immatriculation consulaire.",
+    "Acte de naissance intégral de moins de 3 mois, avec toutes les mentions marginales, sans rature (original et copie).",
+    "Pièce d'identité algérienne (original et copie).",
+    "Deux témoins immatriculés avec leur carte consulaire, passeport ou CNI."
+   ],
+   "ou": "Consulat de rattachement.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/certificate-of-non-marriage-non-divorce-and-non-remarriage",
+     "titre": "Consulat d'Algérie à Nanterre — Certificat de non-mariage, de non-divorce et de non-remariage",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-concordance-nom",
+   "titre": "Obtenir un certificat de concordance de nom",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Si un acte contient une erreur d'orthographe ou de transcription du nom, le consulat délivre un certificat de concordance (acte d'individualité), en présence du demandeur.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Aller au consulat en personne avec les pièces."
+   ],
+   "pieces": [
+    "Pièce d'identité algérienne (passeport, carte consulaire ou CNI).",
+    "Copie intégrale de l'acte de naissance, sans rature."
+   ],
+   "ou": "Consulat de rattachement.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/certificate-of-name-concordance",
+     "titre": "Consulat d'Algérie à Nanterre — Certificat de concordance de nom",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "legalisation-documents-tasdik",
+   "titre": "Faire légaliser un document algérien pour l'étranger (T@SDIK)",
+   "categorie": "etat-civil",
+   "public": [
+    "residents",
+    "diaspora",
+    "entreprises"
+   ],
+   "resume": "Le MAE légalise les documents algériens destinés à l'étranger quand l'apostille ne s'applique pas. Le dépôt se fait par Algérie Poste (depuis le 18 septembre 2025) ou en personne.",
+   "en_ligne": {
+    "possible": true
+   },
+   "etapes": [
+    "Faire d'abord légaliser le document par le ministère ou l'organisme de tutelle de l'administration qui l'a établi.",
+    "Coller un timbre fiscal de 20 DA par document.",
+    "Par la poste : saisir la demande sur la plateforme T@SDIK, avec le type, le nombre de documents et le pays de destination.",
+    "Imprimer le bordereau de versement, le bulletin d'expédition et le récépissé.",
+    "Déposer les documents et deux exemplaires des formulaires dans un bureau de poste du chef-lieu de daïra.",
+    "Suivre l'envoi par Tracemail. Retirer les documents au bureau de dépôt.",
+    "En personne : aller au service de l'état civil du MAE ou à une annexe régionale."
+   ],
+   "pieces": [
+    "Documents algériens lisibles, non abîmés, déjà légalisés par l'organisme de tutelle.",
+    "Timbre fiscal de 20 DA par document."
+   ],
+   "cout": "20 DA de timbre fiscal par document. Frais postaux non précisés.",
+   "ou": "Service de l'état civil du MAE (Kouba, Alger) ; annexes de Constantine (06 rue Zighoud Youcef), Oran (route nationale 04, Cité Djamel) et Ouargla (rue Rouabah Abderrahmane) ; ou bureau de poste du chef-lieu de daïra.",
+   "textes": [
+    {
+     "titre": "Protocole judiciaire algéro-français du 12 août 1962, art. 36 (documents destinés à la France dispensés de légalisation) — cité par le MAE"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/legalisation-of-documents-1",
+     "titre": "MAE — Légalisation des documents (apostille et légalisation)",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/service-tsdik",
+     "titre": "MAE — Service T@SDIK",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certification-copie-conforme-consulat",
+   "titre": "Faire certifier conforme la copie d'un document administratif au consulat",
+   "categorie": "etat-civil",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le consulat certifie qu'une photocopie est conforme à l'original d'un document administratif.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Aller au consulat avec l'original et les copies."
+   ],
+   "pieces": [
+    "Pièce d'identité algérienne (CNI, passeport ou carte consulaire).",
+    "Document original.",
+    "Copies à certifier."
+   ],
+   "ou": "Consulat de rattachement.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/document-legalization",
+     "titre": "Consulat d'Algérie à Nanterre — Légalisation de documents",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-nationalite-depuis-l-etranger",
+   "titre": "Obtenir le certificat de nationalité algérienne depuis l'étranger",
+   "categorie": "nationalite-justice",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le ministère de la Justice permet aux Algériens de l'étranger d'obtenir un certificat de nationalité signé électroniquement, à l'ambassade ou au consulat le plus proche, sans venir en Algérie.",
+   "en_ligne": {
+    "possible": true
+   },
+   "etapes": [
+    "Aller à l'ambassade ou au consulat d'Algérie le plus proche.",
+    "Demander le certificat de nationalité signé électroniquement."
+   ],
+   "ou": "Toute mission diplomatique ou consulaire algérienne.",
+   "sources": [
+    {
+     "url": "https://embbrussels.mfa.gov.dz/announcements/members-of-national-community-can-obtain-their-nationality-certificate-online",
+     "titre": "Ambassade d'Algérie à Bruxelles — Certificat de nationalité signé électroniquement",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embabuja.mfa.gov.dz/en/announcements/dear-compatriots-obtain-your-nationality-certificate-at-the-diplomatic-and-consular-missions",
+     "titre": "Ambassade d'Algérie à Abuja — Certificat de nationalité auprès des missions",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embbaku.mfa.gov.dz/fr/announcements/announcement-regarding-enabling-the-algerian-community-residing-abroad-to-obtain-and-issue-an-algerian-nationality-certificate",
+     "titre": "Ambassade d'Algérie à Bakou — Certificat de nationalité pour la communauté à l'étranger",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "attestation-nationalite-consulaire",
+   "titre": "Obtenir une attestation de nationalité au consulat",
+   "categorie": "nationalite-justice",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Le consulat délivre une attestation de nationalité aux personnes immatriculées. Elle ne remplace pas le certificat de nationalité.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Aller au consulat d'immatriculation avec les pièces."
+   ],
+   "pieces": [
+    "Pièce d'identité algérienne (passeport, carte consulaire ou CNI).",
+    "Copie intégrale de l'acte de naissance du demandeur.",
+    "Copie intégrale de l'acte de naissance du père.",
+    "Père étranger : copie intégrale de l'acte de naissance de la mère."
+   ],
+   "ou": "Consulat d'immatriculation.",
+   "sources": [
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/consular-services/civil-status-1/attestation-de-nationalite-algerienne",
+     "titre": "Consulat d'Algérie à Nanterre — Attestation de nationalité algérienne",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "casier-judiciaire-bulletin-3-etranger",
+   "titre": "Demander l'extrait de casier judiciaire (bulletin n° 3) depuis l'étranger",
+   "categorie": "nationalite-justice",
+   "public": [
+    "diaspora",
+    "etrangers"
+   ],
+   "resume": "Le consulat transmet la demande de bulletin n° 3. Elle concerne les Algériens immatriculés nés en Algérie et les étrangers qui ont résidé en Algérie. La demande est strictement personnelle.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Remplir le formulaire en français et en arabe. Écrire les noms dans les deux langues.",
+    "Déposer la demande vous-même au consulat, ou l'envoyer par courrier avec une enveloppe prépayée (Washington).",
+    "Demander une version en français si besoin. Le bulletin est rédigé en arabe."
+   ],
+   "pieces": [
+    "Formulaire de demande signé.",
+    "Pièce d'identité algérienne (carte consulaire, passeport ou CNI).",
+    "Acte de naissance (intégral à Washington), pour une personne née en Algérie.",
+    "Étranger : document qui prouve l'identité et la résidence passée en Algérie.",
+    "Enveloppe retour prépayée (envoi postal)."
+   ],
+   "cout": "Droit de timbre de 5 € (Lyon).",
+   "ou": "Consulat de rattachement.",
+   "formulaires": [
+    {
+     "titre": "Formulaire de demande de casier judiciaire (consulat de Pontoise)",
+     "url": "https://cpontoise.mfa.gov.dz/media/cpontoise/files/pdf/FORMULAIRE-DE-DEMANDE-DE-CASIER-JUDICIAIRE.pdf"
+    },
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/fr/social-legal-affairs/criminal-record",
+     "titre": "Consulat général d'Algérie à Lyon — Casier judiciaire",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embwashington.mfa.gov.dz/consular-services/judicial-records-casier-judiciaire",
+     "titre": "Ambassade d'Algérie à Washington — Casier judiciaire",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cpontoise.mfa.gov.dz/media/cpontoise/files/pdf/FORMULAIRE-DE-DEMANDE-DE-CASIER-JUDICIAIRE.pdf",
+     "titre": "Consulat d'Algérie à Pontoise — Formulaire de demande de casier judiciaire",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "visa-entree-algerie",
+   "titre": "Demander un visa d'entrée en Algérie",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Sauf dispense, un étranger demande le visa à l'ambassade ou au consulat de son lieu de résidence avant le voyage. Le séjour est de 90 jours au plus par entrée.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Choisir la catégorie : diplomatique, service, courtoisie, presse, tourisme, affaires, études, travail, travail temporaire, familial, médical, culturel ou transit.",
+    "Remplir le formulaire en deux exemplaires.",
+    "Déposer le dossier au poste consulaire du lieu de résidence habituelle.",
+    "Payer les droits de chancellerie. Le montant dépend du pays."
+   ],
+   "pieces": [
+    "Formulaire rempli en deux exemplaires.",
+    "Passeport valide au moins 6 mois, avec photocopie.",
+    "Deux photos d'identité récentes et identiques.",
+    "Attestation d'assurance voyage avec rapatriement.",
+    "Demandeur non national du pays de dépôt : carte de résident et photocopie.",
+    "Familial : certificat d'hébergement légalisé par la mairie du lieu d'hébergement.",
+    "Affaires : lettre de mission ou d'invitation, et réservation d'hôtel ou prise en charge.",
+    "Tourisme : certificat d'hébergement légalisé, réservation d'hôtel, ou attestation d'agence de voyage.",
+    "Travail : autorisation provisoire de travail, contrat de travail, engagement de rapatriement.",
+    "Travail temporaire (3 mois au plus) : contrat d'assistance ou de prestation, ou contrat de travail avec APTT et engagement de rapatriement.",
+    "Études : attestation d'inscription, de bourse ou de ressources.",
+    "Culturel : invitation à la manifestation et justificatifs de ressources.",
+    "Transit : visa du pays de destination si exigé, et justificatif de ressources."
+   ],
+   "cout": "Variable selon le pays. Exemple à Washington : 160 $ (tourisme, affaires, études, familial, médical, transit, presse) ; 190 $ (travail, culturel).",
+   "delai": "Tourisme organisé par agence : 48 heures après dossier complet. Washington : 5 à 8 jours ouvrables en moyenne.",
+   "ou": "Ambassade ou consulat d'Algérie du lieu de résidence habituelle.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-foreigners/entry-visa-to-algeria",
+     "titre": "MAE — Visa d'entrée en Algérie",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embwashington.mfa.gov.dz/services-for-foreigners/entry-visa-to-algeria-1",
+     "titre": "Ambassade d'Algérie à Washington — Visa d'entrée en Algérie",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "visa-regularisation-grand-sud",
+   "titre": "Obtenir un visa à l'arrivée pour un circuit touristique dans le Grand Sud",
+   "categorie": "etrangers-en-algerie",
+   "public": [
+    "etrangers"
+   ],
+   "resume": "Un touriste qui voyage avec une agence algérienne agréée vers le Grand Sud reçoit un visa de régularisation à l'arrivée. Ce visa vaut 30 jours au plus.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Plateforme numérique du ministère du Tourisme et de l'Artisanat, utilisée par les agences (adresse non publiée par les sources)"
+   },
+   "etapes": [
+    "Réserver le voyage auprès d'une agence de voyage algérienne agréée.",
+    "Donner à l'agence votre identité, votre document de voyage et l'itinéraire.",
+    "Recevoir de l'agence une autorisation d'embarquement avec code QR.",
+    "Prendre l'avion vers le sud, en vol direct ou via un aéroport international du nord.",
+    "Payer les frais de visa à l'arrivée."
+   ],
+   "cout": "Payé à l'arrivée. Montant non précisé.",
+   "delai": "Validité du visa : 30 jours au plus.",
+   "ou": "Wilayas couvertes : Tamanrasset, Illizi, Tindouf, Adrar, Béchar, Timimoun, Djanet, Bordj Badji Mokhtar, Béni Abbès, In Salah et Touggourt. Les autres destinations restent sous visa consulaire.",
+   "sources": [
+    {
+     "url": "https://embbrussels.mfa.gov.dz/fr/announcements/algerian-great-south-tourist-destination-new-visa-issuance-measures",
+     "titre": "Ambassade d'Algérie à Bruxelles — Grand Sud : nouvelles mesures de délivrance de visas",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embastana.mfa.gov.dz/fr/announcements/introduction-of-regularization-visas-visas-upon-arrival-for-tourists-traveling-to-the-south-of-algeria",
+     "titre": "Ambassade d'Algérie à Astana — Visas de régularisation (à l'arrivée) pour le sud",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "immatriculation-consulaire",
+   "titre": "S'immatriculer au consulat",
+   "categorie": "consulaire-diaspora",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "L'immatriculation concerne l'Algérien qui réside de façon habituelle à l'étranger. La carte est gratuite et vaut 5 ans. Elle est exigée pour le passeport et la CNI.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Remplir, dater et signer le formulaire.",
+    "Déposer le dossier au consulat de la circonscription de résidence.",
+    "Renouveler la carte tous les 5 ans sur demande.",
+    "Signaler tout changement de situation. Demander la radiation en cas de retour définitif en Algérie."
+   ],
+   "pieces": [
+    "Formulaire de demande.",
+    "Passeport algérien et copies (3 premières pages, page du visa, page d'entrée).",
+    "Acte 12S original et copie.",
+    "Acte de naissance intégral du père (né en Algérie) ; du père et du grand-père (né à l'étranger).",
+    "Décret de naturalisation, si nationalité acquise.",
+    "Livret de famille, acte de mariage ou jugement de divorce, si besoin.",
+    "Titre de séjour ou carte d'identité française.",
+    "Justificatif de domicile de moins de 3 mois, ou attestation d'hébergement légalisée.",
+    "Justificatif d'activité.",
+    "Cinq photos 3,5 x 4,5 cm.",
+    "Mineur : carte du tuteur, acte 12S, DCEM ou CNI française, deux photos. Le tuteur vient.",
+    "Renouvellement : ancienne carte, formulaire, preuve de séjour, deux photos, justificatif d'activité."
+   ],
+   "cout": "Gratuit.",
+   "delai": "Validité de la carte : 5 ans.",
+   "ou": "Consulat de la circonscription de résidence.",
+   "formulaires": [
+    {
+     "titre": "Formulaires du consulat de Nanterre (liste des PDF)",
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cgparis.mfa.gov.dz/en/consular-services/consular-registration-1",
+     "titre": "Consulat général d'Algérie à Paris — Immatriculation",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnanterre.mfa.gov.dz/fr/services-for-foreigners/forms",
+     "titre": "Consulat d'Algérie à Nanterre — Formulaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-radiation-retour-definitif",
+   "titre": "Obtenir en Algérie un certificat de radiation consulaire après un retour définitif",
+   "categorie": "consulaire-diaspora",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un Algérien immatriculé à l'étranger et rentré définitivement obtient un certificat de radiation et de changement de résidence. Ce document permet de renouveler ses papiers d'identité à la commune de résidence.",
+   "en_ligne": {
+    "possible": false
+   },
+   "etapes": [
+    "Obtenir un certificat de résidence à la commune.",
+    "Déposer la demande au service de l'état civil du MAE."
+   ],
+   "pieces": [
+    "Carte d'immatriculation consulaire originale, ou déclaration de perte.",
+    "Copie d'une pièce d'identité valide.",
+    "Certificat de résidence de moins de 3 mois."
+   ],
+   "ou": "Service de l'état civil du MAE, 93 Plateau des Anassers, Kouba, Alger.",
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/certificate-of-change-of-residence-and-de-registration",
+     "titre": "MAE — Certificat de radiation et de changement de résidence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "immatriculation-registre-commerce-personne-physique",
+   "titre": "S'inscrire au registre du commerce — commerçant personne physique",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Le commerçant individuel s'inscrit au registre du commerce tenu par le CNRC. L'extrait obtenu permet d'exercer l'activité.",
+   "etapes": [
+    "Remplir et signer le formulaire de demande du CNRC.",
+    "Réunir la preuve du local et les autres pièces.",
+    "Payer le droit de timbre et le droit d'inscription.",
+    "Déposer le dossier à l'antenne locale du CNRC."
+   ],
+   "pieces": [
+    "Formulaire de demande du CNRC, signé.",
+    "Justificatif du local d'activité : acte de propriété, bail, acte de concession ou décision d'un organisme public.",
+    "Quittance du droit de timbre (4 000 DA).",
+    "Quittance du droit d'inscription.",
+    "Copie de la carte de résident, pour un étranger.",
+    "Copie de l'autorisation ou de l'agrément, pour une activité réglementée."
+   ],
+   "cout": "Droit de timbre : 4 000 DA. Le droit d'inscription est fixé par la réglementation — montant non indiqué sur la page.",
+   "ou": "Centre national du registre du commerce (CNRC) — antenne locale",
+   "sources": [
+    {
+     "url": "https://sidjilcom.cnrc.dz/en/web/sidjilcom/-/dossier-a-fournir/1.8",
+     "titre": "CNRC Sidjilcom — Dossier à fournir",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "immatriculation-registre-commerce-personne-morale",
+   "titre": "Inscrire une société au registre du commerce",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "diaspora",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Une société (personne morale) s'inscrit au registre du commerce après la rédaction de ses statuts et leur publication au BOAL.",
+   "etapes": [
+    "Faire rédiger les statuts de la société.",
+    "Publier l'avis des statuts au Bulletin officiel des annonces légales (BOAL).",
+    "Remplir et signer le formulaire de demande du CNRC.",
+    "Payer le droit de timbre et le droit d'inscription.",
+    "Déposer le dossier au CNRC."
+   ],
+   "pieces": [
+    "Formulaire de demande du CNRC, signé.",
+    "Justificatif du local au nom de la société.",
+    "Copie des statuts (ou du texte statutaire pour un EPIC).",
+    "Copie de l'avis BOAL relatif aux statuts.",
+    "Quittance du droit de timbre (4 000 DA).",
+    "Quittance du droit d'inscription.",
+    "Copie de l'autorisation ou de l'agrément provisoire, pour une activité réglementée."
+   ],
+   "cout": "Droit de timbre : 4 000 DA. Droit d'inscription fixé par la réglementation — montant non indiqué sur la page.",
+   "ou": "Centre national du registre du commerce (CNRC)",
+   "sources": [
+    {
+     "url": "https://sidjilcom.cnrc.dz/en/web/sidjilcom/-/dossier-a-fournir/1.8",
+     "titre": "CNRC Sidjilcom — Dossier à fournir",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "modification-registre-commerce",
+   "titre": "Modifier une inscription au registre du commerce (adresse, siège, activités, statuts)",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Le commerçant ou la société déclare au CNRC tout changement d'adresse, de siège, d'activité ou de statuts. Le CNRC met à jour l'extrait.",
+   "etapes": [
+    "Remplir et signer le formulaire de demande du CNRC.",
+    "Pour une société : publier l'avis des statuts modifiés au BOAL.",
+    "Payer le droit de timbre et le droit de modification.",
+    "Déposer le dossier avec l'extrait original au CNRC."
+   ],
+   "pieces": [
+    "Formulaire de demande signé.",
+    "Original de l'extrait du registre du commerce.",
+    "Justificatif du nouveau local, si l'adresse ou le siège change.",
+    "Société : copie des statuts modifiés et de l'avis BOAL correspondant.",
+    "Quittance du droit de timbre (4 000 DA).",
+    "Quittance du droit de modification.",
+    "Copie de l'autorisation ou de l'agrément provisoire, si l'activité l'exige."
+   ],
+   "cout": "Droit de timbre : 4 000 DA, plus le droit de modification (montant non indiqué sur la page).",
+   "ou": "Centre national du registre du commerce (CNRC)",
+   "sources": [
+    {
+     "url": "https://sidjilcom.cnrc.dz/en/web/sidjilcom/-/dossier-a-fournir/1.8",
+     "titre": "CNRC Sidjilcom — Dossier à fournir",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "radiation-registre-commerce",
+   "titre": "Radier une inscription au registre du commerce (cessation, dissolution)",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Le commerçant qui cesse son activité, ou la société dissoute, demande sa radiation au CNRC. Une attestation de situation fiscale est exigée.",
+   "etapes": [
+    "Obtenir l'attestation de situation fiscale auprès de l'inspection des impôts.",
+    "Pour une société : faire établir l'acte de dissolution et publier son avis au BOAL.",
+    "Remplir et signer le formulaire de demande du CNRC.",
+    "Payer le droit de radiation et déposer le dossier au CNRC."
+   ],
+   "pieces": [
+    "Formulaire de demande signé.",
+    "Original de l'extrait (ou duplicata, si besoin).",
+    "Attestation de situation fiscale délivrée par l'inspection des impôts territoriale.",
+    "Personne physique : extrait d'acte de décès ou décision de justice, le cas échéant.",
+    "Société : copie de l'acte de dissolution et de l'avis BOAL ; décision de justice, le cas échéant."
+   ],
+   "cout": "Droit de radiation : 1 440 DA (personne physique) ; 2 496 DA (personne morale).",
+   "ou": "Centre national du registre du commerce (CNRC)",
+   "sources": [
+    {
+     "url": "https://sidjilcom.cnrc.dz/en/web/sidjilcom/-/dossier-a-fournir/1.8",
+     "titre": "CNRC Sidjilcom — Dossier à fournir",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "duplicata-extrait-registre-commerce",
+   "titre": "Remplacer un extrait du registre du commerce perdu ou volé",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Après la perte ou le vol de l'extrait, le titulaire demande un nouvel exemplaire au CNRC.",
+   "etapes": [
+    "Faire une déclaration de perte ou de vol.",
+    "Remplir et signer le formulaire de demande du CNRC.",
+    "Payer le droit de timbre et le droit de modification.",
+    "Déposer le dossier au CNRC."
+   ],
+   "pieces": [
+    "Formulaire de demande signé.",
+    "Déclaration de perte ou de vol.",
+    "Quittance du droit de timbre (4 000 DA).",
+    "Quittance du droit de modification."
+   ],
+   "cout": "Droit de timbre : 4 000 DA, plus le droit de modification (montant non indiqué sur la page).",
+   "ou": "Centre national du registre du commerce (CNRC)",
+   "sources": [
+    {
+     "url": "https://sidjilcom.cnrc.dz/en/web/sidjilcom/-/dossier-a-fournir/1.8",
+     "titre": "CNRC Sidjilcom — Dossier à fournir",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "carte-auto-entrepreneur",
+   "titre": "Obtenir la carte d'auto-entrepreneur (ANAE)",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "etrangers"
+   ],
+   "resume": "L'ANAE inscrit les auto-entrepreneurs au registre national et délivre une carte. L'inscription se fait en ligne pour une activité de la liste officielle.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://anae.dz/user/ae/register",
+    "plateforme": "ANAE — plateforme d'inscription"
+   },
+   "etapes": [
+    "Créer un compte sur la plateforme de l'ANAE : prénom en lettres latines, adresse e-mail, mot de passe.",
+    "Accepter la politique de confidentialité et le traitement des données (loi n° 18-07).",
+    "Compléter la demande en ligne pour obtenir la carte."
+   ],
+   "delai": "L'ANAE annonce un traitement moyen de 12 à 24 heures.",
+   "ou": "Agence nationale de l'auto-entrepreneur (ANAE), Chemin Cherif Omar, Alger-Centre — contact@anae.dz",
+   "sources": [
+    {
+     "url": "https://anae.dz/fr/",
+     "titre": "ANAE — Agence nationale de l'auto-entrepreneur",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://anae.dz/user/ae/register",
+     "titre": "ANAE — Inscription",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://activities.anae.dz/",
+     "titre": "Liste des activités auto-entrepreneur — ANAE",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "statut-importateur-micro-entrepreneur",
+   "titre": "Exercer comme micro-importateur (auto-entrepreneur, ANAE)",
+   "categorie": "entreprise",
+   "public": [
+    "residents"
+   ],
+   "resume": "Un auto-entrepreneur algérien résident peut importer des marchandises lors de ses voyages personnels. Il déclare les marchandises en ligne avant leur arrivée et paie 5 % de leur valeur.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://anae.dz/micro-importer/guide",
+    "plateforme": "ANAE — espace micro-importateur"
+   },
+   "etapes": [
+    "Obtenir la carte d'auto-entrepreneur pour l'activité « micro-importation » (code 080101).",
+    "S'affilier à la caisse des non-salariés (CASNOS) et obtenir un NIF validé par les impôts.",
+    "Ouvrir un compte en devises à la Banque extérieure d'Algérie (BEA).",
+    "Demander puis télécharger la licence générale annuelle sur la plateforme.",
+    "Avant l'arrivée, déclarer en ligne la liste des marchandises et charger les factures d'achat.",
+    "À l'arrivée, la douane établit la déclaration en douane à partir de la déclaration transmise."
+   ],
+   "pieces": [
+    "Passeport.",
+    "Numéro d'identification national (NIN).",
+    "Numéro d'enregistrement ANAE.",
+    "Licence générale du ministère du Commerce extérieur.",
+    "Factures d'achat.",
+    "Déclaration de la liste des marchandises."
+   ],
+   "cout": "Paiement global de 5 % de la valeur des marchandises au titre des droits et taxes de douane. Plafond : 1 800 000 DA par voyage, deux voyages par mois au plus.",
+   "ou": "ANAE (plateforme) ; douane au point d'entrée",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 25-170 du 28 juin 2025 fixant les conditions et modalités de l'activité (cité par l'ANAE)",
+     "url": "https://anae.dz/micro-importer/guide"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://anae.dz/micro-importer/guide",
+     "titre": "ANAE — Guide de la micro-importation",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "label-startup",
+   "titre": "Demander ou renouveler le label « Startup »",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "diaspora",
+    "entreprises"
+   ],
+   "resume": "Le label « Startup » donne accès aux mesures d'aide de l'État, dont des avantages fiscaux et le financement de l'Algerian Startup Fund. La demande se fait en ligne sur startup.dz.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://startup.dz/label-startup/",
+    "plateforme": "Startup.dz"
+   },
+   "etapes": [
+    "Créer d'abord la société : le label ne vise pas un projet non immatriculé.",
+    "Remplir le formulaire en ligne en lettres latines : demandeur, société, projet.",
+    "Charger les pièces demandées.",
+    "Un comité de labellisation examine le dossier.",
+    "Pour un renouvellement : remplir le canevas de renouvellement publié sur startup.dz, puis déposer la demande."
+   ],
+   "pieces": [
+    "Copie du registre du commerce.",
+    "Copie des statuts.",
+    "Présentation de la startup (PDF ou PPTX).",
+    "Description du projet (400 caractères au plus).",
+    "Photo du prototype.",
+    "Facultatif : attestations d'affiliation CASNOS et CNAS, comptes sociaux, titre de propriété intellectuelle, preuve de dépenses de R&D."
+   ],
+   "delai": "Le label vaut quatre ans. Il est renouvelable une fois si la société remplit toujours les critères.",
+   "ou": "Ministère chargé de l'économie de la connaissance et des startups — comité de labellisation",
+   "textes": [
+    {
+     "titre": "Décret exécutif n° 20-254 du 15 septembre 2020 (cité par startup.dz pour les critères)",
+     "url": "https://startup.dz/pour-obtenir-et-renouveler-label-startup/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://startup.dz/label-startup/",
+     "titre": "Startup.dz — Label startup",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://startup.dz/pour-obtenir-et-renouveler-label-startup/",
+     "titre": "Startup.dz — Demander ou renouveler le label startup",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://startup.dz/pour-les-startups/",
+     "titre": "Startup.dz — Pour les startups",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://startup.dz/",
+     "titre": "Startup.dz — Accueil",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "label-projet-innovant",
+   "titre": "Demander le label « Projet innovant » (avant la création de la société)",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Le label « Projet innovant » vise un porteur de projet dont la société n'existe pas encore. La demande se fait par un formulaire en ligne.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://startup.dz/label-projet/",
+    "plateforme": "Startup.dz"
+   },
+   "etapes": [
+    "Remplir la partie « demandeur » en lettres latines : NIN, contacts, wilaya, résidence à l'étranger ou non.",
+    "Décrire le projet : secteur, aspect innovant (400 caractères au plus), stade, modèle économique, incubation.",
+    "Charger les pièces.",
+    "Accepter le partage des données personnelles et envoyer."
+   ],
+   "pieces": [
+    "Pitch deck sur le modèle officiel téléchargeable sur la page.",
+    "Présentation détaillée du projet (PDF ou PPTX).",
+    "Photo du prototype.",
+    "Attestation d'incubation.",
+    "Titres de propriété intellectuelle, le cas échéant.",
+    "Facultatif : CV des fondateurs."
+   ],
+   "ou": "Ministère chargé de l'économie de la connaissance et des startups",
+   "sources": [
+    {
+     "url": "https://startup.dz/label-projet/",
+     "titre": "Startup.dz — Label projet innovant",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "label-scale-up",
+   "titre": "Demander le label « Scale-up »",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Le label « Scale-up » vise les entreprises innovantes en croissance. Le formulaire en ligne exige la preuve que l'entreprise consacre 5 % de son chiffre d'affaires à la R&D.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://startup.dz/demander-le-label-scale-up/",
+    "plateforme": "Startup.dz"
+   },
+   "etapes": [
+    "Remplir la partie « demandeur » (dont la détention éventuelle du label Startup).",
+    "Remplir la partie « société » : raison sociale, forme juridique, effectif, NIF, registre du commerce.",
+    "Remplir la partie « projet » : secteur, description, modèle économique, chiffres, R&D, prix obtenus.",
+    "Charger les pièces et envoyer."
+   ],
+   "pieces": [
+    "Extrait du registre du commerce.",
+    "Statuts de la société.",
+    "Comptes sociaux des deux derniers exercices demandés par le formulaire (2023 et 2024 lors de la consultation), avec références CNRC.",
+    "Preuve des dépenses de R&D.",
+    "Présentation de l'entreprise (PDF ou PPTX) ; vidéo facultative.",
+    "Titres de propriété intellectuelle, le cas échéant."
+   ],
+   "ou": "Ministère chargé de l'économie de la connaissance et des startups",
+   "sources": [
+    {
+     "url": "https://startup.dz/demander-le-label-scale-up/",
+     "titre": "Startup.dz — Demander le label Scale up",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "label-incubateur",
+   "titre": "Demander le label « Incubateur »",
+   "categorie": "entreprise",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "Une structure d'incubation (société, incubateur universitaire, association ou fondation) demande le label « Incubateur » par un formulaire en ligne.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://startup.dz/label-incubateur/",
+    "plateforme": "Startup.dz"
+   },
+   "etapes": [
+    "Remplir la partie « demandeur » en lettres latines.",
+    "Décrire l'incubateur : nom, forme juridique, effectif, date de création, NIF (et NIS), équipements et services.",
+    "Présenter le programme d'incubation et les startups incubées.",
+    "Charger les pièces et envoyer."
+   ],
+   "pieces": [
+    "Copie du registre du commerce.",
+    "Statuts.",
+    "Photos de l'incubateur.",
+    "Présentation du programme d'incubation.",
+    "CV des fondateurs ou des formateurs.",
+    "Selon le cas : attestation CASNOS, attestation CNAS, agrément de l'association ou de la fondation."
+   ],
+   "ou": "Ministère chargé de l'économie de la connaissance et des startups",
+   "sources": [
+    {
+     "url": "https://startup.dz/label-incubateur/",
+     "titre": "Startup.dz — Label incubateur",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "enregistrement-investissement-aapi",
+   "titre": "Enregistrer un projet d'investissement auprès de l'AAPI",
+   "categorie": "entreprise",
+   "public": [
+    "residents",
+    "diaspora",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "L'AAPI enregistre les investissements et délivre le certificat d'enregistrement qui ouvre droit aux avantages. Elle gère aussi la plateforme numérique de l'investisseur.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Plateforme numérique de l'investisseur (AAPI)"
+   },
+   "ou": "Agence algérienne de promotion de l'investissement (AAPI), sous l'autorité du Premier ministre",
+   "textes": [
+    {
+     "titre": "Loi n° 22-18 relative à l'investissement (citée par l'AAPI)",
+     "url": "https://aapi.dz/presentation-de-laapi/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://aapi.dz/presentation-de-laapi/",
+     "titre": "AAPI — Présentation de l'AAPI",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "immatriculation-employeur-cnas-en-ligne",
+   "titre": "Immatriculer un employeur et son premier salarié à la CNAS (en ligne)",
+   "categorie": "social-emploi",
+   "public": [
+    "residents",
+    "etrangers",
+    "entreprises"
+   ],
+   "resume": "Un nouvel employeur s'immatricule en ligne sur le portail Télédéclaration de la CNAS. Il déclare en même temps le salarié recruté.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Portail Télédéclaration CNAS"
+   },
+   "etapes": [
+    "Ouvrir le portail Télédéclaration et lancer une nouvelle inscription employeur.",
+    "Onglet « Activité » : personnalité juridique, nationalité, acte de création, mode de création.",
+    "Onglet « Société » : raison sociale en français et en arabe, effectif, date de début, NIF, NIS, RIB/RIP, adresse, contacts.",
+    "Onglet « Assuré » : choisir « Nouvelle immatriculation » si le salarié n'a pas de numéro de sécurité sociale ; sinon saisir son numéro.",
+    "Saisir les données du salarié : acte de recrutement, date, poste, NIN, adresse ; le bulletin ANEM si le recrutement passe par l'ANEM.",
+    "Charger les pièces : chaque pièce doit afficher une coche verte.",
+    "Garder l'accusé de réception (numéro de demande, QR code) pour suivre le dossier."
+   ],
+   "pieces": [
+    "Passeport, pour une personne née à l'étranger.",
+    "Livret de famille, pour ajouter un ayant droit.",
+    "Carte de handicapé, le cas échéant.",
+    "Permis de travail, pour un salarié étranger.",
+    "Photo pour la carte Chifa, si le salarié n'en a pas.",
+    "Facultatif : extrait de naissance (PDF)."
+   ],
+   "ou": "CNAS — agence de rattachement de l'employeur",
+   "sources": [
+    {
+     "url": "https://teledeclaration.cnas.dz/pdf/Guide%20Inscription%20des%20employeurs%20en%20ligne.pdf",
+     "titre": "CNAS — Guide d'inscription des employeurs en ligne",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://teledeclaration.cnas.dz/pdf/Guide%20TELE-DECLARATION.pdf",
+     "titre": "CNAS — Guide Télédéclaration",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "declaration-cotisations-cnas",
+   "titre": "Déclarer et payer les cotisations sociales CNAS (DAC, DAS)",
+   "categorie": "social-emploi",
+   "public": [
+    "entreprises"
+   ],
+   "resume": "L'employeur déclare et paie ses cotisations sur le portail Télédéclaration. Il dépose aussi la déclaration annuelle des salaires (DAS).",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Portail Télédéclaration CNAS"
+   },
+   "etapes": [
+    "Demander à l'agence CNAS un identifiant et un mot de passe.",
+    "Déposer la DAC : chaque mois si l'entreprise a plus de 9 salariés, chaque trimestre sinon, dans les 30 jours après la fin de la période.",
+    "Après chaque DAC, déclarer les entrées et sorties de salariés (état des mouvements, EMS).",
+    "Chaque année, déposer la DAS en deux fichiers (employeur et salariés) ; corriger les erreurs signalées.",
+    "Payer : carte via la plateforme interbancaire, chèque à l'agence, e-banking MYBDL (après activation), ou espèces avec un bulletin de versement (BVE)."
+   ],
+   "cout": "Un échéancier est possible si l'employeur paie au moins la part salariale de 9 %.",
+   "ou": "CNAS — agence de rattachement",
+   "sources": [
+    {
+     "url": "https://teledeclaration.cnas.dz/pdf/Guide%20TELE-DECLARATION.pdf",
+     "titre": "CNAS — Guide Télédéclaration",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "attestation-non-affiliation-cnas",
+   "titre": "Obtenir une attestation de non-affiliation CNAS en ligne",
+   "categorie": "social-emploi",
+   "public": [
+    "residents"
+   ],
+   "resume": "La CNAS délivre en ligne une attestation de non-affiliation. Le demandeur saisit son identité et valide son numéro de téléphone avant le téléchargement.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://elhanaa.cnas.dz/attestation_no_affiliation.xhtml",
+    "plateforme": "CNAS — Espace El Hanaa"
+   },
+   "etapes": [
+    "Ouvrir le formulaire « Attestation de non affiliation » sur El Hanaa.",
+    "Saisir le NIN, le nom et le prénom, le numéro et la date de l'acte de naissance, le prénom du père, le nom et le prénom de la mère, l'e-mail, le téléphone et l'adresse.",
+    "Accepter les conditions d'utilisation et remplir le captcha.",
+    "Valider le numéro de téléphone.",
+    "Télécharger l'attestation."
+   ],
+   "cout": "Aucun coût indiqué sur la page.",
+   "ou": "CNAS — en ligne",
+   "sources": [
+    {
+     "url": "https://elhanaa.cnas.dz/attestation_no_affiliation.xhtml",
+     "titre": "CNAS El Hanaa — Attestation de non affiliation",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://elhanaa.cnas.dz/",
+     "titre": "CNAS — Espace El Hanaa",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "espace-assure-el-hanaa",
+   "titre": "Créer son espace assuré CNAS El Hanaa",
+   "categorie": "social-emploi",
+   "public": [
+    "residents"
+   ],
+   "resume": "L'assuré social crée un compte El Hanaa. Il y consulte ses remboursements, ses informations et celles de ses ayants droit, et reçoit des notifications.",
+   "en_ligne": {
+    "possible": true,
+    "url": "https://elhanaa.cnas.dz/",
+    "plateforme": "CNAS — Espace El Hanaa"
+   },
+   "etapes": [
+    "Ouvrir El Hanaa et choisir « S'inscrire ».",
+    "Remplir le formulaire d'inscription.",
+    "Se connecter avec ses identifiants et le captcha.",
+    "Consulter l'historique des remboursements et les informations des ayants droit.",
+    "Une application Android « EL HANAA Mobile » existe aussi."
+   ],
+   "ou": "CNAS — en ligne",
+   "sources": [
+    {
+     "url": "https://elhanaa.cnas.dz/",
+     "titre": "CNAS — Espace El Hanaa",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "affiliation-etudiant-cnas",
+   "titre": "S'affilier à la sécurité sociale comme étudiant (CNAS)",
+   "categorie": "social-emploi",
+   "public": [
+    "residents"
+   ],
+   "resume": "L'étudiant inscrit à l'université s'affilie à la CNAS. Il devient assuré social et reçoit la carte Chifa.",
+   "etapes": [
+    "Télécharger et remplir le formulaire SECU 01 sur le site de la CNAS.",
+    "Joindre les pièces.",
+    "Déposer le dossier au centre de paiement CNAS de la zone de l'université.",
+    "Chaque année, fournir un certificat de scolarité."
+   ],
+   "pieces": [
+    "Formulaire SECU 01.",
+    "Copie de la carte nationale d'identité.",
+    "Photo d'identité sur fond clair.",
+    "Copie de la carte de groupe sanguin.",
+    "Extrait d'acte de naissance n° 12.",
+    "Fiche d'inscription universitaire."
+   ],
+   "ou": "CNAS — centre de paiement de la zone de l'université",
+   "formulaires": [
+    {
+     "titre": "SECU 01 — Déclaration et demande d'affiliation de l'assuré (liste des formulaires CNAS)",
+     "url": "https://cnas.dz/en/download/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://www.cnas.dz/wp-content/uploads/2018/02/etudiant.pdf",
+     "titre": "CNAS — Affiliation des étudiants",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cnas.dz/en/download/",
+     "titre": "CNAS — Téléchargements",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "duplicata-carte-chifa",
+   "titre": "Demander un duplicata de la carte Chifa",
+   "categorie": "sante",
+   "public": [
+    "residents"
+   ],
+   "resume": "La CNAS publie un formulaire de demande de duplicata de la carte Chifa (CHIFA 005). La page ne détaille ni les pièces ni le coût.",
+   "ou": "CNAS — centre de paiement de l'assuré",
+   "formulaires": [
+    {
+     "titre": "CHIFA 005 — Demande de duplicata de carte Chifa (liste des formulaires CNAS)",
+     "url": "https://cnas.dz/en/download/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnas.dz/en/download/",
+     "titre": "CNAS — Téléchargements",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "choix-medecin-traitant-chifa",
+   "titre": "Choisir son médecin généraliste conventionné (Chifa)",
+   "categorie": "sante",
+   "public": [
+    "residents"
+   ],
+   "resume": "La CNAS publie un formulaire de choix du médecin généraliste dans le système conventionné (CHIFA 004). La page ne détaille pas la procédure.",
+   "ou": "CNAS",
+   "formulaires": [
+    {
+     "titre": "CHIFA 004 — Choix du médecin généraliste, système conventionnel (liste des formulaires CNAS)",
+     "url": "https://cnas.dz/en/download/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://cnas.dz/en/download/",
+     "titre": "CNAS — Téléchargements",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "equivalence-diplome-etranger",
+   "titre": "Demander l'équivalence d'un diplôme étranger (MESRS)",
+   "categorie": "education-diplomes",
+   "public": [
+    "residents",
+    "diaspora",
+    "etrangers"
+   ],
+   "resume": "Le MESRS examine les demandes d'équivalence des diplômes étrangers. Depuis le 10 février 2022, la demande se fait seulement en ligne sur la plateforme Progrès.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Progrès — plateforme Équivalence (MESRS)"
+   },
+   "etapes": [
+    "Faire authentifier le diplôme par l'autorité du pays d'origine (ministère, rectorat ou service compétent).",
+    "Faire viser le diplôme authentifié par les services consulaires algériens de ce pays.",
+    "Préparer le dossier selon l'arrêté n° 1260 du 20 décembre 2015.",
+    "Déposer la demande en ligne sur la plateforme Progrès.",
+    "Pour une demande déposée avant le 10 février 2022 : suivre son état sur l'ancien service de suivi."
+   ],
+   "delai": "Aucun délai fixe. Le ministère vise un délai « raisonnable » après un dossier complet.",
+   "ou": "MESRS — Sous-direction des équivalences. Tél. 023 23 85 64 / 023 23 85 88 — sde@mesrs.dz. Réception : lundi 9 h-15 h 30, jeudi 9 h-12 h.",
+   "textes": [
+    {
+     "titre": "Arrêté n° 1260 du 20 décembre 2015 (liste des pièces, cité par le MESRS)",
+     "url": "https://www.mesrs.dz/index.php/fr/espace-etudiant/plateforme-equivalence/"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://www.mesrs.dz/index.php/fr/espace-etudiant/plateforme-equivalence/",
+     "titre": "MESRS — Plateforme Équivalence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "legalisation-documents-mae",
+   "titre": "Faire légaliser un document algérien pour l'étranger (MAE)",
+   "categorie": "education-diplomes",
+   "public": [
+    "residents",
+    "diaspora"
+   ],
+   "resume": "Le ministère des Affaires étrangères légalise les documents officiels algériens destinés à l'étranger. Depuis le 9 juillet 2026, certains documents relèvent de l'apostille à la place.",
+   "etapes": [
+    "Faire d'abord légaliser le document par le ministère ou l'organisme de tutelle de l'administration qui l'a délivré.",
+    "Coller un timbre fiscal de 20 DA par document.",
+    "Déposer le document : par la poste (service T@SDIK), au service de l'état civil du MAE à Alger, ou dans une annexe régionale."
+   ],
+   "pieces": [
+    "Document original lisible et en bon état.",
+    "Prélégalisation par le ministère de tutelle.",
+    "Timbre fiscal de 20 DA par document."
+   ],
+   "cout": "20 DA par document (timbre fiscal).",
+   "ou": "MAE — service de l'état civil, 93 Plateau des Anassers, Kouba, Alger ; annexes de Constantine, Oran et Ouargla.",
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/legalisation-of-documents-1",
+     "titre": "MAE — Légalisation des documents",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "legalisation-par-la-poste-tasdik",
+   "titre": "Faire légaliser ses documents par la poste (service T@SDIK)",
+   "categorie": "education-diplomes",
+   "public": [
+    "residents"
+   ],
+   "resume": "Le service T@SDIK permet de faire légaliser des documents par le MAE sans se déplacer à Alger. Le dépôt et le retrait se font dans un bureau d'Algérie Poste.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "T@SDIK (Algérie Poste)"
+   },
+   "etapes": [
+    "Coller un timbre fiscal de 20 DA sur chaque document.",
+    "S'inscrire sur la plateforme T@SDIK : type de document, nombre, pays de destination.",
+    "Imprimer le bordereau de versement (deux exemplaires), le bordereau d'envoi et le reçu de dépôt.",
+    "Déposer le tout dans un bureau de poste du chef-lieu de daïra.",
+    "Suivre l'envoi avec le service Tracemail, puis retirer les documents au même bureau."
+   ],
+   "pieces": [
+    "Documents originaux prélégalisés.",
+    "Timbre fiscal de 20 DA par document.",
+    "Bordereaux imprimés depuis la plateforme."
+   ],
+   "cout": "20 DA par document (timbre fiscal).",
+   "ou": "Bureau d'Algérie Poste du chef-lieu de daïra",
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/service-tsdik",
+     "titre": "MAE — Service T@SDIK",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://www.mfa.gov.dz/fr/services-for-algerians/legalisation-of-documents-1",
+     "titre": "MAE — Légalisation des documents",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "changement-residence-ccr-franchise-douaniere",
+   "titre": "Rentrer définitivement en Algérie avec ses biens en franchise (certificat de changement de résidence)",
+   "categorie": "consulaire-diaspora",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "Un Algérien établi à l'étranger depuis au moins trois ans peut rentrer avec ses meubles, ses effets et un véhicule neuf sans droits ni taxes. Il obtient d'abord un certificat de changement de résidence (CCR) au consulat.",
+   "etapes": [
+    "Déposer la demande de CCR au poste consulaire d'immatriculation (la liste des pièces dépend du poste).",
+    "Faire viser l'inventaire des effets par le poste consulaire.",
+    "Expédier les biens vers l'Algérie dans les six mois suivant la date du CCR.",
+    "Présenter la déclaration en douane avec les pièces au bureau de douane."
+   ],
+   "pieces": [
+    "Certificat de changement de résidence visé par le poste consulaire.",
+    "Inventaire des effets importés, visé de la même façon.",
+    "Titre de transport.",
+    "Documents du véhicule."
+   ],
+   "cout": "Franchise de droits et taxes si la valeur totale, véhicule compris, ne dépasse pas 10 000 000 DA (8 000 000 DA pour les étudiants et stagiaires), selon la loi de finances 2024 citée par l'ambassade au Koweït. Au-delà, les droits et taxes normaux s'appliquent.",
+   "delai": "Expédition des biens dans les six mois suivant la délivrance du CCR.",
+   "ou": "Poste consulaire d'immatriculation, puis bureau de douane en Algérie",
+   "textes": [
+    {
+     "titre": "Code des douanes, article 202 ; loi de finances 2020, article 112 ; décret exécutif n° 99-188 du 10 août 1999 (cités par l'ambassade au Koweït)",
+     "url": "https://embkuwait.mfa.gov.dz/fr/announcements/nationals-registered-with-our-diplomatic-and-consular-representations"
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://embkuwait.mfa.gov.dz/fr/announcements/nationals-registered-with-our-diplomatic-and-consular-representations",
+     "titre": "Ambassade d'Algérie au Koweït — Importation des effets personnels en changement de résidence",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cgstrasbourg.mfa.gov.dz/fr/consular-services/certificat-de-changement-de-residence",
+     "titre": "Consulat général d'Algérie à Strasbourg — Certificat de changement de résidence",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "certificat-capacite-permis-conduire",
+   "titre": "Demander le certificat de capacité du permis de conduire depuis l'étranger",
+   "categorie": "vehicules-permis",
+   "public": [
+    "diaspora"
+   ],
+   "resume": "L'Algérien établi à l'étranger demande en ligne le certificat de capacité de son permis algérien. Ce certificat sert à échanger le permis contre un permis étranger.",
+   "en_ligne": {
+    "possible": true,
+    "plateforme": "Site du ministère de l'Intérieur (MICLAT)"
+   },
+   "etapes": [
+    "S'inscrire sur le site du ministère de l'Intérieur pour obtenir un code et un mot de passe.",
+    "Se connecter et remplir le formulaire électronique.",
+    "Choisir le consulat de retrait.",
+    "Suivre la demande en ligne, puis l'envoi du certificat de la wilaya au consulat.",
+    "Retirer le certificat en personne au consulat choisi."
+   ],
+   "delai": "Le ministère indique quelques jours au lieu de plusieurs mois. Service ouvert 24 h/24.",
+   "ou": "Consulat d'Algérie choisi par le demandeur",
+   "sources": [
+    {
+     "url": "https://www.interieur.gov.dz/images/pdf/Facilitations_administratives/Facilitations_administratives_fr.pdf",
+     "titre": "Ministère de l'Intérieur — Facilitations administratives",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "slug": "payer-facture-eau-seaal",
+   "titre": "Payer sa facture d'eau SEAAL (Alger et Tipasa)",
+   "categorie": "factures-services",
+   "public": [
+    "residents"
+   ],
+   "resume": "La SEAAL distribue l'eau à Alger et à Tipasa. Le client paie sa facture dans une agence SEAAL ou dans un bureau d'Algérie Poste.",
+   "etapes": [
+    "Repérer sur la facture le numéro client et le montant net à payer (il inclut les impayés).",
+    "Payer dans l'un des 40 points de paiement SEAAL, du samedi au jeudi, de 8 h à 16 h 30 : espèces, chèque ou carte CIB.",
+    "Ou payer dans l'un des 286 bureaux d'Algérie Poste d'Alger et de Tipasa."
+   ],
+   "ou": "Agences SEAAL ; bureaux d'Algérie Poste (wilayas d'Alger et de Tipasa)",
+   "sources": [
+    {
+     "url": "https://www.seaal.dz/espace-client/fatourati/",
+     "titre": "SEAAL — Fatourati",
+     "consulte": "2026-11-01"
+    }
+   ]
+  }
+ ]
+}

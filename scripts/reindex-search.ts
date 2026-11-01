@@ -8,6 +8,7 @@ import { annuaireTaxonomyRows, reindexPlaces } from '@/modules/annuaire/search'
 import { reindexPractitioners, santeTaxonomyRows } from '@/modules/sante/search'
 import { reindexProviders, servicesTaxonomyRows } from '@/modules/services/search'
 import { annoncesTaxonomyRows, reindexClassifieds } from '@/modules/annonces/search'
+import { reindexProcedures, reindexRepresentations } from '@/modules/contenus/officiel/search'
 
 const payload = await getPayload({ config })
 const counts = await rebuildIndex(payload, [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], {
@@ -15,6 +16,8 @@ const counts = await rebuildIndex(payload, [...annuaireTaxonomyRows(), ...santeT
   praticiens: reindexPractitioners,
   prestataires: reindexProviders,
   annonces: reindexClassifieds,
+  demarches: reindexProcedures,
+  consulats: reindexRepresentations,
 })
 payload.logger.info(`Index de recherche : ${JSON.stringify(counts)}`)
 process.exit(0)

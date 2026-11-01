@@ -4,6 +4,7 @@ import { CATEGORIES, categoryCounts, categoryLabel, searchProviders, type Provid
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel, LANGUAGES } from '@/platform/referentiel/languages'
+import { IconLabel } from '@/platform/ui/Icon'
 
 /** Photo de chaque métier (Wikimedia Commons, crédits sur /credits-photos). */
 const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
@@ -184,7 +185,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
           <div className="activity-chips">
             {current.activities.map(([v, l]) => (
               <Link key={v} className={`chip ${q.activite === v ? '' : 'chip-plain'}`} href={`/services/${current.value}?activite=${v}${q.wilaya ? `&wilaya=${q.wilaya}` : ''}`}>
-                {l}
+                <IconLabel label={l} />
               </Link>
             ))}
           </div>

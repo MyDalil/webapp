@@ -1,0 +1,2221 @@
+{
+ "representations": [
+  {
+   "pays": "France",
+   "ville": "Paris",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Paris",
+   "adresse": "50, rue de Lisbonne, 75008 Paris",
+   "email": "chancellerie@amb-algerie.fr",
+   "sources": [
+    {
+     "url": "https://en.gouv.mc/Policy-Practice/Monaco-Worldwide/Diplomacy-and-International-Presence/bilateral-relations/All-the-countries/Algeria",
+     "titre": "Gouvernement de Monaco — Relations bilatérales : Algérie",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "telephone": "+33 1 53 93 20 20",
+   "site": "https://amb-algerie.fr/",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Paris",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Paris",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-paris-algerie.fr/",
+   "email": "contact@consulat-paris-algerie.fr",
+   "juridiction": "Départements : 18 Cher, 36 Indre, 37 Indre-et-Loire, 41 Loir-et-Cher, 45 Loiret, 75 Paris, Outre-mer",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Lille",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Lille",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-lille-algerie.fr/",
+   "email": "cgal@consulatalgerielille.org",
+   "juridiction": "Départements : 02 Aisne, 59 Nord, 62 Pas-de-Calais, 80 Somme",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Lyon",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Lyon",
+   "adresse": "126, rue Vauban, 69006 Lyon",
+   "telephone": "+33 4 72 83 85 50",
+   "email": "ccglyon.algerie@orange.fr",
+   "site": "https://cglyon.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cglyon.mfa.gov.dz/consular-services/opening-hours",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Lyon, horaires",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "juridiction": "Départements : 01 Ain, 07 Ardèche, 26 Drôme, 69 Rhône, 71 Saône-et-Loire",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Marseille",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Marseille",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://www.consulat-marseille-algerie.fr/",
+   "juridiction": "Départements : 13 Bouches-du-Rhône, 84 Vaucluse",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Strasbourg",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Strasbourg",
+   "adresse": "37, allée de la Robertsau, 67000 Strasbourg",
+   "telephone": "+33 3 88 30 17 51",
+   "email": "contact@consulat-strasbourg-algerie.fr",
+   "site": "https://cgstrasbourg.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgstrasbourg.mfa.gov.dz/consular-services/file-transfer",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Strasbourg, transfert de dossier",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "juridiction": "Départements : 67 Bas-Rhin, 68 Haut-Rhin, 88 Vosges",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Besançon",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Besançon",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-besancon-algerie.fr/",
+   "email": "info@consulat-algerie-besancon.org",
+   "juridiction": "Départements : 21 Côte-d’Or, 25 Doubs, 39 Jura, 70 Haute-Saône, 90 Territoire de Belfort",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Bobigny",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Bobigny",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-bobigny-algerie.fr/",
+   "email": "info@consulat-bobigny-algerie.fr",
+   "juridiction": "Départements : 93 Seine-Saint-Denis",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Bordeaux",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Bordeaux",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-bordeaux-algerie.fr/",
+   "email": "contact@consulat-bordeaux-algerie.fr",
+   "juridiction": "Départements : 16 Charente, 17 Charente-Maritime, 19 Corrèze, 23 Creuse, 24 Dordogne, 33 Gironde, 40 Landes, 47 Lot-et-Garonne, 64 Pyrénées-Atlantiques, 87 Haute-Vienne",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Créteil",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Créteil",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-creteil-algerie.fr/",
+   "email": "plic@consulat-creteil-algerie.fr",
+   "juridiction": "Départements : 58 Nièvre, 77 Seine-et-Marne, 89 Yonne, 91 Essonne, 94 Val-de-Marne",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Grenoble",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Grenoble",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-grenoble-algerie.fr/",
+   "email": "courrier@consulat-algerie-grenoble.org",
+   "juridiction": "Départements : 05 Hautes-Alpes, 38 Isère, 73 Savoie, 74 Haute-Savoie",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Metz",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Metz",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-metz-algerie.fr/",
+   "email": "contact@consulat-metz-algerie.fr",
+   "juridiction": "Départements : 08 Ardennes, 10 Aube, 51 Marne, 52 Haute-Marne, 54 Meurthe-et-Moselle, 55 Meuse, 57 Moselle",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Montpellier",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Montpellier",
+   "adresse": "198, rue Yves Montand, 34080 Montpellier",
+   "sources": [
+    {
+     "url": "https://consulat-montpellier-algerie.fr/wp-content/uploads/2024/07/AVIS-SN-AR.pdf",
+     "titre": "Consulat d'Algérie à Montpellier — avis service national (PDF officiel)",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-montpellier-algerie.fr/",
+   "email": "infos@consulat-montpellier-algerie.fr",
+   "juridiction": "Départements : 11 Aude, 12 Aveyron, 30 Gard, 34 Hérault, 48 Lozère, 66 Pyrénées-Orientales",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Nanterre",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Nanterre",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-nanterre-algerie.fr/",
+   "email": "service.plic@consulat-nanterre-algerie.fr",
+   "juridiction": "Départements : 28 Eure-et-Loir, 78 Yvelines, 92 Hauts-de-Seine",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Nantes",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Nantes",
+   "adresse": "57, rue du Général Buat, BP 71006, 44010 Nantes Cedex 1",
+   "telephone": "+33 2 40 74 38 19",
+   "email": "contact@consulat-nantes-algerie.fr",
+   "site": "https://cnantes.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cnantes.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Consulat d'Algérie à Nantes, contact",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "juridiction": "Départements : 22 Côtes-d’Armor, 29 Finistère, 35 Ille-et-Vilaine, 44 Loire-Atlantique, 49 Maine-et-Loire, 53 Mayenne, 56 Morbihan, 72 Sarthe, 79 Deux-Sèvres, 85 Vendée, 86 Vienne",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Nice",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Nice",
+   "telephone": "+33 4 93 97 71 00",
+   "juridiction": "Départements : 04 Alpes-de-Haute-Provence, 06 Alpes-Maritimes, 2A Corse-du-Sud, 2B Haute-Corse, 83 Var",
+   "sources": [
+    {
+     "url": "https://en.gouv.mc/Policy-Practice/Monaco-Worldwide/Diplomacy-and-International-Presence/bilateral-relations/All-the-countries/Algeria",
+     "titre": "Gouvernement de Monaco — Relations bilatérales : Algérie",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-nice-algerie.fr/",
+   "email": "contact@consulat-algerie-nice.org",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Pontoise",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Pontoise",
+   "adresse": "25, quai Eugène Turpin, 95300 Pontoise",
+   "telephone": "+33 1 30 73 27 75",
+   "email": "info@consulat-pontoise-algerie.fr",
+   "site": "https://cpontoise.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cpontoise.mfa.gov.dz/the-consulate/consul-generals-speech",
+     "titre": "Site officiel (MFA) — Consulat d'Algérie à Pontoise, mot du consul",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "juridiction": "Départements : 14 Calvados, 27 Eure, 50 Manche, 60 Oise, 61 Orne, 76 Seine-Maritime, 95 Val-d’Oise",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Saint-Étienne",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Saint-Étienne",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-saint-etienne-algerie.fr/",
+   "email": "info@consulat-saint-etienne-algerie.fr",
+   "juridiction": "Départements : 03 Allier, 15 Cantal, 42 Loire, 43 Haute-Loire, 63 Puy-de-Dôme",
+   "continent": "Europe"
+  },
+  {
+   "pays": "France",
+   "ville": "Toulouse",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Toulouse",
+   "sources": [
+    {
+     "url": "https://amb-algerie.fr/",
+     "titre": "Ambassade d’Algérie en France — réseau consulaire et rattachement par département",
+     "consulte": "2026-11-01"
+    }
+   ],
+   "site": "https://consulat-toulouse-algerie.fr/",
+   "email": "info@consulat-toulouse-algerie.fr",
+   "juridiction": "Départements : 09 Ariège, 31 Haute-Garonne, 32 Gers, 46 Lot, 65 Hautes-Pyrénées, 81 Tarn, 82 Tarn-et-Garonne",
+   "continent": "Europe"
+  },
+  {
+   "pays": "Allemagne",
+   "ville": "Berlin",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Berlin",
+   "adresse": "Görschstraße 45-46, 13187 Berlin",
+   "telephone": "+49 30 43 73 70",
+   "email": "info@algerische-botschaft.de",
+   "site": "https://embberlin.mfa.gov.dz/",
+   "juridiction": "Schleswig-Holstein, Hambourg, Mecklembourg-Poméranie-Occidentale, Berlin, Brandebourg, Saxe-Anhalt, Saxe (circonscription consulaire)",
+   "sources": [
+    {
+     "url": "https://www.auswaertiges-amt.de/de/reiseundsicherheit/vertretungen-anderer-staaten/vertretungenalgerien-222130",
+     "titre": "Auswärtiges Amt — Vertretungen Algeriens in Deutschland",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://embberlin.mfa.gov.dz/contact-us",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Berlin, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Allemagne",
+   "ville": "Francfort-sur-le-Main",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Francfort",
+   "adresse": "Friedrich-Ebert-Anlage 32, 60325 Frankfurt am Main",
+   "telephone": "+49 69 70 60 950",
+   "juridiction": "Bavière, Hesse, Rhénanie-Palatinat, Bade-Wurtemberg, Brême, Basse-Saxe, Thuringe, Rhénanie-du-Nord-Westphalie, Sarre",
+   "sources": [
+    {
+     "url": "https://www.auswaertiges-amt.de/de/reiseundsicherheit/vertretungen-anderer-staaten/vertretungenalgerien-222130",
+     "titre": "Auswärtiges Amt — Vertretungen Algeriens in Deutschland",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Autriche",
+   "ville": "Vienne",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Vienne",
+   "adresse": "Rudolfinergasse 18, 1190 Wien",
+   "telephone": "+43 1 369 88 53",
+   "email": "office@algerian-embassy.at",
+   "site": "https://embvienna.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embvienna.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Vienne",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Albanie",
+   "ville": "Tirana",
+   "type": "ambassade",
+   "nom": "Bureau de l'ambassade d'Algérie à Tirana",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Belgique",
+   "ville": "Bruxelles",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bruxelles",
+   "adresse": "Avenue Molière 207, 1050 Ixelles (Bruxelles)",
+   "telephone": "+32 2 343 50 78",
+   "email": "info@algerian-embassy.be",
+   "site": "https://embbrussels.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbrussels.mfa.gov.dz/contact-us/opening-hours",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Bruxelles, horaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Belgique",
+   "ville": "Bruxelles",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Bruxelles",
+   "adresse": "Rue d'Édimbourg 28, 1050 Ixelles (Bruxelles)",
+   "telephone": "+32 2 537 82 41",
+   "email": "secretariat@consulatalgerie.be",
+   "site": "https://cgbrussels.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgbrussels.mfa.gov.dz/activity",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Bruxelles, activités",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Bosnie-Herzégovine",
+   "ville": "Sarajevo",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Sarajevo",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Bulgarie",
+   "ville": "Sofia",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Sofia",
+   "adresse": "16, rue Slavyanska, 1000 Sofia",
+   "telephone": "+359 2 980 22 50",
+   "email": "ambalgsf@abv.bg",
+   "site": "https://embsofia.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embsofia.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Sofia, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Croatie",
+   "ville": "Zagreb",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Zagreb",
+   "adresse": "Babonićeva ulica 94, 10000 Zagreb",
+   "telephone": "+385 1 378 0333",
+   "email": "info@ambalgzagreb.com",
+   "site": "https://embzagreb.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embzagreb.mfa.gov.dz/announcements",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Zagreb, annonces",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tchéquie",
+   "ville": "Prague",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Prague",
+   "adresse": "V Tišině 10/483, P.O. Box 204, 160 41 Praha 6",
+   "telephone": "+420 233 371 145",
+   "email": "ambalger@volny.cz",
+   "sources": [
+    {
+     "url": "https://mzv.gov.cz/jnp/en/diplomatic_missions/foreign_missions_to_the_czech_republic/algeria_embassy_of_the_people_s.html",
+     "titre": "Ministère des Affaires étrangères tchèque — Ambassade d'Algérie",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Danemark",
+   "ville": "Copenhague",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Copenhague",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Finlande",
+   "ville": "Helsinki",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Helsinki",
+   "adresse": "Pohjoinen Makasiinikatu 6 A 6, 00130 Helsinki",
+   "telephone": "+358 9 270 920 80",
+   "email": "helsinki@algerianembassy.fi",
+   "site": "https://embhelsinki.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embhelsinki.mfa.gov.dz/announcements/annoucement",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Helsinki, annonce",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Grèce",
+   "ville": "Athènes",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Athènes",
+   "adresse": "14, avenue Vassileos Constantinou, 116 35 Athènes",
+   "telephone": "+30 210 756 4191",
+   "email": "embalg@otenet.gr",
+   "site": "https://embathens.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embathens.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Athènes",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Hongrie",
+   "ville": "Budapest",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Budapest",
+   "adresse": "Zugligeti út 27, 1121 Budapest",
+   "telephone": "+36 1 392 05 10",
+   "email": "consular@algerianembassy.hu",
+   "site": "https://embbudapest.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbudapest.mfa.gov.dz/biography",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Budapest",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Irlande",
+   "ville": "Dublin",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Dublin",
+   "adresse": "14 Clyde Road, Dublin 4, D04 KP74",
+   "telephone": "+353 1 668 9202",
+   "email": "contact@embassyofalgeria.ie",
+   "site": "https://embdublin.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embdublin.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Dublin, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Italie",
+   "ville": "Rome",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Rome",
+   "adresse": "Via Bartolomeo Eustachio 12, 00161 Roma (section consulaire : Via Barnaba Oriani 26, 00197 Roma)",
+   "telephone": "+39 06 44 20 25 33",
+   "email": "embassy@algerianembassy.it",
+   "site": "https://embrome.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embrome.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Rome",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Italie",
+   "ville": "Milan",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Milan",
+   "adresse": "Via Rovello 7/11, 20121 Milano",
+   "telephone": "+39 02 72 08 05 95",
+   "email": "contact@consulatgeneralalgeriemilan.it",
+   "site": "https://cgmilan.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgmilan.mfa.gov.dz/contact-us/useful-links",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Milan, liens utiles",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Italie",
+   "ville": "Naples",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Naples",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Pays-Bas",
+   "ville": "La Haye",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à La Haye",
+   "adresse": "Van Stolklaan 3, 2585 JS Den Haag",
+   "telephone": "+31 70 352 29 54",
+   "email": "consular.affairs@embalg.nl",
+   "site": "https://embthehague.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embthehague.mfa.gov.dz/en/embassy/ambassadors-welcoming-message",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à La Haye",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Norvège",
+   "ville": "Oslo",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Oslo",
+   "adresse": "Sigurd Syrs gate 2, Oslo",
+   "telephone": "+47 21 60 88 30",
+   "email": "mail@algerianembassy.no",
+   "site": "https://emboslo.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://emboslo.mfa.gov.dz/en",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Oslo",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Pologne",
+   "ville": "Varsovie",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Varsovie",
+   "adresse": "ul. Ignacego Krasickiego 10, 02-628 Warszawa",
+   "telephone": "+48 22 617 58 55",
+   "email": "warsaw@algerianembassy.pl",
+   "site": "https://embwarsaw.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embwarsaw.mfa.gov.dz/announcements",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Varsovie, annonces",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Portugal",
+   "ville": "Lisbonne",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Lisbonne",
+   "site": "https://www.emb-argelia.pt/",
+   "sources": [
+    {
+     "url": "https://www.emb-argelia.pt/categoria/noticias/page/34/",
+     "titre": "Ambassade d'Algérie à Lisbonne — site officiel (actualités)",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Roumanie",
+   "ville": "Bucarest",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bucarest",
+   "adresse": "Strada Theodor Aman 4, 010778 Bucarest",
+   "telephone": "+40 21 211 51 50",
+   "email": "ambalgeria@ambasada-algeriei.ro",
+   "site": "https://embbucharest.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbucharest.mfa.gov.dz/staff-and-services/embassy-services",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Bucarest, services",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Russie",
+   "ville": "Moscou",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Moscou",
+   "adresse": "Krapivinsky pereulok 1a, 115127 Moscou",
+   "telephone": "+7 495 937 46 00",
+   "email": "ambalg.moscou@mae.dz",
+   "site": "https://embmoscow.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmoscow.mfa.gov.dz/staff-and-services/embassy-staff",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Moscou",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Serbie",
+   "ville": "Belgrade",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Belgrade",
+   "adresse": "Maglajska 26b, Belgrade",
+   "telephone": "+381 11 3671 211",
+   "email": "ambalgerie-serbie@eunet.rs",
+   "sources": [
+    {
+     "url": "https://www.mfa.gov.rs/sites/default/files/inline-files/Diplomatska%20lista%2C%207.7.2026_0.pdf",
+     "titre": "Ministère des Affaires étrangères de Serbie — Liste diplomatique (7/7/2026)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Slovaquie",
+   "ville": "Bratislava",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bratislava",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Slovénie",
+   "ville": "Ljubljana",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Ljubljana",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Espagne",
+   "ville": "Madrid",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Madrid",
+   "adresse": "Calle General Oraá 12, 28006 Madrid",
+   "telephone": "+34 915 629 705",
+   "site": "https://embmadrid.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmadrid.mfa.gov.dz/",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Madrid",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Espagne",
+   "ville": "Barcelone",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Barcelone",
+   "adresse": "Avda. Tibidabo 6, 08022 Barcelona",
+   "telephone": "+34 93 418 81 21",
+   "email": "courrier@consulatdz-bcn.org",
+   "sources": [
+    {
+     "url": "https://www.exteriores.gob.es/es/Ministerio/Protocolo/Documents/2ACONS.pdf",
+     "titre": "Ministerio de Asuntos Exteriores (Espagne) — Lista consular (au 30/10/2026)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Espagne",
+   "ville": "Alicante",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Alicante",
+   "adresse": "C/ Pintor Velázquez 32, 03004 Alicante",
+   "telephone": "+34 965 22 76 05",
+   "sources": [
+    {
+     "url": "https://www.exteriores.gob.es/es/Ministerio/Protocolo/Documents/2ACONS.pdf",
+     "titre": "Ministerio de Asuntos Exteriores (Espagne) — Lista consular (au 30/10/2026)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Suède",
+   "ville": "Stockholm",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Stockholm",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Suisse",
+   "ville": "Berne",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Berne",
+   "adresse": "Willadingweg 74, 3006 Berne",
+   "telephone": "+41 31 350 10 50",
+   "email": "ambalg.berne@bluewin.ch",
+   "sources": [
+    {
+     "url": "https://www.eda.admin.ch/dam/fr/sd-web/SliJacSmVgQb/liste-cd.pdf",
+     "titre": "DFAE (Suisse) — Liste du corps diplomatique et consulaire (mutations au 23/09/2026)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Suisse",
+   "ville": "Genève (Bellevue)",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Genève",
+   "adresse": "Route de Lausanne 308 bis, 1293 Bellevue",
+   "telephone": "+41 22 774 19 19",
+   "email": "consulat-algerie@consulat-algerie.ch",
+   "site": "https://cggeneva.mfa.gov.dz/",
+   "juridiction": "Cantons de Zurich, Lucerne, Uri, Schwyz, Obwald, Nidwald, Glaris, Zoug, Soleure, Bâle-Ville, Bâle-Campagne, Schaffhouse, Appenzell Rhodes-Extérieures, Appenzell Rhodes-Intérieures, Saint-Gall, Grisons, Argovie, Thurgovie, Tessin, Vaud, Valais, Genève, Jura",
+   "sources": [
+    {
+     "url": "https://www.eda.admin.ch/dam/fr/sd-web/SliJacSmVgQb/liste-cd.pdf",
+     "titre": "DFAE (Suisse) — Liste du corps diplomatique et consulaire (mutations au 23/09/2026)",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://cggeneva.mfa.gov.dz/consular-services/opening-hours",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Genève, horaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Ukraine",
+   "ville": "Kyiv",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kyiv",
+   "adresse": "Zvirynetska vulytsia 76, 02000 Kyiv",
+   "telephone": "+380 44 286 7688",
+   "email": "ambalgkiev.cons@gmail.com",
+   "site": "https://embkiev.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embkiev.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Kyiv, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Royaume-Uni",
+   "ville": "Londres",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Londres",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Royaume-Uni",
+   "ville": "Londres",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Londres",
+   "adresse": "5 Portal Way, London W3 6RT",
+   "telephone": "+44 20 8752 1177",
+   "email": "info@algerian-consulate.org.uk",
+   "site": "https://cglondon.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cglondon.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Londres, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "États-Unis",
+   "ville": "Washington",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Washington",
+   "adresse": "2118 Kalorama Road NW, Washington, DC 20008 (section consulaire : 2137 Wyoming Ave NW)",
+   "telephone": "+1 202 265 2800",
+   "email": "mail@algerianembassy.org",
+   "site": "https://embwashington.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embwashington.mfa.gov.dz/contact-us/address-phone-e-mail",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Washington, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "États-Unis",
+   "ville": "New York",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à New York",
+   "adresse": "15 East 47th Street, New York, NY 10017",
+   "telephone": "+1 212 486 6930",
+   "site": "https://cgnewyork.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgnewyork.mfa.gov.dz/en/biography",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à New York",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "États-Unis",
+   "ville": "San Francisco",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à San Francisco",
+   "adresse": "465 California Street, Suite 900, San Francisco, CA 94104",
+   "email": "secretariat@cgalgeriasf.org",
+   "site": "https://cgsanfrancisco.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgsanfrancisco.mfa.gov.dz/biography",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à San Francisco",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Canada",
+   "ville": "Ottawa",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Ottawa",
+   "adresse": "500, rue Wilbrod, Ottawa (Ontario) K1N 6N2",
+   "sources": [
+    {
+     "url": "https://www.international.gc.ca/protocol-protocole/addresses.aspx?lang=eng",
+     "titre": "Affaires mondiales Canada — Adresses des missions diplomatiques",
+     "consulte": "2026-11-01"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Canada",
+   "ville": "Montréal",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Montréal",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mexique",
+   "ville": "Mexico",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Mexico",
+   "adresse": "Sierra Madre 540, Lomas de Chapultepec, 11000 Ciudad de México",
+   "telephone": "+52 55 5520 6950",
+   "email": "embajadadeargelia@yahoo.com.mx",
+   "site": "https://embmexico.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmexico.mfa.gov.dz/en",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Mexico",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Brésil",
+   "ville": "Brasília",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Brasília",
+   "adresse": "SHIS QI 09, Conjunto 13, Casa 01, CEP 71625-130, Brasília/DF",
+   "telephone": "+55 61 3248 4039",
+   "email": "argelia.bsb@gmail.com",
+   "site": "https://embbrasilia.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbrasilia.mfa.gov.dz/en/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Brasília",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Chili",
+   "ville": "Santiago",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Santiago",
+   "adresse": "Málaga 370, Las Condes, Santiago",
+   "telephone": "+56 2 2228 1661",
+   "email": "embajadargelia.cl@gmail.com",
+   "site": "https://embsantiago.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embsantiago.mfa.gov.dz/contact-us/useful-links",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Santiago",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Argentine",
+   "ville": "Buenos Aires",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Buenos Aires",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Colombie",
+   "ville": "Bogota",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bogota",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Cuba",
+   "ville": "La Havane",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à La Havane",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Équateur",
+   "ville": "Quito",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Quito",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Jamaïque",
+   "ville": "Kingston",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kingston",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Nicaragua",
+   "ville": "Managua",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Managua",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Pérou",
+   "ville": "Lima",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Lima",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Venezuela",
+   "ville": "Caracas",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Caracas",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tunisie",
+   "ville": "Tunis",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Tunis",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tunisie",
+   "ville": "Le Kef",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie au Kef",
+   "adresse": "3, rue Hédi Chaker, 7100 Le Kef",
+   "telephone": "+216 78 200 169",
+   "email": "consalgkef@gmail.com",
+   "site": "https://ckef.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://ckef.mfa.gov.dz/embassy-staff/consulate-services",
+     "titre": "Site officiel (MFA) — Consulat d'Algérie au Kef, services",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tunisie",
+   "ville": "Gafsa",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Gafsa",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Libye",
+   "ville": "Tripoli",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Tripoli",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Libye",
+   "ville": "Sabha",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Sabha",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Maroc",
+   "ville": "Casablanca",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Casablanca",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Maroc",
+   "ville": "Oujda",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Oujda",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mauritanie",
+   "ville": "Nouakchott",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Nouakchott",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mauritanie",
+   "ville": "Nouadhibou",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Nouadhibou",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Égypte",
+   "ville": "Le Caire",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie au Caire",
+   "adresse": "14, rue du Brésil, Zamalek, Le Caire",
+   "telephone": "+20 2 2738 0363",
+   "email": "amb-caire@mae.dz",
+   "site": "https://embcairo.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embcairo.mfa.gov.dz/announcements/guide",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie au Caire, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Niger",
+   "ville": "Niamey",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Niamey",
+   "adresse": "Rue des Ambassades, BP 142, Niamey",
+   "telephone": "+227 20 72 35 83",
+   "site": "https://embniamey.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embniamey.mfa.gov.dz/en/[...slug]",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Niamey",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Niger",
+   "ville": "Agadez",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Agadez",
+   "adresse": "BP 175, Agadez",
+   "telephone": "+227 20 44 01 17",
+   "email": "agadez.consulat2019@gmail.com",
+   "site": "https://cagadez.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cagadez.mfa.gov.dz/consular-services/opening-hours",
+     "titre": "Site officiel (MFA) — Consulat d'Algérie à Agadez, horaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mali",
+   "ville": "Bamako",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bamako",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mali",
+   "ville": "Gao",
+   "type": "consulat",
+   "nom": "Consulat d'Algérie à Gao",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tchad",
+   "ville": "N'Djamena",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à N'Djamena",
+   "adresse": "Rue de Paris, BP 178, N'Djamena",
+   "telephone": "+235 68 98 02 84",
+   "email": "amb.dz.td@gmail.com",
+   "site": "https://embndjamena.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embndjamena.mfa.gov.dz/",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à N'Djamena",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Sénégal",
+   "ville": "Dakar",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Dakar",
+   "adresse": "5, rue Jean Mermoz, Dakar",
+   "telephone": "+221 33 849 57 00",
+   "email": "mail@ambalgdakar.org",
+   "site": "https://embdakar.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embdakar.mfa.gov.dz",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Dakar",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Côte d'Ivoire",
+   "ville": "Abidjan",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Abidjan",
+   "adresse": "53, boulevard Clozel, 01 BP 1015, Abidjan 01",
+   "telephone": "+225 27 20 21 48 54",
+   "email": "ambalgci2020@gmail.com",
+   "site": "https://embabidjan.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embabidjan.mfa.gov.dz",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Abidjan",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Burkina Faso",
+   "ville": "Ouagadougou",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Ouagadougou",
+   "adresse": "Secteur 13, Zone du Bois, 295, avenue Babanguida, 01 BP 3893, Ouagadougou",
+   "telephone": "+226 25 36 81 81",
+   "email": "ambassade@ambalgbf.net",
+   "site": "https://embouagadougou.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embouagadougou.mfa.gov.dz/en/embassy/former-ambassadors/former-ambassadors-1",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Ouagadougou",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Nigeria",
+   "ville": "Abuja",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Abuja",
+   "adresse": "Plot 09, Cadastral Zone A4, 1398 Hon. Justice Mamman Nasir Street, Asokoro, P.O. Box 10739 Garki, Abuja",
+   "telephone": "+234 703 404 5321",
+   "email": "Ambalg-Abuja@mae.dz",
+   "site": "https://embabuja.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embabuja.mfa.gov.dz/embassy/ambassador/ambassadors-speech-1",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Abuja",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Ghana",
+   "ville": "Accra",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Accra",
+   "adresse": "22, Josif Broz Tito Avenue, Accra",
+   "telephone": "+233 302 77 67 19",
+   "email": "ambacc.secretariat@gmail.com",
+   "site": "https://embaccra.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embaccra.mfa.gov.dz/news-and-press-releases/opening-of-the-45th-session-of-the-executive-council-of-the-african-union-in-accra-with-the-participation-of-mr-attaf",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Accra",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Afrique du Sud",
+   "ville": "Pretoria",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Pretoria",
+   "adresse": "950 Arcadia Street, Arcadia 0083, Pretoria",
+   "telephone": "+27 12 342 50 74",
+   "email": "algemb.pretoria@gmail.com",
+   "site": "https://embpretoria.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embpretoria.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Pretoria",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Kenya",
+   "ville": "Nairobi",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Nairobi",
+   "adresse": "37, Muthaiga Road, P.O. Box 64140-00620, Nairobi",
+   "telephone": "+254 20 2680 728",
+   "email": "algeria@algerianembassy.co.ke",
+   "site": "https://embnairobi.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embnairobi.mfa.gov.dz/en/embassys-locations-list",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Nairobi",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Ouganda",
+   "ville": "Kampala",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kampala",
+   "adresse": "Plot 14, John Babiiha Avenue, Kololo, P.O. Box 4025, Kampala",
+   "telephone": "+256 414 343 886",
+   "email": "Amb-Kampala@mae.dz",
+   "site": "https://embkampala.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embkampala.mfa.gov.dz/staff-and-services/embassy-staff",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Kampala",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Angola",
+   "ville": "Luanda",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Luanda",
+   "adresse": "Rua Houari Boumediene 118, Miramar, Luanda",
+   "telephone": "+244 226 470 031",
+   "email": "ambalg.lda@gmail.com",
+   "site": "https://embluanda.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embluanda.mfa.gov.dz/en/news-and-press-releases/interview-by-al-24-with-the-minister-of-state-minister-of-foreign-affairs-mr-ahmed-attaf",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Luanda",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Mozambique",
+   "ville": "Maputo",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Maputo",
+   "adresse": "Rua de Mukumbura 121/125, C.P. 1709, Maputo",
+   "telephone": "+258 21 492 070",
+   "email": "ambalgmaputo@tvcabo.co.mz",
+   "site": "https://embmaputo.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmaputo.mfa.gov.dz/en/biography",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Maputo",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Zambie",
+   "ville": "Lusaka",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Lusaka",
+   "adresse": "18G Cheetah Road, Kabulonga, Lusaka 10101",
+   "telephone": "+260 211 269 104",
+   "email": "algeriaembassy.zambia@yahoo.com",
+   "site": "https://emblusaka.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://emblusaka.mfa.gov.dz/en/news-and-press-releases/president-tebboune-receives-mayor-of-marseille",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Lusaka",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Bénin",
+   "ville": "Cotonou",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Cotonou",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Botswana",
+   "ville": "Gaborone",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Gaborone",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Burundi",
+   "ville": "Bujumbura",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bujumbura",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Cameroun",
+   "ville": "Yaoundé",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Yaoundé",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Congo",
+   "ville": "Brazzaville",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Brazzaville",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "République démocratique du Congo",
+   "ville": "Kinshasa",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kinshasa",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Djibouti",
+   "ville": "Djibouti",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Djibouti",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Éthiopie",
+   "ville": "Addis-Abeba",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Addis-Abeba",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Gabon",
+   "ville": "Libreville",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Libreville",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Guinée",
+   "ville": "Conakry",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Conakry",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Madagascar",
+   "ville": "Antananarivo",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Antananarivo",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Namibie",
+   "ville": "Windhoek",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Windhoek",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Rwanda",
+   "ville": "Kigali",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kigali",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Sierra Leone",
+   "ville": "Freetown",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Freetown",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Soudan",
+   "ville": "Khartoum",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Khartoum",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Tanzanie",
+   "ville": "Dar es Salaam",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Dar es Salaam",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Zimbabwe",
+   "ville": "Harare",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Harare",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Arabie saoudite",
+   "ville": "Riyad",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Riyad",
+   "adresse": "Quartier diplomatique, BP 94388, Riyad 11693",
+   "telephone": "+966 11 488 7171",
+   "email": "mail@algerianembassy-saudi.com",
+   "site": "https://embriyadh.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embriyadh.mfa.gov.dz/en/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Riyad",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Arabie saoudite",
+   "ville": "Djeddah",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Djeddah",
+   "adresse": "BP 8132, Djeddah 21482",
+   "telephone": "+966 12 698 5034",
+   "email": "cg.algeria@consalg-jeddah.org",
+   "site": "https://cgjeddah.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgjeddah.mfa.gov.dz/embassy-staff/consulate-services",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Djeddah, services",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Qatar",
+   "ville": "Doha",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Doha",
+   "adresse": "Bâtiment 211, rue 905, nouvelle zone diplomatique n°66, BP 2494, Doha",
+   "telephone": "+974 4483 8729",
+   "email": "info@embalgdoha.com.qa",
+   "site": "https://embdoha.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embdoha.mfa.gov.dz/announcements/the-algerian-embassy-in-doha-calls-on-all-members-of-the-algerian-community-in-qatar-to-remain-calm-and-maintain-constant-contact-with-the-embassys-services",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Doha",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Koweït",
+   "ville": "Koweït",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Koweït",
+   "adresse": "Zone des ambassades, bloc 5, rue du Yémen, Daiya, Koweït",
+   "telephone": "+965 2251 9984",
+   "email": "ambalg.kw@gmail.com",
+   "site": "https://embkuwait.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embkuwait.mfa.gov.dz/en/news-and-press-releases/mr-lounes-magramane-co-chairs-in-rome-together-with-his-italian-counterpart-the-fifth-session-of-the-algerian-italian-strategic-dialogue",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie au Koweït",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Bahreïn",
+   "ville": "Manama",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Manama",
+   "adresse": "435, Road 3308, Um Al Hassam 333, Manama",
+   "telephone": "+973 1774 0659",
+   "email": "algerian@batelco.com.bh",
+   "site": "https://embmanama.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmanama.mfa.gov.dz/en/announcements/announce-platform-for-algerian-travelers-abroad",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Manama",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Oman",
+   "ville": "Mascate",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Mascate",
+   "adresse": "Rue de la Ligue arabe, BP 216, CP 115, Mascate",
+   "telephone": "+968 24 60 55 93",
+   "email": "algeria1@omantel.net.om",
+   "site": "https://embmuscat.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embmuscat.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Mascate",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Jordanie",
+   "ville": "Amman",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Amman",
+   "adresse": "Jabal Amman, avenue Soltane El Atrach n°6, Amman",
+   "telephone": "+962 6 464 1271",
+   "email": "ambalg-amman@mae.dz",
+   "site": "https://embamman.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embamman.mfa.gov.dz/embassy/ambassador/ambassadors-speech-1",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Amman",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Irak",
+   "ville": "Bagdad",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bagdad",
+   "adresse": "Al Daoudi, quartier 613, rue 14, maison 13, Bagdad",
+   "telephone": "+964 770 471 7127",
+   "email": "ambalgbaghdad2022@gmail.com",
+   "site": "https://embbaghdad.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbaghdad.mfa.gov.dz/",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Bagdad",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Turquie",
+   "ville": "Ankara",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Ankara",
+   "adresse": "Şehit Ersan Caddesi No 42, 06680 Çankaya, Ankara",
+   "telephone": "+90 312 468 77 19",
+   "email": "secambalgankara@mae.dz",
+   "site": "https://embankara.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embankara.mfa.gov.dz/tr/invest-in-algeria/investment-support-1/information-and-promotion-office-for-investments-and-exports-ipoie",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Ankara",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Turquie",
+   "ville": "Istanbul",
+   "type": "consulat-general",
+   "nom": "Consulat général d'Algérie à Istanbul",
+   "adresse": "Gazeteciler 23 Temmuz Sokak No 7, Esentepe, Şişli, Istanbul",
+   "telephone": "+90 212 356 95 16",
+   "email": "cgalgerie.istanbul@mae.dz",
+   "site": "https://cgistanbul.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://cgistanbul.mfa.gov.dz/consular-services/opening-hours",
+     "titre": "Site officiel (MFA) — Consulat général d'Algérie à Istanbul, horaires",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Azerbaïdjan",
+   "ville": "Bakou",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Bakou",
+   "adresse": "District de Narimanov, rue Fatulla Rustambayov 24, Bakou",
+   "telephone": "+994 12 505 94 63",
+   "site": "https://embbaku.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbaku.mfa.gov.dz/staff-and-services/embassy-staff",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Bakou",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Kazakhstan",
+   "ville": "Astana",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Astana",
+   "adresse": "Microdistrict Karaotkel-2, 111, Astana",
+   "telephone": "+7 7172 57 38 13",
+   "email": "algerianemb.kz@mail.ru",
+   "site": "https://embastana.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embastana.mfa.gov.dz/news-and-press-releases",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Astana",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Chine",
+   "ville": "Pékin",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Pékin",
+   "adresse": "7, Sanlitun Lu, district de Chaoyang, 100600 Pékin",
+   "telephone": "+86 10 6532 1231",
+   "email": "algpek@ymail.com",
+   "site": "https://embbeijing.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embbeijing.mfa.gov.dz/invest-in-algeria/investment-support-1/information-and-promotion-office-for-investments-and-exports-ipoie",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Pékin",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Japon",
+   "ville": "Tokyo",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Tokyo",
+   "adresse": "2-10-67 Mita, Meguro-ku, Tokyo 153-0062",
+   "telephone": "+81 3 3711 2661",
+   "email": "secretary@algerianembassy-japan.jp",
+   "site": "https://embtokyo.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embtokyo.mfa.gov.dz/en/staff-and-services/embassy-staff",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Tokyo",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Inde",
+   "ville": "New Delhi",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à New Delhi",
+   "adresse": "B-6, Anand Niketan, New Delhi 110021",
+   "telephone": "+91 11 2411 7585",
+   "email": "contact@algerianembassy.co.in",
+   "site": "https://embnewdelhi.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embnewdelhi.mfa.gov.dz/announcements/press-release-from-the-ministry-of-foreign-affairs-electronic-platform-23112025",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à New Delhi",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Malaisie",
+   "ville": "Kuala Lumpur",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Kuala Lumpur",
+   "adresse": "5, Jalan Mesra, off Jalan Damai, 55000 Kuala Lumpur",
+   "telephone": "+60 3 2145 9604",
+   "email": "dz@algerianembassy.org.my",
+   "site": "https://embkualalumpur.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embkualalumpur.mfa.gov.dz/news-and-press-releases/mr-lounes-magramane-is-co-chairing-in-rome-with-his-italian-counterpart-the-fifth-session-of-the-algerian-italian-strategic-dialogue",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Kuala Lumpur",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Bangladesh",
+   "ville": "Dacca",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Dacca",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Indonésie",
+   "ville": "Jakarta",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Jakarta",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Iran",
+   "ville": "Téhéran",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Téhéran",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Liban",
+   "ville": "Beyrouth",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Beyrouth",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Pakistan",
+   "ville": "Islamabad",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Islamabad",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Corée du Sud",
+   "ville": "Séoul",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Séoul",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Syrie",
+   "ville": "Damas",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Damas",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Ouzbékistan",
+   "ville": "Tachkent",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Tachkent",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Viêt Nam",
+   "ville": "Hanoï",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Hanoï",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/List_of_diplomatic_missions_of_Algeria",
+     "titre": "Wikipedia — List of diplomatic missions of Algeria (existence du poste seulement, pas les coordonnées)",
+     "consulte": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "pays": "Australie",
+   "ville": "Canberra",
+   "type": "ambassade",
+   "nom": "Ambassade d'Algérie à Canberra",
+   "adresse": "7 Culgoa Circuit, O'Malley ACT 2606",
+   "telephone": "+61 2 6286 7355",
+   "email": "info@algeriaemb.org.au",
+   "site": "https://embcanberra.mfa.gov.dz/",
+   "sources": [
+    {
+     "url": "https://embcanberra.mfa.gov.dz/contact",
+     "titre": "Site officiel (MFA) — Ambassade d'Algérie à Canberra, contact",
+     "consulte": "2026-11-01"
+    }
+   ]
+  }
+ ]
+}

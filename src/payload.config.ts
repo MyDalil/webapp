@@ -22,6 +22,7 @@ import { Events, FeaturedDestination, Places } from '@/modules/annuaire/collecti
 import { ContributionPhotos, Submissions } from '@/modules/messages/collections'
 import { Campaigns, Subscribers, TelegramPosts } from '@/modules/communication/collections'
 import { Members, VisitorSessions } from '@/modules/membres/collections'
+import { Platforms, Procedures, Representations } from '@/modules/contenus/collections'
 import { Appointments, Practitioners } from '@/modules/sante/collections'
 import { MissionMessages, Missions, ProviderDocuments, ProviderReviews, Providers } from '@/modules/services/collections'
 import { migrations } from './migrations'
@@ -44,7 +45,7 @@ export default buildConfig({
   },
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
   globals: [FeaturedDestination, Controls, AccompagnementSettings],
-  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, AuditLog],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, AuditLog],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY

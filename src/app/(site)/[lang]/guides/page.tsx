@@ -3,7 +3,7 @@ import Link from '@/platform/ui/Link'
 import { GUIDE_VISUALS } from '@/modules/contenus'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 
 export const metadata: Metadata = {
@@ -39,7 +39,7 @@ export default function Guides() {
       <nav className="xp-chips xp-chips-top" aria-label="Thèmes">
         {themes.map(([t]) => (
           <Link key={t} href={`#${encodeURIComponent(t)}`} className="xp-chip is-text">
-            {t}
+            <IconLabel label={t} />
           </Link>
         ))}
       </nav>

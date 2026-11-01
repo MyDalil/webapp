@@ -170,7 +170,7 @@ export default async function PlacePage({ params }: Props) {
             </span>
             <h1>{p.name}</h1>
             {(p.nameAr || p.nameEn) && <p className="pl-alt">{[p.nameEn, p.nameAr].filter(Boolean).join(' · ')}</p>}
-            <p className={`pl-status is-${status}`}>{statusLine}</p>
+            {(status === 'verified' || status === 'labelled') && <p className={`pl-status is-${status}`}>{statusLine}</p>}
             <div className="pl-actions">
               {directions ? (
                 <a className="button primary" href={directions} target="_blank" rel="noreferrer">
