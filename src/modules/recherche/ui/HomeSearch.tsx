@@ -100,7 +100,10 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
 
   // Micro : dictée en direct dans le champ, nettoyée à la fin.
   function mic() {
-    if (listening) return dictation.current?.stop()
+    if (listening) {
+      setListening(false)
+      return dictation.current?.stop()
+    }
     const input = ref.current
     if (!input) return
     const base = input.value.trim()

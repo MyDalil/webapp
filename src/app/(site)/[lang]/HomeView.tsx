@@ -167,6 +167,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.rubricsEyebrow}</p>
               <h2>{T.rubricsTitle}</h2>
+              <p className="section-lead">{T.rubricsLead}</p>
             </div>
           </div>
         </div>
@@ -180,6 +181,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               <div>
                 <p className="eyebrow">{T.musulmaneEyebrow}</p>
                 <h2>{T.musulmaneTitle}</h2>
+                <p className="section-lead">{T.musulmaneLead}</p>
               </div>
             </div>
           </div>
@@ -199,7 +201,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
 
       {/* Santé et À domicile en carrousels photo (Rad, 2026-10-31) : grandes tuiles regroupées, photos sans visage. */}
       <section className="section">
-        <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} />
+        <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} text={T.santeLead} />
         <TileCarousel
           label={T.santeEyebrow}
           tiles={[
@@ -211,7 +213,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
       </section>
 
       <section className="section section-tint">
-        <SectionHead eyebrow={T.domicileEyebrow} title={T.domicileTitle} />
+        <SectionHead eyebrow={T.domicileEyebrow} title={T.domicileTitle} text={T.domicileLead} />
         <TileCarousel
           label={T.domicileEyebrow}
           tiles={[
@@ -229,6 +231,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.decouvrirEyebrow}</p>
               <h2>{T.decouvrirTitle}</h2>
+              <p className="section-lead">{T.decouvrirLead}</p>
             </div>
           </div>
         </div>
@@ -312,6 +315,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.demarchesEyebrow}</p>
               <h2>{T.demarchesTitle}</h2>
+              <p className="section-lead">{T.demarchesLead}</p>
             </div>
           </div>
         </div>
@@ -381,6 +385,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
             <div>
               <p className="eyebrow">{T.vivreEyebrow}</p>
               <h2>{T.vivreTitle}</h2>
+              <p className="section-lead">{T.vivreLead}</p>
             </div>
           </div>
         </div>

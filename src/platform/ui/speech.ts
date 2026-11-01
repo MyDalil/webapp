@@ -64,27 +64,52 @@ export function startDictation(o: { lang: DictationLang; onLive: (text: string) 
   rec.lang = o.lang
   rec.continuous = true
   rec.interimResults = true
-  let finals = ''
-  let live = ''
+  let text = ''
+  let ended = false
+  let guard = 0
+  // Fin unique : l’arrêt manuel, la fin du navigateur ou l’échec rendent le texte une seule fois.
+  const finish = () => {
+    if (ended) return
+    ended = true
+    window.clearTimeout(guard)
+    o.onDone(text.trim())
+  }
   rec.onresult = (e) => {
-    live = ''
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+    // Liste relue en entier : Safari (iPhone) renvoie des résultats cumulés, sinon les phrases se répètent.
+    let finals = ''
+    let live = ''
+    for (let i = 0; i < e.results.length; i++) {
       const r = e.results[i]
-      if (r.isFinal) finals = `${finals} ${r[0].transcript}`.trim()
-      else live = `${live} ${r[0].transcript}`.trim()
+      if (r.isFinal) finals = `${finals} ${r[0].transcript}`
+      else live = `${live} ${r[0].transcript}`
     }
-    o.onLive(`${finals} ${live}`.trim())
+    text = `${finals} ${live}`.replace(/\s+/g, ' ').trim()
+    o.onLive(text)
   }
   rec.onerror = (e) => {
     if (e.error === 'not-allowed' || e.error === 'service-not-allowed') o.onError('Micro refusé : autorisez-le dans les réglages du navigateur.')
     else if (e.error !== 'no-speech' && e.error !== 'aborted') o.onError('La dictée s’est interrompue. Réessayez.')
   }
-  rec.onend = () => o.onDone(`${finals} ${live}`.trim())
+  rec.onend = finish
   try {
     rec.start()
   } catch {
     o.onError('Micro indisponible.')
     return null
   }
-  return { stop: () => rec.stop() }
+  return {
+    stop: () => {
+      if (ended) return
+      try {
+        rec.stop()
+      } catch {}
+      // Certains navigateurs (iPhone) ne signalent pas la fin : on termine nous-mêmes après 800 ms.
+      guard = window.setTimeout(() => {
+        try {
+          ;(rec as unknown as { abort?: () => void }).abort?.()
+        } catch {}
+        finish()
+      }, 800)
+    },
+  }
 }

@@ -75,13 +75,14 @@ export function TileCarousel({ label, tiles, variant = 'tiles' }: { label: strin
 }
 
 /** En-tête de section (même rythme que l’accueil). */
-export function SectionHead({ eyebrow, title, action }: { eyebrow?: string; title: string; action?: ReactNode }) {
+export function SectionHead({ eyebrow, title, text, action }: { eyebrow?: string; title: string; text?: string; action?: ReactNode }) {
   return (
     <div className="container">
       <div className="section-head" data-reveal>
         <div>
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
           <h2>{title}</h2>
+          {text && <p className="section-lead">{text}</p>}
         </div>
         {action}
       </div>

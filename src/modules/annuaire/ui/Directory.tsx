@@ -10,6 +10,7 @@ import { LANGUAGES } from '@/platform/referentiel/languages'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { useWilaya } from '@/platform/shell/wilaya'
 import { filterPlaces, verifiedCriteria } from '../filters'
+import { MicButton } from '@/platform/ui/MicButton'
 
 const DirectoryMap = dynamic(() => import('./DirectoryMap').then((m) => m.DirectoryMap), { ssr: false })
 
@@ -40,6 +41,20 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
   const [favorite, setFavorite] = useState(false)
   const [criteria, setCriteria] = useState<string[]>([])
   const chosen = useWilaya()
+  // Carte : toujours visible sur grand écran ; sur mobile et tablette, plein écran à la demande (zoom aux doigts).
+  const [wide, setWide] = useState(false)
+  const [mapOpen, setMapOpen] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1121px)')
+    const on = () => setWide(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  useEffect(() => {
+    document.documentElement.classList.toggle('map-sheet-open', mapOpen)
+    return () => document.documentElement.classList.remove('map-sheet-open')
+  }, [mapOpen])
   // Wilaya imposée par le lien ou choisie ici : la wilaya de l’en-tête ne l’écrase plus (ref lue dans le même rendu).
   const pinned = useRef(Boolean(initialWilaya))
 
@@ -115,7 +130,6 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
   // Valeurs DALIL en tête (espace de prière, sans alcool, non-mixité), puis l’ordre alphabétique.
   const FIRST = ['Espace de prière', 'Sans alcool', 'Espace femmes', 'Horaires hommes / femmes', 'Piscine non mixte']
   const checkable = useMemo(() => verifiedCriteria(scoped).sort((a, b) => (FIRST.includes(b) ? 1 : 0) - (FIRST.includes(a) ? 1 : 0)), [scoped])
-  const verified = results.filter((p) => p.status === 'verified' || p.status === 'labelled').length
 
   return (
     <section className="directory-shell container">
@@ -125,6 +139,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
           <div className="field-icon">
             <Icon name="search" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nom, lieu, métier…" />
+            <MicButton />
           </div>
         </label>
         {/* Mobile : les filtres se replient derrière un bouton pour montrer les résultats tout de suite. */}
@@ -212,12 +227,8 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
         <label>
           Vérification
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">Tous les statuts</option>
-            {Object.entries(STATUS).map(([v, l]) => (
-              <option key={v} value={v}>
-                {l}
-              </option>
-            ))}
+            <option value="">Toutes les adresses</option>
+            <option value="verified">{STATUS.verified} par DALIL</option>
           </select>
         </label>
         <label>
@@ -233,13 +244,14 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
         </Link>
       </div>
       <div className="directory-results">
+        <button type="button" className="map-open" onClick={() => setMapOpen(true)}>
+          <Icon name="pin" /> Voir sur la carte
+        </button>
         <div className="results-toolbar">
           <div>
-            <strong aria-live="polite">
-              {loading ? 'Recherche…' : `${results.length} résultat${results.length > 1 ? 's' : ''}`}
-            </strong>
-            {total > places.length && <small>Les {places.length} mieux classés sur {total.toLocaleString('fr-FR')} : précisez la wilaya ou la spécialité.</small>}
-            <small>{verified ? `${verified} vérifiée${verified > 1 ? 's' : ''} par DALIL` : 'Adresses repérées · critères DALIL en cours de vérification'}</small>
+            {/* Pas de compteur public : un titre et une phrase d’aide. */}
+            <strong aria-live="polite">{loading ? 'Recherche…' : results.length ? 'Adresses' : 'Aucune adresse'}</strong>
+            <small>{results.length ? (total > places.length ? 'Les plus pertinentes d’abord. Précisez la wilaya ou la spécialité pour affiner.' : 'Les plus pertinentes d’abord.') : 'Essayez une autre wilaya ou un autre mot.'}</small>
           </div>
           {(theme || wilaya || favorite) && (
             <div className="active-filters" aria-label="Filtres actifs">
@@ -272,7 +284,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
         <div className="place-list">
           {results.length ? (
             results.map((p) => (
-              <PlaceRow key={p.slug} p={p} />
+              <PlaceRow key={p.slug} p={lockSector ? { ...p, sectorTitle: null } : p} />
             ))
           ) : (
             <div className="empty-state">
@@ -305,8 +317,13 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
           )}
         </div>
       </div>
-      <div className="map-panel" aria-label="Carte des adresses">
-        <DirectoryMap places={results} />
+      <div className={`map-panel${mapOpen ? ' is-open' : ''}`} aria-label="Carte des adresses">
+        {mapOpen && (
+          <button type="button" className="map-close" onClick={() => setMapOpen(false)}>
+            <Icon name="list" /> Voir la liste
+          </button>
+        )}
+        {(wide || mapOpen) && <DirectoryMap places={results} />}
         <div className="map-card">
           <strong>Carte</strong>
           <small>

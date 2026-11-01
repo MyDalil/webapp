@@ -2,3 +2,6 @@
 export { Tree } from './ui/Tree'
 export { Legacy } from './ui/Legacy'
 export { HubView } from './ui/HubView'
+export { OfficialProcedure } from './ui/OfficialProcedure'
+export { ProcedureRows } from './ui/ProcedureRows'
+export { ConsulatFinder, type Rep } from './ui/ConsulatFinder'

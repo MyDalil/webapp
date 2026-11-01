@@ -5,6 +5,7 @@ import { reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/module
 import { dailyServicesTasks, reindexProviders, servicesTaxonomyRows } from '@/modules/services'
 import { fail, json, payload } from '@/platform/http'
 import { rebuildIndex } from '@/platform/search/rebuild'
+import { reindexProcedures, reindexRepresentations } from '@/modules/contenus'
 import { purgeRateLimits } from '@/platform/security/rateLimit'
 import { dailyBackup } from '@/platform/backup/run'
 
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
   // Index de recherche : tenu à jour à chaque enregistrement (crochets des métiers). Reconstruction complète une fois
   // par semaine seulement (vendredi, heure d’Alger), filet de sécurité qui économise le calcul de la base.
   const friday = new Date().toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'Africa/Algiers' }) === 'Friday'
-  const recherche = !friday ? 'à jour (reconstruction le vendredi)' : await rebuildIndex(await payload(), [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], { adresses: reindexPlaces, praticiens: reindexPractitioners, prestataires: reindexProviders, annonces: reindexClassifieds }).catch((e: Error) => ({ erreur: e.message }))
+  const recherche = !friday ? 'à jour (reconstruction le vendredi)' : await rebuildIndex(await payload(), [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], { adresses: reindexPlaces, praticiens: reindexPractitioners, prestataires: reindexProviders, annonces: reindexClassifieds, demarches: reindexProcedures, consulats: reindexRepresentations }).catch((e: Error) => ({ erreur: e.message }))
   const sauvegarde = await dailyBackup().catch((e: Error) => ({ erreur: e.message }))
   return json({ ...result, recherche, sauvegarde })
 }

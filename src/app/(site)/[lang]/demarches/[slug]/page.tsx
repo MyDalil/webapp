@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
-import { DEMARCHES, demarcheBySlug, type Demarche, type GuideFact } from '@/modules/contenus'
+import { DEMARCHES, demarcheBySlug, procedureBySlug, type Demarche, type GuideFact } from '@/modules/contenus'
+import { OfficialProcedure } from '@/modules/contenus/ui'
 import { offerState, packForGuide } from '@/modules/accompagnement'
 import { Choice, SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
@@ -9,12 +10,14 @@ import { XpHero } from '@/platform/ui/Xp'
 
 type Props = { params: Promise<{ slug: string }> }
 export const revalidate = 3600
-export const dynamicParams = false
 export const generateStaticParams = () => DEMARCHES.map((d) => ({ slug: d.slug }))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const d = demarcheBySlug((await params).slug)
-  return d ? { title: `${d.title} · DALIL`, description: `${d.lead} Étapes, pièces, liens officiels et sources datées.` } : {}
+  const slug = (await params).slug
+  const d = demarcheBySlug(slug)
+  if (d) return { title: `${d.title} · DALIL`, description: `${d.lead} Étapes, pièces, liens officiels et sources datées.` }
+  const p = await procedureBySlug(slug)
+  return p ? { title: `${p.title} · DALIL`, description: `${p.summary} Lien direct vers le site officiel, pièces et sources datées.` } : {}
 }
 
 /** Couleurs des pictogrammes des points clés (même palette que les catégories). */
@@ -53,8 +56,14 @@ function Facts({ d, items, ordered = false }: { d: Demarche; items: GuideFact[];
 
 /** Fiche d’une démarche (maquette validée par Rad) : visuel, points clés, deux options, guide gratuit sourcé. */
 export default async function DemarchePage({ params }: Props) {
-  const d = demarcheBySlug((await params).slug)
-  if (!d) notFound()
+  const slug = (await params).slug
+  const d = demarcheBySlug(slug)
+  if (!d) {
+    // Démarche officielle de la base (Neon) : fiche au même format, lien direct vers le site de l’État.
+    const p = await procedureBySlug(slug)
+    if (!p) notFound()
+    return <OfficialProcedure p={p} />
+  }
   const pack = await packForGuide(`/demarches/${d.slug}`)
   const open = (await offerState()).mode === 'ouvert'
   return (

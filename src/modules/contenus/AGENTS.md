@@ -10,6 +10,7 @@ Guides, démarches, pages éditoriales reprises du prototype, et leur rendu dans
 - `ui/Tree` (rendu des arbres), `ui/Legacy` (page du prototype dans la maquette), `ui/islands` (registre des composants interactifs de chaque métier), DiagnosticWizard, ParallaxPhoto.
 - `demarches/` : fiches de démarches sourcées (type `Demarche`, catégories populaires), rendues par `app/(site)/demarches/[slug]`.
 - Toute route non dédiée passe par `app/(site)/[...slug]`.
+- `officiel/` : démarches officielles (`Procedures`), sites officiels de démarches en ligne (`Platforms`), ambassades et consulats (`Representations`) ; thèmes (`themes.ts`, un dossier mémoire par thème dans `src/rubriques/demarches/`) ; données sources datées dans `officiel/data/*.json`, importées par `importData.ts`.
 
 ## Dépend de
 `annuaire`, `membres`, `pros`, `communaute`, `communication`, `recherche` (composants via `/ui`), `platform`.

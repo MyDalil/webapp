@@ -62,6 +62,8 @@ export function Assistant() {
   }, [path])
 
   useEffect(() => {
+    dictation.current?.stop()
+    setListening(false)
     setExpanded(false)
     setIntent(null)
     setContext('')
@@ -90,6 +92,7 @@ export function Assistant() {
 
   async function submit(e: FormEvent) {
     e.preventDefault()
+    if (listening) return stopListening()
     const q = text.trim()
     if (!q) return toast('Posez votre question à DALIL')
     // Réponse à une question de DALIL : on la joint à la demande précédente.
@@ -122,8 +125,15 @@ export function Assistant() {
     router.push(url)
   }
 
+  // Arrêt immédiat à l’écran ; le texte dicté arrive ensuite (nettoyé) dans le champ.
+  function stopListening() {
+    if (!dictation.current) return
+    setListening(false)
+    dictation.current.stop()
+  }
+
   function mic() {
-    if (listening) return dictation.current?.stop()
+    if (listening) return stopListening()
     const base = text
     dictation.current = startDictation({
       lang,
@@ -225,6 +235,7 @@ export function Assistant() {
           maxLength={600}
           onChange={(e) => setText(e.target.value)}
           onFocus={() => turns.length && setPanel(true)}
+          onPointerDown={() => listening && stopListening()}
           placeholder={listening ? A.listening : busy ? A.busy : intent?.question ? A.answer : A.ask}
           autoComplete="off"
         />

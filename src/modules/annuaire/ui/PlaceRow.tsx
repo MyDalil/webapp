@@ -41,9 +41,15 @@ export function PlaceRow({ p, distance }: { p: PlaceRowData; distance?: string |
           {distance ? ` · ${distance}` : ''}
         </span>
         <h3>{p.name}</h3>
-        <p>
-          {p.sectorTitle ? `${p.sectorTitle} · ` : ''}
-          <b className={`status-${p.status}`}>{PLACE_STATUS[p.status] ?? PLACE_STATUS.spotted}</b>
+        <p hidden={!p.sectorTitle && p.status !== 'verified' && p.status !== 'labelled'}>
+          {p.sectorTitle}
+          {/* Statut public : seulement une vérification acquise. « À vérifier » reste interne (/admin). */}
+          {(p.status === 'verified' || p.status === 'labelled') && (
+            <>
+              {p.sectorTitle ? ' · ' : ''}
+              <b className={`status-${p.status}`}>{PLACE_STATUS[p.status]}</b>
+            </>
+          )}
         </p>
       </Link>
       <SaveButton itemType="listing" itemKey={p.slug} label={p.name} />

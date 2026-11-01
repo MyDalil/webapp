@@ -1,0 +1,161 @@
+/* Version 1 (Rad, 2026-10-31) — raccords finaux, chargés en dernier. Petites règles ciblées, pas de refonte. */
+
+/* ── Titres de section : toujours titre + petit texte, coupure équilibrée ── */
+.section-head h2, .xp-hero h1, .hub-hero h1, .praticiens-empty h2 { text-wrap: balance; }
+.section-head p, .section-lead, .xp-lead { text-wrap: pretty; }
+.section-lead { max-width: 62ch; margin: 6px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.5; }
+.xp-parallax-content .section-lead, .xp-parallax-content p { color: rgba(255, 255, 255, .86); }
+
+/* ── Carrousels : une carte ne déborde jamais sur la suivante ── */
+.carousel-track > *, .xp-tile-wrap, .xp-tile, .city-tile-body { min-width: 0; }
+.city-tile-body p { overflow-wrap: anywhere; }
+.xp-tile-footer { min-width: 0; }
+
+/* ── Barre de conversation : un seul contour, curseur dégagé ── */
+.assistant-bar input,
+.assistant-bar input:focus,
+.assistant-bar input:focus-visible { border: 0; outline: 0; box-shadow: none; background: transparent; padding-inline: 4px; }
+.assistant-bar:focus-within { box-shadow: 0 0 0 2px color-mix(in srgb, var(--green) 55%, transparent), 0 12px 36px -12px rgba(0, 0, 0, .28); }
+.assistant-dock { bottom: max(16px, env(safe-area-inset-bottom)); }
+.assistant-bar.is-listening input::placeholder { color: var(--green); }
+
+/* ── Micro des champs de recherche ── */
+.field-mic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; transition: background .2s ease, color .2s ease; }
+.field-mic svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; }
+.field-mic:hover { background: color-mix(in srgb, var(--green) 10%, transparent); color: var(--green); }
+.field-mic.recording { background: #e5484d; color: #fff; animation: smart-pulse 1.4s ease-in-out infinite; }
+.field-icon .field-mic { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); }
+.field-icon .field-mic svg { position: static; transform: none; width: 20px; color: inherit; }
+.field-icon input { padding-right: 48px; }
+.dm-search .field-mic { color: #5b6660; }
+.dm-search .field-mic.recording { color: #fff; }
+.quick-query { position: relative; }
+.quick-query .field-mic { margin-inline-start: auto; }
+@media (prefers-reduced-motion: reduce) { .field-mic.recording { animation: none; } }
+
+/* ── Menu ordinateur : effet au survol des mots, pictogrammes en couleur ── */
+.primary-nav .nav-more { position: relative; }
+.primary-nav .nav-more::before { content: ""; position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px; border-radius: 2px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform .28s var(--ease-soft, ease); }
+.primary-nav .nav-more:hover::before, .primary-nav .nav-more:focus-visible::before { transform: scaleX(1); }
+.primary-nav .nav-more[aria-expanded="true"]::before { transform: scaleX(0); }
+.mega2-ico { background: color-mix(in srgb, var(--rc, var(--green)) 14%, var(--surface)); color: var(--rc, var(--green)); transition: transform .25s var(--ease-soft, ease), background .25s ease; }
+.mega2-entry strong { background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1.5px; padding-bottom: 2px; transition: background-size .3s var(--ease-soft, ease), color .2s ease; }
+.mega2-entry:hover strong, .mega2-entry:focus-visible strong { background-size: 100% 1.5px; color: var(--rc, var(--green)); }
+.mega2-entry:hover .mega2-ico { transform: scale(1.08) rotate(-3deg); background: color-mix(in srgb, var(--rc, var(--green)) 22%, var(--surface)); }
+.mega2-entry:hover small { color: var(--text); }
+.nav-sheet-sub a, .nav-sheet-all { transition: color .2s ease, padding .2s ease; }
+.nav-sheet-sub a:hover, .nav-sheet-sub a:active { color: var(--green); padding-inline-start: 4px; }
+@media (prefers-reduced-motion: reduce) { .mega2-ico, .primary-nav .nav-more::before, .mega2-entry strong { transition: none; } }
+
+/* Bouton menu : mobile et tablette seulement ; sur ordinateur la barre horizontale suffit. */
+@media (min-width: 1341px) { .header-actions .hamburger { display: none; } }
+
+/* ── Mobile : équilibre, champs, cartes ── */
+@media (max-width: 640px) {
+  .section-head h2 { font-size: clamp(1.4rem, 6.2vw, 1.75rem); line-height: 1.15; }
+  .section-lead { font-size: .95rem; }
+  .section-head { margin-bottom: 18px; }
+  .section-head .button { margin-top: 14px; }
+  select { text-overflow: ellipsis; padding-right: 34px; }
+  .xp-steps, .xp-steps li { min-width: 0; }
+  .xp-steps li { overflow-wrap: anywhere; }
+  .praticiens-empty { text-align: start; padding: 22px 18px; }
+  .praticiens-empty .place-panel { margin: 18px -4px; padding: 0; }
+  .place-row { grid-template-columns: 64px 1fr 34px; gap: 12px; padding: 14px; }
+  .place-row h3 { font-size: 1rem; line-height: 1.3; }
+  .place-type { font-size: .7rem; }
+  input, select, textarea { font-size: 16px; }
+}
+.praticiens-empty .place-panel, .praticiens-empty .place-row { text-align: start; }
+
+/* ── Connexion par code (une seule entrée, ordinateur et mobile) ── */
+.auth-one { max-width: 480px; margin-inline: auto; padding-block: 56px 96px; }
+.auth-one h1 { font-size: clamp(2rem, 7vw, 2.8rem); text-wrap: balance; }
+.auth-one .auth-lead { margin-bottom: 26px; color: var(--muted); }
+.otp-panel { padding: 26px; border-radius: 24px; box-shadow: 0 18px 50px -28px rgba(0, 0, 0, .35); }
+.otp-steps { display: flex; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
+.otp-steps li { flex: 1; height: 4px; border-radius: 4px; background: var(--line); transition: background .3s ease; }
+.otp-steps li.is-on, .otp-steps li.is-done { background: var(--green); }
+.otp-sent { margin: 0; color: var(--muted); font-size: .95rem; }
+.otp-sent b { color: var(--text); overflow-wrap: anywhere; }
+.otp-legal { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+.otp-legal a, .auth-check a { color: var(--green); }
+.otp-field { position: relative; display: grid; gap: 8px; }
+.otp-field > span:first-child { font-weight: 600; font-size: .92rem; }
+.otp-field input { position: absolute; inset: auto 0 0; height: 60px; opacity: 0; font-size: 16px; caret-color: transparent; z-index: 1; }
+.otp-boxes { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.otp-boxes i { display: grid; place-items: center; height: 60px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--surface-2); font: 700 1.5rem/1 Manrope, Inter, sans-serif; font-style: normal; color: var(--text); transition: border-color .2s ease, transform .2s ease; }
+.otp-field:focus-within .otp-boxes i.is-next { border-color: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 22%, transparent); }
+.otp-kind { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.otp-kind button { display: grid; gap: 2px; padding: 14px; text-align: start; border: 1.5px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--text); cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.otp-kind button small { color: var(--muted); font-size: .8rem; }
+.otp-kind button[aria-checked="true"] { border-color: var(--green); background: color-mix(in srgb, var(--green) 8%, var(--surface)); }
+.auth-link:disabled { opacity: .55; cursor: default; }
+@media (max-width: 640px) {
+  .auth-one { padding-block: 32px 80px; }
+  .otp-panel { padding: 20px 16px; border-radius: 20px; }
+  .otp-boxes { gap: 6px; }
+  .otp-boxes i { height: 54px; font-size: 1.3rem; }
+  .otp-field input { height: 54px; }
+}
+
+/* Noms saisis en minuscules (sources ouvertes) : majuscule initiale à l’affichage. */
+.place-row h3::first-letter { text-transform: uppercase; }
+
+/* ── Annuaire : carte sur mobile et tablette (plein écran à la demande, zoom aux doigts) ── */
+.map-open, .map-close { display: none; }
+@media (max-width: 1120px) {
+  .map-open { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0 0 14px; padding: 0 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-weight: 650; cursor: pointer; }
+  .map-open svg, .map-close svg { width: 18px; height: 18px; color: var(--green); }
+  .map-panel.is-open { display: block; position: fixed; z-index: 140; inset: var(--header, 58px) 0 0 0; border-radius: 0; }
+  .map-panel.is-open .map-card { display: none; }
+  .map-close { position: absolute; z-index: 10; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--text); color: var(--bg, #fff); font-weight: 650; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); cursor: pointer; }
+  .map-panel.is-open .maplibregl-canvas { touch-action: none; }
+  html.map-sheet-open, html.map-sheet-open body { overflow: hidden; }
+  html.map-sheet-open .assistant-dock, html.map-sheet-open .join-circle { display: none; }
+}
+.otp-mailbox { display: grid; gap: 8px; }
+.otp-mailbox.is-many { grid-template-columns: repeat(4, auto); justify-content: start; align-items: center; gap: 8px 14px; }
+.otp-mailbox.is-many small { grid-column: 1 / -1; }
+.otp-mailbox-link { color: var(--green); font-weight: 650; text-decoration: none; }
+.otp-mailbox-link:hover { text-decoration: underline; }
+
+/* ── Démarches officielles : listes, fiche, consulats ── */
+.op-list .op-row { display: grid; }
+.op-go { justify-self: start; margin: -4px 0 12px 58px; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--green) 10%, transparent); color: var(--green); font-size: .84rem; font-weight: 650; text-decoration: none; overflow-wrap: anywhere; }
+.op-go:hover { background: color-mix(in srgb, var(--green) 18%, transparent); }
+.sr-icon.is-online { background: color-mix(in srgb, var(--green) 14%, var(--surface)); color: var(--green); }
+.op-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--green) 35%, var(--line)); border-radius: 20px; background: color-mix(in srgb, var(--green) 7%, var(--surface)); }
+.op-cta b { display: block; font-size: 1.05rem; }
+.op-cta small { color: var(--muted); }
+.op-cta .sr-pill { flex: none; }
+.op-band { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; margin: 0 0 28px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--text); text-decoration: none; transition: border-color .2s ease; }
+.op-band:hover { border-color: var(--green); }
+.op-band b { display: block; }
+.op-band small { color: var(--muted); }
+.cs-search { display: flex; align-items: center; gap: 10px; min-height: 54px; margin: 0 0 28px; padding: 0 8px 0 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.cs-search:focus-within { border-color: var(--green); }
+.cs-search > svg { width: 20px; height: 20px; color: var(--muted); flex: none; }
+.cs-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font: 400 16px Inter, sans-serif; }
+.cs-country { margin: 0 0 32px; }
+.cs-country h2 { margin: 0 0 14px; font-size: 1.35rem; }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.cs-card { display: grid; align-content: start; gap: 8px; padding: 18px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); scroll-margin-top: 90px; }
+.cs-card:target { border-color: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 20%, transparent); }
+.cs-kind { color: var(--green); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.cs-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.3; }
+.cs-line { margin: 0; font-size: .9rem; line-height: 1.45; }
+.cs-line.is-muted { color: var(--muted); }
+.cs-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.cs-actions .sr-pill { min-height: 40px; padding: 0 14px; font-size: .86rem; }
+.cs-online { display: grid; gap: 4px; margin: 4px 0 0; padding: 10px 0 0; border-top: 1px solid var(--line); list-style: none; font-size: .88rem; }
+.cs-online a { color: var(--green); text-decoration: none; }
+@media (max-width: 640px) {
+  .op-cta { flex-direction: column; align-items: stretch; }
+  .op-cta .sr-pill { justify-content: center; }
+  .op-go { margin-left: 14px; }
+}
+
+/* Fiches (démarches) : titres plus petits (décision de Rad : « titres beaucoup moins gros » sur les fiches). */
+article.xp .xp-hero-city h1 { font-size: clamp(1.8rem, 3.4vw, 2.9rem); line-height: 1.08; max-inline-size: 22ch; }
+@media (max-width: 640px) { article.xp .xp-hero-city h1 { font-size: clamp(1.55rem, 7vw, 2rem); } }

@@ -6,6 +6,7 @@ import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { useWilaya } from './wilaya'
 import { NavIcon } from './NavIcon'
 import { sectorTitle, shellText, type Lang } from '../i18n'
+import { MicButton } from '../ui/MicButton'
 
 /** Barre « Trouvez rapidement » des méga-menus : wilaya + catégorie + recherche → annuaire filtré. */
 export function QuickFind({ onDone, lang = 'fr' }: { onDone?: () => void; lang?: Lang }) {
@@ -65,6 +66,7 @@ export function QuickFind({ onDone, lang = 'fr' }: { onDone?: () => void; lang?:
           <path d="m20 20-3.5-3.5" />
         </svg>
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.quickPlaceholder} />
+        <MicButton />
       </label>
       <button className="button primary quick-submit" type="submit">
         {t.search}

@@ -6,7 +6,7 @@ import type { Payload } from 'payload'
  * Sans accent (`dalil_unaccent`), plein texte français (`tsv`), fautes tolérées (trigrammes).
  * Chaque métier construit ses lignes (il connaît ses libellés) ; le socle les écrit et les interroge.
  */
-export type SearchType = 'rubrique' | 'categorie' | 'adresse' | 'praticien' | 'prestataire' | 'annonce' | 'guide'
+export type SearchType = 'rubrique' | 'categorie' | 'adresse' | 'praticien' | 'prestataire' | 'annonce' | 'guide' | 'demarche' | 'consulat'
 export type SearchRow = {
   type: SearchType
   id: string

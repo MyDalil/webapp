@@ -5,3 +5,6 @@ export { OFFICIAL_SITES, OFFICIAL_SITES_CHECKED, type OfficialSite } from './off
 export { DEMARCHES, DEMARCHE_CATEGORIES, demarcheBySlug, type Demarche, type DemarcheCategory, type GuideFact, type GuideSource, type KeyPoint, type Tone } from './demarches'
 export { guideView, GUIDE_VISUALS, type GuideView, type GuideVisual, type GuideSourceLink } from './guides'
 export { HUBS, hubByRoute, type Hub, type HubCard } from './hubs'
+export { THEMES, themeByKey, type Theme, type ThemeKey } from './officiel/themes'
+export { listPlatforms, listProcedures, listRepresentations, procedureBySlug, themesWithContent } from './officiel/queries'
+export { reindexProcedures, reindexRepresentations } from './officiel/search'

@@ -6,7 +6,7 @@ import type { PhotoKey } from '@/platform/referentiel/photos'
 
 export type HubPhoto = PhotoKey
 export type HubCard = { href: string; title: string; sub: string; photo?: HubPhoto; icon: string; tone: 'vert' | 'sable' | 'ciel'; links?: [string, string][] }
-export type Hub = { route: string; eyebrow: string; title: string; accent: string; lead: string; photo: HubPhoto; search: string; sections: { title: string; cards: HubCard[] }[] }
+export type Hub = { route: string; eyebrow: string; title: string; accent: string; lead: string; photo: HubPhoto; search: string; sections: { title: string; lead: string; cards: HubCard[] }[] }
 
 const CNL = '/annuaire/culture-nature-loisirs'
 
@@ -22,6 +22,7 @@ export const HUBS: Hub[] = [
     sections: [
       {
         title: 'Envies',
+        lead: 'Villes, patrimoine, nature, tables et sorties : choisissez votre idée.',
         cards: [
           { href: '/guides/choisir-sa-ville', title: 'Villes & Régions', sub: 'Découvrir les territoires et leurs particularités.', photo: 'constantine-pont', icon: 'pin', tone: 'sable', links: [['/guides/choisir-sa-ville', 'Choisir une ville'], ['/que-faire-ce-week-end', 'Culture et événements']] },
           { href: `${CNL}?category=Mus%C3%A9es`, title: 'Culture & Patrimoine', sub: 'Comprendre l’histoire et explorer les lieux culturels.', photo: 'arc-antique', icon: 'building', tone: 'vert', links: [[`${CNL}?category=Mus%C3%A9es`, 'Musées et patrimoine'], ['/que-faire-ce-week-end', 'Culture et événements']] },
@@ -44,6 +45,7 @@ export const HUBS: Hub[] = [
     sections: [
       {
         title: 'Au quotidien',
+        lead: 'Sorties, restaurants et services utiles près de chez vous.',
         cards: [
           { href: '/explorer', title: 'Sorties et loisirs', sub: 'Parcs, jardins, musées, plages et activités en famille.', photo: 'jardin', icon: 'users', tone: 'vert' },
           { href: '/guides/restaurants', title: 'Restaurants et cafés', sub: 'Trouver une table et choisir selon ses envies.', photo: 'couscous', icon: 'heart', tone: 'sable' },
@@ -52,6 +54,7 @@ export const HUBS: Hub[] = [
       },
       {
         title: 'S’organiser',
+        lead: 'Logement, santé, école, transport, banque et télécoms : les repères.',
         cards: [
           { href: '/guides/logement', title: 'Logement', sub: 'Location, achat, quartiers, garanties et points de vigilance.', photo: 'alger-ville', icon: 'home', tone: 'sable' },
           { href: '/guides/sante', title: 'Santé', sub: 'Médecins, cliniques, urgences, assurances et parcours de soin.', photo: 'hopital-moderne', icon: 'health', tone: 'vert' },
@@ -74,6 +77,7 @@ export const HUBS: Hub[] = [
     sections: [
       {
         title: 'Votre projet',
+        lead: 'Créer, investir, travailler : les étapes et les bons interlocuteurs.',
         cards: [
           { href: '/guides/travail-et-entreprise', title: 'Entreprendre', sub: 'Structurer son activité et préparer sa création.', photo: 'epices', icon: 'briefcase', tone: 'sable', links: [['/demarches/auto-entrepreneur', 'Auto-entrepreneur'], ['/guides/travail-et-entreprise', 'Le guide']] },
           { href: '/recherche?q=investir', title: 'Investir', sub: 'Préparer son projet et identifier les interlocuteurs.', photo: 'oran-panorama', icon: 'cash', tone: 'vert' },

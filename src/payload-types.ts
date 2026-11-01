@@ -82,6 +82,9 @@ export interface Config {
     'classified-messages': ClassifiedMessage;
     packs: Pack;
     'demandes-accompagnement': DemandesAccompagnement;
+    procedures: Procedure;
+    platforms: Platform;
+    representations: Representation;
     media: Media;
     submissions: Submission;
     'contribution-photos': ContributionPhoto;
@@ -117,6 +120,9 @@ export interface Config {
     'classified-messages': ClassifiedMessagesSelect<false> | ClassifiedMessagesSelect<true>;
     packs: PacksSelect<false> | PacksSelect<true>;
     'demandes-accompagnement': DemandesAccompagnementSelect<false> | DemandesAccompagnementSelect<true>;
+    procedures: ProceduresSelect<false> | ProceduresSelect<true>;
+    platforms: PlatformsSelect<false> | PlatformsSelect<true>;
+    representations: RepresentationsSelect<false> | RepresentationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
@@ -1554,6 +1560,146 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Garde-fous : src/rubriques/demarches/<thème>/AGENTS.md. Sources officielles seulement.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "procedures".
+ */
+export interface Procedure {
+  id: number;
+  title: string;
+  slug: string;
+  theme:
+    | 'identite'
+    | 'etat-civil'
+    | 'consulaire-diaspora'
+    | 'nationalite-justice'
+    | 'voyage-circulation'
+    | 'entreprise'
+    | 'fiscalite'
+    | 'social-emploi'
+    | 'logement-urbanisme'
+    | 'vehicules-permis'
+    | 'education-diplomes'
+    | 'etrangers-en-algerie'
+    | 'associations'
+    | 'sante'
+    | 'factures-services';
+  audience?: ('residents' | 'diaspora' | 'etrangers' | 'entreprises')[] | null;
+  summary: string;
+  online?: boolean | null;
+  onlineUrl?: string | null;
+  platform?: string | null;
+  steps?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  documents?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  cost?: string | null;
+  delay?: string | null;
+  where?: string | null;
+  forms?:
+    | {
+        title: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  laws?:
+    | {
+        title: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        url: string;
+        title: string;
+        checked: string;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'published' | 'draft' | 'retired';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "platforms".
+ */
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+  url: string;
+  organisme?: string | null;
+  services?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        url: string;
+        title: string;
+        checked: string;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  status: 'published' | 'draft' | 'retired';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Garde-fous : src/rubriques/demarches/consulats/AGENTS.md.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "representations".
+ */
+export interface Representation {
+  id: number;
+  name: string;
+  slug: string;
+  country: string;
+  city: string;
+  kind: 'ambassade' | 'consulat-general' | 'consulat';
+  continent?:
+    ('Europe' | 'Afrique' | 'Amérique du Nord' | 'Amérique latine' | 'Moyen-Orient' | 'Asie' | 'Océanie') | null;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  jurisdiction?: string | null;
+  onlineServices?:
+    | {
+        title: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  sources?:
+    | {
+        url: string;
+        title: string;
+        checked: string;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'published' | 'draft' | 'retired';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
@@ -1990,6 +2136,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'demandes-accompagnement';
         value: number | DemandesAccompagnement;
+      } | null)
+    | ({
+        relationTo: 'procedures';
+        value: number | Procedure;
+      } | null)
+    | ({
+        relationTo: 'platforms';
+        value: number | Platform;
+      } | null)
+    | ({
+        relationTo: 'representations';
+        value: number | Representation;
       } | null)
     | ({
         relationTo: 'media';
@@ -2562,6 +2720,123 @@ export interface DemandesAccompagnementSelect<T extends boolean = true> {
   status?: T;
   advisor?: T;
   notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "procedures_select".
+ */
+export interface ProceduresSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  theme?: T;
+  audience?: T;
+  summary?: T;
+  online?: T;
+  onlineUrl?: T;
+  platform?: T;
+  steps?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  cost?: T;
+  delay?: T;
+  where?: T;
+  forms?:
+    | T
+    | {
+        title?: T;
+        url?: T;
+        id?: T;
+      };
+  laws?:
+    | T
+    | {
+        title?: T;
+        url?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        url?: T;
+        title?: T;
+        checked?: T;
+        id?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "platforms_select".
+ */
+export interface PlatformsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  url?: T;
+  organisme?: T;
+  services?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        url?: T;
+        title?: T;
+        checked?: T;
+        id?: T;
+      };
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "representations_select".
+ */
+export interface RepresentationsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  country?: T;
+  city?: T;
+  kind?: T;
+  continent?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  website?: T;
+  jurisdiction?: T;
+  onlineServices?:
+    | T
+    | {
+        title?: T;
+        url?: T;
+        id?: T;
+      };
+  sources?:
+    | T
+    | {
+        url?: T;
+        title?: T;
+        checked?: T;
+        id?: T;
+      };
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

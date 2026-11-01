@@ -16,9 +16,9 @@ const ALGERIA: [[number, number], [number, number]] = [
   [12, 37.2],
 ]
 const GREEN = '#006b3c'
-const dark = () => document.documentElement.dataset.theme === 'dark'
-// OpenFreeMap (gratuit, sans clé, usage commercial permis) : « Liberty » en clair, « Dark » en sombre.
-const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark() ? 'dark' : 'liberty'}`
+// OpenFreeMap « Liberty » (gratuit, sans clé, usage commercial permis), en clair comme en sombre :
+// c’est le plan le plus détaillé (rues, bâtiments, lieux) — le style « Dark » en montrait beaucoup moins (Rad, 2026-11-01).
+const styleUrl = () => 'https://tiles.openfreemap.org/styles/liberty'
 // Noms de la carte en français, arabe ou anglais (Rad, 2026-10-30) ; repli : lettres latines, puis nom local.
 type MapLang = 'fr' | 'ar' | 'en'
 const LANG_KEY = 'dalil-map-lang'
@@ -131,7 +131,8 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
 
   useEffect(() => {
     if (!box.current || map.current) return
-    const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, attributionControl: { compact: true } })
+    const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, touchZoomRotate: true, dragRotate: false, touchPitch: false, attributionControl: { compact: true } })
+    m.touchZoomRotate.disableRotation()
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
     let lang = initialLang()
     m.addControl(
@@ -172,11 +173,11 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
       m.on('mouseleave', id, () => (m.getCanvas().style.cursor = ''))
     }
     map.current = m
-    // Thème clair / sombre : nouveau fond, mêmes repères.
-    const obs = new MutationObserver(() => m.setStyle(styleUrl()))
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    // Le cadre peut changer de taille (carte ouverte sur mobile, rotation) : la carte suit.
+    const ro = new ResizeObserver(() => m.resize())
+    ro.observe(box.current)
     return () => {
-      obs.disconnect()
+      ro.disconnect()
       m.remove()
       map.current = null
     }

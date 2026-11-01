@@ -3,6 +3,7 @@ import type { Hub } from '../hubs'
 import { PHOTOS } from '@/platform/referentiel/photos'
 import { Icon } from '@/platform/ui/Icon'
 import { SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
+import { MicButton } from '@/platform/ui/MicButton'
 
 /** Page de rubrique au format de l’accueil : diaporama des photos de la rubrique, rangées de grandes tuiles photo. */
 export function HubView({ hub }: { hub: Hub }) {
@@ -14,11 +15,12 @@ export function HubView({ hub }: { hub: Hub }) {
         <form action="/recherche" className="dm-search" role="search">
           <Icon name="search" />
           <input name="q" type="search" placeholder={hub.search} aria-label="Rechercher" />
+          <MicButton />
         </form>
       </XpHero>
       {hub.sections.map((s, i) => (
         <section key={s.title} className={`section${i % 2 ? ' section-tint' : ''}`}>
-          <SectionHead eyebrow={hub.eyebrow} title={s.title} />
+          <SectionHead eyebrow={hub.eyebrow} title={s.title} text={s.lead} />
           <TileCarousel
             label={s.title}
             tiles={s.cards.map(

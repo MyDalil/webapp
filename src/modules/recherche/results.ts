@@ -18,6 +18,8 @@ const GROUPS: { key: SearchGroup['key']; title: string; types: SearchType[]; max
   { key: 'prestataire', title: 'Prestataires', types: ['prestataire'], max: 6 },
   { key: 'adresse', title: 'Adresses', types: ['adresse'], max: 12 },
   { key: 'annonce', title: 'Annonces', types: ['annonce'], max: 8 },
+  { key: 'demarche', title: 'Démarches officielles', types: ['demarche'], max: 6 },
+  { key: 'consulat', title: 'Ambassades et consulats', types: ['consulat'], max: 6 },
   { key: 'guide', title: 'Guides', types: ['guide'], max: 4 },
 ]
 

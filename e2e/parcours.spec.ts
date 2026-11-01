@@ -118,6 +118,36 @@ test.describe('Formulaires @ecriture', () => {
   })
 })
 
+test.describe('Démarches officielles', () => {
+  test('un thème liste ses démarches avec le lien du site officiel', async ({ page }) => {
+    await page.goto('/demarches/theme/etat-civil')
+    await expect(page.locator('.op-row').first()).toBeVisible()
+    await expect(page.locator('.op-go').first()).toHaveAttribute('href', /^https:\/\/[a-z0-9.-]+\.dz\//)
+  })
+  test('fiche : renouvellement du passeport en ligne', async ({ page }) => {
+    await page.goto('/demarches/renouvellement-passeport-a-distance-diaspora')
+    await expect(page.locator('.op-cta a')).toHaveAttribute('href', 'https://biometric-documents.interieur.gov.dz/')
+  })
+  test('consulats : recherche par ville', async ({ page }) => {
+    await page.goto('/demarches/consulats')
+    await page.locator('.cs-search input').fill('Lyon')
+    await expect(page.locator('.cs-card', { hasText: 'Lyon' }).first()).toBeVisible()
+  })
+  test('aucun « À vérifier » visible du public', async ({ page }) => {
+    await page.goto('/demarches/theme/identite')
+    await expect(page.getByText('À vérifier')).toHaveCount(0)
+  })
+})
+
+test.describe('Connexion par code', () => {
+  test('une seule entrée : email, pas de mot de passe', async ({ page }) => {
+    await page.goto('/connexion')
+    await expect(page.locator('.otp-panel input[type="email"]')).toBeVisible()
+    await expect(page.locator('input[type="password"]')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Continuer' })).toBeVisible()
+  })
+})
+
 test.describe('Administration', () => {
   test('/admin affiche la connexion', async ({ page }) => {
     await page.goto('/admin')

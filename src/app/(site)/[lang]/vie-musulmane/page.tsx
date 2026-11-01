@@ -46,6 +46,7 @@ export default async function VieMusulmane() {
           <div className="section-head">
             <div>
               <h2>Que cherchez-vous ?</h2>
+              <p className="section-lead">Choisissez une rubrique pour trouver le bon lieu ou le bon guide.</p>
             </div>
             {rubric?.feature && (
               <Link className="button outline" href={rubric.feature.href}>
