@@ -358,3 +358,12 @@ html[data-theme="dark"] .sr-pill.is-primary .ico-dot { background: rgba(5, 20, 1
   .dm-actions .sr-pill { max-width: none; width: 100%; white-space: normal; text-align: center; line-height: 1.25; padding-block: 10px; }
 }
 .sr-pill .ico-dot svg, .chip .ico-dot svg, .xp-chip .ico-dot svg { color: inherit; }
+
+/* Exemples sous la recherche de l’accueil (sur photo) : pictogramme en couleur, plus clair pour rester lisible. */
+.xp-suggest a:has(.ico-dot) { padding-left: 4px; gap: 7px; }
+.xp-suggest .ico-dot { width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--ic) 34%, transparent); color: color-mix(in srgb, var(--ic) 55%, #fff); }
+.xp-suggest .ico-dot svg { width: 13px; height: 13px; }
+
+/* Recherche de l’accueil : l’anneau de focus entoure toute la barre, pas le seul champ. */
+.search-bar input:focus, .search-bar input:focus-visible { outline: none; box-shadow: none; }
+.search-bar:focus-within { box-shadow: 0 0 0 3px rgba(56, 209, 129, .45), 0 18px 50px -18px rgba(0, 0, 0, .6); }

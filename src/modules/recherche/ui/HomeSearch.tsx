@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import Link from '@/platform/ui/Link'
 import { useLangRouter } from '@/platform/ui/lang'
-import { Icon } from '@/platform/ui/Icon'
+import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { NearMe } from './NearMe'
 import { readWilaya } from '@/platform/shell/wilaya'
 import { toast } from '@/platform/shell/toast'
@@ -29,15 +29,15 @@ const UI = {
 }
 
 /** Exemples : jamais deux de la même rubrique à la suite (Rad, 2026-10-31). */
-const SUGGESTIONS: [href: string, fr: string, en: string, ar: string][] = [
-  ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger', 'Dentist in Algiers', 'طبيب أسنان في العاصمة'],
-  ['/services/bricolage?activite=electricite', 'Électricien', 'Electrician', 'كهربائي'],
-  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée', 'Mosque', 'مسجد'],
-  ['/guides/documents-et-demarches', 'Passeport et papiers', 'Passport & papers', 'جواز السفر والوثائق'],
-  ['/praticiens?specialite=pediatrie', 'Pédiatre', 'Paediatrician', 'طبيب أطفال'],
-  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement', 'Flat to rent', 'شقة للكراء'],
-  ['/services/bricolage?activite=plomberie', 'Plombier', 'Plumber', 'سبّاك'],
-  ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie', 'Pharmacy', 'صيدلية'],
+const SUGGESTIONS: [href: string, fr: string, en: string, ar: string, icon: string][] = [
+  ['/praticiens?specialite=dentiste&wilaya=16', 'Dentiste à Alger', 'Dentist in Algiers', 'طبيب أسنان في العاصمة', 'health'],
+  ['/services/bricolage?activite=electricite', 'Électricien', 'Electrician', 'كهربائي', 'bolt'],
+  ['/annuaire/mosquees-priere?category=Mosqu%C3%A9es', 'Mosquée', 'Mosque', 'مسجد', 'mosque'],
+  ['/guides/documents-et-demarches', 'Passeport et papiers', 'Passport & papers', 'جواز السفر والوثائق', 'passport'],
+  ['/praticiens?specialite=pediatrie', 'Pédiatre', 'Paediatrician', 'طبيب أطفال', 'baby'],
+  ['/annonces/immobilier?type=appartement&transaction=location', 'Location d’appartement', 'Flat to rent', 'شقة للكراء', 'home'],
+  ['/services/bricolage?activite=plomberie', 'Plombier', 'Plumber', 'سبّاك', 'drop'],
+  ['/annuaire/sante-soins?category=Pharmacies', 'Pharmacie', 'Pharmacy', 'صيدلية', 'health'],
 ]
 
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
@@ -167,9 +167,9 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
     <p className="xp-suggest">
       <NearMe inputId="home-search" className="near-me-home" lang={lang} />
       <span className="sr-only">{u.ex}</span>
-      {SUGGESTIONS.map(([href, fr, en, ar]) => (
+      {SUGGESTIONS.map(([href, fr, en, ar, icon]) => (
         <Link key={href} href={href}>
-          {{ fr, en, ar }[lang]}
+          <IconLabel label={{ fr, en, ar }[lang]} icon={icon} />
         </Link>
       ))}
     </p>

@@ -69,6 +69,7 @@ export function Assistant() {
   const dictation = useRef<Dictation | null>(null)
   // Accueil : la barre flottante s’efface tant que la grande recherche de la photo est à l’écran.
   const [tucked, setTucked] = useState(false)
+  const visibleBars = useRef<Element[]>([])
   // Fiches détaillées : l’assistant se replie en bouton rond pour ne jamais masquer le contenu (crédits photo).
   const compact = /^\/(adresses|prestataires|missions)\/|^\/praticiens\/[^/]+|^\/annonces\/[^/]+\/[^/]+|^\/guides\/[^/]+/.test(path ?? '')
   useEffect(() => {
@@ -83,6 +84,7 @@ export function Assistant() {
       const seen = new Set<Element>()
       obs = new IntersectionObserver((es) => {
         es.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)))
+        visibleBars.current = [...seen]
         setTucked(seen.size > 0)
       }, { threshold: 0.01 })
       bars.forEach((b) => obs!.observe(b))
@@ -93,6 +95,17 @@ export function Assistant() {
       obs?.disconnect()
     }
   }, [path])
+
+  // Une barre de la page revient à l’écran : la barre DALIL vide se referme (jamais deux barres visibles).
+  useEffect(() => {
+    if (tucked && !text.trim() && !panel && !listening) {
+      setExpanded(false)
+      setFocused(false)
+      const el = document.activeElement as HTMLElement | null
+      if (el?.closest('.assistant-dock')) el.blur()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tucked])
 
   useEffect(() => {
     dictation.current?.stop()
@@ -192,11 +205,23 @@ export function Assistant() {
 
 
 
+  // Une seule barre à la fois : si une barre de la page est à l’écran, ✦ y place le curseur au lieu d’ouvrir une seconde barre.
+  function openOrb() {
+    const bar = visibleBars.current[0]
+    const input = bar?.querySelector<HTMLInputElement>('input:not([type=hidden])') ?? (bar instanceof HTMLInputElement ? bar : null)
+    if (!expanded && input) {
+      bar!.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      input.focus({ preventScroll: true })
+      return
+    }
+    setExpanded(!expanded)
+  }
+
   if (path === '/recherche') return null
 
   return (
     <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact || (tucked && !expanded && !text && !panel) ? 'is-compact' : ''}`}>
-      <button className="assistant-orb" type="button" aria-label={A.open} onClick={() => setExpanded(!expanded)}>
+      <button className="assistant-orb" type="button" aria-label={A.open} onClick={openOrb}>
         <span aria-hidden="true">✦</span>
       </button>
       <form className={`assistant-bar is-chat${listening ? ' is-listening' : ''}${text.trim() ? ' has-text' : ''}`} onSubmit={submit}>
