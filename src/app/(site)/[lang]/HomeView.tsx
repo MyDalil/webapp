@@ -125,7 +125,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
   }
   const photos: EntryPhotos = {
     sante: { ...door(['sante-soins']), photo: { src: PHOTOS['hopital-moderne'].src, credit: PHOTOS['hopital-moderne'].credit }, example: null },
-    // Portes Services et Vivre & démarches : photo choisie qui montre le sujet (pas une fiche au hasard).
+    // Portes Services et Vie pratique : photo choisie qui montre le sujet (pas une fiche au hasard).
     services: { ...door(['maison-travaux', 'droit-finance-conseil', 'transports-mobilite']), photo: { src: PHOTOS['domicile-travaux'].src, credit: PHOTOS['domicile-travaux'].credit }, example: null },
     annonces: (() => {
       const c = latest.find((x) => x.photo)

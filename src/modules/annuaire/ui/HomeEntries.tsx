@@ -14,8 +14,8 @@ const fiches = (n: number, l: Lang) => count(n, l, { fr: ['fiche', 'fiches'], en
 
 /** Titres et lignes des portes en anglais et en arabe (mêmes mots que le menu). */
 const DOOR_T: Record<'en' | 'ar', Record<EntryKey, [title: string, line?: string]>> = {
-  en: { sante: ['Health', 'Doctors, pharmacies, emergencies'], services: ['Services', 'Repairs, cleaning, home help'], annonces: ['Classifieds', 'Property, jobs, vehicles, items'], musulmane: ['Muslim life'], decouvrir: ['Discover'], vivre: ['Living & paperwork', 'Moving, papers, housing, school'] },
-  ar: { sante: ['الصحة', 'أطباء، صيدليات، طوارئ'], services: ['الخدمات', 'أشغال، تنظيف، مساعدة منزلية'], annonces: ['الإعلانات', 'عقار، عمل، مركبات، أغراض'], musulmane: ['الحياة الإسلامية'], decouvrir: ['اكتشف'], vivre: ['العيش والإجراءات', 'الاستقرار، الوثائق، السكن، المدرسة'] },
+  en: { sante: ['Health', 'Doctors, pharmacies, emergencies'], services: ['Services', 'Repairs, cleaning, home help'], annonces: ['Classifieds', 'Property, jobs, vehicles, items'], musulmane: ['Muslim life'], decouvrir: ['Discover'], vivre: ['Everyday life', 'Moving, papers, housing, school'] },
+  ar: { sante: ['الصحة', 'أطباء، صيدليات، طوارئ'], services: ['الخدمات', 'أشغال، تنظيف، مساعدة منزلية'], annonces: ['الإعلانات', 'عقار، عمل، مركبات، أغراض'], musulmane: ['الحياة الإسلامية'], decouvrir: ['اكتشف'], vivre: ['الحياة العملية', 'الاستقرار، الوثائق، السكن، المدرسة'] },
 }
 
 /**
@@ -28,7 +28,7 @@ const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
   { key: 'annonces', href: '/annonces', title: 'Annonces', line: 'Immobilier, emploi, véhicules, objets' },
   { key: 'musulmane', href: '/vie-musulmane', title: 'Vie musulmane' },
   { key: 'decouvrir', href: '/explorer', title: 'Découvrir' },
-  { key: 'vivre', href: '/demarches', title: 'Vivre & démarches', line: 'Installation, papiers, logement, école' },
+  { key: 'vivre', href: '/demarches', title: 'Vie pratique', line: 'Installation, papiers, logement, école' },
 ]
 
 export function HomeEntries({ stats, lang = 'fr' }: { stats: EntryPhotos; lang?: Lang }) {

@@ -73,7 +73,7 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
       extra: 'All guides',
     },
     vivre: {
-      label: 'Living & paperwork',
+      label: 'Everyday life',
       hint: 'Moving, paperwork, housing, school',
       entries: [
         ['Moving to Algeria', 'Prepare your arrival'],
@@ -83,7 +83,7 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
         ['Work & business', 'Jobs, legal status, registry, tax'],
         ['Banking, telecoms & transport', 'Accounts, plans, getting around'],
       ],
-      feature: ['All procedures', 'Living & paperwork'],
+      feature: ['All procedures', 'Everyday life'],
     },
   },
   ar: {
@@ -154,7 +154,7 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
       extra: 'كل الأدلة',
     },
     vivre: {
-      label: 'العيش والإجراءات',
+      label: 'الحياة العملية',
       hint: 'الاستقرار، الوثائق، السكن، المدرسة',
       entries: [
         ['الاستقرار في الجزائر', 'حضّر وصولك'],
@@ -164,7 +164,7 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
         ['العمل والمؤسسة', 'توظيف، الوضع القانوني، السجل، الضرائب'],
         ['البنك والاتصالات والنقل', 'حسابات، اشتراكات، التنقل'],
       ],
-      feature: ['كل الإجراءات', 'العيش والإجراءات'],
+      feature: ['كل الإجراءات', 'الحياة العملية'],
     },
   },
 }

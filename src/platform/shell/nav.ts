@@ -1,6 +1,6 @@
 /**
  * Navigation principale : six univers (audit du 2026-11-02, structure validée par Rad le même jour) dans cet ordre :
- * Santé, Services, Annonces, Vie musulmane, Découvrir, Vivre & démarches. Chacun avec son méga-menu
+ * Santé, Services, Annonces, Vie musulmane, Découvrir, Vie pratique. Chacun avec son méga-menu
  * (six entrées, une carte à la une, la barre « Trouvez rapidement »).
  * Une entrée = [lien, pictogramme, titre, sous-titre]. Toutes les pages existent.
  */
@@ -103,7 +103,7 @@ export const RUBRICS: Rubric[] = [
   },
   {
     key: 'vivre',
-    label: 'Vivre & démarches',
+    label: 'Vie pratique',
     href: '/demarches',
     match: ['/demarches', '/installation', '/vie-pratique', '/guides/documents-et-demarches', '/guides/travail-et-entreprise', '/guides/preparer-son-installation', '/guides/logement', '/guides/ecole-et-famille', '/guides/transport', '/guides/budget-et-banque', '/guides/internet-et-telecoms', '/annuaire/administrations-services-publics'],
     entries: [
@@ -114,7 +114,7 @@ export const RUBRICS: Rubric[] = [
       ['/guides/travail-et-entreprise', 'briefcase', 'Travail & entreprise', 'Emploi, statuts, registre, fiscalité'],
       ['/guides/budget-et-banque', 'wallet', 'Banque, télécoms & transports', 'Comptes, forfaits, se déplacer'],
     ],
-    feature: { title: 'Toutes les démarches', href: '/demarches', kicker: 'Vivre & démarches' },
+    feature: { title: 'Toutes les démarches', href: '/demarches', kicker: 'Vie pratique' },
   },
 ]
 
