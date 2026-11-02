@@ -115,7 +115,7 @@ export function Directory({ places: initial, total: initialTotal, sectors, initi
 
   const [showFilters, setShowFilters] = useState(false)
   const scoped = useMemo(() => filterPlaces(places, { sector, wilaya }), [places, sector, wilaya])
-  const wilayas = useMemo(() => WILAYAS.filter((w) => !w.transition).map((w) => w.name).sort((a, b) => a.localeCompare(b, 'fr')), [])
+  const wilayas = useMemo(() => WILAYAS.map((w) => w.name).sort((a, b) => a.localeCompare(b, 'fr')), [])
   const cities = useMemo(() => [...new Set(scoped.map((p) => p.city))].sort((a, b) => a.localeCompare(b, 'fr')), [scoped])
   const categories = useMemo(() => {
     const fromSector = sectors.find((s) => s.slug === sector)?.categories ?? []

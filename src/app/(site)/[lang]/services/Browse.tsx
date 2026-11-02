@@ -22,7 +22,7 @@ const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
 }
 
 export type BrowseQuery = { categorie?: string; activite?: string; wilaya?: string; commune?: string; genre?: string; langue?: string }
-const WILAYA_LIST = [...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+const WILAYA_LIST = [...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 const stars = (r: number) => `★ ${r.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`
 
 function Card({ p, activity }: { p: ProviderCard; activity?: string }) {

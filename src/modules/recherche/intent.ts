@@ -19,7 +19,7 @@ const norm = (s: string) =>
     .replace(/[’'`-]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-const WILAYA_LIST = WILAYAS.filter((w) => !w.transition)
+const WILAYA_LIST = WILAYAS
 const findWilaya = (v: unknown) => {
   const s = norm(String(v ?? ''))
   if (!s) return null

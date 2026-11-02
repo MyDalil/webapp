@@ -485,8 +485,13 @@ function ZoneForm({ pr, wilayas, onSubmit }: { pr: P; wilayas: Wilaya[]; onSubmi
     setList(null)
     fetch(`/api/communes?wilaya=${wilaya}`)
       .then((r) => r.json())
-      .then((d) => setList(d.communes))
+      .then((d) => {
+        setList(d.communes)
+        // Wilaya sans liste officielle de communes publiée : intervention dans toute la wilaya.
+        if (!d.communes?.length) setWhole(true)
+      })
   }, [wilaya])
+  const noCommunes = list !== null && list.length === 0
   const shown = useMemo(() => (list ?? []).filter((c) => !q || c.name.toLowerCase().includes(q.toLowerCase())), [list, q])
   const toggle = (id: string) => {
     const next = new Set(picked)
@@ -534,9 +539,10 @@ function ZoneForm({ pr, wilayas, onSubmit }: { pr: P; wilayas: Wilaya[]; onSubmi
         </label>
       </div>
       <label className="auth-check">
-        <input type="checkbox" checked={whole} onChange={(e) => setWhole(e.target.checked)} />
+        <input type="checkbox" checked={whole} disabled={noCommunes} onChange={(e) => setWhole(e.target.checked)} />
         <span>J’interviens dans toute la wilaya</span>
       </label>
+      {noCommunes && <p className="booking-note">La liste officielle des communes de cette wilaya n’est pas encore publiée. Votre zone couvre toute la wilaya.</p>}
       {!whole &&
         (list === null ? (
           <p className="muted-line">Chargement des communes…</p>

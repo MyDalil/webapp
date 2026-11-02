@@ -8,9 +8,9 @@ const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'src/platform/referentiel/communes.json'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
-// Les 58 wilayas « définitives » du référentiel DALIL (les wilayas en transition n’ont pas encore de liste de communes publiée).
+// Les wilayas du référentiel DALIL. Les 11 wilayas de 2026 (codes 59 à 69) : pas encore de liste officielle de communes publiée.
 const catalog = readFileSync('src/platform/referentiel/catalog.ts', 'utf8')
-const WILAYAS = JSON.parse(/export const WILAYAS[^=]*=\s*(\[.*\])/.exec(catalog)[1]).filter((w) => !w.transition)
+const WILAYAS = JSON.parse(/export const WILAYAS[^=]*=\s*(\[.*\])/.exec(catalog)[1])
 const norm = (s) =>
   String(s ?? '')
     .normalize('NFD')

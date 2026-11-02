@@ -101,7 +101,7 @@ export const Providers: CollectionConfig = {
         {
           label: 'Zone',
           fields: [
-            { name: 'wilaya', type: 'select', required: true, label: 'Wilaya', options: WILAYAS.filter((w) => !w.transition).map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
+            { name: 'wilaya', type: 'select', required: true, label: 'Wilaya', options: WILAYAS.map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
             { name: 'baseCommune', type: 'text', label: 'Commune de base', admin: { description: 'Identifiant du référentiel des communes (ex. 16-bab-el-oued).' } },
             { name: 'wholeWilaya', type: 'checkbox', label: 'Intervient dans toute la wilaya', defaultValue: false },
             { name: 'communes', type: 'text', hasMany: true, label: 'Communes desservies', admin: { description: 'Identifiants du référentiel des communes.' } },

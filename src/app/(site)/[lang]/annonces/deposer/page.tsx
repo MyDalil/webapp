@@ -29,7 +29,7 @@ export default async function Deposer({ searchParams }: Props) {
       photos: (photos ?? []).filter((m): m is Media => typeof m === 'object').map((m) => ({ id: m.id, thumb: m.sizes?.thumb?.url ?? m.url ?? '' })),
     }
   }
-  const wilayas = WILAYAS.filter((w) => !w.transition).map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+  const wilayas = WILAYAS.map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   return (
     <section className="auth-page container account-page">
       <p className="eyebrow">Annonces</p>

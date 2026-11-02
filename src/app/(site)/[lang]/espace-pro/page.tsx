@@ -22,7 +22,7 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
   if (!m) redirect(`/connexion/professionnel?next=${encodeURIComponent(asked ? `/espace-pro?espace=${asked}` : '/espace-pro')}`)
   const [practitioner, provider] = m._verified ? await Promise.all([myPractitioner(m), myProvider(m)]) : [null, null]
   const space = asked === 'services' || asked === 'praticien' ? asked : provider ? 'services' : practitioner ? 'praticien' : null
-  const wilayas = WILAYAS.filter((w) => !w.transition).map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+  const wilayas = WILAYAS.map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   return (
     <section className="auth-page container account-page">
       <p className="eyebrow">Espace professionnel</p>

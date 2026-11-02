@@ -2,7 +2,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { COMMUNES } from '@/platform/referentiel/communes'
 import { searchWords } from '@/platform/search/store'
 
-const OPEN = WILAYAS.filter((w) => !w.transition)
+const OPEN = WILAYAS
 const LINK = new Set(['a', 'au', 'aux', 'en', 'de', 'du', 'pres', 'sur', 'dans', 'vers', 'region'])
 
 /**

@@ -56,7 +56,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
               <span>Où</span>
               <select name="wilaya" defaultValue={q.wilaya ?? ''}>
                 <option value="">Toute l’Algérie</option>
-                {[...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr')).map((w) => (
+                {[...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr')).map((w) => (
                   <option key={w.code} value={String(w.code)}>
                     {w.name}
                   </option>
