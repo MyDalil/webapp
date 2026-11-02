@@ -14,7 +14,7 @@ import { MicButton } from '@/platform/ui/MicButton'
 import { ThemeRails } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
-  title: 'Démarches en Algérie · DALIL',
+  title: 'Démarches en Algérie',
   description: 'Passeport, changement de résidence, auto-entrepreneur, administrations, ambassades : les étapes, les pièces et les sites officiels, sources datées.',
 }
 export const revalidate = 3600

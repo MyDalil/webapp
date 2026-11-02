@@ -1,7 +1,7 @@
 import { revalidateLangs } from '@/platform/revalidate'
 import type { CollectionAfterChangeHook } from 'payload'
 import type { Access, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
-import { isStaff } from '@/platform/access'
+import { guardPublication, isAdmin, isAdminField, isStaff, isStaffField } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { DAYS, LANGUAGES, SPECIALTIES } from './specialties'
 import { indexPractitioner, unindexPractitioner } from './search'
@@ -31,8 +31,8 @@ export const Practitioners: CollectionConfig = {
   slug: 'practitioners',
   labels: { singular: 'Praticien', plural: 'Praticiens' },
   admin: { group: 'Santé', useAsTitle: 'name', defaultColumns: ['name', 'specialties', 'city', 'status', 'identityVerified'] },
-  access: { read: readPublished, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { beforeValidate: [prepare], afterChange: [indexPractitioner, refreshPage], afterDelete: [unindexPractitioner] },
+  access: { read: readPublished, create: isStaff, update: isStaff, delete: isAdmin },
+  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication('status')], afterChange: [indexPractitioner, refreshPage], afterDelete: [unindexPractitioner] },
   fields: [
     {
       type: 'tabs',
@@ -93,30 +93,30 @@ export const Practitioners: CollectionConfig = {
               name: 'closures',
               type: 'array',
               label: 'Absences et congés',
-              fields: [{ type: 'row', fields: [{ name: 'from', type: 'date', required: true, label: 'Du' }, { name: 'to', type: 'date', required: true, label: 'Au' }, { name: 'note', type: 'text', label: 'Motif (interne)' }] }],
+              fields: [{ type: 'row', fields: [{ name: 'from', type: 'date', required: true, label: 'Du' }, { name: 'to', type: 'date', required: true, label: 'Au' }, { name: 'note', type: 'text', label: 'Motif (interne)', access: { read: isStaffField } }] }],
             },
           ],
         },
         {
           label: 'Vérification',
           fields: [
-            { type: 'row', fields: [{ name: 'identityVerified', type: 'checkbox', label: 'Identité vérifiée' }, { name: 'verifiedAt', type: 'date', label: 'Vérifié le' }, { name: 'verifiedBy', type: 'text', label: 'Vérifié par' }] },
+            { type: 'row', fields: [{ name: 'identityVerified', type: 'checkbox', label: 'Identité vérifiée', access: { create: isAdminField, update: isAdminField } }, { name: 'verifiedAt', type: 'date', label: 'Vérifié le', access: { create: isAdminField, update: isAdminField } }, { name: 'verifiedBy', type: 'text', label: 'Vérifié par', access: { create: isAdminField, update: isAdminField } }] },
             {
               name: 'diplomas',
               type: 'array',
               label: 'Diplômes et autorisations d’exercice',
               fields: [
-                { type: 'row', fields: [{ name: 'title', type: 'text', required: true, label: 'Intitulé' }, { name: 'institution', type: 'text', label: 'Établissement' }, { name: 'year', type: 'number', label: 'Année' }, { name: 'verified', type: 'checkbox', label: 'Vérifié' }] },
+                { type: 'row', fields: [{ name: 'title', type: 'text', required: true, label: 'Intitulé' }, { name: 'institution', type: 'text', label: 'Établissement' }, { name: 'year', type: 'number', label: 'Année' }, { name: 'verified', type: 'checkbox', label: 'Vérifié', access: { create: isAdminField, update: isAdminField } }] },
               ],
             },
-            { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)' },
+            { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)', access: { read: isStaffField } },
           ],
         },
       ],
     },
     { name: 'status', type: 'select', required: true, defaultValue: 'pending', label: 'Statut', options: [{ label: 'En attente de vérification', value: 'pending' }, { label: 'Publié', value: 'published' }, { label: 'Suspendu', value: 'suspended' }], admin: { position: 'sidebar', description: 'Publication uniquement après vérification de l’identité et du droit d’exercer.' } },
     { name: 'demo', type: 'checkbox', label: 'Fiche de démonstration', defaultValue: false, admin: { position: 'sidebar', description: 'Affiche un bandeau « Démo » : aucun vrai praticien derrière.' } },
-    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', admin: { position: 'sidebar' } },
+    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', access: { read: isStaffField }, admin: { position: 'sidebar' } },
     { name: 'slug', type: 'text', unique: true, index: true, label: 'Adresse de la page', admin: { position: 'sidebar', description: '/praticiens/…' } },
   ],
 }

@@ -15,9 +15,9 @@ export const generateStaticParams = () => DEMARCHES.map((d) => ({ slug: d.slug }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug
   const d = demarcheBySlug(slug)
-  if (d) return { title: `${d.title} · DALIL`, description: `${d.lead} Étapes, pièces, liens officiels et sources datées.` }
+  if (d) return { title: `${d.title}`, description: `${d.lead} Étapes, pièces, liens officiels et sources datées.` }
   const p = await procedureBySlug(slug)
-  return p ? { title: `${p.title} · DALIL`, description: `${p.summary} Lien direct vers le site officiel, pièces et sources datées.` } : {}
+  return p ? { title: `${p.title}`, description: `${p.summary} Lien direct vers le site officiel, pièces et sources datées.` } : {}
 }
 
 /** Couleurs des pictogrammes des points clés (même palette que les catégories). */

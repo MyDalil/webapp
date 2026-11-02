@@ -35,19 +35,42 @@ ${cta ? `<tr><td style="padding-top:24px"><a href="${esc(cta.href)}" style="disp
 </table></td></tr></table></body></html>`
 }
 
-type Options = { headers?: Record<string, string> }
+type Options = { headers?: Record<string, string>; idempotencyKey?: string }
 
-/** Envoi best-effort : un email qui échoue ne bloque jamais l’action (journal sans contenu ni destinataire). */
+/** Suivi en base (email-deliveries) : chargé à la demande, jamais bloquant (la CLI Payload charge aussi ce fichier). */
+async function track(fn: (p: { db: unknown }, t: typeof import('./mailing/track')) => Promise<unknown>) {
+  try {
+    const [{ payload }, t] = await Promise.all([import('./http'), import('./mailing/track')])
+    return await fn(await payload(), t)
+  } catch (e) {
+    console.error('[mail] suivi indisponible', (e as Error).name)
+    return undefined
+  }
+}
+
+/**
+ * Envoi : retourne `true` seulement si Resend a accepté l’email (accepté ≠ délivré : la délivrance arrive par webhook).
+ * Avec `idempotencyKey` : un email déjà accepté n’est jamais renvoyé, et Resend déduplique aussi de son côté.
+ * Un email qui échoue ne bloque jamais l’action ; il est enregistré « Échec » (sans contenu ni adresse en clair).
+ */
 export async function send(to: string, subject: string, html: string, opts: Options = {}) {
   if (!client) return false
+  const key = opts.idempotencyKey
+  if (key && (await track((p, t) => t.alreadyAccepted(p, key))) === true) return true
+  let ok = false
+  let id: string | null = null
+  let err: string | null = null
   try {
-    const { error } = await client.emails.send({ from: FROM, to, replyTo: TEAM, subject, html, headers: opts.headers })
-    if (error) console.error('[mail] échec', subject, error.name)
-    return !error
+    const { data, error } = await client.emails.send({ from: FROM, to, replyTo: TEAM, subject, html, headers: opts.headers }, key ? { idempotencyKey: key } : undefined)
+    ok = !error
+    id = data?.id ?? null
+    if (error) err = error.name
   } catch (e) {
-    console.error('[mail] échec', subject, (e as Error).name)
-    return false
+    err = (e as Error).name
   }
+  if (err) console.error('[mail] échec', subject, err)
+  await track((p, t) => t.recordAttempt(p, { key: key ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`, subject, to, ok, providerId: id, error: err }))
+  return ok
 }
 
 /** Envoi groupé (newsletter) : 100 emails max par appel Resend. Retourne le nombre d’envois acceptés. */

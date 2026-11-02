@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getProvider((await params).slug)
   return p
     ? {
-        title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')} · DALIL`,
-        description: `Prestataire vérifié par DALIL. Demande en ligne, réponse sous 24 h.`,
+        title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')}`,
+        description: `Identité et statut légal contrôlés avant publication. Demande en ligne : le prestataire accepte ou décline sous 24 h.`,
         robots: p.demo ? { index: false } : undefined,
       }
     : {}

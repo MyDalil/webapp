@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pack = await packBySlug((await params).slug)
-  return pack ? { title: `${pack.title} · DALIL`, description: pack.summary, robots: { index: false } } : {}
+  return pack ? { title: `${pack.title}`, description: pack.summary, robots: { index: false } } : {}
 }
 
 /** « Votre accompagnement » (maquette validée par Rad) : le pack, le nombre de personnes, la tarification, le paiement, la demande. */

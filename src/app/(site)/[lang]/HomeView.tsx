@@ -353,10 +353,11 @@ export async function HomeView({ lang }: { lang: Lang }) {
         {!!latest.length && (
           <>
             <div className="container xp-subhead" data-reveal>
-              <h3>{T.latestAds}</h3>
+              {/* Exemples seuls : jamais présentés comme de vraies « dernières annonces » (audit D07). */}
+              <h3>{latest.every((c) => c.example) ? T.examplesAds : T.latestAds}</h3>
               <Link href="/annonces">{T.allAds}</Link>
             </div>
-            <Carousel label={T.latestAds} variant="tiles">
+            <Carousel label={latest.every((c) => c.example) ? T.examplesAds : T.latestAds} variant="tiles">
               {latest.map((c, i) => (
                 <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
                   {c.photo ? (

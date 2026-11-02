@@ -1,8 +1,8 @@
 import type { CollectionAfterChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { revalidateLangs } from '@/platform/revalidate'
-import { isAdmin, isStaff, publishedOrStaff } from '@/platform/access'
+import { contactField, guardPublication, keepPublishedBase, markTechnicalUpdate, isAdmin, isStaff, isStaffField, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
-import { criteriaFor, verificationTab } from '@/modules/confiance'
+import { criteriaFor, requireProof, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
@@ -45,7 +45,7 @@ export const Places: CollectionConfig = {
   versions: { drafts: true },
   defaultSort: 'name',
   access: { read: publishedOrStaff, create: isStaff, update: isStaff, delete: isAdmin },
-  hooks: { beforeValidate: [prepare], afterChange: [refresh, indexPlace], afterDelete: [unindexPlace] },
+  hooks: { beforeOperation: [markTechnicalUpdate], beforeValidate: [prepare], beforeChange: [guardPublication('_status'), keepPublishedBase, requireProof], afterChange: [refresh, indexPlace], afterDelete: [unindexPlace] },
   fields: [
     {
       type: 'tabs',
@@ -159,9 +159,9 @@ export const Places: CollectionConfig = {
             {
               type: 'row',
               fields: [
-                { name: 'phone', type: 'text', label: 'Téléphone' },
-                { name: 'whatsapp', type: 'text', label: 'WhatsApp' },
-                { name: 'email', type: 'email', label: 'Email' },
+                { name: 'phone', type: 'text', access: { read: contactField }, label: 'Téléphone' },
+                { name: 'whatsapp', type: 'text', access: { read: contactField }, label: 'WhatsApp' },
+                { name: 'email', type: 'email', label: 'Email', access: { read: contactField } },
               ],
             },
             {
@@ -213,7 +213,7 @@ export const Places: CollectionConfig = {
         { name: 'externalId', type: 'text', label: 'Identifiant source', index: true },
         { name: 'url', type: 'text', label: 'Lien source' },
         { name: 'notoriety', type: 'number', label: 'Notoriété (nombre de Wikipédias)', admin: { readOnly: true } },
-        { name: 'notes', type: 'textarea', label: 'Notes de source (internes, jamais publiées)' },
+        { name: 'notes', type: 'textarea', label: 'Notes de source (internes, jamais publiées)', access: { read: isStaffField } },
       ],
     },
     { name: 'slug', type: 'text', label: 'Adresse de la page', unique: true, index: true, admin: { position: 'sidebar', description: 'Généré depuis le nom. /adresses/…' } },

@@ -47,3 +47,25 @@ describe('disponibilités', () => {
     expect(isBookable(agenda, '2026-10-19T08:00:00.000Z', 'visio', [], now)).toBe(false)
   })
 })
+
+describe('A11 — aucun chevauchement de rendez-vous', () => {
+  // Lundi 19 octobre 2026, deux plages superposées 09:00-10:00 et 09:15-10:15 (heure d’Alger), créneaux de 30 min.
+  const overlapping = { slotMinutes: 30, minNoticeHours: 0, horizonDays: 60, weekly: [{ day: 1, start: '09:00', end: '10:00' }, { day: 1, start: '09:15', end: '10:15' }] }
+  const now = new Date('2026-10-18T08:00:00Z')
+  it('plages fusionnées : aucun créneau doublon', () => {
+    const s = slotsForDay(overlapping, '2026-10-19', [], now).map((x) => algiersTime(x.start))
+    expect(s).toEqual(['09:00', '09:30'])
+  })
+  it('09:15 n’est plus proposé après une réservation 09:00-09:30', () => {
+    const busy = [{ start: '2026-10-19T08:00:00.000Z', end: '2026-10-19T08:30:00.000Z' }]
+    const s = slotsForDay(overlapping, '2026-10-19', busy, now).map((x) => algiersTime(x.start))
+    expect(s).not.toContain('09:00')
+    expect(s).not.toContain('09:15')
+    expect(isBookable(overlapping, '2026-10-19T08:15:00.000Z', 'cabinet', busy, now)).toBe(false)
+  })
+  it('changement de durée : un ancien rendez-vous de 60 min bloque deux créneaux de 30 min', () => {
+    const busy = [{ start: '2026-10-19T08:00:00.000Z', end: '2026-10-19T09:00:00.000Z' }]
+    const s = slotsForDay(overlapping, '2026-10-19', busy, now).map((x) => algiersTime(x.start))
+    expect(s).toEqual([])
+  })
+})

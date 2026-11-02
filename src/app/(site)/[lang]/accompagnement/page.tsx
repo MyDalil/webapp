@@ -6,7 +6,7 @@ import { Transparency, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
 
 export const metadata: Metadata = {
-  title: 'Accompagnement aux démarches · DALIL',
+  title: 'Accompagnement aux démarches',
   description: 'Un conseiller vous aide à préparer et vérifier votre dossier. Les démarches restent gratuites sur les sites officiels.',
   robots: { index: false },
 }

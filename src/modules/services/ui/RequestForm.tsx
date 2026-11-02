@@ -215,7 +215,7 @@ export function RequestForm({ slug, name, offers, communes, clientele, initialAc
           <button className="button primary booking-submit" disabled={!consent || state.busy || Boolean(wrongGender) || Boolean(needGender && !gender) || (me ? !me.verified : false)}>
             {state.busy ? 'Envoi…' : me === null ? 'Me connecter pour envoyer' : 'Envoyer ma demande'}
           </button>
-          <p className="booking-note">Réponse sous 24 h. Gratuit et sans engagement tant que la mission n’est pas acceptée.</p>
+          <p className="booking-note">Le prestataire accepte ou décline sous 24 h ; sans réponse, la demande expire et vous êtes prévenu. Une demande n’est pas une réservation. Gratuit et sans engagement tant que la mission n’est pas acceptée.</p>
         </>
       )}
     </form>

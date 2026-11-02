@@ -23,14 +23,14 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
       label: 'Services',
       hint: 'Doctors, tradespeople, home help',
       entries: [
-        ['Health: book an appointment', 'Verified doctors and practitioners'],
+        ['Health: find a professional', 'Doctors, pharmacies, booking if offered'],
         ['Home services', 'Cleaning, repairs, tutoring…'],
         ['Home & repairs', 'Tradespeople, maintenance'],
         ['Law & finance', 'Lawyers, accountants, banks'],
         ['Transport & mobility', 'Removals, taxis'],
         ['Full directory', 'All places and services'],
       ],
-      feature: ['Providers verified by DALIL', 'Services'],
+      feature: ['Describe what you need', 'Services'],
     },
     decouvrir: {
       label: 'Discover',
@@ -117,14 +117,14 @@ const T: Record<'en' | 'ar', Record<Rubric['key'], Text>> = {
       label: 'الخدمات',
       hint: 'أطباء، حرفيون، مساعدة منزلية',
       entries: [
-        ['الصحة: احجز موعدًا', 'أطباء وممارسون موثَّقون'],
+        ['الصحة: اعثر على مهني', 'أطباء وصيدليات، وموعد إن كان متاحًا'],
         ['خدمات منزلية', 'تنظيف، أشغال صغيرة، دروس…'],
         ['المنزل والأشغال', 'حرفيون، صيانة'],
         ['القانون والمالية', 'محامون، محاسبون، بنوك'],
         ['النقل والتنقل', 'نقل الأثاث، سيارات الأجرة'],
         ['الدليل الكامل', 'كل الأماكن والخدمات'],
       ],
-      feature: ['مقدّمو خدمات موثَّقون من دليل', 'الخدمات'],
+      feature: ['صف حاجتك', 'الخدمات'],
     },
     decouvrir: {
       label: 'اكتشف',

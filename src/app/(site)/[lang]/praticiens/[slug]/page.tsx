@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getPractitioner((await params).slug)
   return p
     ? {
-        title: `${p.name} — prendre rendez-vous · DALIL`,
+        title: `${p.name} — prendre rendez-vous`,
         description: `${(p.specialties ?? []).map(specialtyLabel).join(', ')} à ${p.city}. Réservation en ligne.`,
       }
     : {}

@@ -4,7 +4,7 @@ import { ConsulatFinder, type Rep } from '@/modules/contenus/ui'
 import { XpHero } from '@/platform/ui/Xp'
 import { PHOTOS } from '@/platform/referentiel/photos'
 
-export const metadata: Metadata = { title: 'Ambassades et consulats d’Algérie dans le monde · DALIL', description: 'Adresse, téléphone, email, site officiel, territoire couvert et services en ligne de chaque ambassade et consulat d’Algérie.' }
+export const metadata: Metadata = { title: 'Ambassades et consulats d’Algérie dans le monde', description: 'Adresse, téléphone, email, site officiel, territoire couvert et services en ligne de chaque ambassade et consulat d’Algérie.' }
 export const revalidate = 3600
 
 /** Tous les postes diplomatiques et consulaires d’Algérie, groupés par pays, avec recherche. */

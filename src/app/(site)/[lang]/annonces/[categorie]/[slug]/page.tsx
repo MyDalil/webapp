@@ -12,7 +12,7 @@ const since = (iso: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long',
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const a = await getClassified((await params).slug)
-  return a ? { title: `${a.title} — ${a.price} · ${a.place} · DALIL`, description: a.description.slice(0, 160), robots: a.status === 'published' && !a.example ? undefined : { index: false } } : {}
+  return a ? { title: `${a.title} — ${a.price} · ${a.place}`, description: a.description.slice(0, 160), robots: a.status === 'published' && !a.example ? undefined : { index: false } } : {}
 }
 
 export default async function AnnoncePage({ params }: Props) {

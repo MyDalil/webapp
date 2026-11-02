@@ -17,7 +17,7 @@ Le moteur de confiance : statuts, critères par secteur, sources, date et auteur
 
 ## Règles propres
 - **Indépendance totale vis-à-vis des revenus** : aucun code de `pros` ne peut écrire `verification`, `criteria` ou un label.
-- « Vérifiée » exige une date (`verifiedAt`), un vérificateur et au moins une source.
+- « Vérifiée » exige une date (`verifiedAt`), un vérificateur, au moins une source et les critères — refusé par le serveur sinon (`requireProof`) ; « Labellisée » exige en plus tous les critères évalués, aucun non conforme. Statuts réservés aux administrateurs.
 - Ne jamais présenter une information non vérifiée comme vérifiée.
 
 ## Accès
@@ -27,7 +27,6 @@ Neon (lecture/écriture des champs de vérification uniquement).
 - `skills/verifier-une-fiche` — Vérifier une fiche DALIL et mettre à jour son statut, ses critères et ses sources.
 
 ## Prochaines étapes
-- Fondation 3 : provenance par champ, niveau de confiance, prochaine vérification, historique.
-- Règle de validation serveur : interdire « Vérifiée » sans date ni source.
+- File de revérification (tâche planifiée) à partir de `nextVerificationAt`.
 
 Décisions et erreurs à ne pas refaire : `DECISIONS.md`.

@@ -1,4 +1,5 @@
-import type { Access, FieldAccess } from 'payload'
+import type { Access, CollectionBeforeChangeHook, CollectionBeforeOperationHook, FieldAccess } from 'payload'
+import { APIError } from 'payload'
 
 /**
  * Rôles de l’équipe (collection « users ») :
@@ -39,6 +40,22 @@ export const isStaff: Access = ({ req: { user } }) => isStaffUser(user)
 export const isAdminOrAdvisor: Access = ({ req: { user } }) => isAdminUser(user) || isAdvisorUser(user)
 export const isAdminField: FieldAccess = ({ req: { user } }) => isAdminUser(user)
 export const isPatronField: FieldAccess = ({ req: { user } }) => isPatronUser(user)
+/** Champ interne (notes, pièces, compte propriétaire) : équipe seulement, jamais renvoyé par les API publiques. */
+export const isStaffField: FieldAccess = ({ req: { user } }) => isStaffUser(user)
+/**
+ * Coordonnées d’une fiche : à tous si `showContacts` est coché, sinon aux comptes connectés et à l’équipe.
+ * La règle vit dans le serveur : REST, GraphQL et pages appliquent la même décision.
+ */
+export const contactField: FieldAccess = ({ req: { user }, doc, siblingData }) =>
+  isStaffUser(user) || isMember(user) || Boolean((doc as { showContacts?: boolean } | undefined)?.showContacts ?? (siblingData as { showContacts?: boolean } | undefined)?.showContacts)
+
+/**
+ * Rédacteur : prépare, ne publie pas (règle des rôles). Refus côté serveur, quel que soit le bouton ou la route.
+ * Les traitements sans compte (migrations, imports, tâches) ne sont pas concernés : ils n’ont pas d’utilisateur.
+ */
+export function mayPublish(user: unknown) {
+  return !user || isAdminUser(user)
+}
 
 export const anyone: Access = () => true
 
@@ -55,4 +72,42 @@ export const actorOf = (user: unknown): { kind: 'humain' | 'agent' | 'membre' | 
   if (u.collection === 'users') return { kind: 'humain', label: u.name || u.email || 'Équipe', id: u.id }
   if (u.collection === 'agents') return { kind: 'agent', label: u.name || 'Agent', id: u.id }
   return { kind: 'membre', label: u.email || 'Membre', id: u.id }
+}
+
+/**
+ * Garde de publication (A02) : seul un administrateur publie.
+ * - collections à brouillons : `_status: published` refusé au rédacteur et aux agents ;
+ * - collections à statut : passage à `published` refusé, la fiche déjà publiée reste modifiable sans republier.
+ */
+export const guardPublication =
+  (field: '_status' | 'status' = '_status'): CollectionBeforeChangeHook =>
+  ({ data, originalDoc, req }) => {
+    if (mayPublish(req.user)) return data
+    const next = data?.[field]
+    const before = (originalDoc as Record<string, unknown> | undefined)?.[field]
+    const publishing = field === '_status' ? next === 'published' : next === 'published' && before !== 'published'
+    if (publishing) throw new APIError('Publication réservée à un administrateur. Enregistrez un brouillon : il sera relu puis publié.', 403, null, true)
+    return data
+  }
+
+/**
+ * Brouillon en attente sur une fiche publiée : une mise à jour technique (import, tâche, script : `_status` absent,
+ * pas de brouillon) part de la version publiée, pas du brouillon. Sans cette garde, Payload repart de la dernière
+ * version (le brouillon du rédacteur) : la fiche serait dépubliée et le brouillon non relu mis en ligne.
+ * Le brouillon reste dans l’historique des versions. `markTechnicalUpdate` (beforeOperation) repère ces mises à jour.
+ */
+export const markTechnicalUpdate: CollectionBeforeOperationHook = ({ args, operation, req }) => {
+  const a = args as { draft?: boolean; data?: Record<string, unknown> }
+  if (operation === 'update' || operation === 'updateByID') req.context = { ...req.context, technicalUpdate: !a.draft && !!a.data && a.data._status === undefined ? Object.keys(a.data ?? {}) : false }
+  return args
+}
+
+export const keepPublishedBase: CollectionBeforeChangeHook = async ({ collection, data, operation, originalDoc, req }) => {
+  if (operation !== 'update' || !data || !req.context?.technicalUpdate || originalDoc?._status !== 'draft' || !originalDoc?.id) return data
+  const main = (await req.payload.db.findOne({ collection: collection.slug, where: { id: { equals: originalDoc.id } }, req })) as Record<string, unknown> | null
+  if (main?._status !== 'published') return data
+  const submitted = new Set(req.context.technicalUpdate as string[])
+  const { id: _id, createdAt: _c, updatedAt: _u, ...published } = main
+  const kept = Object.fromEntries(Object.entries(published).filter(([k]) => !submitted.has(k)))
+  return { ...data, ...kept, _status: 'published' }
 }

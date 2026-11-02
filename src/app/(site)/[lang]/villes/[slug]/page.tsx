@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const w = wilayaBySlug((await params).slug)
-  return w ? { title: `${w.name} — que voir, que faire · DALIL`, description: `Les lieux à découvrir dans la wilaya de ${w.name}, avec leurs sources et leur statut de vérification.` } : {}
+  return w ? { title: `${w.name} — que voir, que faire`, description: `Les lieux à découvrir dans la wilaya de ${w.name}, avec leurs sources et leur statut de vérification.` } : {}
 }
 
 export default async function City({ params }: Props) {

@@ -18,7 +18,7 @@ export const generateStaticParams = () => GUIDES.map((g) => ({ slug: g.slug }))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const g = await guideView((await params).slug)
-  return g ? { title: `${g.title} · DALIL`, description: g.lead } : {}
+  return g ? { title: `${g.title}`, description: g.lead } : {}
 }
 
 const dateFr = (d: string) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })

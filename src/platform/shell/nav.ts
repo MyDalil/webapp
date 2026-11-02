@@ -45,14 +45,14 @@ export const RUBRICS: Rubric[] = [
     href: '/services',
     match: ['/services', '/prestataires', '/praticiens', '/annuaire/maison-travaux', '/annuaire/droit-finance-conseil', '/annuaire/transports-mobilite'],
     entries: [
-      ['/praticiens', 'health', 'Santé : prendre rendez-vous', 'Médecins et praticiens vérifiés'],
+      ['/praticiens', 'health', 'Santé : trouver un professionnel', 'Médecins, pharmacies, rendez-vous si proposé'],
       ['/services', 'wrench', 'Services à domicile', 'Ménage, bricolage, cours…'],
       ['/annuaire/maison-travaux', 'hammer', 'Maison & travaux', 'Artisans, entretien'],
       ['/annuaire/droit-finance-conseil', 'scale', 'Droit & finance', 'Avocats, comptables, banques'],
       ['/annuaire/transports-mobilite', 'truck', 'Transports & mobilité', 'Déménagement, taxis'],
       ['/annuaire', 'grid', 'Annuaire complet', 'Tous les lieux et services'],
     ],
-    feature: { title: 'Prestataires vérifiés par DALIL', href: '/services', kicker: 'Services' }
+    feature: { title: 'Décrire mon besoin', href: '/services', kicker: 'Services' }
   },
   {
     key: 'decouvrir',

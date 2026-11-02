@@ -16,7 +16,7 @@ const HERO: Record<string, keyof typeof PHOTOS> = { identite: 'passeport', 'cons
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = themeByKey((await params).theme)
-  return t ? { title: `${t.label} — démarches en Algérie · DALIL`, description: `${t.lead} Liens directs vers les sites officiels, pièces, coûts et sources datées.` } : {}
+  return t ? { title: `${t.label} — démarches en Algérie`, description: `${t.lead} Liens directs vers les sites officiels, pièces, coûts et sources datées.` } : {}
 }
 
 /** Toutes les démarches d’un thème : en ligne d’abord, chacune avec son lien direct vers le site officiel. */

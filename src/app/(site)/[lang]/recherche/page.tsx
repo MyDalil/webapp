@@ -27,28 +27,33 @@ function positionOf(v?: string) {
   return lat >= 18 && lat <= 38 && lng >= -9 && lng <= 12.5 ? { lat, lng } : null
 }
 
-export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string; pos?: string; w?: string }> }) {
-  const { q = '', pos, w } = await searchParams
+export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string; pos?: string; w?: string; p?: string }> }) {
+  const { q = '', pos, w, p: pageParam } = await searchParams
   const query = q.trim().slice(0, 200)
   const position = positionOf(pos)
-  const [page, r] = await Promise.all([getPage('/recherche'), query ? searchEverything(query, { position, prefer: /^\d{1,2}$/.test(w ?? '') ? w : null }) : null])
+  const [page, r] = await Promise.all([getPage('/recherche'), query ? searchEverything(query, { position, prefer: /^\d{1,2}$/.test(w ?? '') ? w : null, page: Number(pageParam) || 1 }) : null])
   const pistes = r?.groups.find((g) => g.key === 'pistes')
   const adresses = r?.groups.find((g) => g.key === 'adresse')
   // Adresses : même carte que les pages de catégorie (vignette, catégorie · ville, statut, favori).
   const cards = new Map((await cardsBySlugs((adresses?.hits ?? []).map((h) => h.url.replace(/^\/adresses\//, '')))).map((c) => [`/adresses/${c.slug}`, c]))
-  const found = r?.spread ? r.spread.reduce((n, s) => n + s.count, 0) : adresses?.hits.length ?? 0
+  // Total exact des adresses correspondantes (jamais la taille de la liste affichée).
+  const found = r?.addresses.total ?? 0
+  const pageHref = (n: number) => `/recherche?${new URLSearchParams({ q: query, ...(pos ? { pos } : {}), ...(w ? { w } : {}), ...(n > 1 ? { p: String(n) } : {}) }).toString()}`
+  // Recherche guidée (accompagnement) : seulement sans résultat, ou pour un projet professionnel (« je suis dentiste et je veux exercer »).
+  const guided = !r || !r.total || r.professional
   return (
     <>
       {r && (
         <section className="sr" aria-label="Résultats">
           <header className="sr-head">
-            <p className="sr-eyebrow">{r.total ? 'Résultats' : 'Aucun résultat précis'}</p>
+            <p className="sr-eyebrow">{r.unavailable ? 'Recherche momentanément indisponible' : r.total ? 'Résultats' : 'Aucun résultat précis'}</p>
             <h1>{query.slice(0, 80)}</h1>
             <p className="sr-meta">
               {r.place ? (r.nearby ? `Près ${/^[aeiouyhàâéèêîïôû]/i.test(r.place) ? 'd’' : 'de '}${r.place}` : `À ${r.place}`) : 'Toute l’Algérie'}
-              {found ? ` · ${found} adresse${found > 1 ? 's' : ''}` : ''}
+              {found ? ` · ${found.toLocaleString('fr-FR')} adresse${found > 1 ? 's' : ''}${r.addresses.shown < found ? `, ${r.addresses.shown} affichée${r.addresses.shown > 1 ? 's' : ''}${r.addresses.pages > 1 ? ` (page ${r.addresses.page} sur ${r.addresses.pages})` : ''}` : ''}` : ''}
             </p>
-            {!r.total && <p className="sr-hint">Vérifiez l’orthographe, essayez un mot plus court, ou parcourez les rubriques et les guides ci-dessous.</p>}
+            {r.unavailable && <p className="sr-hint" role="alert">Une partie de la recherche n’a pas répondu. Ces résultats peuvent être incomplets : réessayez dans un instant.</p>}
+            {!r.total && !r.unavailable && <p className="sr-hint">Aucune correspondance exacte. Vérifiez l’orthographe, essayez un mot plus court, ou parcourez les rubriques ci-dessous.</p>}
             <div className="sr-actions">
               <NearMe text={query} label={position ? 'Actualiser ma position' : 'Autour de moi'} className="sr-pill" />
               {r.intent.target !== 'recherche' && (
@@ -126,14 +131,23 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       <ul className="sr-list">{rows(more)}</ul>
                     </details>
                   )}
+                  {g.key === 'adresse' && r.addresses.pages > 1 && (
+                    <nav className="sr-actions" aria-label="Pages des adresses">
+                      {r.addresses.page > 1 && <Link className="sr-pill" href={pageHref(r.addresses.page - 1)}>‹ Adresses précédentes</Link>}
+                      {r.addresses.page < r.addresses.pages && <Link className="sr-pill is-primary" href={pageHref(r.addresses.page + 1)}>Adresses suivantes ›</Link>}
+                    </nav>
+                  )}
                 </section>
               )
             })}
         </section>
       )}
-      <div className="legacy">
-        <Tree nodes={page?.content ?? []} overrides={{ GuidedSearch: { initialQuery: q.slice(0, 4000) } }} />
-      </div>
+      {guided && (
+        <div className="legacy">
+          {/* Avec une recherche, le titre principal est celui des résultats : l’en-tête de la page guidée est retiré (un seul h1). */}
+          <Tree nodes={(r ? page?.content.slice(1) : page?.content) ?? []} overrides={{ GuidedSearch: { initialQuery: q.slice(0, 4000) } }} />
+        </div>
+      )}
     </>
   )
 }

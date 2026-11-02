@@ -7,7 +7,7 @@ import { myProvider } from '@/modules/services'
 import { ProviderSpace } from '@/modules/services/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
-export const metadata: Metadata = { title: 'Espace pro · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Espace pro', robots: { index: false } }
 export const dynamic = 'force-dynamic'
 
 const SPACES = {

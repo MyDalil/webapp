@@ -13,6 +13,8 @@ import { Media } from '@/platform/storage/Media'
 import { AiUsage } from '@/platform/ai/AiUsage'
 import { ErrorLogs } from '@/platform/monitoring/ErrorLogs'
 import { AuditLog } from '@/platform/audit/AuditLog'
+import { TaskRuns } from '@/platform/tasks/TaskRuns'
+import { EmailDeliveries } from '@/platform/mailing/EmailDeliveries'
 import { auditPlugin } from '@/platform/audit/audit'
 import { Controls } from '@/platform/controls/Controls'
 import { AccompagnementRequests, AccompagnementSettings, Packs } from '@/modules/accompagnement/collections'
@@ -38,6 +40,8 @@ const secret =
   process.env.PAYLOAD_SECRET || (databaseUrl ? createHash('sha256').update(`dalil:${databaseUrl}`).digest('hex') : '')
 
 export default buildConfig({
+  // GraphQL désactivé (audit 2026-11-02) : inutilisé par le site, schéma en échec ; une seule API publique (REST) à protéger.
+  graphQL: { disable: true },
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
@@ -45,7 +49,7 @@ export default buildConfig({
   },
   i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
   globals: [FeaturedDestination, Controls, AccompagnementSettings],
-  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, AuditLog],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, TaskRuns, EmailDeliveries, AuditLog],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY

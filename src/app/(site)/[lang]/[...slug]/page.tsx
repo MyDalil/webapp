@@ -23,7 +23,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = await getPage(routeOf((await params).slug))
   if (!page) return {}
-  return { title: firstHeading(page.content) ?? undefined, description: firstParagraph(page.content) ?? undefined }
+  // Un titre distinct par page, la marque une seule fois (ajoutée par le gabarit) : jamais « DALIL · DALIL » (audit SEO).
+  const route = routeOf((await params).slug)
+  const heading = (firstHeading(page.content) ?? '').replace(/\s*[·|—–-]\s*DALIL\s*$/i, '').replace(/^\s*DALIL\s*[·|—–:-]\s*/i, '').trim()
+  const fallback = route.split('/').filter(Boolean).pop()?.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase()) ?? null
+  return { title: heading && !/^dalil$/i.test(heading) ? heading : fallback ?? undefined, description: firstParagraph(page.content) ?? undefined }
 }
 
 export default async function LegacyPage({ params }: Props) {

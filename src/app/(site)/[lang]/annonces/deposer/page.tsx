@@ -7,7 +7,7 @@ import { payload } from '@/platform/http'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Déposer une annonce · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Déposer une annonce', robots: { index: false } }
 
 type Props = { searchParams: Promise<{ modifier?: string; categorie?: string }> }
 

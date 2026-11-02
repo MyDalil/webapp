@@ -18,7 +18,9 @@ Prise de rendez-vous avec les praticiens, sur le modèle Doctolib : le praticien
 ## Règles propres
 - **Compte vérifié obligatoire** pour réserver ; consentement explicite à chaque réservation (transmission au praticien).
 - **DALIL n’encaisse rien** : tarif et moyens de paiement affichés, le patient paie le praticien directement.
-- **Visio** : fournisseur non choisi (`platform/video.ts`). Tant que `VIDEO_PROVIDER` n’est pas défini, la visio est affichée « Bientôt » et n’est pas réservable. Aucun enregistrement, salle privée par rendez-vous.
+- **Visio** : fournisseur non choisi (`platform/video.ts`). La visio n’est réservable que si `VIDEO_PROVIDER` désigne un fournisseur implémenté ; sans salle créée, aucune confirmation. Aucun enregistrement, salle privée par rendez-vous.
+- **Aucun chevauchement** : créneaux calculés sur les intervalles complets ; contrainte Postgres `appointments_no_overlap`.
+- **Rappels** : comptés envoyés seulement si Resend les accepte ; sinon retentés.
 - Le praticien modifie lui-même ses infos pratiques et son agenda ; nom, spécialités et diplômes ne changent qu’après vérification de l’équipe.
 - Pratiques complémentaires signalées comme telles ; jamais de promesse d’efficacité. DALIL vérifie identité et diplômes, pas les méthodes.
 - Motif court, sans détail médical. Suppression du compte = annulation des rendez-vous à venir + effacement.
