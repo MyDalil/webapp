@@ -9,7 +9,6 @@ import { rubricOf, type Rubric } from './nav'
 import { rubricsFor } from './navI18n'
 import { homeHref, langPath, shellText, type Lang } from '../i18n'
 import { NavIcon } from './NavIcon'
-import { QuickFind } from './QuickFind'
 import { WilayaPicker } from './WilayaPicker'
 import { readWilaya, setWilaya, wilayaByCode } from './wilaya'
 import { MicButton } from '../ui/MicButton'
@@ -28,21 +27,22 @@ const LANGS = [
 const ENTRY_TONES = ['#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#db2777', '#0891b2', '#ca8a04', '#dc2626', '#0d9488', '#4f46e5']
 
 /** Couleur des pictogrammes du méga-menu (ordinateur) : couleur de la rubrique, lisible sur fond clair et sombre. */
-const ICON_TONE: Record<Rubric['key'], string> = { musulmane: '#0F9D58', services: '#2F6BFF', decouvrir: '#EA580C', demarches: '#7C3AED', annonces: '#DB2777', vivre: '#CA8A04', plus: '#0F9D58' }
+const ICON_TONE: Record<Rubric['key'], string> = { sante: '#2F6BFF', services: '#7C3AED', annonces: '#DB2777', musulmane: '#0F9D58', decouvrir: '#EA580C', vivre: '#CA8A04' }
 
 const SHEET: Record<Rubric['key'], { color: string; ink?: string; icon: string }> = {
-  musulmane: { color: '#0F7A4A', icon: 'M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5' },
-  services: { color: '#1A56DB', icon: 'M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11ZM8 12h2l1-2 2 4 1-2h2' },
-  decouvrir: { color: '#C2410C', icon: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15.5 8.5l-2 5-5 2 2-5 5-2Z' },
-  demarches: { color: '#6D28D9', icon: 'M14 3H6v18h12V7l-4-4ZM14 3v4h4M9 13h6M9 17h6' },
+  // Santé reprend la couleur et le pictogramme de l’ancienne rubrique Services (santé en tête) ; Services prend le violet libéré par Démarches.
+  sante: { color: '#1A56DB', icon: 'M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11ZM8 12h2l1-2 2 4 1-2h2' },
+  services: { color: '#6D28D9', icon: 'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6Z' },
   annonces: { color: '#BE185D', icon: 'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9-9-9ZM7.5 6v3' },
+  musulmane: { color: '#0F7A4A', icon: 'M12 2c2 2 4 3 4 6H8c0-3 2-4 4-6ZM6 8h12v13H6zM3 21h18M10 21v-5a2 2 0 0 1 4 0v5' },
+  decouvrir: { color: '#C2410C', icon: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM15.5 8.5l-2 5-5 2 2-5 5-2Z' },
   vivre: { color: '#FACC15', ink: '#14201B', icon: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z' },
-  plus: { color: '#2A3A33', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5ZM4 19a2 2 0 0 1 2-2h13M9 7h6' },
 }
 
 type Theme = 'light' | 'dark'
 
-export function Header() {
+/** `search` : recherche de l’en-tête sur ordinateur, fournie par la mise en page (le socle n’importe aucun module). */
+export function Header({ search }: { search?: React.ReactNode } = {}) {
   const path = usePath()
   const [menu, setMenu] = useState<Menu>(null)
   const [slides, setSlides] = useState<Record<string, Slide[]> | null>(null)
@@ -224,20 +224,20 @@ export function Header() {
                     </ul>
                     <Feature rubric={r} slides={slides?.[r.key] ?? []} onGo={() => setMenu(null)} t={t} />
                   </div>
-                  <div className="mega2-foot">
-                    <QuickFind onDone={() => setMenu(null)} lang={lang} />
-                    {r.extra && (
+                  {r.extra && (
+                    <div className="mega2-foot">
                       <Link className="mega2-extra" href={r.extra[0]} onClick={() => setMenu(null)}>
                         {r.extra[1]} →
                       </Link>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
             </div>
           ))}
         </nav>
 
         <div className="header-actions">
+          {search}
           <WilayaPicker lang={lang} open={menu === 'wilaya'} onToggle={(o) => setMenu(o ? 'wilaya' : null)} />
           <div className="utility-wrap">
             <button className="icon-button flag-button" type="button" data-menu-trigger="language" aria-label={t.changeLang} aria-expanded={menu === 'language'} onClick={() => setMenu(menu === 'language' ? null : 'language')}>

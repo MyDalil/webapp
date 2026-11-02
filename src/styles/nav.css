@@ -294,3 +294,28 @@ html[data-theme="dark"] .nav-sheet-seg > .is-on { color: #07140e; }
 .nav-sheet-seg > a.is-on { background: var(--surface); box-shadow: 0 0 0 2px var(--green); }
 /* Bouton menu aussi sur grand écran (Rad, 2026-10-31) : le même panneau partout, à côté de la barre horizontale. */
 .header-actions .hamburger { display: block; }
+
+/* Recherche de l’en-tête (ordinateur) : loupe → même barre que l’accueil, sous l’en-tête, voile sur la page.
+   L’en-tête a un backdrop-filter : les éléments « fixed » se placent par rapport à lui (top: 100% = juste dessous). */
+.header-search-button { color: var(--text); border: .5px solid var(--line); background: var(--surface, transparent); }
+.header-search-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-search-button:hover { color: var(--green); border-color: color-mix(in srgb, var(--green) 40%, var(--line)); }
+.header-search-button[hidden] { display: none; }
+.header-search-veil { position: fixed; top: 100%; left: 0; right: 0; height: 100vh; z-index: 1; background: rgba(9, 18, 14, .45); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); animation: hs-fade .2s ease; }
+.header-search-panel { position: fixed; top: 100%; left: 0; right: 0; z-index: 2; padding: 22px 0 18px; background: #0c1813; border-bottom: .5px solid rgba(255, 255, 255, .12); box-shadow: 0 24px 48px -24px rgba(0, 0, 0, .55); animation: hs-drop .22s var(--ease-soft, ease); }
+.header-search-panel .container { display: grid; justify-items: center; }
+.header-search-panel .search-wrap { width: min(720px, 100%); }
+.header-search-panel .xp-suggest { width: min(720px, 100%); }
+html[data-theme="dark"] .header-search-panel { background: #08110d; border-bottom-color: rgba(255, 255, 255, .16); }
+html[data-theme="dark"] .header-search-veil { background: rgba(0, 0, 0, .72); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+/* Propositions pendant la frappe : lisibles en mode clair et en mode sombre. */
+html[data-theme="dark"] .search-suggest { background: #14201b; border-color: rgba(255, 255, 255, .12); color: #e7efe9; }
+html[data-theme="dark"] .search-suggest a small { color: #a7b8ae; }
+html[data-theme="dark"] .search-suggest a:hover, html[data-theme="dark"] .search-suggest a.is-active { background: rgba(62, 207, 127, .14); }
+html[data-theme="dark"] .search-suggest a.search-suggest-all { color: #6fe0a2; border-top-color: rgba(255, 255, 255, .12); }
+@keyframes hs-fade { from { opacity: 0 } }
+@keyframes hs-drop { from { opacity: 0; transform: translateY(-8px) } }
+@media (prefers-reduced-motion: reduce) { .header-search-veil, .header-search-panel { animation: none; } }
+/* Téléphone et tablette : la recherche reste dans le menu ☰ (rien ne change). */
+@media (max-width: 1023px) { .header-search-button, .header-search-panel, .header-search-veil { display: none !important; } }
+html[data-theme="dark"] .search-suggest-kind { color: #6fe0a2; }

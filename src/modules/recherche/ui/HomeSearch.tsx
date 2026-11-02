@@ -41,7 +41,7 @@ const SUGGESTIONS: [href: string, fr: string, en: string, ar: string, icon: stri
 ]
 
 /** Barre de recherche du hero de la maquette, reliée à la recherche guidée du prototype. */
-export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
+export function HomeSearch({ lang = 'fr', idBase = 'home-search', autoFocus = false }: { lang?: Lang; idBase?: string; autoFocus?: boolean } = {}) {
   const u = UI[lang]
   const router = useLangRouter()
   // Téléphone : texte d’exemple court, jamais coupé.
@@ -54,6 +54,9 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
     return () => mq.removeEventListener('change', on)
   }, [])
   const ref = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (autoFocus) ref.current?.focus()
+  }, [autoFocus])
   const dictation = useRef<Dictation | null>(null)
   const [listening, setListening] = useState(false)
   // Propositions pendant la frappe (index de recherche) : clavier ↑ ↓ Entrée, Échap pour fermer.
@@ -129,10 +132,10 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
       <span>
         <Icon name="search" />
       </span>
-      <label className="sr-only" htmlFor="home-search">
+      <label className="sr-only" htmlFor={idBase}>
         {u.label}
       </label>
-      <input id="home-search" ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls="home-search-list" aria-autocomplete="list" aria-activedescendant={active >= 0 ? `home-search-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder={short ? u.short : u.long} />
+      <input id={idBase} ref={ref} name="search" autoComplete="off" role="combobox" aria-expanded={shown.length > 0} aria-controls={`${idBase}-list`} aria-autocomplete="list" aria-activedescendant={active >= 0 ? `${idBase}-${active}` : undefined} onChange={(e) => setText(e.target.value)} onKeyDown={onKey} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => setOpen(true)} placeholder={short ? u.short : u.long} />
       <button type="button" className={`search-mic ${listening ? 'recording' : ''}`} aria-pressed={listening} aria-label={listening ? u.stop : u.mic} onClick={mic}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="9" y="3" width="6" height="12" rx="3" />
@@ -146,9 +149,9 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
       </button>
     </form>
     {shown.length > 0 && (
-      <ul id="home-search-list" className="search-suggest" role="listbox" aria-label={u.list}>
+      <ul id={`${idBase}-list`} className="search-suggest" role="listbox" aria-label={u.list}>
         {shown.map((it, i) => (
-          <li key={it.url} id={`home-search-${i}`} role="option" aria-selected={i === active}>
+          <li key={it.url} id={`${idBase}-${i}`} role="option" aria-selected={i === active}>
             <Link href={it.url} className={i === active ? 'is-active' : undefined}>
               <span className="search-suggest-kind">{KIND[lang][it.type] ?? ''}</span>
               <b>{it.title}</b>
@@ -165,7 +168,7 @@ export function HomeSearch({ lang = 'fr' }: { lang?: Lang } = {}) {
     )}
     </div>
     <p className="xp-suggest">
-      <NearMe inputId="home-search" className="near-me-home" lang={lang} />
+      <NearMe inputId={idBase} className="near-me-home" lang={lang} />
       <span className="sr-only">{u.ex}</span>
       {SUGGESTIONS.map(([href, fr, en, ar, icon]) => (
         <Link key={href} href={href}>

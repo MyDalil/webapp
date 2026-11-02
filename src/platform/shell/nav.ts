@@ -1,11 +1,12 @@
 /**
- * Navigation principale (validée par Rad, 2026-10-17 ; ordre du 2026-10-21 : Vie musulmane, Services — Santé en tête —, Découvrir, Démarches, Annonces, Vivre en Algérie) : sept rubriques, chacune avec son méga-menu
+ * Navigation principale : six univers (audit du 2026-11-02, structure validée par Rad le même jour) dans cet ordre :
+ * Santé, Services, Annonces, Vie musulmane, Découvrir, Vivre & démarches. Chacun avec son méga-menu
  * (six entrées, une carte à la une, la barre « Trouvez rapidement »).
  * Une entrée = [lien, pictogramme, titre, sous-titre]. Toutes les pages existent.
  */
 export type NavEntry = [href: string, icon: NavIcon, title: string, sub: string]
 export type Rubric = {
-  key: 'decouvrir' | 'vivre' | 'demarches' | 'services' | 'musulmane' | 'annonces' | 'plus'
+  key: 'sante' | 'services' | 'annonces' | 'musulmane' | 'decouvrir' | 'vivre'
   label: string
   href?: string
   match: string[]
@@ -25,6 +26,51 @@ const cat = (sector: string, category: string) => `/annuaire/${sector}?category=
 
 export const RUBRICS: Rubric[] = [
   {
+    key: 'sante',
+    label: 'Santé',
+    href: '/praticiens',
+    match: ['/praticiens', '/annuaire/sante-soins', '/guides/sante'],
+    entries: [
+      ['/praticiens', 'health', 'Médecins & praticiens', 'Coordonnées, rendez-vous si proposé'],
+      [cat('sante-soins', 'Pharmacies'), 'heart', 'Pharmacies', 'Trouver une pharmacie proche'],
+      [cat('sante-soins', 'Laboratoires'), 'file', 'Laboratoires', 'Analyses médicales'],
+      ['/annuaire/sante-soins', 'building', 'Cliniques & hôpitaux', 'Établissements de soins'],
+      [cat('sante-soins', 'Vétérinaires'), 'pin', 'Vétérinaires', 'Cabinets et cliniques vétérinaires'],
+      [cat('administrations-services-publics', 'Contacts utiles et urgences'), 'phone', 'Urgences', 'Numéros d’urgence'],
+    ],
+    feature: { title: 'Trouver un professionnel de santé', href: '/praticiens', kicker: 'Santé' },
+  },
+  {
+    key: 'services',
+    label: 'Services',
+    href: '/services',
+    match: ['/services', '/prestataires', '/annuaire/maison-travaux', '/annuaire/droit-finance-conseil', '/annuaire/transports-mobilite'],
+    entries: [
+      ['/services/bricolage', 'hammer', 'Travaux & dépannage', 'Bricolage, réparations, artisans'],
+      ['/services/menage', 'wrench', 'Ménage & entretien', 'Ménage, repassage, jardinage'],
+      ['/services/demenagement', 'truck', 'Déménagement', 'Transport, montage de meubles'],
+      ['/services/aide-domicile', 'heart', 'Famille & aide à domicile', 'Garde d’enfants, aînés, animaux'],
+      ['/services/cours-particuliers', 'book', 'Cours & informatique', 'Cours particuliers, dépannage informatique'],
+      ['/annuaire/droit-finance-conseil', 'scale', 'Droit & conseil', 'Avocats, notaires, comptables'],
+    ],
+    feature: { title: 'Décrire mon besoin', href: '/services', kicker: 'Services' },
+  },
+  {
+    key: 'annonces',
+    label: 'Annonces',
+    href: '/annonces',
+    match: ['/annonces', '/business-emploi'],
+    entries: [
+      ['/annonces/immobilier', 'home', 'Immobilier', 'Vendre, louer, colocation'],
+      ['/annonces/emploi', 'briefcase', 'Emploi', 'Offres, candidatures, stages'],
+      ['/annonces/vehicules', 'car', 'Véhicules', 'Voitures, motos, pièces'],
+      ['/annonces/objets', 'tag', 'Objets', 'Maison, high-tech, mode, enfants'],
+      ['/annonces/deposer', 'upload', 'Déposer une annonce', 'Gratuit, contrôlée par DALIL'],
+      ['/mon-compte#annonces', 'news', 'Mes annonces et messages', 'Suivre, renouveler, répondre'],
+    ],
+    feature: { title: 'Toutes les annonces', href: '/annonces', kicker: 'Annonces' },
+  },
+  {
     key: 'musulmane',
     label: 'Vie musulmane',
     href: '/vie-musulmane',
@@ -37,97 +83,49 @@ export const RUBRICS: Rubric[] = [
       [cat('mosquees-priere', 'Associations caritatives et entraide'), 'heart', 'Entraide & associations', 'Solidarité, associations caritatives'],
       [cat('mosquees-priere', 'Pompes funèbres musulmanes et toilette mortuaire'), 'moon', 'Funérailles musulmanes', 'Pompes funèbres, toilette mortuaire'],
     ],
-    feature: { title: 'Le guide de la vie musulmane', href: '/guides/vie-musulmane', kicker: 'Vie musulmane' }
-  },
-  {
-    key: 'services',
-    label: 'Services',
-    href: '/services',
-    match: ['/services', '/prestataires', '/praticiens', '/annuaire/maison-travaux', '/annuaire/droit-finance-conseil', '/annuaire/transports-mobilite'],
-    entries: [
-      ['/praticiens', 'health', 'Santé : trouver un professionnel', 'Médecins, pharmacies, rendez-vous si proposé'],
-      ['/services', 'wrench', 'Services à domicile', 'Ménage, bricolage, cours…'],
-      ['/annuaire/maison-travaux', 'hammer', 'Maison & travaux', 'Artisans, entretien'],
-      ['/annuaire/droit-finance-conseil', 'scale', 'Droit & finance', 'Avocats, comptables, banques'],
-      ['/annuaire/transports-mobilite', 'truck', 'Transports & mobilité', 'Déménagement, taxis'],
-      ['/annuaire', 'grid', 'Annuaire complet', 'Tous les lieux et services'],
-    ],
-    feature: { title: 'Décrire mon besoin', href: '/services', kicker: 'Services' }
+    feature: { title: 'Le guide de la vie musulmane', href: '/guides/vie-musulmane', kicker: 'Vie musulmane' },
   },
   {
     key: 'decouvrir',
     label: 'Découvrir',
     href: '/explorer',
-    match: ['/explorer', '/villes', '/que-faire-ce-week-end', '/annuaire/culture-nature-loisirs', '/annuaire/restaurants-gastronomie'],
+    match: ['/explorer', '/villes', '/que-faire-ce-week-end', '/annuaire/culture-nature-loisirs', '/annuaire/restaurants-gastronomie', '/annuaire/hebergement-sejours', '/guides'],
     entries: [
-      ['/explorer#territoires', 'pin', 'Villes & Wilayas', 'Découvrir chaque région, leurs atouts et particularités'],
-      ['/annuaire/culture-nature-loisirs', 'camera', 'Tourisme', 'Sites incontournables, nature, circuits et activités'],
-      [cat('culture-nature-loisirs', 'Monuments et sites historiques'), 'landmark', 'Culture & Histoire', 'Patrimoine, musées, sites historiques'],
-      ['/annuaire/restaurants-gastronomie', 'utensils', 'Gastronomie', 'Restaurants, spécialités locales, produits du terroir'],
-      ['/que-faire-ce-week-end', 'calendar', 'Agenda & Événements', 'Festivals, expositions, événements culturels et sportifs'],
-      ['/annuaire/culture-nature-loisirs?theme=nature', 'mountain', 'Nature & Espaces', 'Plages, montagnes, parcs et espaces naturels'],
+      ['/explorer#territoires', 'pin', 'Villes & régions', 'Chaque région, ses atouts et particularités'],
+      [cat('culture-nature-loisirs', 'Monuments et sites historiques'), 'landmark', 'Patrimoine & musées', 'Sites historiques, musées, cités antiques'],
+      ['/annuaire/culture-nature-loisirs?theme=nature', 'mountain', 'Nature & plages', 'Plages, montagnes, parcs, oasis'],
+      ['/annuaire/restaurants-gastronomie', 'utensils', 'Restaurants & cafés', 'Tables, cafés, spécialités locales'],
+      ['/annuaire/hebergement-sejours', 'home', 'Séjours', 'Hôtels, gîtes, maisons d’hôtes'],
+      ['/que-faire-ce-week-end', 'calendar', 'Agenda & week-end', 'Sorties, festivals, événements datés'],
     ],
-    feature: { title: 'Des lieux qui marquent votre temps', href: '/annuaire', kicker: '' }
-  },
-  {
-    key: 'demarches',
-    label: 'Démarches',
-    href: '/demarches',
-    match: ['/demarches', '/guides/documents-et-demarches', '/guides/travail-et-entreprise', '/guides/preparer-son-installation', '/annuaire/administrations-services-publics'],
-    entries: [
-      ['/guides/documents-et-demarches', 'file', 'Documents & papiers', 'Pièces, délais, coûts'],
-      [cat('administrations-services-publics', 'Administrations'), 'building', 'Administrations', 'Adresses et horaires officiels'],
-      ['/guides/travail-et-entreprise', 'briefcase', 'Créer son entreprise', 'Statuts, registre, fiscalité'],
-      ['/guides/preparer-son-installation', 'plane', 'S’installer depuis l’étranger', 'Douanes, résidence'],
-      [cat('administrations-services-publics', 'Ambassades'), 'flag', 'Ambassades & consulats', 'Représentations et rendez-vous'],
-      [cat('administrations-services-publics', 'Contacts utiles et urgences'), 'phone', 'Urgences & contacts utiles', 'Numéros essentiels'],
-    ],
-    feature: { title: 'Toutes les démarches', href: '/demarches', kicker: 'Démarches' }
-  },
-  {
-    key: 'annonces',
-    label: 'Annonces',
-    href: '/annonces',
-    match: ['/annonces'],
-    entries: [
-      ['/annonces/immobilier', 'home', 'Immobilier', 'Vendre, louer, colocation'],
-      ['/annonces/emploi', 'briefcase', 'Emploi', 'Offres, candidatures, stages'],
-      ['/annonces/vehicules', 'car', 'Véhicules', 'Voitures, motos, pièces'],
-      ['/annonces/objets', 'tag', 'Objets', 'Maison, high-tech, mode, enfants'],
-      ['/annonces/deposer', 'upload', 'Déposer une annonce', 'Gratuit, contrôlée par DALIL'],
-      ['/mon-compte#annonces', 'news', 'Mes annonces et messages', 'Suivre, renouveler, répondre'],
-    ],
-    feature: { title: 'Toutes les annonces', href: '/annonces', kicker: 'Annonces' },
+    feature: { title: 'Que faire ce week-end ?', href: '/que-faire-ce-week-end', kicker: 'Découvrir' },
+    extra: ['/guides', 'Tous les guides'],
   },
   {
     key: 'vivre',
-    label: 'Vivre en Algérie',
-    href: '/installation',
-    match: ['/installation', '/vie-pratique', '/guides/logement', '/guides/ecole-et-famille', '/guides/sante', '/guides/transport', '/guides/budget-et-banque', '/guides/internet-et-telecoms'],
+    label: 'Vivre & démarches',
+    href: '/demarches',
+    match: ['/demarches', '/installation', '/vie-pratique', '/guides/documents-et-demarches', '/guides/travail-et-entreprise', '/guides/preparer-son-installation', '/guides/logement', '/guides/ecole-et-famille', '/guides/transport', '/guides/budget-et-banque', '/guides/internet-et-telecoms', '/annuaire/administrations-services-publics'],
     entries: [
-      ['/guides/logement', 'home', 'Logement', 'Louer, acheter, choisir son quartier'],
+      ['/installation', 'plane', 'M’installer', 'Préparer son arrivée en Algérie'],
+      ['/demarches', 'file', 'Papiers & consulats', 'Démarches officielles, administrations, consulats'],
+      ['/guides/logement', 'home', 'Logement & quartier', 'Louer, acheter, choisir son quartier'],
       ['/guides/ecole-et-famille', 'school', 'École & famille', 'Inscriptions, crèches, activités'],
-      ['/guides/transport', 'bus', 'Transports', 'Se déplacer au quotidien'],
-      ['/guides/budget-et-banque', 'wallet', 'Budget & banque', 'Comptes, paiements, devises'],
-      ['/guides/internet-et-telecoms', 'wifi', 'Internet & téléphone', 'Forfaits, fibre, couverture'],
+      ['/guides/travail-et-entreprise', 'briefcase', 'Travail & entreprise', 'Emploi, statuts, registre, fiscalité'],
+      ['/guides/budget-et-banque', 'wallet', 'Banque, télécoms & transports', 'Comptes, forfaits, se déplacer'],
     ],
-    feature: { title: 'Votre installation, étape par étape', href: '/installation', kicker: 'Vivre en Algérie' }
+    feature: { title: 'Toutes les démarches', href: '/demarches', kicker: 'Vivre & démarches' },
   },
-  {
-    key: 'plus',
-    label: 'Plus',
-    match: ['/actualites', '/guides', '/business-emploi', '/label', '/proposer', '/boutique'],
-    entries: [
-      ['/actualites', 'news', 'Actualités', 'Ce qui change'],
-      ['/guides', 'book', 'Guides', 'Comprendre et préparer'],
-      ['/business-emploi', 'briefcase', 'Business & Emploi', 'Investir, créer, travailler'],
-      ['/label#methode', 'shield', 'Critères de vérification', 'Notre exigence de qualité'],
-      ['/proposer', 'upload', 'Contribuer', 'Partager une information'],
-      ['/boutique', 'compass', 'Accompagnements', 'Avancer avec un parcours clair'],
-    ],
-    feature: { title: 'Des lieux qui méritent votre temps', href: '/annuaire', kicker: 'À la une' },
-    extra: ['/espace-pro', 'Espace professionnel'],
-  },
+]
+
+/** Tuiles de la page /demarches (inchangées depuis l’ancienne rubrique Démarches). */
+export const DEMARCHES_ENTRIES: NavEntry[] = [
+  ['/guides/documents-et-demarches', 'file', 'Documents & papiers', 'Pièces, délais, coûts'],
+  [cat('administrations-services-publics', 'Administrations'), 'building', 'Administrations', 'Adresses et horaires officiels'],
+  ['/guides/travail-et-entreprise', 'briefcase', 'Créer son entreprise', 'Statuts, registre, fiscalité'],
+  ['/guides/preparer-son-installation', 'plane', 'S’installer depuis l’étranger', 'Douanes, résidence'],
+  [cat('administrations-services-publics', 'Ambassades'), 'flag', 'Ambassades & consulats', 'Représentations et rendez-vous'],
+  [cat('administrations-services-publics', 'Contacts utiles et urgences'), 'phone', 'Urgences & contacts utiles', 'Numéros essentiels'],
 ]
 
 /** Rubrique de la page courante (soulignée dans le menu). */

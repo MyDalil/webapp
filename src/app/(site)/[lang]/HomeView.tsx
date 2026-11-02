@@ -123,22 +123,17 @@ export async function HomeView({ lang }: { lang: Lang }) {
       example: p?.name ?? null,
     }
   }
-  const city = cities[0]
   const photos: EntryPhotos = {
-    musulmane: door(['mosquees-priere'], (p) => p.category === 'Mosquées'),
-    // Portes Services et Démarches : photo choisie qui montre le sujet (pas une fiche au hasard).
-    services: { ...door(['sante-soins', 'maison-travaux', 'droit-finance-conseil', 'transports-mobilite']), photo: { src: PHOTOS['hopital-moderne'].src, credit: PHOTOS['hopital-moderne'].credit }, example: null },
-    decouvrir: door(['culture-nature-loisirs', 'restaurants-gastronomie']),
-    demarches: { ...door(['administrations-services-publics']), photo: { src: PHOTOS['grande-poste'].src, credit: PHOTOS['grande-poste'].credit }, example: null },
+    sante: { ...door(['sante-soins']), photo: { src: PHOTOS['hopital-moderne'].src, credit: PHOTOS['hopital-moderne'].credit }, example: null },
+    // Portes Services et Vivre & démarches : photo choisie qui montre le sujet (pas une fiche au hasard).
+    services: { ...door(['maison-travaux', 'droit-finance-conseil', 'transports-mobilite']), photo: { src: PHOTOS['domicile-travaux'].src, credit: PHOTOS['domicile-travaux'].credit }, example: null },
     annonces: (() => {
       const c = latest.find((x) => x.photo)
       return { photo: c?.photo ? { src: c.photo, credit: null } : { src: PHOTOS['alger-ville'].src, credit: PHOTOS['alger-ville'].credit }, count: classified.total, example: null }
     })(),
-    vivre: {
-      photo: city ? { src: city.cover, credit: city.credit } : { src: PHOTOS['alger-mer'].src, credit: PHOTOS['alger-mer'].credit },
-      count: 0,
-      example: null,
-    },
+    musulmane: door(['mosquees-priere'], (p) => p.category === 'Mosquées'),
+    decouvrir: door(['culture-nature-loisirs', 'restaurants-gastronomie']),
+    vivre: { ...door(['administrations-services-publics']), photo: { src: PHOTOS['grande-poste'].src, credit: PHOTOS['grande-poste'].credit }, example: null },
   }
   const byCategory = (c: string) =>
     top.find((p) => p.category === c) ?? all.find((p) => p.category === c && own(p))
@@ -177,31 +172,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
         <HomeEntries stats={photos} lang={lang} />
       </section>
 
-      {musulmane && (
-        <section className="section section-tint">
-          <div className="container">
-            <div className="section-head" data-reveal>
-              <div>
-                <p className="eyebrow">{T.musulmaneEyebrow}</p>
-                <h2>{T.musulmaneTitle}</h2>
-                <p className="section-lead">{T.musulmaneLead}</p>
-              </div>
-            </div>
-          </div>
-          <TileCarousel
-            label={T.musulmaneEyebrow}
-            tiles={musulmane.entries.map(([href, icon, title, sub], i): Tile => {
-              const category = new URL(href, 'https://mydalil.com').searchParams.get('category')
-              const p = category ? byCategory(category) : undefined
-              // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
-              const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
-              const t = lang === 'fr' ? null : MUSULMANE_T[lang][i]
-              return { href, title: t?.[0] ?? title, sub: t?.[1] ?? sub, photo: MUSULMANE_PHOTO[title] ?? own ?? PHOTOS['djamaa-el-kebir'].src, icon }
-            })}
-          />
-        </section>
-      )}
-
       {/* Santé et À domicile en carrousels photo (Rad, 2026-10-31) : grandes tuiles regroupées, photos sans visage. */}
       <section className="section">
         <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} text={T.santeLead} />
@@ -227,6 +197,89 @@ export async function HomeView({ lang }: { lang: Lang }) {
           ]}
         />
       </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="eyebrow">{T.annoncesEyebrow}</p>
+              <h2>{T.annoncesTitle}</h2>
+              <p>{T.annoncesText}</p>
+            </div>
+            <Link className="button primary" href="/annonces/deposer">
+              {T.postAd}
+            </Link>
+          </div>
+        </div>
+        <TileCarousel
+          label={T.annoncesEyebrow}
+          tiles={CLASSIFIED_CATEGORIES.map(
+            (c): Tile => ({
+              href: `/annonces/${c.value}`,
+              title: ad(c.label),
+              sub: `${c.subs.slice(0, 3).map(([, l]) => ad(l)).join(' · ')} — ${classified.byCategory[c.value] ? count(classified.byCategory[c.value], lang, { fr: ['annonce', 'annonces'], en: ['ad', 'ads'], ar: ['إعلان واحد', 'إعلانان', 'إعلانات', 'إعلانًا'] }) : T.beFirst}`,
+              photo: PHOTOS[ANNONCE_PHOTO[c.value] ?? 'alger-ville'].src,
+              icon: 'grid',
+            }),
+          )}
+        />
+        {!!latest.length && (
+          <>
+            <div className="container xp-subhead" data-reveal>
+              {/* Exemples seuls : jamais présentés comme de vraies « dernières annonces » (audit D07). */}
+              <h3>{latest.every((c) => c.example) ? T.examplesAds : T.latestAds}</h3>
+              <Link href="/annonces">{T.allAds}</Link>
+            </div>
+            <Carousel label={latest.every((c) => c.example) ? T.examplesAds : T.latestAds} variant="tiles">
+              {latest.map((c, i) => (
+                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
+                  {c.photo ? (
+                    <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
+                  ) : (
+                    <div className="city-tile-img is-icon is-annonce">
+                      <span className="xp-tile-icon" aria-hidden="true">
+                        <Icon name={adIcon(c)} />
+                      </span>
+                    </div>
+                  )}
+                  <div className="city-tile-body">
+                    <span className="chip">{c.example ? `${T.exampleChip} · ${ad(c.subLabel)}` : ad(c.subLabel)}</span>
+                    <h3>{c.title}</h3>
+                    <p>
+                      {c.price} · {c.place}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
+          </>
+        )}
+      </section>
+
+      {musulmane && (
+        <section className="section section-tint">
+          <div className="container">
+            <div className="section-head" data-reveal>
+              <div>
+                <p className="eyebrow">{T.musulmaneEyebrow}</p>
+                <h2>{T.musulmaneTitle}</h2>
+                <p className="section-lead">{T.musulmaneLead}</p>
+              </div>
+            </div>
+          </div>
+          <TileCarousel
+            label={T.musulmaneEyebrow}
+            tiles={musulmane.entries.map(([href, icon, title, sub], i): Tile => {
+              const category = new URL(href, 'https://mydalil.com').searchParams.get('category')
+              const p = category ? byCategory(category) : undefined
+              // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
+              const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
+              const t = lang === 'fr' ? null : MUSULMANE_T[lang][i]
+              return { href, title: t?.[0] ?? title, sub: t?.[1] ?? sub, photo: MUSULMANE_PHOTO[title] ?? own ?? PHOTOS['djamaa-el-kebir'].src, icon }
+            })}
+          />
+        </section>
+      )}
 
       <section className="section xp-band">
         <div className="container">
@@ -323,64 +376,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
           </div>
         </div>
         <GuideTiles slugs={DEMARCHES} label={T.demarchesLabel} lang={lang} />
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head" data-reveal>
-            <div>
-              <p className="eyebrow">{T.annoncesEyebrow}</p>
-              <h2>{T.annoncesTitle}</h2>
-              <p>{T.annoncesText}</p>
-            </div>
-            <Link className="button primary" href="/annonces/deposer">
-              {T.postAd}
-            </Link>
-          </div>
-        </div>
-        <TileCarousel
-          label={T.annoncesEyebrow}
-          tiles={CLASSIFIED_CATEGORIES.map(
-            (c): Tile => ({
-              href: `/annonces/${c.value}`,
-              title: ad(c.label),
-              sub: `${c.subs.slice(0, 3).map(([, l]) => ad(l)).join(' · ')} — ${classified.byCategory[c.value] ? count(classified.byCategory[c.value], lang, { fr: ['annonce', 'annonces'], en: ['ad', 'ads'], ar: ['إعلان واحد', 'إعلانان', 'إعلانات', 'إعلانًا'] }) : T.beFirst}`,
-              photo: PHOTOS[ANNONCE_PHOTO[c.value] ?? 'alger-ville'].src,
-              icon: 'grid',
-            }),
-          )}
-        />
-        {!!latest.length && (
-          <>
-            <div className="container xp-subhead" data-reveal>
-              {/* Exemples seuls : jamais présentés comme de vraies « dernières annonces » (audit D07). */}
-              <h3>{latest.every((c) => c.example) ? T.examplesAds : T.latestAds}</h3>
-              <Link href="/annonces">{T.allAds}</Link>
-            </div>
-            <Carousel label={latest.every((c) => c.example) ? T.examplesAds : T.latestAds} variant="tiles">
-              {latest.map((c, i) => (
-                <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
-                  {c.photo ? (
-                    <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
-                  ) : (
-                    <div className="city-tile-img is-icon is-annonce">
-                      <span className="xp-tile-icon" aria-hidden="true">
-                        <Icon name={adIcon(c)} />
-                      </span>
-                    </div>
-                  )}
-                  <div className="city-tile-body">
-                    <span className="chip">{c.example ? `${T.exampleChip} · ${ad(c.subLabel)}` : ad(c.subLabel)}</span>
-                    <h3>{c.title}</h3>
-                    <p>
-                      {c.price} · {c.place}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
-          </>
-        )}
       </section>
 
       <section className="section section-tint">
