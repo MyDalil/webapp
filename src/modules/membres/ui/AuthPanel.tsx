@@ -5,17 +5,19 @@ import { useSearchParams } from 'next/navigation'
 import { useLangRouter } from '@/platform/ui/lang'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { COMMON_BOXES, mailboxOf } from './mailbox'
+import { proofHeaders } from '@/platform/security/proofClient'
 
 type Kind = 'particulier' | 'pro'
 type Step = 'email' | 'code' | 'profile'
 
-async function api(url: string, body: unknown, method = 'POST') {
-  const r = await fetch(url, { method, headers: { 'content-type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) })
+async function api(url: string, body: unknown, method = 'POST', headers: Record<string, string> = { 'content-type': 'application/json' }) {
+  const r = await fetch(url, { method, headers, credentials: 'include', body: JSON.stringify(body) })
   const data = await r.json().catch(() => ({}))
   return { ok: r.ok, data }
 }
 const errorOf = (d: { error?: string; errors?: { message?: string }[]; message?: string }) => d.error ?? d.errors?.[0]?.message ?? d.message ?? 'Une erreur est survenue.'
-const otp = (body: Record<string, unknown>) => api('/api/members/otp', body)
+const otp = async (body: Record<string, unknown>) =>
+  api('/api/members/otp', body, 'POST', body.action === 'send' ? await proofHeaders({ 'content-type': 'application/json' }) : undefined)
 
 /** Brouillon de connexion gardé dans l’onglet : un retour arrière ne fait rien retaper (jamais le code lui-même). */
 const DRAFT = 'dalil-auth-brouillon'

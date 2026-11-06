@@ -11,8 +11,12 @@ const KIND_LABEL = {
   report: 'Annonce signalée',
 } as const
 
-/** Enregistre une demande, alerte l’équipe et accuse réception à l’expéditeur s’il a laissé son email. */
-export async function record(kind: keyof typeof KIND_LABEL, subject: string, data: unknown, email?: string, session?: string) {
+/**
+ * Enregistre une demande, alerte l’équipe et accuse réception à l’expéditeur.
+ * L’accusé de réception part seulement si `ack` est vrai (humain confirmé ou compte connecté avec cet email) :
+ * sinon un robot ferait envoyer par DALIL des emails à des inconnus (bombardement d’emails, réputation Resend).
+ */
+export async function record(kind: keyof typeof KIND_LABEL, subject: string, data: unknown, email?: string, session?: string, opts: { ack?: boolean } = {}) {
   const p = await payload()
   const doc = await p.create({
     collection: 'submissions',
@@ -25,7 +29,7 @@ export async function record(kind: keyof typeof KIND_LABEL, subject: string, dat
     `${KIND_LABEL[kind]} — ${subject.slice(0, 80)}`,
     layout(esc(KIND_LABEL[kind]), `<p><b>${esc(subject)}</b>${email ? `<br>De : ${esc(email)}` : ''}</p><p>À traiter dans la boîte de réception DALIL.</p>`, { label: 'Ouvrir la demande', href: admin }),
   )
-  if (email && (kind === 'contribution' || kind === 'application')) {
+  if (email && opts.ack && (kind === 'contribution' || kind === 'application')) {
     const what = kind === 'contribution' ? 'votre contribution' : 'votre candidature'
     await send(
       email,
