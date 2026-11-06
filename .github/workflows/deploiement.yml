@@ -10,7 +10,7 @@ jobs:
   controle:
     name: Parcours sur le déploiement
     if: github.event.deployment_status.state == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       # Production : le domaine public (l’adresse technique du déploiement exige une connexion Vercel).

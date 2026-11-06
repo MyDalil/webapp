@@ -15,7 +15,7 @@ concurrency:
 jobs:
   verifier:
     name: Disponibilité de www.mydalil.com
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     env:
       SITE: https://www.mydalil.com
