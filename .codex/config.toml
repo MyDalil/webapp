@@ -1,0 +1,6 @@
+# Autonomie dans le dossier du projet ; les politiques imposées par l’hôte restent prioritaires.
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true
