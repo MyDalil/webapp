@@ -1,6 +1,8 @@
 import type { Tab } from 'payload'
 import type { Place } from '@/payload-types'
+import { APIError, type CollectionBeforeChangeHook } from 'payload'
 import { SECTORS } from '@/platform/referentiel/catalog'
+import { isAdminField, isStaffField, mayPublish } from '@/platform/access'
 
 /**
  * Moteur de confiance DALIL : statuts, critères, sources et date de vérification.
@@ -88,15 +90,20 @@ export function mergeCriteria(sector: string, current: Criterion[]): Criterion[]
 }
 
 /** Onglet « Vérification » commun à toute entité vérifiable (aujourd’hui : les adresses). */
+/** Statuts de confiance : attribués par un administrateur seulement (jamais par un rédacteur, un agent ou un pro). */
+const trustAccess = { create: isAdminField, update: isAdminField }
+
+/** Onglet « Vérification » commun à toute entité vérifiable (aujourd’hui : les adresses). */
 export const verificationTab: Tab = {
   label: 'Vérification',
   fields: [
     {
       type: 'row',
       fields: [
-        { name: 'verification', type: 'select', label: 'Statut DALIL', required: true, defaultValue: 'spotted', options: [...PLACE_STATUS] },
-        { name: 'verifiedAt', type: 'date', label: 'Dernière vérification', admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy' } } },
-        { name: 'verifiedBy', type: 'text', label: 'Vérifiée par' },
+        { name: 'verification', type: 'select', label: 'Statut DALIL', required: true, defaultValue: 'spotted', options: [...PLACE_STATUS], access: trustAccess },
+        { name: 'verifiedAt', type: 'date', label: 'Dernière vérification', access: trustAccess, admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy' } } },
+        { name: 'verifiedBy', type: 'text', label: 'Vérifiée par', access: trustAccess },
+        { name: 'nextVerificationAt', type: 'date', label: 'Prochaine vérification', access: trustAccess, admin: { description: 'Échéance de revérification. Calculée à 12 mois si vide.', date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy' } } },
       ],
     },
     {
@@ -104,6 +111,7 @@ export const verificationTab: Tab = {
       type: 'array',
       label: 'Critères DALIL',
       labels: { singular: 'Critère', plural: 'Critères' },
+      access: trustAccess,
       admin: { description: 'Pré-remplis selon le secteur. Mettez à jour après chaque visite.' },
       fields: [
         {
@@ -130,6 +138,51 @@ export const verificationTab: Tab = {
         },
       ],
     },
-    { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)' },
+    {
+      name: 'provenance',
+      type: 'array',
+      label: 'Provenance par champ',
+      labels: { singular: 'Champ', plural: 'Provenance par champ' },
+      access: { read: isStaffField },
+      admin: { description: 'Pour chaque champ sensible (téléphone, adresse, horaires…) : source, identifiant source, date de collecte, méthode, date de vérification, responsable. Une valeur en conflit est gardée ici, jamais écrasée.' },
+      fields: [
+        { type: 'row', fields: [{ name: 'field', type: 'text', label: 'Champ', required: true }, { name: 'value', type: 'text', label: 'Valeur relevée' }, { name: 'conflict', type: 'checkbox', label: 'En conflit' }] },
+        { type: 'row', fields: [{ name: 'source', type: 'text', label: 'Source', required: true }, { name: 'sourceId', type: 'text', label: 'Identifiant source' }, { name: 'collectedAt', type: 'date', label: 'Collectée le' }] },
+        { type: 'row', fields: [{ name: 'method', type: 'select', label: 'Méthode', options: [{ label: 'Import de données ouvertes', value: 'import' }, { label: 'Site officiel', value: 'official' }, { label: 'Appel téléphonique', value: 'phone' }, { label: 'Visite sur place', value: 'visit' }, { label: 'Déclaration du professionnel', value: 'pro' }, { label: 'Contribution d’un visiteur', value: 'contribution' }] }, { name: 'checkedAt', type: 'date', label: 'Vérifiée le' }, { name: 'checkedBy', type: 'text', label: 'Responsable' }] },
+      ],
+    },
+    { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)', access: { read: isStaffField } },
   ],
+}
+
+const TRUST_FIELDS = ['verification', 'verifiedAt', 'verifiedBy', 'nextVerificationAt', 'criteria']
+
+type Proof = { verification?: string | null; verifiedAt?: string | null; verifiedBy?: string | null; sources?: { url?: string | null }[] | null; criteria?: { result?: string | null }[] | null; nextVerificationAt?: string | null }
+
+/** Ce qui manque pour attribuer un statut de confiance (règle du module, testée). Vide = statut accepté. */
+export function missingProof(doc: Proof): string[] {
+  if (doc.verification !== 'verified' && doc.verification !== 'labelled') return []
+  const missing: string[] = []
+  if (!doc.verifiedAt || Number.isNaN(Date.parse(doc.verifiedAt))) missing.push('date de vérification')
+  else if (Date.parse(doc.verifiedAt) > Date.now() + 864e5) missing.push('date de vérification passée (pas dans le futur)')
+  if (!doc.verifiedBy?.trim()) missing.push('auteur de la vérification')
+  if (!(doc.sources ?? []).some((s) => /^https?:\/\/\S+\.\S+/.test(s.url?.trim() ?? ''))) missing.push('au moins une source exploitable (lien)')
+  const criteria = doc.criteria ?? []
+  if (!criteria.length) missing.push('critères du secteur')
+  else if (doc.verification === 'labelled' && criteria.some((c) => c.result === 'pending' || c.result === 'ko')) missing.push('tous les critères évalués et aucun non conforme (label)')
+  return missing
+}
+
+/** Revérification par défaut : 12 mois après la vérification. */
+export const nextCheck = (verifiedAt: string) => new Date(Date.parse(verifiedAt) + 365 * 864e5).toISOString()
+
+/** Refuse « Vérifiée » / « Labellisée » sans preuves (création, mise à jour partielle, import). */
+export const requireProof: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
+  // Les champs de confiance envoyés par un compte non habilité sont ignorés (retirés par le contrôle d’accès du champ).
+  const own = mayPublish(req?.user) ? (data ?? {}) : Object.fromEntries(Object.entries(data ?? {}).filter(([k]) => !TRUST_FIELDS.includes(k)))
+  const next = { ...(originalDoc ?? {}), ...own } as Proof
+  const missing = missingProof(next)
+  if (missing.length) throw new APIError(`Statut « ${next.verification === 'labelled' ? 'Labellisée' : 'Vérifiée'} » refusé : il manque ${missing.join(', ')}.`, 400, null, true)
+  if (data && mayPublish(req?.user) && (next.verification === 'verified' || next.verification === 'labelled') && next.verifiedAt && !next.nextVerificationAt) data.nextVerificationAt = nextCheck(next.verifiedAt)
+  return data
 }

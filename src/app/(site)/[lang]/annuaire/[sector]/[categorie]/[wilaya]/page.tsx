@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Une combinaison sans adresse reste utile au visiteur mais n’est pas proposée aux moteurs (contenu non spécifique).
   const { total } = await searchPlaces({ sector: f.sector.slug, category: f.category, wilaya: String(w.code) }, 1)
   return {
-    title: `${f.category} à ${w.name} — ${f.sector.title} · DALIL`,
+    title: `${f.category} à ${w.name} — ${f.sector.title}`,
     description: `${f.category} dans la wilaya de ${w.name} : adresses, contacts et statut de vérification DALIL.`,
     alternates: { canonical: `${SITE}${categoryPath(f.sector.slug, f.category, w.code)}` },
     robots: total ? undefined : { index: false, follow: true },

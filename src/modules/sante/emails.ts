@@ -45,7 +45,7 @@ export const bookingCancelled = (to: Mail, r: Rdv, by: 'patient' | 'practitioner
     ),
   )
 
-export const bookingReminder = (p: Mail, r: Rdv) =>
+export const bookingReminder = (p: Mail, r: Rdv, idempotencyKey?: string) =>
   send(
     p.to,
     `Rappel : rendez-vous demain à ${algiersTime(r.start)} — ${r.practitionerName}`,
@@ -54,4 +54,5 @@ export const bookingReminder = (p: Mail, r: Rdv) =>
       `<p><b>${esc(r.practitionerName)}</b><br>${when(r)}</p><p>${where(r)}</p>${pay(r)}<p>Un empêchement ? Annulez ou déplacez depuis votre compte.</p>`,
       { label: 'Gérer mes rendez-vous', href: `${SITE}/mon-compte` },
     ),
+    { idempotencyKey },
   )

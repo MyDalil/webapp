@@ -32,7 +32,10 @@ export async function sitemapFiles(): Promise<string[]> {
   return ['pages', 'categories', 'professionnels', 'annonces', ...Array.from({ length: chunks }, (_, i) => `adresses-${i}`)]
 }
 
-/** Adresses d’un fichier du plan, ou null si le nom est inconnu. */
+/**
+ * Adresses d’un fichier du plan, ou null si le nom est inconnu. Une erreur de base n’est jamais masquée par une liste vide
+ * (audit A09) : la route répond 503 et les moteurs gardent le dernier plan valide.
+ */
 export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
   if (file === 'pages') {
     const counts = await getPlaceCounts()
@@ -53,11 +56,11 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
     return [...new Set([...all, ...local])].map((p) => url(p))
   }
   if (file === 'professionnels') {
-    const [practitioners, providers] = await Promise.all([getPractitionerSitemap().catch(() => []), getProviderSitemap().catch(() => [])])
+    const [practitioners, providers] = await Promise.all([getPractitionerSitemap(), getProviderSitemap()])
     return [...practitioners.map((p) => url(`/praticiens/${p.slug}`, p.updatedAt)), ...providers.map((p) => url(`/prestataires/${p.slug}`, p.updatedAt))]
   }
   if (file === 'annonces') {
-    const list = await getClassifiedSitemap().catch(() => [])
+    const list = await getClassifiedSitemap()
     return list.map((a) => url(`/annonces/${a.category}/${a.slug}`, a.updatedAt))
   }
   const m = /^adresses-(\d+)$/.exec(file)

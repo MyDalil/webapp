@@ -27,6 +27,7 @@ export const ErrorLogs: CollectionConfig = {
       { name: 'firstSeen', type: 'date', label: 'Première fois', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
       { name: 'lastSeen', type: 'date', label: 'Dernière fois', index: true, admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
       { name: 'resolved', type: 'checkbox', label: 'Résolue', defaultValue: false },
+      { name: 'lastAlertAt', type: 'date', label: 'Dernière alerte', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
     ] },
     { name: 'digest', type: 'text', label: 'Référence Next', admin: { readOnly: true } },
     { name: 'stack', type: 'textarea', label: 'Pile d’appels', admin: { readOnly: true } },

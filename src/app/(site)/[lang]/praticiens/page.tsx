@@ -5,7 +5,7 @@ import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
 import { PlacePanel } from '@/modules/annuaire/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
-export const metadata: Metadata = { title: 'Trouver un praticien · DALIL', description: 'Prenez rendez-vous en ligne avec un médecin ou un praticien vérifié par DALIL, au cabinet ou en visio.' }
+export const metadata: Metadata = { title: 'Trouver un praticien', description: 'Trouvez un professionnel de santé près de vous : coordonnées, et rendez-vous en ligne chez les praticiens qui le proposent.' }
 export const dynamic = 'force-dynamic'
 
 type Q = { specialite?: string; wilaya?: string; mode?: string; langue?: string; q?: string }
@@ -35,7 +35,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
         <div className="container">
           <p className="eyebrow">Santé</p>
           <h1>Trouver un praticien.</h1>
-          <p className="auth-lead">Prenez rendez-vous en ligne, au cabinet ou en visio. Identité et diplômes vérifiés par DALIL.</p>
+          <p className="auth-lead">Trouvez un professionnel de santé près de vous. Rendez-vous en ligne seulement chez les praticiens qui le proposent ; identité et diplômes contrôlés avant publication.</p>
           <form className="praticiens-search" action="/praticiens">
             <label>
               <span>Spécialité</span>
@@ -56,7 +56,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
               <span>Où</span>
               <select name="wilaya" defaultValue={q.wilaya ?? ''}>
                 <option value="">Toute l’Algérie</option>
-                {[...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr')).map((w) => (
+                {[...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr')).map((w) => (
                   <option key={w.code} value={String(w.code)}>
                     {w.name}
                   </option>

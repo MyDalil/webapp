@@ -6,7 +6,7 @@ import { ClassifiedChat } from '@/modules/annonces/ui'
 import { payload } from '@/platform/http'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Messagerie des annonces · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Messagerie des annonces', robots: { index: false } }
 
 type Props = { searchParams: Promise<{ annonce?: string; contact?: string }> }
 

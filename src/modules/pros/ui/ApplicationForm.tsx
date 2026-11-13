@@ -19,6 +19,7 @@ export function ApplicationForm() {
   }
   return (
     <form className="product-form" onSubmit={submit}>
+      <input className="honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <div className="form-grid">
         <label>
           <span>Nom de l’activité *</span>

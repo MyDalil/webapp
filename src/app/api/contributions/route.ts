@@ -1,9 +1,9 @@
 import { clean, fail, isEmail, json } from '@/platform/http'
-import { readSession } from '@/modules/membres'
+import { currentMember, readSession } from '@/modules/membres'
 import { record, saveContributionPhotos } from '@/modules/messages'
 import { guard } from '@/platform/security/rateLimit'
 import { cleanImage, readFile, type CleanFile } from '@/platform/storage/images'
-import { proofError } from '@/platform/security/proof'
+import { isVerifiedHuman, proofError } from '@/platform/security/proof'
 
 const MAX_PHOTOS = 3
 
@@ -40,7 +40,9 @@ export async function POST(req: Request) {
   if (photos.length) data.photos = `${photos.length} photo${photos.length > 1 ? 's' : ''} — voir « Photos proposées »`
   delete data.licenseOk
   const s = await readSession()
-  const id = await record('contribution', title, data, email, s?.sid)
+  const member = await currentMember()
+  const ack = isVerifiedHuman(req) || (!!member?.email && member.email.toLowerCase() === email.toLowerCase())
+  const id = await record('contribution', title, data, email, s?.sid, { ack })
   if (photos.length) await saveContributionPhotos(id, photos, author)
   return json({ ok: true })
 }

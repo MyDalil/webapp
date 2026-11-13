@@ -37,18 +37,42 @@ export async function tables(q: Query): Promise<string[]> {
   return rows.map((r) => String(r.tablename)).filter((t) => !SKIP.has(t) && t !== 'spatial_ref_sys')
 }
 
-/** Exporte chaque table ; `put` range le fichier (Blob ou disque). Renvoie le nombre de lignes par table. */
-export async function backup(q: Query, secret: string, put: (name: string, data: Buffer) => Promise<void>) {
+export const sha256 = (b: Buffer) => createHash('sha256').update(b).digest('hex')
+
+/** Empreinte publique de la clé : dit si une sauvegarde est lisible avec le secret du moment, sans le révéler. */
+export const keyId = (secret: string) => sha256(key(secret)).slice(0, 12)
+
+/** Manifeste : date, lignes par table, nom exact et empreinte de chaque fichier, empreinte de la clé. */
+export type Manifest = { at: string; version: 2; keyId: string; counts: Record<string, number>; files: Record<string, { name: string; sha256: string; bytes: number }> }
+
+/**
+ * Exporte chaque table dans un instantané transactionnel commun (REPEATABLE READ, lecture seule) : toutes les tables
+ * sont lues au même instant, même si la base change pendant l’export. `q` doit donc utiliser une seule connexion.
+ * `put` range le fichier sous un nom déterministe (Blob ou disque). Renvoie le manifeste.
+ */
+export async function backup(q: Query, secret: string, put: (name: string, data: Buffer) => Promise<void>): Promise<Manifest> {
   const counts: Record<string, number> = {}
-  for (const t of await tables(q)) {
-    const list = await columns(q, t)
-    const { rows } = await q(`SELECT COALESCE(json_agg(x), '[]'::json) AS data FROM (SELECT ${list} FROM "${t}") x`)
-    const data = rows[0].data as unknown[]
-    counts[t] = data.length
-    await put(`${t}.json.enc`, seal(secret, Buffer.from(JSON.stringify(data))))
+  const files: Manifest['files'] = {}
+  await q('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY')
+  try {
+    for (const t of await tables(q)) {
+      const list = await columns(q, t)
+      const { rows } = await q(`SELECT COALESCE(json_agg(x), '[]'::json) AS data FROM (SELECT ${list} FROM "${t}") x`)
+      const data = rows[0].data as unknown[]
+      counts[t] = data.length
+      const file = seal(secret, Buffer.from(JSON.stringify(data)))
+      const name = `${t}.json.enc`
+      await put(name, file)
+      files[t] = { name, sha256: sha256(file), bytes: file.length }
+    }
+    await q('COMMIT')
+  } catch (e) {
+    await q('ROLLBACK').catch(() => {})
+    throw e
   }
-  await put('manifest.json.enc', seal(secret, Buffer.from(JSON.stringify({ at: new Date().toISOString(), counts }))))
-  return counts
+  const manifest: Manifest = { at: new Date().toISOString(), version: 2, keyId: keyId(secret), counts, files }
+  await put('manifest.json.enc', seal(secret, Buffer.from(JSON.stringify(manifest))))
+  return manifest
 }
 
 /**
@@ -56,14 +80,27 @@ export async function backup(q: Query, secret: string, put: (name: string, data:
  * séquences recalées. `get` lit un fichier par nom.
  */
 export async function restore(q: Query, secret: string, get: (name: string) => Promise<Buffer>) {
-  const manifest = JSON.parse(open(secret, await get('manifest.json.enc')).toString()) as { at: string; counts: Record<string, number> }
+  let manifest: Partial<Manifest> & { at: string; counts: Record<string, number> }
+  try {
+    manifest = JSON.parse(open(secret, await get('manifest.json.enc')).toString())
+  } catch {
+    throw new Error(`Manifeste illisible : mauvaise clé (clé du moment : ${keyId(secret)}) ou fichier absent.`)
+  }
   const names = Object.keys(manifest.counts)
+  // Tous les fichiers sont lus et contrôlés avant de toucher à la base.
+  const blobs = new Map<string, Buffer>()
+  for (const t of names) {
+    const ref = manifest.files?.[t]
+    const file = await get(ref?.name ?? `${t}.json.enc`)
+    if (ref && sha256(file) !== ref.sha256) throw new Error(`Fichier ${ref.name} altéré ou incomplet (empreinte différente).`)
+    blobs.set(t, file)
+  }
   await q('BEGIN')
   try {
     await q(`SET LOCAL session_replication_role = replica`)
     await q(`TRUNCATE ${names.map((t) => `"${t}"`).join(', ')} CASCADE`)
     for (const t of names) {
-      const rows = JSON.parse(open(secret, await get(`${t}.json.enc`)).toString()) as Record<string, unknown>[]
+      const rows = JSON.parse(open(secret, blobs.get(t)!).toString()) as Record<string, unknown>[]
       const list = await columns(q, t)
       for (let i = 0; i < rows.length; i += 2000) {
         await q(`INSERT INTO "${t}" (${list}) SELECT ${list} FROM json_populate_recordset(NULL::"${t}", $1::json)`, [JSON.stringify(rows.slice(i, i + 2000))])
@@ -81,10 +118,16 @@ export async function restore(q: Query, secret: string, get: (name: string) => P
   return manifest
 }
 
-/** Secret de chiffrement : celui de payload.config.ts (PAYLOAD_SECRET, sinon dérivé de l’URL de la base). */
+/**
+ * Secret de chiffrement des sauvegardes, par ordre de priorité :
+ * 1. BACKUP_SECRET — secret dédié, à conserver hors de Vercel (coffre de l’équipe) : recommandé ;
+ * 2. PAYLOAD_SECRET ;
+ * 3. dérivé de l’URL de la base (ancien fonctionnement : changer le mot de passe Neon rend les anciennes sauvegardes illisibles).
+ * Rotation : garder l’ancien secret tant que des sauvegardes chiffrées avec lui existent (30 jours). Voir platform/AGENTS.md.
+ */
 export function backupSecret() {
   const url = process.env.DALIL_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
-  const s = process.env.PAYLOAD_SECRET || (url ? createHash('sha256').update(`dalil:${url}`).digest('hex') : '')
-  if (!s) throw new Error('PAYLOAD_SECRET ou DALIL_DATABASE_URL requis.')
+  const s = process.env.BACKUP_SECRET || process.env.PAYLOAD_SECRET || (url ? createHash('sha256').update(`dalil:${url}`).digest('hex') : '')
+  if (!s) throw new Error('BACKUP_SECRET, PAYLOAD_SECRET ou DALIL_DATABASE_URL requis.')
   return s
 }

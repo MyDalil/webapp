@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Permissions-Policy', value: 'camera=(), geolocation=(self), microphone=(self), payment=(), usb=(), interest-cohort=()' },
+        ],
+      },
+      {
+        // Partout, /admin et /api compris : HTTPS imposé, pas d’intégration dans un autre site, pas de plugin.
+        source: '/:path*',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'" },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
     ]

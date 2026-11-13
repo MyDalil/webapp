@@ -12,7 +12,7 @@ permissions:
   contents: read
 jobs:
   economie:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
       KEY: ${{ secrets.NEON_API_KEY }}

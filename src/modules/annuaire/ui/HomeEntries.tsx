@@ -7,38 +7,28 @@ import { count, type Lang } from '@/platform/i18n'
 type Photo = { src: string; credit: string | null } | null
 /** Une porte : photo d’une fiche DALIL publiée, nombre de fiches et un exemple (format « Par ville »). */
 export type EntryStat = { photo: Photo; count: number; example: string | null }
-export type EntryKey = 'musulmane' | 'services' | 'decouvrir' | 'demarches' | 'annonces' | 'vivre'
+export type EntryKey = 'sante' | 'services' | 'annonces' | 'musulmane' | 'decouvrir' | 'vivre'
 export type EntryPhotos = Record<EntryKey, EntryStat>
 
 const fiches = (n: number, l: Lang) => count(n, l, { fr: ['fiche', 'fiches'], en: ['listing', 'listings'], ar: ['عنوان واحد', 'عنوانان', 'عناوين', 'عنوانًا'] })
 
 /** Titres et lignes des portes en anglais et en arabe (mêmes mots que le menu). */
 const DOOR_T: Record<'en' | 'ar', Record<EntryKey, [title: string, line?: string]>> = {
-  en: { musulmane: ['Muslim life'], services: ['Services', 'Verified doctors, tradespeople and providers'], decouvrir: ['Discover'], demarches: ['Paperwork'], annonces: ['Classifieds', 'Property, jobs, vehicles, items'], vivre: ['Living in Algeria', 'Housing, school, banking, transport'] },
-  ar: { musulmane: ['الحياة الإسلامية'], services: ['الخدمات', 'أطباء وحرفيون ومقدّمو خدمات موثَّقون'], decouvrir: ['اكتشف'], demarches: ['الإجراءات'], annonces: ['الإعلانات', 'عقار، عمل، مركبات، أغراض'], vivre: ['العيش في الجزائر', 'السكن، المدرسة، البنك، النقل'] },
+  en: { sante: ['Health', 'Doctors, pharmacies, emergencies'], services: ['Services', 'Repairs, cleaning, home help'], annonces: ['Classifieds', 'Property, jobs, vehicles, items'], musulmane: ['Muslim life'], decouvrir: ['Discover'], vivre: ['Everyday life', 'Moving, papers, housing, school'] },
+  ar: { sante: ['الصحة', 'أطباء، صيدليات، طوارئ'], services: ['الخدمات', 'أشغال، تنظيف، مساعدة منزلية'], annonces: ['الإعلانات', 'عقار، عمل، مركبات، أغراض'], musulmane: ['الحياة الإسلامية'], decouvrir: ['اكتشف'], vivre: ['الحياة العملية', 'الاستقرار، الوثائق، السكن، المدرسة'] },
 }
 
 /**
- * Portes sous le premier écran (ordre validé par Rad, 2026-10-21) : une porte par rubrique du menu,
- * même ordre, mêmes mots.
+ * Portes sous le premier écran : une porte par univers du menu, même ordre, mêmes mots
+ * (six univers, validés par Rad le 2026-11-02).
  */
 const DOORS: { key: EntryKey; href: string; title: string; line?: string }[] = [
-  { key: 'musulmane', href: '/vie-musulmane', title: 'Vie musulmane' },
-  {
-    key: 'services',
-    href: '/services',
-    title: 'Services',
-    line: 'Médecins, artisans et prestataires vérifiés',
-  },
-  { key: 'decouvrir', href: '/explorer', title: 'Découvrir' },
-  { key: 'demarches', href: '/demarches', title: 'Démarches' },
+  { key: 'sante', href: '/praticiens', title: 'Santé', line: 'Médecins, pharmacies, urgences' },
+  { key: 'services', href: '/services', title: 'Services', line: 'Travaux, ménage, aide à domicile' },
   { key: 'annonces', href: '/annonces', title: 'Annonces', line: 'Immobilier, emploi, véhicules, objets' },
-  {
-    key: 'vivre',
-    href: '/installation',
-    title: 'Vivre en Algérie',
-    line: 'Logement, école, banque, transports',
-  },
+  { key: 'musulmane', href: '/vie-musulmane', title: 'Vie musulmane' },
+  { key: 'decouvrir', href: '/explorer', title: 'Découvrir' },
+  { key: 'vivre', href: '/demarches', title: 'Vie pratique', line: 'Installation, papiers, logement, école' },
 ]
 
 export function HomeEntries({ stats, lang = 'fr' }: { stats: EntryPhotos; lang?: Lang }) {

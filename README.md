@@ -36,7 +36,7 @@ Le visuel de référence est `src/styles/mockup.css` ; les contenus et fonctions
 
 ## Développer
 
-Lire [AGENTS.md](AGENTS.md), puis les consignes du module concerné. `CLAUDE.md` importe les mêmes règles ; elles sont utilisables par un humain comme par les autres outils de développement.
+Lire [AGENTS.md](AGENTS.md), puis les consignes du module concerné et [le point de reprise](docs/agent-handoff.md). `CLAUDE.md` importe les mêmes règles ; elles sont utilisables par un humain comme par les autres outils de développement.
 
 ```sh
 pnpm dev

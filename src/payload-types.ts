@@ -99,6 +99,8 @@ export interface Config {
     'agent-messages': AgentMessage;
     'ai-usage': AiUsage;
     'error-logs': ErrorLog;
+    'task-runs': TaskRun;
+    'email-deliveries': EmailDelivery;
     'audit-log': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -137,6 +139,8 @@ export interface Config {
     'agent-messages': AgentMessagesSelect<false> | AgentMessagesSelect<true>;
     'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
     'error-logs': ErrorLogsSelect<false> | ErrorLogsSelect<true>;
+    'task-runs': TaskRunsSelect<false> | TaskRunsSelect<true>;
+    'email-deliveries': EmailDeliveriesSelect<false> | EmailDeliveriesSelect<true>;
     'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -397,6 +401,10 @@ export interface Place {
   verifiedAt?: string | null;
   verifiedBy?: string | null;
   /**
+   * Échéance de revérification. Calculée à 12 mois si vide.
+   */
+  nextVerificationAt?: string | null;
+  /**
    * Pré-remplis selon le secteur. Mettez à jour après chaque visite.
    */
   criteria?:
@@ -411,6 +419,23 @@ export interface Place {
     | {
         label?: string | null;
         url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Pour chaque champ sensible (téléphone, adresse, horaires…) : source, identifiant source, date de collecte, méthode, date de vérification, responsable. Une valeur en conflit est gardée ici, jamais écrasée.
+   */
+  provenance?:
+    | {
+        field: string;
+        value?: string | null;
+        conflict?: boolean | null;
+        source: string;
+        sourceId?: string | null;
+        collectedAt?: string | null;
+        method?: ('import' | 'official' | 'phone' | 'visit' | 'pro' | 'contribution') | null;
+        checkedAt?: string | null;
+        checkedBy?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1096,7 +1121,18 @@ export interface Provider {
     | '55'
     | '56'
     | '57'
-    | '58';
+    | '58'
+    | '59'
+    | '60'
+    | '61'
+    | '62'
+    | '63'
+    | '64'
+    | '65'
+    | '66'
+    | '67'
+    | '68'
+    | '69';
   /**
    * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
    */
@@ -1427,7 +1463,18 @@ export interface Classified {
     | '55'
     | '56'
     | '57'
-    | '58';
+    | '58'
+    | '59'
+    | '60'
+    | '61'
+    | '62'
+    | '63'
+    | '64'
+    | '65'
+    | '66'
+    | '67'
+    | '68'
+    | '69';
   /**
    * Identifiant du référentiel des communes (ex. 16-bab-el-oued).
    */
@@ -2028,8 +2075,56 @@ export interface ErrorLog {
   firstSeen?: string | null;
   lastSeen?: string | null;
   resolved?: boolean | null;
+  lastAlertAt?: string | null;
   digest?: string | null;
   stack?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Exécutions de la tâche quotidienne : état, durée, volume, erreur. Une tâche en échec est rejouée à l’appel suivant.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "task-runs".
+ */
+export interface TaskRun {
+  id: number;
+  key: string;
+  name: string;
+  day: string;
+  status: 'running' | 'succeeded' | 'failed' | 'skipped';
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  durationMs?: number | null;
+  attempts?: number | null;
+  result?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * État de chaque email transactionnel. « Accepté » = pris en charge par Resend ; « Délivré » = reçu par le serveur du destinataire.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-deliveries".
+ */
+export interface EmailDelivery {
+  id: number;
+  idempotencyKey?: string | null;
+  subject: string;
+  recipientHash?: string | null;
+  providerId?: string | null;
+  status: 'pending' | 'accepted' | 'delivered' | 'failed' | 'bounced' | 'complained' | 'delayed';
+  attempts?: number | null;
+  error?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2206,6 +2301,14 @@ export interface PayloadLockedDocument {
         value: number | ErrorLog;
       } | null)
     | ({
+        relationTo: 'task-runs';
+        value: number | TaskRun;
+      } | null)
+    | ({
+        relationTo: 'email-deliveries';
+        value: number | EmailDelivery;
+      } | null)
+    | ({
         relationTo: 'audit-log';
         value: number | AuditLog;
       } | null);
@@ -2328,6 +2431,7 @@ export interface PlacesSelect<T extends boolean = true> {
   verification?: T;
   verifiedAt?: T;
   verifiedBy?: T;
+  nextVerificationAt?: T;
   criteria?:
     | T
     | {
@@ -2341,6 +2445,20 @@ export interface PlacesSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
+        id?: T;
+      };
+  provenance?:
+    | T
+    | {
+        field?: T;
+        value?: T;
+        conflict?: T;
+        source?: T;
+        sourceId?: T;
+        collectedAt?: T;
+        method?: T;
+        checkedAt?: T;
+        checkedBy?: T;
         id?: T;
       };
   internalNote?: T;
@@ -3148,8 +3266,42 @@ export interface ErrorLogsSelect<T extends boolean = true> {
   firstSeen?: T;
   lastSeen?: T;
   resolved?: T;
+  lastAlertAt?: T;
   digest?: T;
   stack?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "task-runs_select".
+ */
+export interface TaskRunsSelect<T extends boolean = true> {
+  key?: T;
+  name?: T;
+  day?: T;
+  status?: T;
+  startedAt?: T;
+  finishedAt?: T;
+  durationMs?: T;
+  attempts?: T;
+  result?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-deliveries_select".
+ */
+export interface EmailDeliveriesSelect<T extends boolean = true> {
+  idempotencyKey?: T;
+  subject?: T;
+  recipientHash?: T;
+  providerId?: T;
+  status?: T;
+  attempts?: T;
+  error?: T;
   updatedAt?: T;
   createdAt?: T;
 }

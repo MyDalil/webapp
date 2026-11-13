@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { currentMember, getMission } from '@/modules/services'
 import { MissionThread } from '@/modules/services/ui'
 
-export const metadata: Metadata = { title: 'Mission · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Mission', robots: { index: false } }
 export const dynamic = 'force-dynamic'
 
 export default async function MissionPage({ params }: { params: Promise<{ id: string }> }) {

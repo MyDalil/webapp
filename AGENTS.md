@@ -83,8 +83,9 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
 
 ## Surveillance
-- `.github/workflows/surveillance.yml` (depuis `main`, chaque lundi) : accueil, `/api/sante` (application + base), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour.
-- Erreurs serveur : /admin › Pilotage › Erreurs du site, alerte email à la première occurrence.
+- `.github/workflows/surveillance.yml` (depuis `main`, toutes les heures) : accueil, `/api/sante` (application + base, JSON validé), plan du site ; panne confirmée → issue « Site indisponible » (email GitHub), fermée au retour ; sauvegarde de plus de 36 h → issue « Tâche quotidienne en retard ».
+- Tâche quotidienne : /admin › Pilotage › Tâches planifiées (état, durée, volume, erreur de chaque tâche). Emails : /admin › Pilotage › Emails envoyés.
+- Erreurs serveur : /admin › Pilotage › Erreurs du site, alerte email à la première occurrence et quand une erreur résolue revient.
 
 ## Migrations de données
 - Une migration qui écrit des données (`payload.create`, `importPlaces`…) enveloppe son `up` dans `deferred('<nom>', …)` (`src/platform/deferredData.ts`).
@@ -115,3 +116,25 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Autonomie et continuité
+
+Radwan autorise les opérations courantes nécessaires à la tâche confiée : diagnostic, modifications de code et de documentation, tests, création de branches et de commits, demandes de fusion et déploiements Preview dans les ressources existantes du projet. Ne pas redemander une autorisation déjà donnée pour ce même périmètre. Aller jusqu'à un résultat vérifié ; en cas d'échec, diagnostiquer et corriger sa cause.
+
+Cette autorisation concerne le travail de développement. Elle ne modifie ni les droits des utilisateurs de l'application, ni ses délégations métier. Elle ne remplace pas une authentification imposée par GitHub ou l'outil utilisé. Aucun abonnement, exposition du code privé, accès d'un nouveau tiers, suppression irréversible ou migration destructive n'est autorisé implicitement. Respecter le circuit de production propre au dépôt et les validations produit déjà définies.
+
+Avant de travailler :
+1. Vérifier le dépôt, la branche et `git status --short` ; préserver tout travail présent.
+2. Lire ce fichier, les consignes de la zone touchée et le dernier point de reprise ; ne pas reprendre un audit complet sans changement qui le justifie.
+3. Travailler dans une branche courte ou un worktree isolé ; ne jamais forcer une branche partagée ni supprimer les commits d'un autre intervenant.
+4. Exécuter les vérifications adaptées au changement. Corriger un contrôle en échec, sans désactiver la protection ni le présenter comme réussi.
+5. Après fusion, supprimer seulement sa branche intégrée ; conserver les branches de livraison et les travaux non fusionnés.
+
+À chaque interruption ou livraison, actualiser `docs/agent-handoff.md` et les journaux des modules concernés : tâche et périmètre, branche et SHA vérifiés, changements, commandes exécutées et résultats réels, prochaine action concrète, blocages précis. Ne jamais y recopier de secret, de jeton ou de données client. Distinguer code écrit, tests exécutés, version déployée et parcours réellement vérifié.
+
+
+## Reprise du travail
+
+Point de reprise : `docs/agent-handoff.md`.
+Conserver les skills et les consignes métier déjà présents dans `.agents/skills/`.
+Les autorisations techniques de développement ne modifient pas les approbations métier ou les validations produit.

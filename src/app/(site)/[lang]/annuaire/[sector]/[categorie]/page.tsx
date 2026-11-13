@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const f = categoryBySlug(sector, categorie)
   if (!f) return {}
   return {
-    title: `${f.category} en Algérie — ${f.sector.title} · DALIL`,
+    title: `${f.category} en Algérie — ${f.sector.title}`,
     description: `${f.category} dans toutes les wilayas d’Algérie : adresses, contacts et statut de vérification DALIL.`,
     alternates: { canonical: `${SITE}${categoryPath(f.sector.slug, f.category)}` },
   }

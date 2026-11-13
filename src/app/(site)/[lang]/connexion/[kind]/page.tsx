@@ -6,7 +6,7 @@ import { AuthPanel } from '@/modules/membres/ui'
 type Props = { params: Promise<{ kind: string }> }
 const KINDS = { particulier: 'particulier', professionnel: 'pro' } as const
 
-export const metadata: Metadata = { title: 'Connexion · DALIL' }
+export const metadata: Metadata = { title: 'Connexion' }
 export const generateStaticParams = () => Object.keys(KINDS).map((kind) => ({ kind }))
 
 export default async function Auth({ params }: Props) {

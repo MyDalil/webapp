@@ -7,14 +7,14 @@ import { SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
 import { NearMe } from '@/modules/recherche/ui'
 import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
-import { RUBRICS } from '@/platform/shell/nav'
+import { DEMARCHES_ENTRIES } from '@/platform/shell/nav'
 import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { ParallaxBand, SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 import { MicButton } from '@/platform/ui/MicButton'
 import { ThemeRails } from '@/modules/contenus/ui'
 
 export const metadata: Metadata = {
-  title: 'Démarches en Algérie · DALIL',
+  title: 'Démarches en Algérie',
   description: 'Passeport, changement de résidence, auto-entrepreneur, administrations, ambassades : les étapes, les pièces et les sites officiels, sources datées.',
 }
 export const revalidate = 3600
@@ -39,9 +39,8 @@ const photo = (k?: PhotoKey) => (k ? PHOTOS[k] : null)
 
 /** Rubrique Démarches au format de l’accueil : diaporama, grandes tuiles photo en carrousel, bande parallaxe. */
 export default async function Demarches() {
-  const rubric = RUBRICS.find((r) => r.key === 'demarches')
   const entries = await Promise.all(
-    (rubric?.entries ?? []).map(async ([href, icon, title, sub]) => {
+    DEMARCHES_ENTRIES.map(async ([href, icon, title, sub]) => {
       const u = new URL(href, 'https://www.mydalil.com')
       const category = u.searchParams.get('category')
       const sector = u.pathname.split('/')[2]

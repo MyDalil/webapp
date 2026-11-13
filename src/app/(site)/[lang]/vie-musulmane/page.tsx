@@ -8,7 +8,7 @@ import { HubHero } from '@/platform/ui/HubHero'
 import { PHOTOS } from '@/platform/referentiel/photos'
 
 export const metadata: Metadata = {
-  title: 'Vie musulmane en Algérie · DALIL',
+  title: 'Vie musulmane en Algérie',
   description: 'Mosquées et salles de prière, enseignement coranique, Hajj et Omra, librairies islamiques, entraide, funérailles musulmanes.',
 }
 export const revalidate = 3600

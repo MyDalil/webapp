@@ -81,7 +81,7 @@ export async function replaceType(payload: Payload, type: SearchType, rows: Sear
  * Recherche : plein texte français par préfixes (« hopit » trouve « Hôpitaux »), sinon trigrammes (« plombier » trouve « Plomberie »).
  * `wilaya` : contenus de cette wilaya et contenus nationaux.
  */
-export async function querySearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[]; limit?: number; near?: { lat: number; lng: number } | null } = {}): Promise<SearchHit[]> {
+export async function querySearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[]; limit?: number; offset?: number; near?: { lat: number; lng: number } | null } = {}): Promise<SearchHit[]> {
   const words = searchWords(q)
   if (!words.length) return []
   const phrase = words.join(' ')
@@ -106,7 +106,7 @@ export async function querySearch(payload: Payload, q: string, opts: { wilaya?: 
         WHERE (tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)
           AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}
         ORDER BY score DESC
-        LIMIT ${limit}`)
+        LIMIT ${limit} OFFSET ${Math.max(0, opts.offset ?? 0)}`)
     ).rows
   let rows = await run(all)
   if (!rows.length && words.length > 1) rows = await run(some)
@@ -124,6 +124,30 @@ export async function querySearch(payload: Payload, q: string, opts: { wilaya?: 
     lng: r.lng == null ? null : Number(r.lng),
     score: Number(r.score),
   }))
+}
+
+/**
+ * Nombre exact de correspondances (mêmes règles que `querySearch`, sans limite) : un total réel, jamais la taille
+ * d’une liste tronquée (audit A10).
+ */
+export async function countSearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[] } = {}): Promise<number> {
+  const words = searchWords(q)
+  if (!words.length) return 0
+  const phrase = words.join(' ')
+  const wilaya = opts.wilaya ?? null
+  const types = opts.types?.length ? sql`AND type IN (${sql.join(opts.types.map((t) => sql`${t}`), sql`, `)})` : sql``
+  const run = async (tsq: string) =>
+    Number(
+      (
+        await dbOf(payload).execute(sql`
+          WITH q AS (SELECT to_tsquery('french', ${tsq}) AS tq, ${phrase}::text AS p)
+          SELECT count(*)::int AS n FROM search_index, q
+          WHERE (tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)
+            AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}`)
+      ).rows[0]?.n ?? 0,
+    )
+  const n = await run(words.map((w) => `${w}:*`).join(' & '))
+  return n || words.length < 2 ? n : run(words.map((w) => `${w}:*`).join(' | '))
 }
 
 /**

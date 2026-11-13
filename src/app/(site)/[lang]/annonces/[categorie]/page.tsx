@@ -8,7 +8,7 @@ type Props = { params: Promise<{ categorie: string }>; searchParams: Promise<Sea
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = category((await params).categorie)
-  return c ? { title: `Annonces ${c.label.toLowerCase()} en Algérie · DALIL`, description: c.lead } : {}
+  return c ? { title: `Annonces ${c.label.toLowerCase()} en Algérie`, description: c.lead } : {}
 }
 
 export default async function AnnoncesCategorie({ params, searchParams }: Props) {

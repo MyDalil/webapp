@@ -45,6 +45,9 @@ import * as migration_20261030_160000_adresses_sans_slug from './20261030_160000
 import * as migration_20261030_170000_lieux_de_culte_non_musulmans from './20261030_170000_lieux_de_culte_non_musulmans';
 import * as migration_20261101_081524_demarches_officielles from './20261101_081524_demarches_officielles';
 import * as migration_20261101_090000_demarches_donnees from './20261101_090000_demarches_donnees';
+import * as migration_20261102_174147_audit_lot1_securite from './20261102_174147_audit_lot1_securite';
+import * as migration_20261102_190000_audit_donnees from './20261102_190000_audit_donnees';
+import * as migration_20261102_210116_wilayas_69_partout from './20261102_210116_wilayas_69_partout';
 
 export const migrations = [
   {
@@ -275,11 +278,26 @@ export const migrations = [
   {
     up: migration_20261101_081524_demarches_officielles.up,
     down: migration_20261101_081524_demarches_officielles.down,
-    name: '20261101_081524_demarches_officielles'
+    name: '20261101_081524_demarches_officielles',
   },
   {
     up: migration_20261101_090000_demarches_donnees.up,
     down: migration_20261101_090000_demarches_donnees.down,
-    name: '20261101_090000_demarches_donnees'
+    name: '20261101_090000_demarches_donnees',
+  },
+  {
+    up: migration_20261102_174147_audit_lot1_securite.up,
+    down: migration_20261102_174147_audit_lot1_securite.down,
+    name: '20261102_174147_audit_lot1_securite',
+  },
+  {
+    up: migration_20261102_190000_audit_donnees.up,
+    down: migration_20261102_190000_audit_donnees.down,
+    name: '20261102_190000_audit_donnees',
+  },
+  {
+    up: migration_20261102_210116_wilayas_69_partout.up,
+    down: migration_20261102_210116_wilayas_69_partout.down,
+    name: '20261102_210116_wilayas_69_partout'
   },
 ];

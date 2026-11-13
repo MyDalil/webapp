@@ -7,7 +7,7 @@ import { payload } from '@/platform/http'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Déposer une annonce · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Déposer une annonce', robots: { index: false } }
 
 type Props = { searchParams: Promise<{ modifier?: string; categorie?: string }> }
 
@@ -29,7 +29,7 @@ export default async function Deposer({ searchParams }: Props) {
       photos: (photos ?? []).filter((m): m is Media => typeof m === 'object').map((m) => ({ id: m.id, thumb: m.sizes?.thumb?.url ?? m.url ?? '' })),
     }
   }
-  const wilayas = WILAYAS.filter((w) => !w.transition).map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+  const wilayas = WILAYAS.map(({ code, name }) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   return (
     <section className="auth-page container account-page">
       <p className="eyebrow">Annonces</p>

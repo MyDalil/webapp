@@ -3,7 +3,8 @@ import type { Payload, PayloadRequest } from 'payload'
 import { sql } from '@payloadcms/db-postgres'
 import { scorePlace } from './ranking'
 import { exclusionReason } from './exclusions'
-import { WILAYAS } from '@/platform/referentiel/catalog'
+import { WILAYA_ALIASES, WILAYAS } from '@/platform/referentiel/catalog'
+import { expectedHealthCategory } from './healthCategory'
 
 /** Fiche prête à importer (recherche documentaire ou OpenStreetMap). Faits seulement, textes rédigés par DALIL. */
 export type ImportRecord = {
@@ -34,8 +35,10 @@ export type ImportRecord = {
 
 const key = (s?: string | null) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’'`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
 const slugify = (s: string) => key(latinize(s)).replace(/ /g, '-')
+/** Code officiel d’une wilaya à partir de son nom (variantes d’écriture comprises) ou de son code. */
 const code = (name: string | null) => {
-  const w = WILAYAS.find((x) => key(x.name) === key(name))
+  if (name && /^\d{1,2}$/.test(name.trim())) return WILAYAS.some((w) => w.code === Number(name)) ? String(Number(name)) : undefined
+  const w = WILAYAS.find((x) => key(x.name) === key(name) || (WILAYA_ALIASES[x.name] ?? []).some((a) => key(a) === key(name)))
   return w ? String(w.code) : undefined
 }
 const SOURCE_LABEL: Record<ImportRecord['provider'], string> = {
@@ -53,7 +56,7 @@ const email = (e?: string | null) => (e && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.t
 
 /**
  * Crée ou complète des fiches. Idempotent (identifiant de source).
- * Une fiche existante au même nom dans la même wilaya est COMPLÉTÉE : seuls les champs vides sont remplis,
+ * Une fiche existante au même nom, dans la même wilaya et le même secteur, est COMPLÉTÉE : seuls les champs vides sont remplis,
  * jamais écrasés (le travail de l’équipe et les vérifications restent intacts).
  * Toute fiche créée arrive « Repérée — à vérifier », avec sa source.
  */
@@ -96,16 +99,16 @@ async function bulkCreate(db: Db, rows: Record<string, unknown>[]) {
 
 export async function importPlaces(payload: Payload, req: PayloadRequest | undefined, records: ImportRecord[], db?: Db) {
   const ctx = { skipRevalidate: true, skipAudit: true }
-  const existing = await payload.find({ collection: 'places', req, overrideAccess: true, limit: 100000, depth: 0, pagination: false, select: { name: true, wilaya: true, slug: true, source: true, lat: true, lng: true } as never })
+  const existing = await payload.find({ collection: 'places', req, overrideAccess: true, limit: 100000, depth: 0, pagination: false, select: { name: true, wilaya: true, sector: true, slug: true, source: true, lat: true, lng: true } as never })
   const byExternal = new Map<string, number>()
   const byName = new Map<string, number>()
   // Position des fiches par nom : deux lieux homonymes éloignés de plus de 300 m sont distincts (mosquées sans nom, chaînes…).
   const where = new Map<number, { lat: number; lng: number }>()
   const slugs = new Set<string>()
   let pendingId = -1
-  for (const d of existing.docs as unknown as { id: number; name: string; wilaya?: string | null; slug?: string; lat?: number | null; lng?: number | null; source?: { externalId?: string | null } }[]) {
+  for (const d of existing.docs as unknown as { id: number; name: string; wilaya?: string | null; sector?: string | null; slug?: string; lat?: number | null; lng?: number | null; source?: { externalId?: string | null } }[]) {
     if (d.source?.externalId) byExternal.set(d.source.externalId, d.id)
-    byName.set(`${key(d.name)}|${d.wilaya ?? ''}`, d.id)
+    byName.set(`${key(d.name)}|${d.wilaya ?? ''}|${d.sector ?? ''}`, d.id)
     if (d.lat != null && d.lng != null) where.set(d.id, { lat: Number(d.lat), lng: Number(d.lng) })
     if (d.slug) slugs.add(d.slug)
   }
@@ -113,7 +116,10 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
   let completed = 0
   let skipped = 0
   const pending: Record<string, unknown>[] = []
-  for (const r of records) {
+  for (const record of records) {
+    // Santé : la catégorie suit le nom quand il la contredit (vétérinaire, pharmacie, laboratoire, cabinet médical).
+    const fixed = record.sector === 'sante-soins' ? expectedHealthCategory(record.name ?? '', record.category) : null
+    const r = fixed ? { ...record, category: fixed } : record
     const wilaya = code(r.wilaya)
     // Lieux exclus de DALIL (musique, zaouïas, chiisme, alcool) : jamais importés.
     if (!wilaya || !r.name || !r.city && !r.wilaya || exclusionReason(r)) {
@@ -137,7 +143,8 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
       // Source publique affichée sur la fiche (attribution ODbL pour OpenStreetMap).
       sources: [{ label: SOURCE_LABEL[r.provider], url: r.sourceUrl }],
     }
-    const homonym = byName.get(`${key(r.name)}|${wilaya}`)
+    // Même nom, même wilaya ET même secteur : un bureau de poste « Timgad » ne complète jamais le site archéologique (audit D05).
+    const homonym = byName.get(`${key(r.name)}|${wilaya}|${r.sector}`)
     const at = homonym != null ? where.get(homonym) : undefined
     const far = at && r.lat != null && r.lng != null && distanceKm(at, { lat: r.lat, lng: r.lng }) > 0.3
     const id = byExternal.get(r.id) ?? (far ? undefined : homonym)
@@ -172,7 +179,7 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
         })
         const pid = pendingId--
         byExternal.set(r.id, pid)
-        byName.set(`${key(r.name)}|${wilaya}`, pid)
+        byName.set(`${key(r.name)}|${wilaya}|${r.sector}`, pid)
         if (r.lat != null && r.lng != null) where.set(pid, { lat: r.lat, lng: r.lng })
         created++
         continue
@@ -198,7 +205,7 @@ export async function importPlaces(payload: Payload, req: PayloadRequest | undef
         } as never,
       })
       byExternal.set(r.id, doc.id as number)
-      byName.set(`${key(r.name)}|${wilaya}`, doc.id as number)
+      byName.set(`${key(r.name)}|${wilaya}|${r.sector}`, doc.id as number)
       created++
     } catch (e) {
       skipped++

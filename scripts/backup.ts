@@ -9,6 +9,6 @@ const dir = process.argv[2] ?? 'sauvegarde'
 mkdirSync(dir, { recursive: true })
 const db = new pg.Client({ connectionString: process.env.DALIL_DATABASE_URL })
 await db.connect()
-const counts = await backup((t, p) => db.query(t, p), backupSecret(), async (name, data) => writeFileSync(path.join(dir, name), data))
-console.log(`Sauvegarde dans ${dir} : ${Object.keys(counts).length} tables, ${Object.values(counts).reduce((a, b) => a + b, 0)} lignes`)
+const m = await backup((t, p) => db.query(t, p), backupSecret(), async (name, data) => writeFileSync(path.join(dir, name), data))
+console.log(`Sauvegarde dans ${dir} : ${Object.keys(m.counts).length} tables, ${Object.values(m.counts).reduce((a, b) => a + b, 0)} lignes, clé ${m.keyId}`)
 await db.end()

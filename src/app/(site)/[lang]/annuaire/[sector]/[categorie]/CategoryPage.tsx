@@ -20,7 +20,7 @@ export async function CategoryPage({ sector, categorie, wilaya }: { sector: stri
   const shown = here.total ? here : national?.total ? national : fallback!
   const wilayas = [...new Set((national ?? here).places.map((p) => p.wilaya).filter(Boolean))]
     .map((name) => WILAYAS.find((x) => x.name === name))
-    .filter((x): x is (typeof WILAYAS)[number] => Boolean(x) && !x!.transition)
+    .filter((x): x is (typeof WILAYAS)[number] => Boolean(x))
     .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   return (
     <>

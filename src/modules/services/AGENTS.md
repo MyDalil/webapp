@@ -35,5 +35,5 @@ Mettre en relation particuliers et prestataires vérifiés (ménage, bricolage, 
 ## Prochaines étapes
 - Photos des 11 catégories : planche en cours de choix avec Rad (Unsplash, style gros plan).
 - Rayon en km (calcul interne depuis le centre des communes, déjà stocké).
-- Communes des 11 wilayas en transition dès publication de la liste officielle.
+- Communes des 11 wilayas de 2026 (codes 59 à 69) dès publication de leur liste officielle ; d’ici là, zone = toute la wilaya.
 - Abonnement prestataire (module `pros`), jamais lié à la vérification.

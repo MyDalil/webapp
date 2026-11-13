@@ -136,7 +136,7 @@ export const Classifieds: CollectionConfig = {
             {
               type: 'row',
               fields: [
-                { name: 'wilaya', type: 'select', label: 'Wilaya', required: true, index: true, options: WILAYAS.filter((w) => !w.transition).map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
+                { name: 'wilaya', type: 'select', label: 'Wilaya', required: true, index: true, options: WILAYAS.map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
                 { name: 'commune', type: 'text', label: 'Commune', admin: { description: 'Identifiant du référentiel des communes (ex. 16-bab-el-oued).' } },
               ],
             },

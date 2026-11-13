@@ -8,7 +8,7 @@ import { readSession } from '@/modules/membres'
 import { MyMissions } from '@/modules/services/ui'
 import { MyClassifieds } from '@/modules/annonces/ui'
 
-export const metadata: Metadata = { title: 'Mon compte · DALIL', robots: { index: false } }
+export const metadata: Metadata = { title: 'Mon compte', robots: { index: false } }
 export const dynamic = 'force-dynamic'
 
 export default async function Account() {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { AuthPanel } from '@/modules/membres/ui'
 
-export const metadata: Metadata = { title: 'Connexion · DALIL', description: 'Connectez-vous ou créez votre compte DALIL avec un code reçu par email.', robots: { index: false } }
+export const metadata: Metadata = { title: 'Connexion', description: 'Connectez-vous ou créez votre compte DALIL avec un code reçu par email.', robots: { index: false } }
 
 /** Une seule entrée (ordinateur et mobile) : email puis code. Particulier ou professionnel se choisit à l’inscription. */
 export default function Connexion() {

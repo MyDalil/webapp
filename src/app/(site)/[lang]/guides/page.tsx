@@ -7,7 +7,7 @@ import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 
 export const metadata: Metadata = {
-  title: 'Guides pratiques · DALIL',
+  title: 'Guides pratiques',
   description: 'Sorties, bonnes adresses, vie quotidienne et projets en Algérie : un guide par sujet, étape par étape, avec ses sources.',
 }
 

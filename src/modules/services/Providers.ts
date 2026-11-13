@@ -1,6 +1,6 @@
 import type { Access, CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { APIError } from 'payload'
-import { isStaff } from '@/platform/access'
+import { guardPublication as onlyAdminPublishes, isAdmin, isAdminField, isStaff, isStaffField } from '@/platform/access'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { ACTIVITIES, CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from './activities'
@@ -55,8 +55,8 @@ export const Providers: CollectionConfig = {
   slug: 'providers',
   labels: { singular: 'Prestataire', plural: 'Prestataires' },
   admin: { group: 'Services', useAsTitle: 'displayName', defaultColumns: ['displayName', 'categories', 'wilaya', 'status', 'identityVerified', 'legalVerified'] },
-  access: { read: readPublished, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication], afterChange: [purgeCheckedDocuments, indexProvider], afterDelete: [unindexProvider] },
+  access: { read: readPublished, create: isStaff, update: isStaff, delete: isAdmin },
+  hooks: { beforeValidate: [prepare], beforeChange: [onlyAdminPublishes('status'), guardPublication], afterChange: [purgeCheckedDocuments, indexProvider], afterDelete: [unindexProvider] },
   fields: [
     {
       type: 'tabs',
@@ -101,7 +101,7 @@ export const Providers: CollectionConfig = {
         {
           label: 'Zone',
           fields: [
-            { name: 'wilaya', type: 'select', required: true, label: 'Wilaya', options: WILAYAS.filter((w) => !w.transition).map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
+            { name: 'wilaya', type: 'select', required: true, label: 'Wilaya', options: WILAYAS.map((w) => ({ label: `${String(w.code).padStart(2, '0')} — ${w.name}`, value: String(w.code) })) },
             { name: 'baseCommune', type: 'text', label: 'Commune de base', admin: { description: 'Identifiant du référentiel des communes (ex. 16-bab-el-oued).' } },
             { name: 'wholeWilaya', type: 'checkbox', label: 'Intervient dans toute la wilaya', defaultValue: false },
             { name: 'communes', type: 'text', hasMany: true, label: 'Communes desservies', admin: { description: 'Identifiants du référentiel des communes.' } },
@@ -135,30 +135,30 @@ export const Providers: CollectionConfig = {
                 },
               ],
             },
-            { name: 'closures', type: 'array', label: 'Absences et congés', fields: [{ type: 'row', fields: [{ name: 'from', type: 'date', required: true, label: 'Du' }, { name: 'to', type: 'date', required: true, label: 'Au' }, { name: 'note', type: 'text', label: 'Motif (interne)' }] }] },
+            { name: 'closures', type: 'array', label: 'Absences et congés', fields: [{ type: 'row', fields: [{ name: 'from', type: 'date', required: true, label: 'Du' }, { name: 'to', type: 'date', required: true, label: 'Au' }, { name: 'note', type: 'text', label: 'Motif (interne)', access: { read: isStaffField } }] }] },
           ],
         },
         {
           label: 'Vérification',
           fields: [
-            { type: 'row', fields: [{ name: 'identityVerified', type: 'checkbox', label: 'Identité vérifiée' }, { name: 'verifiedAt', type: 'date', label: 'Vérifiée le' }, { name: 'verifiedBy', type: 'text', label: 'Vérifiée par' }] },
+            { type: 'row', fields: [{ name: 'identityVerified', type: 'checkbox', label: 'Identité vérifiée', access: { create: isAdminField, update: isAdminField } }, { name: 'verifiedAt', type: 'date', label: 'Vérifiée le', access: { create: isAdminField, update: isAdminField } }, { name: 'verifiedBy', type: 'text', label: 'Vérifiée par', access: { create: isAdminField, update: isAdminField } }] },
             {
               type: 'row',
               fields: [
                 { name: 'legalForm', type: 'select', label: 'Statut légal déclaré', options: [{ label: 'Auto-entrepreneur (carte ANAE)', value: 'auto-entrepreneur' }, { label: 'Registre de commerce', value: 'registre-commerce' }] },
-                { name: 'legalNumber', type: 'text', label: 'Numéro déclaré', maxLength: 40 },
-                { name: 'legalVerified', type: 'checkbox', label: 'Statut légal vérifié' },
+                { name: 'legalNumber', type: 'text', label: 'Numéro déclaré', maxLength: 40, access: { read: isStaffField } },
+                { name: 'legalVerified', type: 'checkbox', label: 'Statut légal vérifié', access: { create: isAdminField, update: isAdminField } },
               ],
             },
-            { name: 'backgroundCheckedAt', type: 'date', label: 'Casier judiciaire (bulletin n° 3) vérifié le', admin: { description: 'Obligatoire pour garde d’enfants, aide à domicile, cours particuliers et coraniques. Le document est consulté puis supprimé : seule cette date est conservée.' } },
-            { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)' },
+            { name: 'backgroundCheckedAt', type: 'date', label: 'Casier judiciaire (bulletin n° 3) vérifié le', access: { read: isStaffField, create: isAdminField, update: isAdminField }, admin: { description: 'Obligatoire pour garde d’enfants, aide à domicile, cours particuliers et coraniques. Le document est consulté puis supprimé : seule cette date est conservée.' } },
+            { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais publiée)', access: { read: isStaffField } },
           ],
         },
       ],
     },
     { name: 'status', type: 'select', required: true, defaultValue: 'pending', label: 'Statut', options: [{ label: 'En attente de vérification', value: 'pending' }, { label: 'Publié', value: 'published' }, { label: 'Suspendu', value: 'suspended' }], admin: { position: 'sidebar', description: 'Publication uniquement après les vérifications exigées (contrôlées automatiquement).' } },
     { name: 'demo', type: 'checkbox', label: 'Fiche de démonstration', defaultValue: false, admin: { position: 'sidebar' } },
-    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', admin: { position: 'sidebar' } },
+    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', access: { read: isStaffField }, admin: { position: 'sidebar' } },
     { name: 'slug', type: 'text', unique: true, index: true, label: 'Adresse de la page', admin: { position: 'sidebar', description: '/prestataires/…' } },
     { type: 'row', admin: { position: 'sidebar' }, fields: [{ name: 'ratingAvg', type: 'number', label: 'Note moyenne', admin: { readOnly: true } }, { name: 'ratingCount', type: 'number', label: 'Avis', defaultValue: 0, admin: { readOnly: true } }, { name: 'missionsDone', type: 'number', label: 'Missions réalisées', defaultValue: 0, admin: { readOnly: true } }] },
   ],

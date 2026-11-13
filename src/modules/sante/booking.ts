@@ -52,6 +52,7 @@ const card = (p: Practitioner, next: string | null): PractitionerCard => ({
 /** Modes réellement réservables : la visio attend le choix du fournisseur. */
 export const bookableModes = (p: Pick<Practitioner, 'modes'>): Mode[] => ((p.modes ?? []) as Mode[]).filter((m) => m === 'cabinet' || videoEnabled())
 
+/** Rendez-vous confirmés qui touchent la période : intervalles complets (début et fin), pour exclure tout chevauchement. */
 async function takenStarts(p: Payload, practitionerId: number, from: Date, to: Date) {
   const { docs } = await p.find({
     collection: 'appointments',
@@ -59,9 +60,9 @@ async function takenStarts(p: Payload, practitionerId: number, from: Date, to: D
     depth: 0,
     limit: 2000,
     pagination: false,
-    where: { and: [{ practitioner: { equals: practitionerId } }, { status: { equals: 'confirmed' } }, { start: { greater_than_equal: from.toISOString() } }, { start: { less_than: to.toISOString() } }] },
+    where: { and: [{ practitioner: { equals: practitionerId } }, { status: { equals: 'confirmed' } }, { end: { greater_than: from.toISOString() } }, { start: { less_than: to.toISOString() } }] },
   })
-  return docs.map((d) => new Date(d.start).toISOString())
+  return docs.map((d) => ({ start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() }))
 }
 
 /** Créneaux libres d’un praticien sur `days` jours à partir d’une date d’Alger. */
@@ -154,8 +155,13 @@ export async function book(input: { slug: string; start: string; mode: Mode; rea
     return fail('Ce créneau vient d’être pris. Choisissez-en un autre.', 409)
   }
   if (input.mode === 'visio') {
-    const url = await createVideoRoom({ appointmentId: doc.id, start: doc.start, end: doc.end })
-    if (url) doc = await p.update({ collection: 'appointments', id: doc.id, data: { videoUrl: url }, overrideAccess: true })
+    // Pas de confirmation sans salle : un échec du fournisseur annule la réservation (créneau libéré).
+    const url = await createVideoRoom({ appointmentId: doc.id, start: doc.start, end: doc.end }).catch(() => null)
+    if (!url) {
+      await p.delete({ collection: 'appointments', id: doc.id, overrideAccess: true }).catch(() => {})
+      return fail('La salle de visio n’a pas pu être créée. Rendez-vous non enregistré : réessayez ou choisissez le cabinet.', 503)
+    }
+    doc = await p.update({ collection: 'appointments', id: doc.id, data: { videoUrl: url }, overrideAccess: true })
   }
   if (previous) await cancel(previous.id, 'patient', 'Rendez-vous déplacé', { silent: true, ignoreNotice: true })
 
@@ -280,20 +286,29 @@ export async function saveMyPractitioner(member: Member, body: Record<string, un
   }
 }
 
-/** Rappels de la veille (tâche planifiée quotidienne). */
+/**
+ * Rappels de la veille (tâche planifiée quotidienne). Un rappel n’est marqué envoyé que si le fournisseur l’accepte ;
+ * sinon il reste à envoyer et sera retenté à l’exécution suivante tant que le rendez-vous est à plus de 2 h.
+ * Clé d’idempotence par rendez-vous : un nouvel essai n’envoie jamais deux fois le même rappel.
+ */
 export async function sendReminders() {
   const p = await getPayload()
-  const from = new Date(Date.now() + 6 * 3600e3)
+  const from = new Date(Date.now() + 2 * 3600e3)
   const to = new Date(Date.now() + 36 * 3600e3)
   const { docs } = await p.find({ collection: 'appointments', where: { and: [{ status: { equals: 'confirmed' } }, { reminderSentAt: { exists: false } }, { start: { greater_than_equal: from.toISOString() } }, { start: { less_than: to.toISOString() } }] }, depth: 2, limit: 1000, overrideAccess: true })
   let sent = 0
+  let failed = 0
   for (const a of docs) {
     const patient = a.patient as Member
-    await bookingReminder({ to: patient.email, firstName: patient.firstName }, rdvInfo(a.practitioner as Practitioner, a as Appointment, patient)).catch(() => {})
+    const ok = await bookingReminder({ to: patient.email, firstName: patient.firstName }, rdvInfo(a.practitioner as Practitioner, a as Appointment, patient), `rappel-rdv-${a.id}`).catch(() => false)
+    if (!ok) {
+      failed++
+      continue
+    }
     await p.update({ collection: 'appointments', id: a.id, data: { reminderSentAt: new Date().toISOString() }, overrideAccess: true })
     sent++
   }
-  return { sent }
+  return { sent, failed }
 }
 
 /** Suppression du compte (RGPD / loi 18-07) : annule les rendez-vous à venir puis efface le compte. */

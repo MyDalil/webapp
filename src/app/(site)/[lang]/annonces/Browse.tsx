@@ -3,7 +3,7 @@ import Link from '@/platform/ui/Link'
 import { CATEGORIES, DEALS, category, classifiedCounts, searchClassifieds, type ClassifiedCard, type SearchQuery } from '@/modules/annonces'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
-const WILAYA_LIST = [...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+const WILAYA_LIST = [...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 const day = (iso: string) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 
 const CLASSIFIED_ICON: Record<string, string> = { immobilier: 'home', emploi: 'briefcase', vehicules: 'car', objets: 'grid' }

@@ -33,6 +33,7 @@ import { Motion } from '@/platform/ui/Motion'
 import { JoinCircle } from '@/platform/shell/JoinCircle'
 import { Tree } from '@/modules/contenus/ui'
 import { footerFor } from '@/modules/contenus'
+import { HeaderSearch } from '@/modules/recherche/ui'
 import { notFound } from 'next/navigation'
 import { isLang, LANGS_ALL, type Lang } from '@/platform/i18n'
 import { LangProvider } from '@/platform/ui/lang'
@@ -88,7 +89,7 @@ export default async function SiteLayout({ children, params }: { children: React
           <a className="skip-link" href="#app">
             {{ fr: 'Aller au contenu', en: 'Skip to content', ar: 'انتقل إلى المحتوى' }[lang]}
           </a>
-          <Header />
+          <Header search={<HeaderSearch lang={lang} />} />
           <main id="app" tabIndex={-1}>
             {children}
           </main>

@@ -8,7 +8,7 @@ type Props = { params: Promise<{ categorie: string }>; searchParams: Promise<Bro
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = category((await params).categorie)
-  return c ? { title: `${c.label} · Services à domicile · DALIL`, description: `${c.activities.map(([, l]) => l).join(', ')}. Prestataires vérifiés par DALIL.` } : {}
+  return c ? { title: `${c.label} · Services à domicile`, description: `${c.activities.map(([, l]) => l).join(', ')}. Identité et statut légal des prestataires contrôlés avant publication.` } : {}
 }
 
 export default async function ServiceCategory({ params, searchParams }: Props) {

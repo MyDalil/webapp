@@ -14,7 +14,7 @@ export const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-const OPEN_WILAYAS = WILAYAS.filter((w) => !w.transition)
+const OPEN_WILAYAS = WILAYAS
 export const wilayaSlug = (code: string | number) => {
   const w = WILAYAS.find((x) => String(x.code) === String(code))
   return w ? slugify(w.name) : null

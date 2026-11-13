@@ -22,7 +22,7 @@ const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
 }
 
 export type BrowseQuery = { categorie?: string; activite?: string; wilaya?: string; commune?: string; genre?: string; langue?: string }
-const WILAYA_LIST = [...WILAYAS].filter((w) => !w.transition).sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+const WILAYA_LIST = [...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 const stars = (r: number) => `★ ${r.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`
 
 function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
@@ -87,7 +87,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
         <div className="container">
           <p className="eyebrow">{current ? 'Services' : 'Services à domicile'}</p>
           <h1>{current ? `${current.label}.` : 'Trouvez le bon prestataire, près de chez vous.'}</h1>
-          <p className="auth-lead">Prestataires vérifiés par DALIL : identité, statut légal et, pour les enfants, les aînés et les cours, casier judiciaire. Réponse sous 24 h, échanges dans la messagerie DALIL, avis de vrais clients.</p>
+          <p className="auth-lead">Décrivez votre besoin : DALIL vous indique les professionnels disponibles. Avant publication, chaque prestataire fait contrôler son identité et son statut légal (et son casier judiciaire pour les enfants, les aînés et les cours). Le prestataire accepte ou décline sous 24 h, sinon la demande expire. Échanges dans la messagerie DALIL.</p>
           <form className="praticiens-search" action={action}>
             {!fixedCategory && (
               <label>
