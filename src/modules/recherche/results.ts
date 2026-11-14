@@ -1,3 +1,4 @@
+import { recordMiss } from './misses'
 import 'server-only'
 import { payload } from '@/platform/http'
 import { countSearch, nearestByCategory, querySearch, searchWords, type SearchHit, type SearchType } from '@/platform/search/store'
@@ -111,7 +112,10 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
     return shownAddresses
   })
   const addresses = { total: addressTotal, shown: shownAddresses, page: nearMode ? 1 : page, pages: nearMode ? 1 : Math.max(1, Math.ceil(addressTotal / PAGE_SIZE)) }
-  return { intent, place: opts.position ? 'vous' : place.label, nearby: Boolean(place.near), total: groups.reduce((n, g) => n + g.hits.length, 0), groups, spread, unavailable, addresses, professional: isProfessionalProject(text) }
+  const total = groups.reduce((n, g) => n + g.hits.length, 0)
+  // Recherche sans résultat (1re page, index disponible) : notée pour le cockpit (texte seul, jamais d’email ni de numéro).
+  if (total === 0 && page === 1 && !unavailable) await recordMiss(p, text).catch(() => false)
+  return { intent, place: opts.position ? 'vous' : place.label, nearby: Boolean(place.near), total, groups, spread, unavailable, addresses, professional: isProfessionalProject(text) }
 }
 
 /** Propositions pendant la frappe : catégories d’abord, puis contenus. 8 au plus. */

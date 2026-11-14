@@ -23,6 +23,13 @@ import { MembresView as MembresView_eecd1832955ee8db6a64e5ec744cee40 } from '@/m
 import { IaView as IaView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
 import { SanteView as SanteView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
 import { SecuriteView as SecuriteView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
+import { AnalyticsView as AnalyticsView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { NewsletterView as NewsletterView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { FinancesView as FinancesView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { SeoView as SeoView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { CouvertureView as CouvertureView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { TraductionsView as TraductionsView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
+import { RecherchesView as RecherchesView_a7822f06714d9aac6863621c1735f591 } from '@/modules/pilotage/admin/views/BusinessViews'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 
@@ -53,6 +60,13 @@ export const importMap = {
   "@/modules/pilotage/admin/views/SystemeViews#IaView": IaView_f5806040924f1b380ec8b4a6cd3afc5a,
   "@/modules/pilotage/admin/views/SystemeViews#SanteView": SanteView_f5806040924f1b380ec8b4a6cd3afc5a,
   "@/modules/pilotage/admin/views/SystemeViews#SecuriteView": SecuriteView_f5806040924f1b380ec8b4a6cd3afc5a,
+  "@/modules/pilotage/admin/views/BusinessViews#AnalyticsView": AnalyticsView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#NewsletterView": NewsletterView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#FinancesView": FinancesView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#SeoView": SeoView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#CouvertureView": CouvertureView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#TraductionsView": TraductionsView_a7822f06714d9aac6863621c1735f591,
+  "@/modules/pilotage/admin/views/BusinessViews#RecherchesView": RecherchesView_a7822f06714d9aac6863621c1735f591,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e
 }
