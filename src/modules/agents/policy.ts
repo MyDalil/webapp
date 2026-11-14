@@ -13,6 +13,9 @@ type KillSwitch = 'off' | 'drain' | 'stop' | 'cut'
 /** Jamais exécutable par un agent : le code refuse avant tout réglage. */
 export const HARD_FORBIDDEN = ['delete-record', 'execute-payment', 'publish-without-validation', 'deploy', 'change-roles'] as const
 
+/** Brouillons : toujours une proposition, même réglés « exécute » (rien n’est publié sans un humain). */
+export const ALWAYS_PROPOSE = ['draft-content', 'draft-email', 'draft-telegram'] as const
+
 export const DEFAULT_MODES: Record<string, Mode> = {
   // Lecture et coordination : sans effet sur le site.
   'read-content': 'execute',
@@ -42,6 +45,7 @@ export function decide(input: { tool: string; agentModes?: Partial<Record<string
   if (!base) return { mode: 'deny', reason: 'outil-inconnu' }
   const mode = agentModes?.[tool] ?? base
   if (mode === 'forbidden') return { mode: 'deny', reason: 'reglage' }
+  if (mode === 'execute' && (ALWAYS_PROPOSE as readonly string[]).includes(tool)) return { mode: 'propose' }
   return { mode }
 }
 

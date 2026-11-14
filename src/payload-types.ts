@@ -1915,7 +1915,12 @@ export interface Agent {
    * ceo, editorial, trust…
    */
   slug: string;
-  status: 'active' | 'paused' | 'disabled';
+  status: 'active' | 'reserve' | 'paused' | 'disabled';
+  /**
+   * agent_id du dossier company/ (méthode ICM).
+   */
+  roleId?: string | null;
+  department?: string | null;
   mission: string;
   provider: 'anthropic' | 'openai';
   model: string;
@@ -1954,6 +1959,9 @@ export interface Agent {
         | 'fix-broken-links'
       )[]
     | null;
+  coldTestResult?: ('pass' | 'fail') | null;
+  coldTestAt?: string | null;
+  coldTestDetail?: string | null;
   /**
    * Vide = réglage par défaut (mode mixte). Les interdictions dures et Vie musulmane restent refusées par le code, quel que soit ce réglage.
    */
@@ -2033,6 +2041,19 @@ export interface AgentTask {
   steps?: number | null;
   maxSteps?: number | null;
   result?: string | null;
+  stage?: string | null;
+  /**
+   * Outils appelés, propositions, refus (30 dernières lignes).
+   */
+  trace?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   /**
    * Ce que l’agent propose de publier ou d’envoyer. Rien n’est appliqué sans validation humaine.
    */
@@ -2116,8 +2137,9 @@ export interface AgentNotification {
  */
 export interface AiUsage {
   id: number;
-  feature: 'reformulate' | 'understand';
+  feature: 'reformulate' | 'understand' | 'agent';
   member?: (number | null) | Member;
+  agent?: (number | null) | Agent;
   inputTokens?: number | null;
   outputTokens?: number | null;
   costMicros?: number | null;
@@ -3258,6 +3280,8 @@ export interface AgentsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   status?: T;
+  roleId?: T;
+  department?: T;
   mission?: T;
   provider?: T;
   model?: T;
@@ -3265,6 +3289,9 @@ export interface AgentsSelect<T extends boolean = true> {
   maxStepsPerTask?: T;
   scopes?: T;
   tools?: T;
+  coldTestResult?: T;
+  coldTestAt?: T;
+  coldTestDetail?: T;
   toolModes?:
     | T
     | {
@@ -3302,6 +3329,8 @@ export interface AgentTasksSelect<T extends boolean = true> {
   steps?: T;
   maxSteps?: T;
   result?: T;
+  stage?: T;
+  trace?: T;
   proposal?: T;
   reviewedBy?: T;
   reviewedAt?: T;
@@ -3352,6 +3381,7 @@ export interface AgentNotificationsSelect<T extends boolean = true> {
 export interface AiUsageSelect<T extends boolean = true> {
   feature?: T;
   member?: T;
+  agent?: T;
   inputTokens?: T;
   outputTokens?: T;
   costMicros?: T;
