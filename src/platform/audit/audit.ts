@@ -1,11 +1,24 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, CollectionConfig, Config, GlobalAfterChangeHook, Payload, PayloadRequest, Plugin } from 'payload'
 import { actorOf } from '@/platform/access'
+import { actionId as newActionId } from './uuidv7'
 
 type Channel = 'admin' | 'telegram' | 'api' | 'agent' | 'cron'
-export type AuditEntry = { action: string; summary: string; target?: string; targetId?: string | number; changes?: Record<string, unknown>; channel?: Channel }
+export type AuditEntry = { action: string; summary: string; target?: string; targetId?: string | number; changes?: Record<string, unknown>; channel?: Channel; actionId?: string }
+
+/** Contexte d’un agent au travail (posé par le moteur sur `req.context.agentRun`). */
+export type AgentRun = { agentSlug: string; department?: string; taskId?: string | number; step?: number; tool?: string; costMicros?: number }
+
+const environment = () => (process.env.VERCEL_ENV === 'production' ? 'production' : process.env.VERCEL_ENV === 'preview' ? 'preview' : 'development')
+
+/** Identifiant réservé par l’appelant pour la prochaine ligne (ex. : notification liée) ; utilisé une seule fois. */
+export function reserveActionId(req: PayloadRequest): string {
+  const id = newActionId()
+  req.context = { ...(req.context ?? {}), actionId: id }
+  return id
+}
 
 /** Collections bruyantes ou techniques : pas de ligne d’audit automatique. */
-const SKIP = new Set(['audit-log', 'visitor-sessions', 'ai-usage', 'error-logs', 'payload-preferences', 'payload-migrations', 'payload-locked-documents', 'payload-jobs'])
+const SKIP = new Set(['audit-log', 'agent-notifications', 'visitor-sessions', 'ai-usage', 'error-logs', 'payload-preferences', 'payload-migrations', 'payload-locked-documents', 'payload-jobs'])
 /** Champs jamais recopiés dans le journal. */
 const SECRET = new Set(['password', 'hash', 'salt', 'resetPasswordToken', 'resetPasswordExpiration', 'apiKey', 'apiKeyIndex', 'enableAPIKey', 'sessions', 'loginAttempts', 'lockUntil', 'updatedAt', 'createdAt'])
 
@@ -36,8 +49,12 @@ const channelOf = (req: PayloadRequest): Channel => {
 }
 
 /** Écrit une ligne. Ne fait jamais échouer l’action d’origine. */
-export async function audit(payload: Payload, req: PayloadRequest | undefined, entry: AuditEntry) {
+export async function audit(payload: Payload, req: PayloadRequest | undefined, entry: AuditEntry): Promise<string> {
   const actor = actorOf(req?.user)
+  const reserved = req?.context?.actionId as string | undefined
+  if (req?.context && reserved) delete req.context.actionId
+  const id = entry.actionId ?? reserved ?? newActionId()
+  const run = req?.context?.agentRun as AgentRun | undefined
   try {
     await payload.create({
       collection: 'audit-log',
@@ -54,11 +71,20 @@ export async function audit(payload: Payload, req: PayloadRequest | undefined, e
         targetId: entry.targetId === undefined ? undefined : String(entry.targetId),
         changes: entry.changes,
         channel: entry.channel ?? (req ? channelOf(req) : 'cron'),
+        actionId: id,
+        agentSlug: run?.agentSlug,
+        department: run?.department,
+        taskId: run?.taskId === undefined ? undefined : String(run.taskId),
+        step: run?.step,
+        tool: run?.tool,
+        costMicros: run?.costMicros,
+        environment: environment(),
       },
     })
   } catch (e) {
     console.error('[audit] écriture impossible', e)
   }
+  return id
 }
 
 const titleOf = (doc: Record<string, unknown>, collection: CollectionConfig) => {

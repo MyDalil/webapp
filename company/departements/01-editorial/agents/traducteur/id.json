@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_editorial_traducteur_01",
+  "slug": "traducteur",
+  "name": "Traducteur",
+  "department": "01-editorial",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "active",
+  "workflows": [
+    "01-traduction"
+  ],
+  "version": "1.0.0"
+}
