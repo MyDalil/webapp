@@ -13,3 +13,34 @@
 - Relire les contrôles et les déploiements sur la révision courante avant toute livraison.
 - Prochaine action : vérifier la branche, le diff et la dernière décision du module avant de poursuivre la tâche confiée.
 - Aucun changement applicatif, migration ou lancement n’est attesté par ce rangement.
+
+## Cockpit /admin — 14 novembre 2026 (lots 1 à 5)
+
+- Branches empilées, chacune avec sa PR vers `preview` : lot 1 `agent/cockpit-lot1` (#19), lot 2 `agent/cockpit-lot2` (#20), lot 3 `agent/cockpit-lot3` (#21), lot 4 `agent/cockpit-lot4` (#22), lot 5 `agent/cockpit-lot5`. Aucune fusion faite : feu vert de Rad requis.
+- Déploiements Vercel Preview des lots 3 et 4 : réussis après le correctif `.vercelignore` (`!company/**/*.md`).
+- Lot 5 (écrans des agents) : `/admin/cockpit/{agents,taches,validation,activite,conversations,memoire,connecteurs}` dans `src/modules/pilotage/admin/views/`, enregistrés dans `payload.config.ts`, rôles dans `admin/data.ts` (`VIEW_ROLES`), textes FR/AR/EN dans `admin/i18n.ts`.
+- Vérifié en local sur le lot 5 : `pnpm check` OK, `pnpm lint` 0 erreur, `pnpm test` 163 réussis, `pnpm build` OK, e2e complets 139 réussis (`TELEGRAM_WEBHOOK_SECRET=ci-telegram-secret DALIL_TEST_LLM=1`, après `pnpm search:index`).
+- Non vérifié : parcours réel sur preview.mydalil.com (protégé par la connexion Vercel).
+- À fournir par Rad dans Vercel : clés ANTHROPIC/OPENAI, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET` ; dans /admin : budget mensuel des agents, `telegramId` des comptes, `telegramChannelId`.
+- Lot 5 : CI entièrement verte et déploiement Vercel Preview réussi (PR #23).
+- Lot 6 `agent/cockpit-lot6` (Médiathèque) : glisser-déposer, 4 formats WebP (`sharp` ajouté), point focal (recadrage vérifié), descriptions FR/AR/EN, doublons par SHA-256, utilisation et remplacement partout, migration `20261114_150104_cockpit_mediatheque` (ajout de colonnes seulement).
+- Vérifié en local sur le lot 6 : `pnpm check` OK, lint 0 erreur, `pnpm test` 171 réussis, build OK, e2e complets 151 réussis.
+- Non vérifié : recadrage du point focal avec Vercel Blob (vérifié sur disque local seulement) ; les descriptions AR/EN ne sont pas encore lues par le site public (lot 10, Traductions).
+- Lot 6 : CI entièrement verte et déploiement Vercel Preview réussi (PR #24).
+- Lot 7 `agent/cockpit-lot7` (Historique et corbeille) : `/admin/cockpit/historique`, corbeille 30 jours sur les adresses (`trash: true`, migration `20261114_152745_cockpit_corbeille`, ajout de colonnes), purge quotidienne, SQL brut de l’annuaire filtré sur `deleted_at`, index de recherche mis à jour.
+- Vérifié en local sur le lot 7 : corbeille → page 404 et hors index ; restauration → retour ; purge 31 j supprimée, 29 j gardée ; restaurer une version crée un brouillon sans toucher la version publiée ; 173 unitaires, 156 parcours réussis.
+- Limite : la corbeille couvre les adresses seulement ; les autres collections suppriment toujours définitivement (administrateur seul).
+- Lot 7 : CI d’abord en échec (tests e2e fragiles en parallèle, pas le code) ; correctif `fc3ae6d` poussé sur la branche du lot 7.
+- Lot 8 `agent/cockpit-lot8` (Boîte unique) : `/admin/cockpit/boite`, emails reçus → demandes « email » (webhook prêt, DNS non touché), réponses avec fil, réponses préparées, note interne ; migration `20261114_154423_boite_unique` (valeur d’énumération + colonnes).
+- Vérifié en local sur le lot 8 : enregistrement idempotent, anti-boucle ; 180 unitaires, 164 parcours réussis.
+- Non vérifié : réception réelle d’un email (exige Resend Inbound + MX ou redirection Gandi, décision de Rad).
+- Lot 8 : CI entièrement verte, déploiement Vercel réussi (PR #26). Lot 7 : la CI a échoué sur des tests instables en parallèle (tests différents à chaque passage, lot 8 au-dessus vert) ; job relancé.
+- Lot 9 `agent/cockpit-lot9` (Communauté) : `/admin/cockpit/{moderation,annonces,pros,membres}`, score anti-arnaque `src/modules/annonces/risk.ts` (testé), badges Modération et Professionnels. Aucune migration.
+- Vérifié en local sur le lot 9 : 187 unitaires, 177 parcours réussis.
+- Lot 10 découpé : 10a Système `agent/cockpit-lot10a` (`/admin/cockpit/{ia,sante,securite}`), aucune migration ; 187 unitaires, 185 parcours réussis en local.
+- Lots 7 et 9 : CI entièrement verte (après relance du lot 7).
+- Lot 10b `agent/cockpit-lot10b` : `/admin/cockpit/{analytics,newsletter,finances,seo,couverture,traductions,recherches}` ; table `search_misses` (migration `20261114_170000_recherches_sans_resultat`, création de table seulement) ; 191 unitaires, 205 parcours réussis en local.
+- Non livré : « Éditeur du site » (périmètre à définir avec Rad).
+- Lot 11 `agent/cockpit-lot11` : accessibilité (axe-core, 25 écrans, clair et sombre, 0 défaut) ; revue indépendante : 18 défauts (5 élevés), tous corrigés ; tests ajoutés (tâche du CEO, test à froid refusé pendant l’arrêt, GET protégé). Local : 191 unitaires, 209 parcours réussis.
+- État : PR #19 à #30 empilées vers `preview`, aucune fusion. Prochaine action : feu vert de Rad, fusion dans l’ordre (#19 → #30), test sur preview.mydalil.com.
+- Décisions attendues de Rad : clés ANTHROPIC/OPENAI et budget mensuel des agents ; bot Telegram (jeton, secret, identifiants) ; réception des emails (sous-domaine ou redirection Gandi) ; suspension de membre ; périmètre de l’« Éditeur du site » ; double authentification de l’équipe.
