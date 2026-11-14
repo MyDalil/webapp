@@ -11,6 +11,8 @@ Newsletter et campagnes : inscription, confirmation, bienvenue, envois, désinsc
 - Collection `telegram-posts` : publications du canal DALIL (7 900 abonnés). Brouillons par l’équipe et les agents ; programmer, publier, retirer : Saïd seul (contrôle serveur).
 - Routes `/api/subscribers`, `/confirm`, `/unsubscribe` (RFC 8058) ; pages /newsletter/confirmation et /newsletter/desinscription.
 - `ui/NewsletterForm`.
+- `telegram/` — bot privé de Saïd et Rad : `commands.ts` (analyse, testée), `bot.ts` (webhook : identification par « Identifiant Telegram » du compte, actions avec les droits réels du compte), `channel.ts` (publication sur le canal décidée par Saïd, retrait, échéances).
+- Routes `/api/telegram` (webhook signé `TELEGRAM_WEBHOOK_SECRET`), `/api/telegram/setup` (état du bot, branchement du webhook — admin).
 
 ## Dépend de
 `platform/mail`, `platform/http`.
@@ -24,7 +26,7 @@ Inscription → email de confirmation ; confirmation → bienvenue ; campagne «
 - Un envoi part une seule fois (garde `sentAt`).
 
 ## Accès
-Resend.
+Resend. Telegram (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`).
 
 ## Skills
 - `skills/envoyer-une-newsletter` — Préparer, tester et envoyer une newsletter DALIL depuis /admin.
