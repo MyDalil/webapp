@@ -6,6 +6,8 @@
 //   2. OpenStreetMap : étiquette wikimedia_commons= (fichier ou catégorie) posée par les contributeurs sur ce bâtiment précis.
 //   3. Commons, recherche géographique : fichier à moins de 150 m dont le titre contient un mot distinctif du nom du lieu.
 // Licences libres seulement (CC0, CC BY, CC BY-SA, domaine public) ; auteur, licence et page source gardés pour le crédit.
+// Niveau exigé (Rad, 2026-11-14 : « niveau Shutterstock ») : original d’au moins 1600 px de large, format paysage,
+// « Quality images » et « Featured pictures » de Commons en premier. Une photo médiocre n’est pas retenue.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 
 const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
@@ -23,6 +25,7 @@ const records = [
   ...load('overture-selected.json'),
   ...load('research-places.json'),
   ...load('open-places-selected.json'),
+  ...load('public-bodies.json'),
 ].filter((r) => r && r.id && (PUBLIC_SECTORS.has(r.sector) || r.publicBody))
 console.log('Lieux publics à traiter :', records.length)
 
@@ -91,23 +94,24 @@ async function wikidataImages(qids) {
   return out
 }
 
-async function categoryFiles(category, limit = 3) {
+async function categoryFiles(category, limit = 12) {
   const j = await commons({ action: 'query', list: 'categorymembers', cmtitle: category, cmtype: 'file', cmlimit: String(limit) })
   return (j?.query?.categorymembers || []).map((m) => m.title.replace(/^File:/, ''))
 }
 
 // --- 3. Informations de licence -----------------------------------------------------------------------------------
+const QUALITY = ['Category:Quality images', 'Category:Featured pictures on Wikimedia Commons', 'Category:Valued images']
 const strip = (h) => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
 const FREE = /^(cc0|cc[ -]by|cc[ -]by-sa|public domain|pd|attribution|fal|gfdl)/i
 const infoCache = new Map()
 async function fileInfo(files) {
   const need = files.filter((f) => !infoCache.has(f))
   for (let i = 0; i < need.length; i += 40) {
-    const j = await commons({ action: 'query', titles: need.slice(i, i + 40).map((f) => `File:${f}`).join('|'), prop: 'imageinfo', iiprop: 'url|size|extmetadata|mime', iiurlwidth: '1280' })
+    const j = await commons({ action: 'query', titles: need.slice(i, i + 40).map((f) => `File:${f}`).join('|'), prop: 'imageinfo|categories', iiprop: 'url|size|extmetadata|mime', iiurlwidth: '1600', clcategories: QUALITY.join('|'), cllimit: 'max' })
     for (const pg of j?.query?.pages || []) {
       const ii = pg.imageinfo?.[0]
       const name = pg.title.replace(/^File:/, '')
-      if (!ii || !/image\/(jpeg|png|webp)/.test(ii.mime) || ii.width < 640) {
+      if (!ii || !/image\/(jpeg|png|webp)/.test(ii.mime) || ii.width < 1600 || ii.width / ii.height < 1.2) {
         infoCache.set(name, null)
         continue
       }
@@ -117,12 +121,12 @@ async function fileInfo(files) {
         infoCache.set(name, null)
         continue
       }
-      infoCache.set(name, { url: ii.thumburl || ii.url, author: strip(m.Artist?.value).slice(0, 160) || 'Auteur inconnu', license, licenseUrl: m.LicenseUrl?.value || null, page: ii.descriptionurl, width: ii.thumbwidth || ii.width, height: ii.thumbheight || ii.height })
+      infoCache.set(name, { quality: Boolean(pg.categories?.length), url: ii.thumburl || ii.url, author: strip(m.Artist?.value).slice(0, 160) || 'Auteur inconnu', license, licenseUrl: m.LicenseUrl?.value || null, page: ii.descriptionurl, width: ii.thumbwidth || ii.width, height: ii.thumbheight || ii.height })
     }
     await sleep(250)
   }
   for (const f of need) if (!infoCache.has(f)) infoCache.set(f, null)
-  return files.map((f) => infoCache.get(f)).filter(Boolean)
+  return files.map((f) => infoCache.get(f)).filter(Boolean).sort((a, b) => Number(b.quality) - Number(a.quality))
 }
 
 // --- 4. Recherche géographique Commons, avec contrôle du nom ------------------------------------------------------
@@ -134,7 +138,7 @@ async function geoMatch(r) {
     const t = norm(g.title.replace(/^File:/, '').replace(/\.[a-z]+$/i, ''))
     return words.some((w) => t.split(' ').includes(w)) && distM(r, { lat: g.lat, lng: g.lon }) <= 150
   })
-  return hits.slice(0, 3).map((g) => g.title.replace(/^File:/, ''))
+  return hits.slice(0, 8).map((g) => g.title.replace(/^File:/, ''))
 }
 
 // --- Exécution ----------------------------------------------------------------------------------------------------
@@ -157,7 +161,7 @@ async function one(r) {
   const qid = /^Q\d+$/.test(r.id) ? r.id : links.get(r.id)?.wikidata
   const w = qid ? wd.get(qid) : null
   if (w?.files.length) {
-    files = w.files.slice(0, 3)
+    files = w.files.slice(0, 5)
     how = 'wikidata'
   }
   const c = links.get(r.id)?.commons
@@ -177,7 +181,7 @@ async function one(r) {
   if (d && (d.website || d.phone || d.email || d.address)) details[r.id] = { ...d, source: `https://www.wikidata.org/wiki/${qid}` }
   const photos = files.length ? await fileInfo(files) : []
   if (photos.length) {
-    result[r.id] = photos.map((p) => ({ ...p, via: how }))
+    result[r.id] = photos.slice(0, 3).map((p) => ({ ...p, via: how }))
     stats[how]++
   } else stats.none++
   if (++done % 500 === 0) {

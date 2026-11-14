@@ -1,17 +1,37 @@
 import { sql, type MigrateDownArgs, type MigrateUpArgs } from '@payloadcms/db-postgres'
 import { deferred } from '@/platform/deferredData'
 import collected from '@/modules/annuaire/data/place-photos.json'
+import bodies from '@/modules/annuaire/data/public-bodies.json'
+import { importPlaces, type ImportRecord } from '@/modules/annuaire'
+import { COMMUNES } from '@/platform/referentiel/communes'
+
+/** Wilaya d’une institution sans wilaya déclarée : celle de la commune la plus proche (centre de commune, Wikidata). */
+function nearestWilaya(lat: number, lng: number): string | null {
+  let best: { d: number; w: number } | null = null
+  for (const c of COMMUNES) {
+    if (c.lat == null || c.lng == null) continue
+    const d = (c.lat - lat) ** 2 + ((c.lng - lng) * Math.cos((lat * Math.PI) / 180)) ** 2
+    if (!best || d < best.d) best = { d, w: c.wilaya }
+  }
+  return best ? String(best.w) : null
+}
 
 type Db = { execute: (q: ReturnType<typeof sql>) => Promise<{ rows: Record<string, unknown>[] }> }
 type Photo = { url: string; author: string; license: string; licenseUrl: string | null; page: string; width?: number; height?: number }
 type Details = { website: string | null; phone: string | null; email: string | null; address: string | null; source: string }
 
 /**
- * Lieux publics : photos sous licence libre et coordonnées officielles (collecte `scripts/import/fetch-place-photos.mjs`).
+ * Lieux publics : 1. institutions de l’État (Wikidata, `scripts/import/fetch-public-bodies.mjs`), créées ou complétées ;
+ * 2. photos sous licence libre et coordonnées officielles (collecte `scripts/import/fetch-place-photos.mjs`).
  * Complète seulement : une fiche qui a déjà ses photos (DALIL ou libres) les garde ; un champ rempli n’est jamais écrasé.
  * Rejouable sans effet de bord (identifiant de source).
  */
 export const up = deferred('20261114_230000_photos_lieux_publics', async ({ payload, req }: MigrateUpArgs): Promise<void> => {
+  const records = (bodies as ImportRecord[]).map((r) => (r.wilaya || r.lat == null || r.lng == null ? r : { ...r, wilaya: nearestWilaya(r.lat, r.lng) }))
+  if (records.length) {
+    const db0 = (payload.db as unknown as { drizzle: Db }).drizzle
+    await importPlaces(payload, req, records, db0 as never)
+  }
   const photos = (collected as { photos: Record<string, Photo[]> }).photos ?? {}
   const details = (collected as { details?: Record<string, Details> }).details ?? {}
   const ids = [...new Set([...Object.keys(photos), ...Object.keys(details)])]

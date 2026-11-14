@@ -9,7 +9,7 @@ import { expectedHealthCategory } from './healthCategory'
 /** Fiche prête à importer (recherche documentaire ou OpenStreetMap). Faits seulement, textes rédigés par DALIL. */
 export type ImportRecord = {
   id: string
-  provider: 'dalil' | 'osm' | 'overture'
+  provider: 'dalil' | 'osm' | 'overture' | 'wikidata'
   name: string
   nameAr?: string | null
   sector: string
@@ -45,6 +45,7 @@ const SOURCE_LABEL: Record<ImportRecord['provider'], string> = {
   osm: 'OpenStreetMap — © les contributeurs OpenStreetMap (ODbL)',
   overture: 'Overture Maps — © Overture Maps Foundation (CDLA Permissive 2.0)',
   dalil: 'Source officielle consultée',
+  wikidata: 'Wikidata (CC0)',
 }
 const distanceKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
   const r = Math.PI / 180
