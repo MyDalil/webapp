@@ -22,4 +22,8 @@
 - Vérifié en local sur le lot 5 : `pnpm check` OK, `pnpm lint` 0 erreur, `pnpm test` 163 réussis, `pnpm build` OK, e2e complets 139 réussis (`TELEGRAM_WEBHOOK_SECRET=ci-telegram-secret DALIL_TEST_LLM=1`, après `pnpm search:index`).
 - Non vérifié : parcours réel sur preview.mydalil.com (protégé par la connexion Vercel).
 - À fournir par Rad dans Vercel : clés ANTHROPIC/OPENAI, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET` ; dans /admin : budget mensuel des agents, `telegramId` des comptes, `telegramChannelId`.
-- Prochaine action : lot 6, Médiathèque glisser-déposer (`/admin/cockpit/medias`). Feuille de route : `docs/superpowers/plans/2026-11-14-cockpit-admin-feuille-de-route.md`.
+- Lot 5 : CI entièrement verte et déploiement Vercel Preview réussi (PR #23).
+- Lot 6 `agent/cockpit-lot6` (Médiathèque) : glisser-déposer, 4 formats WebP (`sharp` ajouté), point focal (recadrage vérifié), descriptions FR/AR/EN, doublons par SHA-256, utilisation et remplacement partout, migration `20261114_150104_cockpit_mediatheque` (ajout de colonnes seulement).
+- Vérifié en local sur le lot 6 : `pnpm check` OK, lint 0 erreur, `pnpm test` 171 réussis, build OK, e2e complets 151 réussis.
+- Non vérifié : recadrage du point focal avec Vercel Blob (vérifié sur disque local seulement) ; les descriptions AR/EN ne sont pas encore lues par le site public (lot 10, Traductions).
+- Prochaine action : lot 7, Édition de fiche (aperçu FR/AR/EN, historique, restauration). Feuille de route : `docs/superpowers/plans/2026-11-14-cockpit-admin-feuille-de-route.md`.

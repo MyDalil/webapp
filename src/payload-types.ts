@@ -476,6 +476,8 @@ export interface Place {
 export interface Media {
   id: number;
   alt: string;
+  altAr?: string | null;
+  altEn?: string | null;
   /**
    * Auteur ou source, affiché sous la photo.
    */
@@ -484,6 +486,10 @@ export interface Media {
    * Photo envoyée par un compte : déjà en ligne. Supprimez-la si elle pose problème.
    */
   moderation?: ('ok' | 'to-check') | null;
+  /**
+   * SHA-256 du fichier reçu : sert à repérer les doublons.
+   */
+  hash?: string | null;
   uploadedBy?: (number | null) | Member;
   updatedAt: string;
   createdAt: string;
@@ -505,7 +511,23 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
     cover?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -3069,8 +3091,11 @@ export interface RepresentationsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  altAr?: T;
+  altEn?: T;
   credit?: T;
   moderation?: T;
+  hash?: T;
   uploadedBy?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -3096,7 +3121,27 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
         cover?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
           | T
           | {
               url?: T;

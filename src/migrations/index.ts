@@ -51,6 +51,7 @@ import * as migration_20261102_210116_wilayas_69_partout from './20261102_210116
 import * as migration_20261114_133045_cockpit_tracabilite_notifications from './20261114_133045_cockpit_tracabilite_notifications';
 import * as migration_20261114_140050_agents_moteur_icm from './20261114_140050_agents_moteur_icm';
 import * as migration_20261114_140100_agents_equipe_icm from './20261114_140100_agents_equipe_icm';
+import * as migration_20261114_150104_cockpit_mediatheque from './20261114_150104_cockpit_mediatheque';
 
 export const migrations = [
   {
@@ -317,5 +318,10 @@ export const migrations = [
     up: migration_20261114_140100_agents_equipe_icm.up,
     down: migration_20261114_140100_agents_equipe_icm.down,
     name: '20261114_140100_agents_equipe_icm',
+  },
+  {
+    up: migration_20261114_150104_cockpit_mediatheque.up,
+    down: migration_20261114_150104_cockpit_mediatheque.down,
+    name: '20261114_150104_cockpit_mediatheque'
   },
 ];

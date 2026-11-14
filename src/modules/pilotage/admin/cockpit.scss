@@ -75,7 +75,7 @@ html[dir='rtl'] .dl-grp { letter-spacing: 0; text-transform: none; }
 .dl-ib:hover { background: var(--dl-s2); }
 .dl-seg { display: inline-flex; padding: 3px; border-radius: 99px; background: var(--dl-s2); border: 1px solid var(--dl-ln); }
 .dl-seg button { border: 0; background: none; color: var(--dl-mu); font: 600 12px/1 Inter, sans-serif; padding: 0 11px; min-height: 28px; border-radius: 99px; cursor: pointer; }
-.dl-seg button[aria-pressed='true'] { background: var(--dl-s); color: var(--dl-tx); box-shadow: var(--dl-sh); }
+.dl-seg button[aria-pressed='true'], .dl-seg button[aria-checked='true'] { background: var(--dl-s); color: var(--dl-tx); box-shadow: var(--dl-sh); }
 .dl-mu { color: var(--dl-mu); }
 
 // ── Barre du haut ──────────────────────────────────────
@@ -161,4 +161,28 @@ html[dir='rtl'] .dl-pv h1 { font-family: 'IBM Plex Sans Arabic', sans-serif; let
 @media (max-width: 768px) {
   .dl-kanban { grid-auto-flow: row; grid-auto-columns: auto; overflow-x: visible; }
   .dl-inp, .dl-btn, .dl-seg button { min-height: 44px; }
+}
+
+// ── Médiathèque (lot 6) ──
+.dl-seg a { display: inline-flex; align-items: center; color: var(--dl-mu); font: 600 12px/1 Inter, sans-serif; padding: 0 11px; min-height: 28px; border-radius: 99px; text-decoration: none; }
+.dl-seg a.on { background: var(--dl-s); color: var(--dl-tx); box-shadow: var(--dl-sh); }
+.dl-drop { display: grid; place-items: center; gap: 4px; text-align: center; min-height: 140px; padding: 20px; border: 2px dashed var(--dl-ln); border-radius: var(--dl-radius); background: var(--dl-s2); cursor: pointer; color: var(--dl-tx); transition: border-color 0.15s ease, background 0.15s ease; }
+.dl-drop:hover, .dl-drop.on { border-color: var(--dl-g); background: var(--dl-g-soft); }
+.dl-up { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px; border: 1px solid var(--dl-ln); border-radius: 12px; }
+.dl-up img { width: 96px; height: 72px; object-fit: cover; border-radius: 8px; background: var(--dl-s2); }
+.dl-medgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.dl-med { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--dl-ln); border-radius: 12px; color: inherit; text-decoration: none; background: var(--dl-s); min-width: 0; }
+.dl-med:hover, .dl-med[aria-current='true'] { border-color: var(--dl-g); }
+.dl-med img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--dl-s2); }
+.dl-med-t { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dl-medgrid2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+.dl-focal { position: relative; display: block; padding: 0; border: 1px solid var(--dl-ln); border-radius: 12px; overflow: hidden; cursor: crosshair; background: var(--dl-s2); width: 100%; }
+.dl-focal img { display: block; width: 100%; height: auto; max-height: 520px; object-fit: contain; }
+.dl-focal-pt { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 99px; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--dl-g), 0 2px 8px rgba(0, 0, 0, 0.4); pointer-events: none; }
+@media (max-width: 768px) {
+  .dl-medgrid2 { grid-template-columns: minmax(0, 1fr); }
+  .dl-medgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .dl-up { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .dl-up img { width: 64px; height: 48px; }
+  .dl-seg a { min-height: 40px; }
 }

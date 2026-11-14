@@ -64,7 +64,7 @@ test.describe.serial('Cockpit admin @ecriture', () => {
     await page.getByRole('combobox').fill('médiat')
     await expect(page.getByRole('option', { name: /Médiathèque/ })).toBeVisible()
     await page.keyboard.press('Enter')
-    await expect(page).toHaveURL(/\/admin\/collections\/media/)
+    await expect(page).toHaveURL(/\/admin\/cockpit\/medias/)
   })
 
   test('mode sombre conservé après rechargement', async ({ page }) => {

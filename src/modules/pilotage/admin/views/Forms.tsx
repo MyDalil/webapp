@@ -49,7 +49,7 @@ export function NewTaskForm({ agents, labels }: { agents: Opt[]; labels: Record<
 }
 
 /** Zone de texte préremplie, enregistrée dans un champ (mémoire résumée d’un agent). */
-export function FieldEditor({ path, field, value, label, save }: { path: string; field: string; value: string; label: string; save: string }) {
+export function FieldEditor({ path, field, value, label, save, rows = 5, dir }: { path: string; field: string; value: string; label: string; save: string; rows?: number; dir?: 'rtl' | 'ltr' }) {
   const router = useRouter()
   const [v, setV] = useState(value)
   const [error, setError] = useState<string | null>(null)
@@ -68,7 +68,7 @@ export function FieldEditor({ path, field, value, label, save }: { path: string;
   }
   return (
     <div style={{ display: 'grid', gap: 6 }}>
-      <textarea className="dl-inp" rows={5} value={v} onChange={(e) => { setV(e.target.value); setSaved(false) }} aria-label={label} />
+      <textarea className="dl-inp" rows={rows} dir={dir} value={v} onChange={(e) => { setV(e.target.value); setSaved(false) }} aria-label={label} />
       <div className="dl-row" style={{ gap: 8 }}>
         <button type="button" className="dl-btn" onClick={send} disabled={pending || v === value}>{pending ? '…' : save}</button>
         {saved ? <span className="dl-pill ok" role="status">✓</span> : null}
