@@ -79,10 +79,41 @@ test.describe.serial('Moteur d’agents @ecriture', () => {
     expect((await agentBySlug(request, 'analyste')).status).toBe('reserve')
   })
 
+  test('tâche sans agent : le CEO la prend et la mène jusqu’à « À valider »', async ({ request }) => {
+    test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
+    await login(request)
+    const ceo = await agentBySlug(request, 'ceo')
+    await request.post('/api/globals/controls', { data: { agentsMonthlyBudgetUsd: 5, killSwitch: 'off', agentsEnabled: true } })
+    const t = (await (await request.post('/api/agent-tasks', { data: { title: `Sans agent ${Date.now()}`, instructions: 'Lis la boîte [outil:read-inbox] puis conclus.' } })).json()).doc
+    await expect.poll(async () => {
+      await request.post('/api/agents/run')
+      return (await (await request.get(`/api/agent-tasks/${t.id}?depth=0`)).json()).status
+    }, { timeout: 30_000 }).toMatch(/review|failed/)
+    const done = (await (await request.get(`/api/agent-tasks/${t.id}?depth=0`)).json()) as { agent: number; status: string; error?: string }
+    expect(done.agent).toBe(ceo.id)
+    expect(done.status, done.error).toBe('review')
+    await request.patch(`/api/agent-tasks/${t.id}`, { data: { status: 'cancelled' } })
+  })
+
+  test('test à froid refusé pendant un arrêt général', async ({ request }) => {
+    test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
+    await login(request)
+    await request.post('/api/globals/controls', { data: { killSwitch: 'cut' } })
+    try {
+      const r = await request.post('/api/agents/role', { data: { slug: 'juridique' } })
+      expect(r.status()).toBe(422)
+      expect(await r.text()).toContain('test à froid impossible')
+      expect((await agentBySlug(request, 'juridique')).status).toBe('reserve')
+    } finally {
+      await request.post('/api/globals/controls', { data: { killSwitch: 'off' } })
+    }
+  })
+
   test('accès refusé sans compte', async ({ playwright, baseURL }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
     const anon = await playwright.request.newContext({ baseURL })
     expect((await anon.post('/api/agents/run')).status()).toBe(401)
+    expect((await anon.get('/api/agents/run')).status()).toBe(401)
     expect((await anon.post('/api/agents/role', { data: { slug: 'analyste' } })).status()).toBe(401)
   })
 })

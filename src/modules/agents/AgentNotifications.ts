@@ -3,7 +3,7 @@ import type { CollectionAfterChangeHook, CollectionConfig, Payload, PayloadReque
 import { isStaff, isStaffUser } from '@/platform/access'
 import { reserveActionId } from '@/platform/audit/audit'
 import { getControls } from '@/platform/controls/Controls'
-import { layout, paragraphs, send, SITE, TEAM } from '@/platform/mail'
+import { esc, layout, paragraphs, send, SITE, TEAM } from '@/platform/mail'
 import { sendTelegram } from '@/platform/telegram/send'
 import { CHANNELS, channelsFor, type ChannelKey, formatNotification, type NotifySettings, type Phase, PHASE_LABEL, phaseOf } from './notify'
 
@@ -17,6 +17,8 @@ export const AgentNotifications: CollectionConfig = {
   admin: { group: 'Équipe IA', useAsTitle: 'title', defaultColumns: ['createdAt', 'phase', 'agentLabel', 'title', 'actionId'] },
   defaultSort: '-createdAt',
   access: { read: isStaff, create: () => false, update: ({ req: { user } }) => isStaffUser(user), delete: () => false },
+  // Ajout seul : l’équipe ne peut changer que « Lu par » ; le reste est écrit une fois par le système.
+  hooks: { beforeChange: [({ data, operation, originalDoc, req }) => (operation === 'update' && originalDoc ? { ...originalDoc, readBy: data.readBy ?? originalDoc.readBy, delivery: req.user ? originalDoc.delivery : (data.delivery ?? originalDoc.delivery) } : data)] },
   timestamps: true,
   fields: [
     {
@@ -79,7 +81,7 @@ export async function notify(payload: Payload, req: PayloadRequest | undefined, 
           if (c === 'telegram_said') delivery[c] = await sendTelegram('said', text, payload)
           else if (c === 'telegram_rad') delivery[c] = await sendTelegram('rad', text, payload)
           else if (c === 'email') {
-            const html = layout(`${PHASE_LABEL[n.phase]} · ${n.agentLabel}`, paragraphs(`${n.title}\n${n.body ?? ''}\n${actionId}`), { label: 'Voir le travail', href: link })
+            const html = layout(esc(`${PHASE_LABEL[n.phase]} · ${n.agentLabel}`), paragraphs(`${n.title}\n${n.body ?? ''}\n${actionId}`), { label: 'Voir le travail', href: link })
             delivery[c] = await send(TEAM, `[DALIL] ${PHASE_LABEL[n.phase]} · ${n.agentLabel} — ${n.title}`.slice(0, 140), html).then((ok) => (ok ? 'accepté' : process.env.RESEND_API_KEY ? 'échec' : 'non configuré'), () => 'échec')
           }
         }),

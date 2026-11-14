@@ -37,7 +37,7 @@ export function ModerationView(props: AdminViewServerProps) {
           <Head title={tr('nav.moderation', 'Modération')} sub={tr('mod.sub', 'Tout ce qui attend un contrôle humain. Un agent peut donner son avis ; il ne publie jamais.')} />
           <div className="dl-kpis">
             {queues.map((q) => (
-              <Link key={q.key} href={q.href} className="dl-card dl-kpi" aria-label={`${q.label} : ${q.n}`}>
+              <Link key={q.key} href={q.href} className="dl-card dl-kpi">
                 <div><div className="dl-v">{q.n}</div><div className="dl-kl">{q.label}</div></div>
               </Link>
             ))}

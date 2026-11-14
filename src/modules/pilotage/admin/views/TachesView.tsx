@@ -50,7 +50,8 @@ export function TachesView(props: AdminViewServerProps) {
                       <div className="dl-row dl-wr" style={{ gap: 6 }}>
                         {c === 'review' ? <Link className="dl-btn pri" href={`/admin/cockpit/validation#t${t.id}`}>{tr('taches.review', 'Examiner')}</Link> : null}
                         {c === 'new' || c === 'running' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'paused' }} label={tr('agents.pause', 'Mettre en pause')} /> : null}
-                        {c === 'paused' || c === 'failed' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'new', error: null }} label={tr('agents.resume', 'Reprendre')} /> : null}
+                        {c === 'paused' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'running' }} label={tr('agents.resume', 'Reprendre')} /> : null}
+                        {c === 'failed' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'new', error: null, steps: 0, spentMicros: 0 }} label={tr('taches.retry', 'Relancer (compteurs à zéro)')} /> : null}
                         {c !== 'done' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'cancelled' }} label={tr('taches.cancel', 'Annuler')} confirm={tr('taches.cancel.confirm', 'Annuler cette tâche ?')} /> : null}
                       </div>
                     </article>

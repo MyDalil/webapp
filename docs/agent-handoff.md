@@ -41,4 +41,6 @@
 - Lots 7 et 9 : CI entièrement verte (après relance du lot 7).
 - Lot 10b `agent/cockpit-lot10b` : `/admin/cockpit/{analytics,newsletter,finances,seo,couverture,traductions,recherches}` ; table `search_misses` (migration `20261114_170000_recherches_sans_resultat`, création de table seulement) ; 191 unitaires, 205 parcours réussis en local.
 - Non livré : « Éditeur du site » (périmètre à définir avec Rad).
-- Prochaine action : lot 11 — finition, accessibilité WCAG AA, revue indépendante (sous-agent), rapport honnête.
+- Lot 11 `agent/cockpit-lot11` : accessibilité (axe-core, 25 écrans, clair et sombre, 0 défaut) ; revue indépendante : 18 défauts (5 élevés), tous corrigés ; tests ajoutés (tâche du CEO, test à froid refusé pendant l’arrêt, GET protégé). Local : 191 unitaires, 209 parcours réussis.
+- État : PR #19 à #30 empilées vers `preview`, aucune fusion. Prochaine action : feu vert de Rad, fusion dans l’ordre (#19 → #30), test sur preview.mydalil.com.
+- Décisions attendues de Rad : clés ANTHROPIC/OPENAI et budget mensuel des agents ; bot Telegram (jeton, secret, identifiants) ; réception des emails (sous-domaine ou redirection Gandi) ; suspension de membre ; périmètre de l’« Éditeur du site » ; double authentification de l’équipe.

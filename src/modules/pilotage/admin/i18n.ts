@@ -96,7 +96,7 @@ const AR: Record<string, string> = {
   'con.use.cron': 'طابور الوكلاء والنشر',
   'con.use.db': 'قاعدة البيانات',
   'conv.directive': 'توجيه إلى وكيل',
-  'conv.directive.sub': 'يقرؤه الوكيل في بداية خطوته التالية.',
+  'conv.directive.sub': 'تُضاف التعليمة إلى مهمة الوكيل المفتوحة؛ يقرؤها في بداية خطوته التالية.',
   'conv.free': 'خارج المهام',
   'conv.none': 'لا توجد رسائل بعد.',
   'conv.ph': 'تعليمتك',
@@ -467,6 +467,14 @@ const AR: Record<string, string> = {
   'rs.count': 'مرات',
   'rs.last': 'آخر مرة',
   'rs.task': 'إسناد إلى وكيل',
+  'trace.outil': 'أداة',
+  'trace.proposition': 'اقتراح',
+  'trace.refus': 'رفض',
+  'trace.fin': 'نهاية',
+  'trace.erreur': 'خطأ',
+  'taches.retry': 'إعادة التشغيل (تصفير العدادات)',
+  'conv.current': 'التعليمة الحالية',
+  'conv.notask': 'لا توجد مهمة مفتوحة: أنشئ مهمة لإعطائه تعليمة.',
 }
 
 const EN: Record<string, string> = {
@@ -563,7 +571,7 @@ const EN: Record<string, string> = {
   'con.use.cron': 'Agent queue, publishing',
   'con.use.db': 'Database',
   'conv.directive': 'Directive to an agent',
-  'conv.directive.sub': 'The agent reads it at the start of its next step.',
+  'conv.directive.sub': 'The instruction is added to the agent’s open task; it reads it at the start of its next step.',
   'conv.free': 'Outside tasks',
   'conv.none': 'No message yet.',
   'conv.ph': 'Your instruction',
@@ -934,6 +942,14 @@ const EN: Record<string, string> = {
   'rs.count': 'Times',
   'rs.last': 'Last',
   'rs.task': 'Assign to an agent',
+  'trace.outil': 'tool',
+  'trace.proposition': 'proposal',
+  'trace.refus': 'refusal',
+  'trace.fin': 'end',
+  'trace.erreur': 'error',
+  'taches.retry': 'Restart (counters reset)',
+  'conv.current': 'current instruction',
+  'conv.notask': 'No open task: create a task to give it an instruction.',
 }
 
 const FR: Record<string, string> = {
@@ -1010,6 +1026,11 @@ const FR: Record<string, string> = {
   'acc.en-cours': 'En cours',
   'acc.terminee': 'Terminée',
   'acc.annulee': 'Annulée',
+  'trace.outil': 'outil',
+  'trace.proposition': 'proposition',
+  'trace.refus': 'refus',
+  'trace.fin': 'fin',
+  'trace.erreur': 'erreur',
 }
 
 const DICT: Record<Lang, Record<string, string>> = { fr: FR, ar: AR, en: EN }

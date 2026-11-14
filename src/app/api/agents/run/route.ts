@@ -21,5 +21,10 @@ async function handle(req: Request) {
   return json({ ...(await runQueue(p, { budgetMs: 240_000 })), canal })
 }
 
-export const GET = handle
+/** GET : tâche planifiée seulement (Vercel envoie le secret). Depuis un navigateur, un lien ne doit jamais lancer les agents. */
+export async function GET(req: Request) {
+  const secret = process.env.CRON_SECRET
+  if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) return fail('Accès refusé : GET réservé à la tâche planifiée.', 401)
+  return handle(req)
+}
 export const POST = handle

@@ -82,7 +82,7 @@ html[dir='rtl'] .dl-grp { letter-spacing: 0; text-transform: none; }
 .dl-bar { display: flex; align-items: center; gap: 6px; }
 .dl-cmd { display: flex; align-items: center; gap: 8px; height: 38px; min-width: 260px; padding: 0 6px 0 14px; border-radius: 99px; background: var(--dl-s); border: 1px solid var(--dl-ln); color: var(--dl-mu); font: 500 13px Inter, sans-serif; cursor: pointer; box-shadow: var(--dl-sh); }
 .dl-kbd { font: 600 11px Inter, sans-serif; border: 1px solid var(--dl-ln); border-radius: 6px; padding: 1px 6px; color: var(--dl-mu); margin-inline-start: auto; }
-@media (max-width: 768px) { .dl-cmd { min-width: 0; width: 38px; padding: 0; justify-content: center; } .dl-cmd span, .dl-cmd .dl-kbd { display: none; } .dl-bar .dl-seg { display: none; } }
+@media (max-width: 768px) { .dl-cmd { min-width: 0; width: 38px; padding: 0; justify-content: center; } .dl-cmd .dl-kbd { display: none; } .dl-cmd .dl-cmd-t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .dl-bar .dl-seg { display: none; } }
 
 // Palette de commandes
 .dl-pal-bg { position: fixed; inset: 0; z-index: 200; background: rgba(6, 17, 13, 0.45); backdrop-filter: blur(6px); display: flex; justify-content: center; padding: 10vh 16px 16px; animation: dl-in 0.18s ease-out; }

@@ -75,8 +75,8 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
   const lang = i18n.language
   return (
     <div className="dl-bar dl">
-      <button type="button" className="dl-cmd" onClick={() => { setQ(''); setSel(0); setOpen(true) }} aria-haspopup="dialog" aria-label={labels.search}>
-        <Icon name="search" /><span>{labels.search}</span><span className="dl-kbd">⌘K</span>
+      <button type="button" className="dl-cmd" onClick={() => { setQ(''); setSel(0); setOpen(true) }} aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+        <Icon name="search" /><span className="dl-cmd-t">{labels.search}</span><span className="dl-kbd" aria-hidden="true">⌘K</span>
       </button>
       <div className="dl-seg" role="group" aria-label={labels.lang}>
         {(['fr', 'ar', 'en'] as const).map((l) => (
