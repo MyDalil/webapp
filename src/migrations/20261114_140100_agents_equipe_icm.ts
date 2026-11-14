@@ -40,6 +40,6 @@ export const up = deferred('20261114_140100_agents_equipe_icm', async ({ payload
       } as never,
     })
   }
-})
+}, { reindex: false })
 
 export async function down(_args: MigrateDownArgs): Promise<void> {}

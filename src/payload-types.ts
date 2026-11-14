@@ -1988,7 +1988,7 @@ export interface Agent {
     | null;
   triggers?: ('any-task' | 'assigned' | 'draft-ready' | 'inbox' | 'report' | 'application' | 'cron')[] | null;
   /**
-   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (src/modules/agents/equipe/<agent>/).
+   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (company/departements/<nn>/agents/<rôle>/).
    */
   memory?: string | null;
   updatedAt: string;
