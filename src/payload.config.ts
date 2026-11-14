@@ -3,9 +3,12 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { ar } from '@payloadcms/translations/languages/ar'
+import { en } from '@payloadcms/translations/languages/en'
 import { fr } from '@payloadcms/translations/languages/fr'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import sharp from 'sharp'
 import { buildConfig } from 'payload'
 
 import { Users } from '@/platform/auth/Users'
@@ -18,7 +21,7 @@ import { EmailDeliveries } from '@/platform/mailing/EmailDeliveries'
 import { auditPlugin } from '@/platform/audit/audit'
 import { Controls } from '@/platform/controls/Controls'
 import { AccompagnementRequests, AccompagnementSettings, Packs } from '@/modules/accompagnement/collections'
-import { AgentMessages, AgentTasks, Agents } from '@/modules/agents/collections'
+import { AgentMessages, AgentNotifications, AgentTasks, Agents } from '@/modules/agents/collections'
 import { ClassifiedMessages, Classifieds } from '@/modules/annonces/collections'
 import { Events, FeaturedDestination, Places } from '@/modules/annuaire/collections'
 import { ContributionPhotos, Submissions } from '@/modules/messages/collections'
@@ -46,10 +49,38 @@ export default buildConfig({
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: ' — DALIL Admin' },
+    // Cockpit DALIL : menu, barre du haut et accueil Pilotage (module pilotage).
+    components: {
+      Nav: '@/modules/pilotage/admin/CockpitNav#CockpitNav',
+      graphics: { Icon: '@/modules/pilotage/admin/Brand#DalilIcon', Logo: '@/modules/pilotage/admin/Brand#DalilLogo' },
+      actions: ['@/modules/pilotage/admin/CockpitBar#CockpitBar'],
+      views: {
+        dashboard: { Component: '@/modules/pilotage/admin/PilotageView#PilotageView' },
+        // Écrans du cockpit (lot 5). Contrôle d’accès dans CockpitPage ; chemins listés dans admin/data.ts.
+        cockpitAgents: { Component: '@/modules/pilotage/admin/views/AgentsView#AgentsView', path: '/cockpit/agents' },
+        cockpitTaches: { Component: '@/modules/pilotage/admin/views/TachesView#TachesView', path: '/cockpit/taches' },
+        cockpitValidation: { Component: '@/modules/pilotage/admin/views/ValidationView#ValidationView', path: '/cockpit/validation' },
+        cockpitActivite: { Component: '@/modules/pilotage/admin/views/ActiviteView#ActiviteView', path: '/cockpit/activite' },
+        cockpitConversations: { Component: '@/modules/pilotage/admin/views/ConversationsView#ConversationsView', path: '/cockpit/conversations' },
+        cockpitMemoire: { Component: '@/modules/pilotage/admin/views/MemoireView#MemoireView', path: '/cockpit/memoire' },
+        cockpitConnecteurs: { Component: '@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView', path: '/cockpit/connecteurs' },
+        cockpitMedias: { Component: '@/modules/pilotage/admin/views/MediasView#MediasView', path: '/cockpit/medias' },
+        cockpitHistorique: { Component: '@/modules/pilotage/admin/views/HistoriqueView#HistoriqueView', path: '/cockpit/historique' },
+        cockpitBoite: { Component: '@/modules/pilotage/admin/views/BoiteView#BoiteView', path: '/cockpit/boite' },
+        cockpitModeration: { Component: '@/modules/pilotage/admin/views/CommunauteViews#ModerationView', path: '/cockpit/moderation' },
+        cockpitAnnonces: { Component: '@/modules/pilotage/admin/views/CommunauteViews#AnnoncesView', path: '/cockpit/annonces' },
+        cockpitPros: { Component: '@/modules/pilotage/admin/views/CommunauteViews#ProsView', path: '/cockpit/pros' },
+        cockpitMembres: { Component: '@/modules/pilotage/admin/views/CommunauteViews#MembresView', path: '/cockpit/membres' },
+        cockpitIa: { Component: '@/modules/pilotage/admin/views/SystemeViews#IaView', path: '/cockpit/ia' },
+        cockpitSante: { Component: '@/modules/pilotage/admin/views/SystemeViews#SanteView', path: '/cockpit/sante' },
+        cockpitSecurite: { Component: '@/modules/pilotage/admin/views/SystemeViews#SecuriteView', path: '/cockpit/securite' },
+      },
+    },
   },
-  i18n: { supportedLanguages: { fr }, fallbackLanguage: 'fr' },
+  // Admin en français par défaut ; arabe (RTL) et anglais en un clic (cockpit, lot 1).
+  i18n: { supportedLanguages: { fr, ar, en }, fallbackLanguage: 'fr' },
   globals: [FeaturedDestination, Controls, AccompagnementSettings],
-  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, TaskRuns, EmailDeliveries, AuditLog],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AgentNotifications, AiUsage, ErrorLogs, TaskRuns, EmailDeliveries, AuditLog],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY
@@ -67,6 +98,8 @@ export default buildConfig({
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
     }),
   ],
+  // Formats des photos (vignette, carte, couverture, partage) en WebP, point focal.
+  sharp,
   db: postgresAdapter({
     pool: { connectionString: databaseUrl },
     migrationDir: path.resolve(dirname, 'migrations'),

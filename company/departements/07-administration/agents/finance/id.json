@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_administration_finance_01",
+  "slug": "finance",
+  "name": "Finance",
+  "department": "07-administration",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-couts"
+  ],
+  "version": "1.0.0"
+}

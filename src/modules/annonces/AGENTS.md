@@ -12,6 +12,7 @@ Petites annonces entre membres, partout en Algérie : immobilier, emploi, véhic
 - `ClassifiedMessages.ts` — collection `classified-messages` : une conversation = une annonce + une personne intéressée.
 - `market.ts` — recherche, compteurs, page d’annonce, dépôt, modification, actions (renouveler, retirer, supprimer), espace membre, messagerie, signalement, tâche quotidienne, suppression et export des données du compte.
 - `emails.ts` — reçue, publiée, refusée, expire bientôt, expirée, nouveau message.
+- `risk.ts` (testé) + `riskContext.ts` — score anti-arnaque explicable (0–100, signaux nommés : paiement avant remise, contact hors DALIL, pression, prix < 35 % de la médiane du type, compte neuf, rafale, texte copié, signalements, absence de photo). Aide au tri dans le cockpit, jamais une décision.
 - `refresh.ts` — rafraîchit l’accueil, la rubrique, la catégorie et l’annonce.
 - `ui/` — ClassifiedForm (dépôt, modification), ClassifiedChat (messagerie), MyClassifieds (espace membre), ReportForm (signalement), Gallery (photos).
 - Routes : `/api/annonces` (GET mes annonces, POST dépôt), `/api/annonces/[id]` (PUT modification, POST action), `/api/annonces/[id]/messages`, `/api/annonces/[id]/signaler`, `/api/taches` (tâche quotidienne commune).
