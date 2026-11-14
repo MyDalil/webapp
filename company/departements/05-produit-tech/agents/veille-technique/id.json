@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_produit_tech_veille_technique_01",
+  "slug": "veille-technique",
+  "name": "Veille technique",
+  "department": "05-produit-tech",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-erreurs"
+  ],
+  "version": "1.0.0"
+}

@@ -12,7 +12,7 @@ export const AuditLog: CollectionConfig = {
   admin: {
     group: 'Système',
     useAsTitle: 'summary',
-    defaultColumns: ['createdAt', 'actorLabel', 'action', 'summary'],
+    defaultColumns: ['createdAt', 'actorLabel', 'action', 'summary', 'actionId'],
     description: 'Ajout seul : aucune ligne ne peut être modifiée ni supprimée.',
   },
   defaultSort: '-createdAt',
@@ -33,6 +33,24 @@ export const AuditLog: CollectionConfig = {
         { name: 'action', type: 'text', label: 'Action', required: true, index: true },
         { name: 'target', type: 'text', label: 'Collection', index: true },
         { name: 'targetId', type: 'text', label: 'ID cible', index: true },
+      ],
+    },
+    { name: 'actionId', type: 'text', label: 'Identifiant d’action', unique: true, index: true, admin: { description: 'act_<UUIDv7> : relie le fil d’activité, Telegram et l’historique de la fiche.' } },
+    {
+      type: 'row',
+      fields: [
+        { name: 'agentSlug', type: 'text', label: 'Agent', index: true },
+        { name: 'department', type: 'text', label: 'Département' },
+        { name: 'taskId', type: 'text', label: 'Tâche', index: true },
+        { name: 'step', type: 'number', label: 'Étape' },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'tool', type: 'text', label: 'Outil' },
+        { name: 'environment', type: 'select', label: 'Environnement', options: [{ label: 'Production', value: 'production' }, { label: 'Preview', value: 'preview' }, { label: 'Développement', value: 'development' }] },
+        { name: 'costMicros', type: 'number', label: 'Coût (µ$)' },
       ],
     },
     { name: 'summary', type: 'text', label: 'Résumé', required: true },

@@ -97,6 +97,7 @@ export interface Config {
     agents: Agent;
     'agent-tasks': AgentTask;
     'agent-messages': AgentMessage;
+    'agent-notifications': AgentNotification;
     'ai-usage': AiUsage;
     'error-logs': ErrorLog;
     'task-runs': TaskRun;
@@ -137,6 +138,7 @@ export interface Config {
     agents: AgentsSelect<false> | AgentsSelect<true>;
     'agent-tasks': AgentTasksSelect<false> | AgentTasksSelect<true>;
     'agent-messages': AgentMessagesSelect<false> | AgentMessagesSelect<true>;
+    'agent-notifications': AgentNotificationsSelect<false> | AgentNotificationsSelect<true>;
     'ai-usage': AiUsageSelect<false> | AiUsageSelect<true>;
     'error-logs': ErrorLogsSelect<false> | ErrorLogsSelect<true>;
     'task-runs': TaskRunsSelect<false> | TaskRunsSelect<true>;
@@ -1913,7 +1915,12 @@ export interface Agent {
    * ceo, editorial, trust…
    */
   slug: string;
-  status: 'active' | 'paused' | 'disabled';
+  status: 'active' | 'reserve' | 'paused' | 'disabled';
+  /**
+   * agent_id du dossier company/ (méthode ICM).
+   */
+  roleId?: string | null;
+  department?: string | null;
   mission: string;
   provider: 'anthropic' | 'openai';
   model: string;
@@ -1946,11 +1953,42 @@ export interface Agent {
         | 'read-inbox'
         | 'read-health'
         | 'review-classifieds'
+        | 'translate'
+        | 'write-alt-text'
+        | 'suggest-tags'
+        | 'fix-broken-links'
       )[]
+    | null;
+  coldTestResult?: ('pass' | 'fail') | null;
+  coldTestAt?: string | null;
+  coldTestDetail?: string | null;
+  /**
+   * Vide = réglage par défaut (mode mixte). Les interdictions dures et Vie musulmane restent refusées par le code, quel que soit ce réglage.
+   */
+  toolModes?:
+    | {
+        tool:
+          | 'read-content'
+          | 'draft-content'
+          | 'web-search'
+          | 'message-agents'
+          | 'create-tasks'
+          | 'draft-email'
+          | 'draft-telegram'
+          | 'read-inbox'
+          | 'read-health'
+          | 'review-classifieds'
+          | 'translate'
+          | 'write-alt-text'
+          | 'suggest-tags'
+          | 'fix-broken-links';
+        mode: 'execute' | 'propose' | 'forbidden';
+        id?: string | null;
+      }[]
     | null;
   triggers?: ('any-task' | 'assigned' | 'draft-ready' | 'inbox' | 'report' | 'application' | 'cron')[] | null;
   /**
-   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (src/modules/agents/equipe/<agent>/).
+   * Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (company/departements/<nn>/agents/<rôle>/).
    */
   memory?: string | null;
   updatedAt: string;
@@ -2003,6 +2041,19 @@ export interface AgentTask {
   steps?: number | null;
   maxSteps?: number | null;
   result?: string | null;
+  stage?: string | null;
+  /**
+   * Outils appelés, propositions, refus (30 dernières lignes).
+   */
+  trace?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   /**
    * Ce que l’agent propose de publier ou d’envoyer. Rien n’est appliqué sans validation humaine.
    */
@@ -2041,6 +2092,44 @@ export interface AgentMessage {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-notifications".
+ */
+export interface AgentNotification {
+  id: number;
+  phase: 'before' | 'during' | 'after' | 'order';
+  agentLabel?: string | null;
+  actionId?: string | null;
+  title: string;
+  body?: string | null;
+  agent?: (number | null) | Agent;
+  task?: (number | null) | AgentTask;
+  /**
+   * Liens vers le travail : tâche, différences, sources.
+   */
+  attachments?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  delivery?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  readBy?: (number | User)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Claude Haiku 5.5 : 0,10 $ par million de jetons en entrée, 0,50 $ en sortie. Coût en millionièmes de dollar (1 000 000 = 1 $). Plafond et quota : variables AI_MONTHLY_BUDGET_USD et AI_DAILY_QUOTA.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2048,8 +2137,9 @@ export interface AgentMessage {
  */
 export interface AiUsage {
   id: number;
-  feature: 'reformulate' | 'understand';
+  feature: 'reformulate' | 'understand' | 'agent';
   member?: (number | null) | Member;
+  agent?: (number | null) | Agent;
   inputTokens?: number | null;
   outputTokens?: number | null;
   costMicros?: number | null;
@@ -2142,6 +2232,17 @@ export interface AuditLog {
   action: string;
   target?: string | null;
   targetId?: string | null;
+  /**
+   * act_<UUIDv7> : relie le fil d’activité, Telegram et l’historique de la fiche.
+   */
+  actionId?: string | null;
+  agentSlug?: string | null;
+  department?: string | null;
+  taskId?: string | null;
+  step?: number | null;
+  tool?: string | null;
+  environment?: ('production' | 'preview' | 'development') | null;
+  costMicros?: number | null;
   summary: string;
   changes?:
     | {
@@ -2291,6 +2392,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'agent-messages';
         value: number | AgentMessage;
+      } | null)
+    | ({
+        relationTo: 'agent-notifications';
+        value: number | AgentNotification;
       } | null)
     | ({
         relationTo: 'ai-usage';
@@ -3175,6 +3280,8 @@ export interface AgentsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   status?: T;
+  roleId?: T;
+  department?: T;
   mission?: T;
   provider?: T;
   model?: T;
@@ -3182,6 +3289,16 @@ export interface AgentsSelect<T extends boolean = true> {
   maxStepsPerTask?: T;
   scopes?: T;
   tools?: T;
+  coldTestResult?: T;
+  coldTestAt?: T;
+  coldTestDetail?: T;
+  toolModes?:
+    | T
+    | {
+        tool?: T;
+        mode?: T;
+        id?: T;
+      };
   triggers?: T;
   memory?: T;
   updatedAt?: T;
@@ -3212,6 +3329,8 @@ export interface AgentTasksSelect<T extends boolean = true> {
   steps?: T;
   maxSteps?: T;
   result?: T;
+  stage?: T;
+  trace?: T;
   proposal?: T;
   reviewedBy?: T;
   reviewedAt?: T;
@@ -3239,11 +3358,30 @@ export interface AgentMessagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agent-notifications_select".
+ */
+export interface AgentNotificationsSelect<T extends boolean = true> {
+  phase?: T;
+  agentLabel?: T;
+  actionId?: T;
+  title?: T;
+  body?: T;
+  agent?: T;
+  task?: T;
+  attachments?: T;
+  delivery?: T;
+  readBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ai-usage_select".
  */
 export interface AiUsageSelect<T extends boolean = true> {
   feature?: T;
   member?: T;
+  agent?: T;
   inputTokens?: T;
   outputTokens?: T;
   costMicros?: T;
@@ -3316,6 +3454,14 @@ export interface AuditLogSelect<T extends boolean = true> {
   action?: T;
   target?: T;
   targetId?: T;
+  actionId?: T;
+  agentSlug?: T;
+  department?: T;
+  taskId?: T;
+  step?: T;
+  tool?: T;
+  environment?: T;
+  costMicros?: T;
   summary?: T;
   changes?: T;
   channel?: T;
@@ -3402,6 +3548,15 @@ export interface Control {
    */
   agentsMonthlyBudgetUsd?: number | null;
   /**
+   * Avant, pendant et après chaque action, avec le travail joint. Le fil de l’admin est toujours servi.
+   */
+  notifications?: {
+    before?: ('admin' | 'telegram_said' | 'telegram_rad' | 'email')[] | null;
+    during?: ('admin' | 'telegram_said' | 'telegram_rad' | 'email')[] | null;
+    after?: ('admin' | 'telegram_said' | 'telegram_rad' | 'email')[] | null;
+    order?: ('admin' | 'telegram_said' | 'telegram_rad' | 'email')[] | null;
+  };
+  /**
    * Modifiable par le patron seulement. Le bot doit être administrateur du canal.
    */
   telegramChannelId?: string | null;
@@ -3457,6 +3612,14 @@ export interface ControlsSelect<T extends boolean = true> {
   telegramEnabled?: T;
   maintenance?: T;
   agentsMonthlyBudgetUsd?: T;
+  notifications?:
+    | T
+    | {
+        before?: T;
+        during?: T;
+        after?: T;
+        order?: T;
+      };
   telegramChannelId?: T;
   updatedAt?: T;
   createdAt?: T;

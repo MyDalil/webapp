@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_editorial_redacteur_01",
+  "slug": "redacteur",
+  "name": "Rédacteur",
+  "department": "01-editorial",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "active",
+  "workflows": [
+    "01-mise-a-jour-fiche"
+  ],
+  "version": "1.0.0"
+}
