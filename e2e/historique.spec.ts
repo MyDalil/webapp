@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Historique et corbeille (lot 7) : recherche d’une fiche, aperçu FR/AR/EN, journal, versions,
@@ -9,7 +10,7 @@ const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', pas
 async function login(page: Page) {
   await page.context().clearCookies()
   await page.request.post('/api/users/first-register', { data: ADMIN })
-  expect((await page.request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+  await signIn(page.request, ADMIN)
 }
 
 test.describe.serial('Cockpit — Historique et corbeille @ecriture', () => {

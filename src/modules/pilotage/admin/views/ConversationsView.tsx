@@ -10,10 +10,13 @@ export function ConversationsView(props: AdminViewServerProps) {
   return (
     <CockpitPage {...props} render={async ({ req, tr, lang }) => {
       const p = req.payload
-      const [msgs, agents] = await Promise.all([
+      const [msgs, agents, open] = await Promise.all([
         p.find({ collection: 'agent-messages', req, overrideAccess: false, depth: 0, limit: 150, sort: '-createdAt' }),
         p.find({ collection: 'agents', req, overrideAccess: false, depth: 0, limit: 100, where: { status: { not_equals: 'reserve' } }, select: { name: true } as never }),
+        p.find({ collection: 'agent-tasks', req, overrideAccess: false, depth: 0, limit: 100, sort: '-updatedAt', where: { status: { in: ['new', 'running', 'paused', 'review'] } }, select: { title: true, agent: true, directive: true } as never }),
       ])
+      const taskOf = new Map<number, Row>()
+      for (const t of open.docs as unknown as Row[]) if (t.agent && !taskOf.has(Number(t.agent))) taskOf.set(Number(t.agent), t)
       const name = new Map((agents.docs as unknown as Row[]).map((a) => [a.id, String(a.name)]))
       const groups = new Map<string, Row[]>()
       for (const m of msgs.docs as unknown as Row[]) {
@@ -24,12 +27,20 @@ export function ConversationsView(props: AdminViewServerProps) {
       return (
         <>
           <Head title={tr('nav.conversations', 'Conversations')} sub={tr('conv.sub', 'L’auteur de chaque message vient de la session : un agent ne parle jamais au nom de Saïd.')} />
-          <Section id="dir" title={tr('conv.directive', 'Directive à un agent')} sub={tr('conv.directive.sub', 'L’agent la lit au début de sa prochaine étape.')}>
+          <Section id="dir" title={tr('conv.directive', 'Directive à un agent')} sub={tr('conv.directive.sub', 'La consigne s’ajoute à la tâche ouverte de l’agent ; il la lit au début de sa prochaine étape.')}>
             {(agents.docs as unknown as Row[]).length === 0 ? <p className="dl-empty">{tr('pv.agents.none', 'Aucun agent enregistré pour l’instant.')}</p> : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-                {(agents.docs as unknown as Row[]).map((a) => (
-                  <div key={a.id}><b style={{ fontSize: 13 }}>{String(a.name)}</b><TextAct path="/api/agent-messages" method="POST" field="body" extra={{ toAgent: a.id, kind: 'directive', channel: 'admin' }} label={tr('conv.send', 'Envoyer')} placeholder={tr('conv.ph', 'Votre consigne')} /></div>
-                ))}
+                {(agents.docs as unknown as Row[]).map((a) => {
+                  const t = taskOf.get(a.id)
+                  return (
+                    <div key={a.id} style={{ display: 'grid', gap: 4 }}><b style={{ fontSize: 13 }}>{String(a.name)}</b>
+                      {t ? <>
+                        <span className="dl-mu" style={{ fontSize: 12 }}>{tr('act.task', 'Tâche')} #{t.id} {String(t.title)}{t.directive ? ` · ${tr('conv.current', 'consigne en cours')} : ${String(t.directive).slice(0, 80)}` : ''}</span>
+                        <TextAct path={`/api/agent-tasks/${t.id}`} field="directive" label={tr('conv.send', 'Envoyer')} placeholder={tr('conv.ph', 'Votre consigne')} />
+                      </> : <span className="dl-mu" style={{ fontSize: 12.5 }}>{tr('conv.notask', 'Aucune tâche ouverte : créez une tâche pour lui donner une consigne.')}</span>}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </Section>

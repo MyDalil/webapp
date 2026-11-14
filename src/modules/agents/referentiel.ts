@@ -13,6 +13,9 @@ export const RUBRIQUES = [
   { label: 'Pilotage', value: 'pilotage' },
 ] as const
 
+/** Secteur de l’annuaire réservé à Saïd (mosquées et prière) : jamais lu ni modifié par un agent. */
+export const FORBIDDEN_SECTOR = 'mosquees-priere'
+
 /** Interdit aux agents, quelle que soit la formulation. Vérifié à chaque écriture. */
 export const FORBIDDEN_FOR_AGENTS = ['vie-musulmane', 'vie musulmane', 'hajj', 'omra', 'umrah'] as const
 

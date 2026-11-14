@@ -31,7 +31,8 @@ export function TachesView(props: AdminViewServerProps) {
           <Section id="new" title={tr('taches.new', 'Nouvelle tâche')} sub={tr('taches.new.sub', 'Sans agent choisi, le CEO répartit le travail. Aussi par Telegram : un message libre crée une tâche.')}>
             <NewTaskForm agents={(agents.docs as unknown as Row[]).map((a) => ({ value: String(a.id), label: String(a.name) }))} labels={{ form: tr('taches.new', 'Nouvelle tâche'), title: tr('taches.f.title', 'Titre de la tâche'), instructions: tr('taches.f.instr', 'Consignes : quoi, où, pour quand, quelles sources'), agent: tr('taches.f.agent', 'Agent'), ceo: tr('taches.f.ceo', 'Le CEO choisit'), priority: tr('taches.f.prio', 'Priorité'), send: tr('taches.f.send', 'Créer la tâche'), 'prio.low': tr('prio.low', 'Basse'), 'prio.normal': tr('prio.normal', 'Normale'), 'prio.high': tr('prio.high', 'Haute'), 'prio.urgent': tr('prio.urgent', 'Urgente') }} />
           </Section>
-          <div className="dl-kanban" role="list" aria-label={tr('nav.taches', 'Tâches')}>
+          {/* tabIndex : la zone défile horizontalement ; elle doit être atteignable et défilable au clavier (WCAG 2.1.1). */}
+          <div className="dl-kanban" role="list" tabIndex={0} aria-label={tr('nav.taches', 'Tâches')}>
             {COLUMNS.map((c) => {
               const list = byCol.get(c) ?? []
               return (
@@ -50,7 +51,8 @@ export function TachesView(props: AdminViewServerProps) {
                       <div className="dl-row dl-wr" style={{ gap: 6 }}>
                         {c === 'review' ? <Link className="dl-btn pri" href={`/admin/cockpit/validation#t${t.id}`}>{tr('taches.review', 'Examiner')}</Link> : null}
                         {c === 'new' || c === 'running' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'paused' }} label={tr('agents.pause', 'Mettre en pause')} /> : null}
-                        {c === 'paused' || c === 'failed' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'new', error: null }} label={tr('agents.resume', 'Reprendre')} /> : null}
+                        {c === 'paused' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'running' }} label={tr('agents.resume', 'Reprendre')} /> : null}
+                        {c === 'failed' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'new', error: null, steps: 0, spentMicros: 0 }} label={tr('taches.retry', 'Relancer (compteurs à zéro)')} /> : null}
                         {c !== 'done' ? <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'cancelled' }} label={tr('taches.cancel', 'Annuler')} confirm={tr('taches.cancel.confirm', 'Annuler cette tâche ?')} /> : null}
                       </div>
                     </article>

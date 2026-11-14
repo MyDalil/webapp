@@ -50,6 +50,9 @@ const parse = (text: string): { action?: { tool: string; input?: Record<string, 
 export async function runTask(agent: AgentDoc, d: EngineDeps): Promise<Outcome> {
   const now = d.now ?? Date.now
   let task = await d.getTask()
+  // Arrêt général, agents coupés ou budget global absent : la tâche reste « nouvelle », aucune notification.
+  const c0 = await d.controls()
+  if (c0.killSwitch !== 'off' || !c0.agentsEnabled || c0.globalBudgetMicros === null) return { outcome: 'stopped', reason: c0.killSwitch !== 'off' ? 'arrêt général' : !c0.agentsEnabled ? 'agents désactivés' : 'budget mensuel global non défini (Commandes)' }
   if (task.status === 'new') {
     await d.updateTask({ status: 'running', stage: task.stage ?? d.stages[0] })
     task = await d.getTask()

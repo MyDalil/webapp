@@ -3,6 +3,7 @@ import { audit } from '@/platform/audit/audit'
 import { notify } from '../AgentNotifications'
 import { loadRole, stageContext, stagesOf } from './company'
 import { callModel, type Llm } from './llm'
+import { controlsFor } from './queue'
 
 type Row = Record<string, unknown> & { id: number }
 type Who = { id?: number; name?: string; collection?: string } | null
@@ -19,6 +20,9 @@ export async function activateRole(payload: Payload, slug: string, by: Who, llm:
   if (a.status === 'active') return { ok: true, detail: 'déjà actif' }
   const role = await loadRole(slug)
   if (!role) return { ok: false, detail: `rôle absent de company/ : ${slug}` }
+  // Le test à froid appelle le modèle : interdit pendant un arrêt général, agents coupés ou sans budget global.
+  const c = await controlsFor(payload)
+  if (c.killSwitch !== 'off' || !c.agentsEnabled || c.globalBudgetMicros === null) return { ok: false, detail: 'test à froid impossible : arrêt général, agents coupés ou budget mensuel global vide (Commandes)' }
   const workflow = role.id.workflows[0]
   const stage = (await stagesOf(role, workflow))[0]
   const system = `${await stageContext(role, workflow, stage)}\n\n## Tes outils\n${role.guardrails.tools.map((t) => `- ${t}`).join('\n')}\n\nRéponds par UN objet JSON : {"final": {"report": "<ton rôle en une phrase>"}}`

@@ -1,3 +1,4 @@
+import { sql } from '@payloadcms/db-postgres'
 import type { CollectionAfterChangeHook, Payload } from 'payload'
 import { after } from 'next/server'
 import { SITE } from '@/platform/mail'
@@ -24,7 +25,10 @@ export async function publishPost(payload: Payload, id: number) {
   if (!botToken()) return fail('jeton du bot non configuré (TELEGRAM_BOT_TOKEN)')
   const ch = await channelId(payload)
   if ('error' in ch) return fail(ch.error!)
-  await payload.update({ collection: 'telegram-posts', id, overrideAccess: true, context: worker, data: { status: 'publishing' } as never })
+  // Réservation en UNE requête : si deux envois partent en même temps (après la décision et la tâche planifiée), un seul gagne.
+  const db = payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: unknown[] }> } }
+  const claimed = await db.drizzle.execute(sql`UPDATE telegram_posts SET status = 'publishing', updated_at = now() WHERE id = ${id} AND status = 'scheduled' RETURNING id`)
+  if (!claimed.rows.length) return { ok: false, detail: 'déjà pris par un autre envoi' }
   const text = [post.text, post.textAr].filter(Boolean).join('\n\n').slice(0, 4096)
   const keyboard = post.buttons?.length ? { inline_keyboard: post.buttons.map((b) => [{ text: b.label, url: b.url }]) } : undefined
   const photoUrl = (post.photo as { url?: string } | null)?.url

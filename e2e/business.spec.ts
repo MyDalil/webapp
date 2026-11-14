@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signIn } from './session'
 
 /** Business (lot 10b) : Analytics, Newsletter, Finances, SEO, Couverture, Traductions, Recherches sans résultat. Crée le compte de test → @ecriture. */
 const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', password: 'Cockpit-test-2026!', name: 'Saïd Test' }
@@ -6,7 +7,7 @@ const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', pas
 async function login(page: Page) {
   await page.context().clearCookies()
   await page.request.post('/api/users/first-register', { data: ADMIN })
-  expect((await page.request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+  await signIn(page.request, ADMIN)
 }
 
 const SCREENS = [

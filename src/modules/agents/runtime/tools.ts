@@ -1,5 +1,5 @@
-import type { Payload, PayloadRequest } from 'payload'
-import { touchesForbidden } from '../referentiel'
+import type { Payload, PayloadRequest, Where } from 'payload'
+import { FORBIDDEN_SECTOR, touchesForbidden } from '../referentiel'
 
 /**
  * Outils réels des agents. La politique (exécuter / proposer / refuser) est appliquée AVANT par le moteur.
@@ -30,7 +30,11 @@ export const TOOL_IMPL: Record<string, Tool> = {
     if (!spec) return `collection non autorisée : ${collection}`
     const query = str(input.query, 80)
     const limit = Math.min(Math.max(Number(input.limit) || 5, 1), 5)
-    const r = await payload.find({ collection: collection as never, where: query ? { [spec.title]: { like: query } } : undefined, limit, depth: 0, overrideAccess: true, select: Object.fromEntries(spec.fields.map((f) => [f, true])) as never })
+    // Vie musulmane : jamais lue par un agent, quel que soit le texte de la tâche (mosquées et lieux de prière exclus).
+    const and: Where[] = []
+    if (query) and.push({ [spec.title]: { like: query } })
+    if (collection === 'places') and.push({ sector: { not_equals: FORBIDDEN_SECTOR } })
+    const r = await payload.find({ collection: collection as never, where: and.length ? { and } : undefined, limit, depth: 0, overrideAccess: true, select: Object.fromEntries(spec.fields.map((f) => [f, true])) as never })
     return json({ total: r.totalDocs, docs: r.docs })
   },
   'read-inbox': async (_input, { payload }) => {
@@ -74,6 +78,9 @@ export const TOOL_IMPL: Record<string, Tool> = {
     const alt = str(input.alt, 200)
     if (!id || alt.length < 8) return 'mediaId et texte alternatif (8 caractères minimum) obligatoires'
     if (touchesForbidden(alt)) return 'refus : Vie musulmane'
+    // Photo d’une mosquée ou d’un lieu de prière (y compris à la corbeille ou en brouillon) : interdit aux agents.
+    const sacred = await payload.count({ collection: 'places', overrideAccess: true, trash: true, where: { and: [{ photos: { in: [id] } }, { sector: { equals: FORBIDDEN_SECTOR } }] } })
+    if (sacred.totalDocs) return 'refus : photo liée à la Vie musulmane (réservée à Saïd)'
     await payload.update({ collection: 'media', id, req, overrideAccess: true, data: { alt } })
     return `texte alternatif écrit pour l’image #${id}`
   },

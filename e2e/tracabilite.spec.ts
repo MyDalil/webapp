@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Lot 2 : chaque changement d’une tâche d’agent produit une notification (avant / après / ordre)
@@ -11,7 +12,7 @@ test.describe('Traçabilité des agents @ecriture', () => {
   test('avant, après et ordre : notifiés avec un action_id partagé avec l’audit', async ({ request }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
     await request.post('/api/users/first-register', { data: ADMIN })
-    expect((await request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+    await signIn(request, ADMIN)
 
     const slug = `trace-${Date.now()}`
     const agent = await request.post('/api/agents', { data: { name: 'Editorial (test)', slug, status: 'active', mission: 'Test de traçabilité.', provider: 'openai', model: 'gpt-test' } })

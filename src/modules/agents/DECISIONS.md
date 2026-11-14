@@ -16,3 +16,10 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - 2026-11-14 — erreur évitée : verrou Postgres de session (`pg_advisory_lock`) via un pool → déverrouillage possible sur une autre connexion, verrou orphelin. Remplacé par une ligne `agent_run_lock` prise en une requête atomique, qui expire seule.
 - 2026-11-14 — budget global vide (Commandes) = aucun agent ne travaille (règle existante, appliquée par le moteur). Tarif d’un modèle sans prix vérifié = estimation prudente haute, signalée.
 - 2026-11-14 — outils `translate`, `suggest-tags`, `fix-broken-links`, `web-search` : « non branché » tant que leur écran n’existe pas — jamais de succès simulé.
+- 2026-11-14 — revue indépendante du cockpit (lot 11), défauts corrigés :
+  - Vie musulmane : le filtre sur le texte de la tâche ne suffisait pas. `read-content` exclut le secteur `mosquees-priere` ; `write-alt-text` refuse toute photo liée à ce secteur (corbeille comprise).
+  - Tâche sans agent : attribuée au CEO avant le travail. Avant, ses écritures étaient refusées et la tâche bloquait la file.
+  - Verrou de la file : durée = passe + 60 s, libéré seulement par son détenteur (avant : 2 min pour une passe de 240 s, double exécution possible).
+  - Arrêt général, agents coupés ou budget absent : contrôlés avant le passage « en cours » ; le test à froid n’appelle plus le modèle dans ces cas.
+  - Fil d’activité : vraiment en ajout seul (seul « Lu par » se modifie) ; titre d’email échappé.
+  - `GET /api/agents/run` réservé à la tâche planifiée.

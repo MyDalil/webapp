@@ -9,6 +9,8 @@ import type { Payload } from 'payload'
 type Db = { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }
 const db = (p: Payload) => (p.db as unknown as Db).drizzle
 export const MISS_DAYS = 90
+/** Plafond de lignes : protège la base contre un remplissage par des recherches inventées. */
+export const MAX_ROWS = 20_000
 
 export function normalizeMiss(q: string): string | null {
   const s = q.normalize('NFKC').toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 120)
@@ -20,9 +22,11 @@ export function normalizeMiss(q: string): string | null {
 export async function recordMiss(p: Payload, q: string) {
   const s = normalizeMiss(q)
   if (!s) return false
-  await db(p).execute(sql`INSERT INTO search_misses (q, count, first_at, last_at) VALUES (${s}, 1, now(), now())
-    ON CONFLICT (q) DO UPDATE SET count = search_misses.count + 1, last_at = now()`)
-  return true
+  // Une recherche déjà notée augmente son compteur ; une nouvelle n’entre que sous le plafond de lignes.
+  const r = await db(p).execute(sql`INSERT INTO search_misses (q, count, first_at, last_at)
+    SELECT ${s}, 1, now(), now() WHERE EXISTS (SELECT 1 FROM search_misses WHERE q = ${s}) OR (SELECT COUNT(*) FROM search_misses) < ${MAX_ROWS}
+    ON CONFLICT (q) DO UPDATE SET count = search_misses.count + 1, last_at = now() RETURNING q`)
+  return r.rows.length > 0
 }
 
 export async function listMisses(p: Payload, days = 30, limit = 100) {

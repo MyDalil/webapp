@@ -25,10 +25,15 @@ export async function replyToSubmission(req: PayloadRequest, id: number, text: s
   if (!doc.email) return { ok: false as const, error: 'Cette demande n’a pas d’adresse email.' }
   const body = text.trim().slice(0, 8000)
   if (body.length < 2) return { ok: false as const, error: 'Réponse vide.' }
-  const delivered = await send(doc.email, replySubject(doc.subject), layout(esc(replySubject(doc.subject)), paragraphs(body)))
   const by = String((req.user as { name?: string; email?: string } | null)?.name ?? 'Équipe DALIL')
-  const data: Record<string, unknown> = { thread: appendThread(doc.thread, { at: new Date().toISOString(), by, text: body, delivered }) }
+  const entry = { at: new Date().toISOString(), by, text: body, delivered: false }
+  // 1. La réponse est enregistrée avant l’envoi : jamais un email parti sans trace dans le fil.
+  const thread = appendThread(doc.thread, entry)
+  const data: Record<string, unknown> = { thread }
   if (status && (STATUSES as readonly string[]).includes(status)) data.status = status as Status
   await req.payload.update({ collection: 'submissions', id, req, overrideAccess: false, data: data as never, context: { skipNotify: true } })
+  // 2. Envoi, puis 3. état d’envoi réel dans le fil.
+  const delivered = await send(doc.email, replySubject(doc.subject), layout(esc(replySubject(doc.subject)), paragraphs(body)))
+  if (delivered) await req.payload.update({ collection: 'submissions', id, req, overrideAccess: false, data: { thread: thread.map((t) => (t === entry ? { ...t, delivered: true } : t)) } as never, context: { skipNotify: true } })
   return { ok: true as const, delivered }
 }

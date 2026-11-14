@@ -57,6 +57,8 @@ export async function runOne(payload: Payload, task: Row, deadline: number, llm:
   if (!agentId) return { task: task.id, outcome: 'skipped', reason: 'aucun agent ni CEO' }
   const a = (await payload.findByID({ collection: 'agents', id: agentId as number, depth: 0, overrideAccess: true })) as unknown as Row
   if (a.status !== 'active') return { task: task.id, outcome: 'skipped', reason: `agent ${a.slug} : ${a.status}` }
+  // Tâche sans agent (« Le CEO choisit », message Telegram libre) : attribuée au CEO, sinon ses écritures sont refusées.
+  if (task.agent == null) await payload.update({ collection: 'agent-tasks', id: task.id, overrideAccess: true, data: { agent: agentId } as never })
   const built = await agentDocFor(payload, a)
   if (!built) return { task: task.id, outcome: 'skipped', reason: `rôle ${a.slug} absent de company/` }
   const role = (await loadRole(String(a.slug)))!
@@ -80,15 +82,18 @@ export async function runOne(payload: Payload, task: Row, deadline: number, llm:
 
 /**
  * Traite la file, une seule passe à la fois. Verrou en base, pris en UNE requête atomique (sûr avec un pool
- * de connexions) et qui expire seul après 2 minutes (une passe interrompue ne bloque jamais la suivante).
+ * de connexions) ; il dure la passe + 60 s et expire seul (une passe interrompue ne bloque jamais la suivante).
  */
 export async function runQueue(payload: Payload, opts: { budgetMs?: number; llm?: Llm } = {}) {
   const deadline = Date.now() + (opts.budgetMs ?? 50_000)
   const db = payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Array<Record<string, unknown>> }> } }
+  // Durée du verrou : la passe entière + 60 s. La valeur prise sert de jeton : seule cette passe le libère.
+  const ttl = Math.ceil((deadline - Date.now()) / 1000) + 60
   const got = await db.drizzle.execute(
-    sql`insert into agent_run_lock (id, locked_until) values (1, now() + interval '2 minutes') on conflict (id) do update set locked_until = excluded.locked_until where agent_run_lock.locked_until < now() returning id`,
+    sql`insert into agent_run_lock (id, locked_until) values (1, now() + make_interval(secs => ${ttl})) on conflict (id) do update set locked_until = excluded.locked_until where agent_run_lock.locked_until < now() returning locked_until::text as token`,
   )
   if (!got.rows.length) return { ran: [], note: 'une autre passe est en cours' }
+  const token = String(got.rows[0].token)
   try {
     const tasks = await payload.find({ collection: 'agent-tasks', where: { status: { in: ['new', 'running'] } }, sort: 'createdAt', limit: 10, depth: 0, overrideAccess: true })
     const ran = []
@@ -98,6 +103,6 @@ export async function runQueue(payload: Payload, opts: { budgetMs?: number; llm?
     }
     return { ran }
   } finally {
-    await db.drizzle.execute(sql`update agent_run_lock set locked_until = now() where id = 1`)
+    await db.drizzle.execute(sql`update agent_run_lock set locked_until = now() where id = 1 and locked_until::text = ${token}`)
   }
 }

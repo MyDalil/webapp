@@ -4,7 +4,7 @@ import { Act, TextAct } from './Act'
 import { CockpitPage, fmtDate, Head, usd } from './CockpitPage'
 
 type Row = Record<string, unknown> & { id: number }
-type TraceLine = { step?: number; tool?: string; mode?: string; outcome?: string; actionId?: string; note?: string }
+type TraceLine = { step?: number; stage?: string; kind?: string; tool?: string; detail?: string; actionId?: string }
 
 /** Travail des agents en attente d’une décision humaine : rapport, proposition, trace. */
 export function ValidationView(props: AdminViewServerProps) {
@@ -46,7 +46,7 @@ export function ValidationView(props: AdminViewServerProps) {
                   <details>
                     <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>{tr('val.trace', 'Trace des étapes')} · {trace.length}</summary>
                     <ul style={{ margin: '6px 0 0', paddingInlineStart: 18, fontSize: 12.5 }}>
-                      {trace.map((l, i) => <li key={i}>{tr('agents.step', 'étape')} {l.step ?? '?'} · {l.tool ?? ''} · {l.mode ?? ''} · {l.outcome ?? ''}{l.actionId ? <> · <code>{l.actionId}</code></> : null}{l.note ? ` — ${l.note}` : ''}</li>)}
+                      {trace.map((l, i) => <li key={i}>{tr('agents.step', 'étape')} {l.step ?? '?'}{l.stage ? ` · ${l.stage}` : ''} · <b>{tr(`trace.${l.kind ?? ''}`, l.kind ?? '')}</b>{l.tool ? ` · ${l.tool}` : ''}{l.actionId ? <> · <code>{l.actionId}</code></> : null}{l.detail ? ` — ${l.detail.slice(0, 300)}` : ''}</li>)}
                     </ul>
                   </details>
                 ) : null}
@@ -54,7 +54,7 @@ export function ValidationView(props: AdminViewServerProps) {
                   <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'done' }} label={tr('val.approve', 'Valider')} className="dl-btn pri" />
                   <Act path={`/api/agent-tasks/${t.id}`} body={{ status: 'cancelled' }} label={tr('val.reject', 'Rejeter')} confirm={tr('val.reject.confirm', 'Rejeter et annuler cette tâche ?')} />
                 </div>
-                <TextAct path={`/api/agent-tasks/${t.id}`} field="directive" extra={{ status: 'new' }} label={tr('val.redo', 'Relancer')} placeholder={tr('val.redo.ph', 'Consigne de correction pour l’agent')} />
+                <TextAct path={`/api/agent-tasks/${t.id}`} field="directive" extra={{ status: 'new', steps: 0, spentMicros: 0, error: null }} label={tr('val.redo', 'Relancer')} placeholder={tr('val.redo.ph', 'Consigne de correction pour l’agent')} />
               </article>
             )
           })}
