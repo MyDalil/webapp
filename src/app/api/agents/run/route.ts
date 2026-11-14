@@ -1,10 +1,11 @@
 import { runQueue } from '@/modules/agents'
+import { publishDue } from '@/modules/communication'
 import { fail, json, payload } from '@/platform/http'
 
 export const maxDuration = 300
 
 /**
- * Fait avancer la file des agents. Appelé par la création d’une tâche (après la réponse), par la tâche planifiée
+ * Fait avancer la file des agents et publie les messages du canal arrivés à échéance. Appelé par la création d’une tâche (après la réponse), par la tâche planifiée
  * et à la main depuis le cockpit. Accès : `Authorization: Bearer <CRON_SECRET>` ou un compte de l’équipe (admin, patron).
  */
 async function handle(req: Request) {
@@ -16,7 +17,8 @@ async function handle(req: Request) {
     const role = (user as { collection?: string; role?: string } | null)
     if (role?.collection !== 'users' || !['admin', 'patron'].includes(String(role.role))) return fail('Accès refusé.', 401)
   }
-  return json(await runQueue(p, { budgetMs: 240_000 }))
+  const canal = await publishDue(p).catch((e: Error) => ({ error: e.message }))
+  return json({ ...(await runQueue(p, { budgetMs: 240_000 })), canal })
 }
 
 export const GET = handle

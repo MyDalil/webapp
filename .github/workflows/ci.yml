@@ -46,6 +46,8 @@ jobs:
       DALIL_TEST_ERRORS: '1'
       # Modèle de test déterministe pour les parcours des agents (refusé en production).
       DALIL_TEST_LLM: '1'
+      # Secret de test du webhook Telegram (aucun bot réel en CI).
+      TELEGRAM_WEBHOOK_SECRET: ci-telegram-secret
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
