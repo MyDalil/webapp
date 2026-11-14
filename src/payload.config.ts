@@ -65,6 +65,7 @@ export default buildConfig({
         cockpitMemoire: { Component: '@/modules/pilotage/admin/views/MemoireView#MemoireView', path: '/cockpit/memoire' },
         cockpitConnecteurs: { Component: '@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView', path: '/cockpit/connecteurs' },
         cockpitMedias: { Component: '@/modules/pilotage/admin/views/MediasView#MediasView', path: '/cockpit/medias' },
+        cockpitHistorique: { Component: '@/modules/pilotage/admin/views/HistoriqueView#HistoriqueView', path: '/cockpit/historique' },
       },
     },
   },

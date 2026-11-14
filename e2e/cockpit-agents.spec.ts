@@ -31,7 +31,10 @@ test.describe.serial('Cockpit — écrans des agents @ecriture', () => {
     await login(page, ADMIN)
     const exists = await r.get(`/api/users?where[email][equals]=${encodeURIComponent(CONSEILLER.email)}&limit=1`)
     if (((await exists.json()) as { totalDocs: number }).totalDocs === 0) {
-      expect((await r.post('/api/users', { data: { ...CONSEILLER, role: 'conseiller' } })).ok()).toBe(true)
+      // Un autre fichier de tests peut le créer en même temps : seul compte le résultat.
+      const made = await r.post('/api/users', { data: { ...CONSEILLER, role: 'conseiller' } })
+      const again = await r.get(`/api/users?where[email][equals]=${encodeURIComponent(CONSEILLER.email)}&limit=1`)
+      expect(made.ok() || ((await again.json()) as { totalDocs: number }).totalDocs === 1, 'création du conseiller de test').toBe(true)
     }
     await page.close()
   })
@@ -60,7 +63,11 @@ test.describe.serial('Cockpit — écrans des agents @ecriture', () => {
     await page.getByLabel('Titre de la tâche').fill(title)
     await page.getByLabel(/Consignes : quoi/).fill('Vérifier les horaires de la fiche de test. Sources : site officiel.')
     await page.getByRole('button', { name: 'Créer la tâche' }).click()
-    await expect(page.getByRole('link', { name: new RegExp(title) })).toBeVisible({ timeout: 20_000 })
+    const link = page.getByRole('link', { name: new RegExp(title) })
+    await expect(link).toBeVisible({ timeout: 20_000 })
+    // Annulée aussitôt : elle ne doit pas occuper la file des agents pendant les autres tests.
+    const id = Number((await link.getAttribute('href'))?.split('/').pop())
+    expect((await page.request.patch(`/api/agent-tasks/${id}`, { data: { status: 'cancelled' } })).ok()).toBe(true)
   })
 
   test('Connecteurs : présence des clés seulement, jamais leur valeur', async ({ page }) => {
