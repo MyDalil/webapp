@@ -1,5 +1,6 @@
 import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
 import { actorOf, isAgent, isPatronUser, isStaffUser } from '@/platform/access'
+import { channelOnDecision } from './telegram/channel'
 
 /** États qui mettent un message sur le canal (ou le programment). Réservés au patron. */
 const PUBLISHING = ['scheduled', 'publishing', 'published', 'deleted'] as const
@@ -8,6 +9,9 @@ const PUBLISHING = ['scheduled', 'publishing', 'published', 'deleted'] as const
  * Seul Saïd (rôle patron) programme, publie ou retire une publication du canal.
  * L’équipe et les agents préparent des brouillons. Le contrôle est côté serveur : un bouton masqué ne suffit pas.
  */
+/** Champs figés après la décision de Saïd (programmé, en cours d’envoi, publié). */
+const FROZEN = ['text', 'textAr', 'buttons', 'photo', 'scheduledAt', 'silent', 'pin'] as const
+
 const onlyPatronPublishes: CollectionBeforeChangeHook = ({ data, originalDoc, operation, req }) => {
   const before = originalDoc?.status ?? 'draft'
   const after = data.status ?? before
@@ -15,8 +19,10 @@ const onlyPatronPublishes: CollectionBeforeChangeHook = ({ data, originalDoc, op
   if (after !== before && (PUBLISHING as readonly string[]).includes(after) && !isPatronUser(req.user) && !sysJob) {
     throw new APIError('Seul Saïd publie sur le canal Telegram.', 403)
   }
-  if (!sysJob && ['published', 'publishing'].includes(before) && ('text' in data && data.text !== originalDoc?.text) && !isPatronUser(req.user)) {
-    throw new APIError('Publication déjà sur le canal : seul Saïd la modifie.', 403)
+  // Dès que Saïd a programmé ou publié un message, son contenu et sa date sont figés pour tous les autres.
+  if (!sysJob && ['scheduled', 'published', 'publishing'].includes(before) && !isPatronUser(req.user)) {
+    const changed = FROZEN.filter((f) => f in data && JSON.stringify(data[f] ?? null) !== JSON.stringify(originalDoc?.[f] ?? null))
+    if (changed.length) throw new APIError(`Message programmé ou publié : seul Saïd le modifie (${changed.join(', ')}).`, 403)
   }
   if (operation === 'create') {
     const a = actorOf(req.user)
@@ -41,7 +47,7 @@ export const TelegramPosts: CollectionConfig = {
     update: ({ req: { user } }) => (isStaffUser(user) ? true : isAgent(user) ? { status: { equals: 'draft' } } : false),
     delete: ({ req: { user } }) => isPatronUser(user),
   },
-  hooks: { beforeChange: [onlyPatronPublishes] },
+  hooks: { beforeChange: [onlyPatronPublishes], afterChange: [channelOnDecision] },
   fields: [
     { name: 'title', type: 'text', label: 'Titre interne', required: true },
     {

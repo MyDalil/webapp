@@ -57,6 +57,25 @@ export const Controls: GlobalConfig = {
       admin: { description: 'Vide = aucun agent ne travaille. Chaque agent a aussi son propre plafond.' },
     },
     {
+      name: 'notifications',
+      type: 'group',
+      label: 'Notifications des agents',
+      admin: { description: 'Avant, pendant et après chaque action, avec le travail joint. Le fil de l’admin est toujours servi.' },
+      fields: (['before', 'during', 'after', 'order'] as const).map((phase) => ({
+        name: phase,
+        type: 'select' as const,
+        hasMany: true,
+        label: { before: 'Avant (le plan de l’agent)', during: 'Pendant (chaque étape clé)', after: 'Après (le travail joint)', order: 'Ordres (pause, annulation, directive)' }[phase],
+        defaultValue: { before: ['admin', 'telegram_said', 'telegram_rad'], during: ['admin'], after: ['admin', 'telegram_said', 'telegram_rad', 'email'], order: ['admin', 'telegram_said', 'telegram_rad'] }[phase],
+        options: [
+          { value: 'admin', label: 'Fil de l’admin' },
+          { value: 'telegram_said', label: 'Telegram de Saïd' },
+          { value: 'telegram_rad', label: 'Telegram de Rad' },
+          { value: 'email', label: 'Email de l’équipe' },
+        ],
+      })),
+    },
+    {
       name: 'telegramChannelId',
       type: 'text',
       label: 'Canal Telegram (identifiant ou @nom)',

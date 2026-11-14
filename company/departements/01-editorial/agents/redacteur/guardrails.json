@@ -1,0 +1,42 @@
+{
+  "tools": [
+    "read-content",
+    "message-agents",
+    "draft-content"
+  ],
+  "execute": [
+    "read-content",
+    "message-agents"
+  ],
+  "propose": [
+    "draft-content"
+  ],
+  "forbidden": [
+    "delete-record",
+    "execute-payment",
+    "publish-without-validation",
+    "deploy",
+    "change-roles",
+    "vie-musulmane"
+  ],
+  "notify": {
+    "before": [
+      "admin",
+      "telegram_said",
+      "telegram_rad"
+    ],
+    "during": [
+      "admin"
+    ],
+    "after": [
+      "admin",
+      "telegram_said",
+      "telegram_rad",
+      "email"
+    ]
+  },
+  "attach_work": true,
+  "max_steps": 12,
+  "budget_usd_per_task": 0.5,
+  "note": "Valeurs par défaut. Le réglage vivant est dans Neon (agents.toolModes). Le refus réel est codé dans src/modules/agents/policy.ts."
+}

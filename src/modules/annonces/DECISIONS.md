@@ -14,3 +14,8 @@
 - **Décision** : réel d’abord, exemples ailleurs. 20 annonces d’exemple, une par type, sur tous les environnements.
 - **Règles** : badge « Exemple », messagerie et signalement refusés, hors plan du site, hors compteurs, jamais expirées ; une vraie annonce publiée dans le même type masque l’exemple. Auteur facultatif pour un exemple seulement.
 - **À ne pas refaire** : présenter un exemple comme une vraie annonce ; compter les exemples dans « N annonces ».
+
+## 2026-11-14 — Score anti-arnaque (lot 9 du cockpit)
+- **Décision** : un score explicable trie la file de contrôle ; chaque point vient d’un signal visible. Il ne publie, ne refuse et ne masque rien.
+- **Raison** : règle « rien n’est publié sans un humain » ; un score opaque ou automatique créerait des refus injustes.
+- **À ne pas refaire** : transformer le score en refus automatique ; comparer un prix à une médiane calculée sur moins de 5 annonces.

@@ -9,6 +9,8 @@ La boîte de réception : toutes les demandes venues du site et leur suivi jusqu
 - Collection `submissions` (types : contribution, candidature, contact, avis, parcours ; statuts : nouveau, en cours, infos manquantes, traité, refusé).
 - `record.ts` : enregistre une demande, alerte l’équipe (lien direct vers /admin), accuse réception à l’expéditeur.
 - `notify.ts` : email au demandeur à chaque changement de statut, avec le « Message au demandeur ».
+- `inbound.ts` (testé) + `inbox.ts` : emails reçus (Resend Inbound, webhook `email.received` sur `/api/resend/evenements`) → demande « email », idempotente (`externalId`), sans accusé automatique, domaine DALIL ignoré (pas de boucle) ; réponse de l’équipe (`replyToSubmission`, route `/api/boite/repondre`) avec fil `thread`.
+- `replies.ts` : réponses préparées (point de départ, à compléter avant l’envoi).
 
 ## Dépend de
 `platform` (mail, http, accès).
@@ -19,6 +21,8 @@ Demande créée → alerte équipe ; statut modifié → email au demandeur (hoo
 ## Règles propres
 - « Infos manquantes » et « Refusé » exigent un message au demandeur.
 - Ne jamais exposer la note interne.
+- Jamais de réponse automatique à un email reçu ; jamais de HTML reçu stocké ou affiché (texte seulement).
+- Une réponse envoyée depuis la boîte unique ne déclenche pas le second email de changement de statut (`context.skipNotify`).
 
 ## Accès
 Resend (via `platform/mail`), Neon.

@@ -164,7 +164,7 @@ export const getPlaceCounts = cache(async (): Promise<{ total: number; favorite:
   try {
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
-    const { rows } = await db.execute(sql`SELECT sector, category, COUNT(*)::int AS n, COUNT(*) FILTER (WHERE favorite)::int AS fav FROM places WHERE _status = 'published' GROUP BY sector, category`)
+    const { rows } = await db.execute(sql`SELECT sector, category, COUNT(*)::int AS n, COUNT(*) FILTER (WHERE favorite)::int AS fav FROM places WHERE _status = 'published' AND deleted_at IS NULL GROUP BY sector, category`)
     for (const r of rows) {
       const n = Number(r.n)
       out.total += n
@@ -172,7 +172,7 @@ export const getPlaceCounts = cache(async (): Promise<{ total: number; favorite:
       out.sector[String(r.sector)] = (out.sector[String(r.sector)] ?? 0) + n
       out.category[String(r.category)] = (out.category[String(r.category)] ?? 0) + n
     }
-    const byW = await db.execute(sql`SELECT wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' GROUP BY wilaya`)
+    const byW = await db.execute(sql`SELECT wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' AND deleted_at IS NULL GROUP BY wilaya`)
     for (const r of byW.rows) {
       const name = wilayaName(r.wilaya as string)
       if (name) out.wilaya[name] = Number(r.n)
@@ -320,7 +320,7 @@ export async function countPublishedPlaces(): Promise<number> {
   try {
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
-    const { rows } = await db.execute(sql`SELECT COUNT(*)::int AS n FROM places WHERE _status = 'published' AND slug IS NOT NULL`)
+    const { rows } = await db.execute(sql`SELECT COUNT(*)::int AS n FROM places WHERE _status = 'published' AND deleted_at IS NULL AND slug IS NOT NULL`)
     return Number(rows[0]?.n ?? 0)
   } catch {
     return 0
@@ -332,7 +332,7 @@ export async function getPlaceSitemap(offset: number, limit: number): Promise<{ 
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
     const { rows } = await db.execute(
-      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND slug IS NOT NULL AND name NOT LIKE '%nom à compléter%' ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND deleted_at IS NULL AND slug IS NOT NULL AND name NOT LIKE '%nom à compléter%' ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
     )
     return rows.map((r) => ({ slug: String(r.slug), updatedAt: new Date(String(r.updated_at)).toISOString() }))
   } catch {
@@ -348,7 +348,7 @@ export async function placesNear(lat: number, lng: number, radiusKm = 5, limit =
     const here = sql`ST_SetSRID(ST_MakePoint(${lng}::double precision, ${lat}::double precision), 4326)::geography`
     const { rows } = await db.execute(sql`
       SELECT slug, name, ST_Distance(geom, ${here}) AS d FROM places
-      WHERE _status = 'published' AND geom IS NOT NULL AND ST_DWithin(geom, ${here}, ${radiusKm * 1000})
+      WHERE _status = 'published' AND deleted_at IS NULL AND geom IS NOT NULL AND ST_DWithin(geom, ${here}, ${radiusKm * 1000})
       ORDER BY geom <-> ${here} LIMIT ${limit}`)
     return rows.map((r) => ({ slug: String(r.slug), name: String(r.name), distanceM: Math.round(Number(r.d)) }))
   } catch {
@@ -362,7 +362,7 @@ export async function getCategoryWilayaCounts(): Promise<{ sector: string; categ
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
     const { rows } = await db.execute(
-      sql`SELECT sector, category, wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' AND slug IS NOT NULL AND category IS NOT NULL GROUP BY sector, category, wilaya`,
+      sql`SELECT sector, category, wilaya, COUNT(*)::int AS n FROM places WHERE _status = 'published' AND deleted_at IS NULL AND slug IS NOT NULL AND category IS NOT NULL GROUP BY sector, category, wilaya`,
     )
     return rows.map((r) => ({ sector: String(r.sector), category: String(r.category), wilaya: r.wilaya ? String(r.wilaya) : null, n: Number(r.n) }))
   } catch {

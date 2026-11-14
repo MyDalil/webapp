@@ -14,10 +14,17 @@ type Db = { execute: (q: ReturnType<typeof sql>) => Promise<{ rows: Record<strin
 
 const TABLE = sql`CREATE TABLE IF NOT EXISTS dalil_deferred_data (name varchar PRIMARY KEY, created_at timestamptz NOT NULL DEFAULT now())`
 const steps = new Map<string, Step>()
+/** Étapes qui n’écrivent rien de cherchable : elles ne déclenchent pas la reconstruction de l’index de recherche. */
+const noReindex = new Set<string>()
 
-/** Enveloppe le `up` d’une migration de données : l’étape est enregistrée, pas exécutée. */
-export function deferred(name: string, step: Step): Step {
+/**
+ * Enveloppe le `up` d’une migration de données : l’étape est enregistrée, pas exécutée.
+ * `reindex: false` : l’étape n’écrit rien de cherchable (ex. : équipe d’agents) — pas de reconstruction de l’index
+ * de recherche au build (environ 47 000 adresses, coûteux en temps de build et en calcul Neon).
+ */
+export function deferred(name: string, step: Step, opts: { reindex?: boolean } = {}): Step {
   steps.set(name, step)
+  if (opts.reindex === false) noReindex.add(name)
   return async ({ db }) => {
     await (db as unknown as Db).execute(TABLE)
     await (db as unknown as Db).execute(sql`INSERT INTO dalil_deferred_data (name) VALUES (${name}) ON CONFLICT DO NOTHING`)
@@ -41,3 +48,6 @@ export async function flushDeferredData(payload: Payload): Promise<string[]> {
   }
   return done
 }
+
+/** Les étapes appliquées exigent-elles une reconstruction de l’index de recherche ? */
+export const needsReindex = (done: string[]) => done.some((n) => !noReindex.has(n))
