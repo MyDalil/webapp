@@ -37,6 +37,7 @@ export async function getBadges(deps: Deps): Promise<Partial<Record<BadgeKey, nu
     ['validation', deps.count('agent-tasks', { status: { equals: 'review' } })],
     ['taches', deps.count('agent-tasks', { status: { in: ['new', 'running', 'paused'] } })],
     ['contributions', deps.count('submissions', { status: { equals: 'new' } })],
+    ['inbox', deps.count('submissions', { status: { equals: 'new' } })],
     ['annonces', deps.count('classifieds', { status: { equals: 'pending' } })],
   ]
   const values = await Promise.allSettled(entries.map(([, p]) => p))

@@ -66,6 +66,7 @@ export default buildConfig({
         cockpitConnecteurs: { Component: '@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView', path: '/cockpit/connecteurs' },
         cockpitMedias: { Component: '@/modules/pilotage/admin/views/MediasView#MediasView', path: '/cockpit/medias' },
         cockpitHistorique: { Component: '@/modules/pilotage/admin/views/HistoriqueView#HistoriqueView', path: '/cockpit/historique' },
+        cockpitBoite: { Component: '@/modules/pilotage/admin/views/BoiteView#BoiteView', path: '/cockpit/boite' },
       },
     },
   },

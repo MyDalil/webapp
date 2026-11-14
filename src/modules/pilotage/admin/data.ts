@@ -19,6 +19,7 @@ export const VIEW_ROLES: Readonly<Record<string, readonly Role[]>> = {
   '/cockpit/connecteurs': STAFF,
   '/cockpit/medias': ['patron', 'admin', 'editor'],
   '/cockpit/historique': ['patron', 'admin', 'editor'],
+  '/cockpit/boite': ['patron', 'admin', 'editor'],
 }
 export const COCKPIT_VIEWS: readonly string[] = Object.keys(VIEW_ROLES)
 export const viewsFor = (role?: string): string[] => COCKPIT_VIEWS.filter((v) => VIEW_ROLES[v].includes((role ?? 'editor') as Role))
