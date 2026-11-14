@@ -3,8 +3,9 @@ import { isAdmin, isStaff } from '@/platform/access'
 import { notifySubmitter } from './notify'
 
 /** Prévient le demandeur à chaque changement de statut fait par l’équipe. */
-const statusEmail: CollectionAfterChangeHook = async ({ doc, previousDoc, operation }) => {
-  if (operation !== 'update' || doc.status === previousDoc?.status) return doc
+const statusEmail: CollectionAfterChangeHook = async ({ doc, previousDoc, operation, req }) => {
+  // Réponse envoyée depuis la boîte unique : un seul email par action.
+  if (operation !== 'update' || doc.status === previousDoc?.status || req.context?.skipNotify) return doc
   await notifySubmitter(doc)
   return doc
 }
@@ -31,6 +32,7 @@ export const Submissions: CollectionConfig = {
             { label: 'Avis (profil test)', value: 'feedback' },
             { label: 'Parcours personnalisé', value: 'diagnostic' },
             { label: 'Signalement d’une annonce', value: 'report' },
+            { label: 'Email reçu', value: 'email' },
           ],
         },
         {
@@ -66,6 +68,8 @@ export const Submissions: CollectionConfig = {
       },
     },
     { name: 'internalNote', type: 'textarea', label: 'Note interne (jamais envoyée)' },
+    { name: 'thread', type: 'json', label: 'Réponses envoyées', admin: { readOnly: true, description: 'Réponses de l’équipe depuis la boîte unique : date, auteur, texte, état d’envoi.' } },
+    { name: 'externalId', type: 'text', label: 'Identifiant du message reçu', unique: true, index: true, admin: { readOnly: true, position: 'sidebar' } },
   ],
   hooks: { afterChange: [statusEmail] },
 }

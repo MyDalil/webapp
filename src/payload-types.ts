@@ -1777,7 +1777,7 @@ export interface Representation {
  */
 export interface Submission {
   id: number;
-  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic' | 'report';
+  kind: 'contribution' | 'application' | 'contact' | 'feedback' | 'diagnostic' | 'report' | 'email';
   status?: ('new' | 'processing' | 'needs_info' | 'done' | 'rejected') | null;
   subject: string;
   email?: string | null;
@@ -1796,6 +1796,19 @@ export interface Submission {
    */
   reply?: string | null;
   internalNote?: string | null;
+  /**
+   * Réponses de l’équipe depuis la boîte unique : date, auteur, texte, état d’envoi.
+   */
+  thread?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  externalId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -3168,6 +3181,8 @@ export interface SubmissionsSelect<T extends boolean = true> {
   session?: T;
   reply?: T;
   internalNote?: T;
+  thread?: T;
+  externalId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -30,4 +30,8 @@
 - Lot 7 `agent/cockpit-lot7` (Historique et corbeille) : `/admin/cockpit/historique`, corbeille 30 jours sur les adresses (`trash: true`, migration `20261114_152745_cockpit_corbeille`, ajout de colonnes), purge quotidienne, SQL brut de l’annuaire filtré sur `deleted_at`, index de recherche mis à jour.
 - Vérifié en local sur le lot 7 : corbeille → page 404 et hors index ; restauration → retour ; purge 31 j supprimée, 29 j gardée ; restaurer une version crée un brouillon sans toucher la version publiée ; 173 unitaires, 156 parcours réussis.
 - Limite : la corbeille couvre les adresses seulement ; les autres collections suppriment toujours définitivement (administrateur seul).
-- Prochaine action : lot 8, Boîte unique (besoin externe : Resend Inbound, MX chez Gandi) ; à défaut, lot 9 Communauté.
+- Lot 7 : CI d’abord en échec (tests e2e fragiles en parallèle, pas le code) ; correctif `fc3ae6d` poussé sur la branche du lot 7.
+- Lot 8 `agent/cockpit-lot8` (Boîte unique) : `/admin/cockpit/boite`, emails reçus → demandes « email » (webhook prêt, DNS non touché), réponses avec fil, réponses préparées, note interne ; migration `20261114_154423_boite_unique` (valeur d’énumération + colonnes).
+- Vérifié en local sur le lot 8 : enregistrement idempotent, anti-boucle ; 180 unitaires, 164 parcours réussis.
+- Non vérifié : réception réelle d’un email (exige Resend Inbound + MX ou redirection Gandi, décision de Rad).
+- Prochaine action : lot 9, Communauté (Modération, Annonces avec score anti-arnaque, Professionnels, Membres).

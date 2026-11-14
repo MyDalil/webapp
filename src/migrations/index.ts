@@ -53,6 +53,7 @@ import * as migration_20261114_140050_agents_moteur_icm from './20261114_140050_
 import * as migration_20261114_140100_agents_equipe_icm from './20261114_140100_agents_equipe_icm';
 import * as migration_20261114_150104_cockpit_mediatheque from './20261114_150104_cockpit_mediatheque';
 import * as migration_20261114_152745_cockpit_corbeille from './20261114_152745_cockpit_corbeille';
+import * as migration_20261114_154423_boite_unique from './20261114_154423_boite_unique';
 
 export const migrations = [
   {
@@ -328,6 +329,11 @@ export const migrations = [
   {
     up: migration_20261114_152745_cockpit_corbeille.up,
     down: migration_20261114_152745_cockpit_corbeille.down,
-    name: '20261114_152745_cockpit_corbeille'
+    name: '20261114_152745_cockpit_corbeille',
+  },
+  {
+    up: migration_20261114_154423_boite_unique.up,
+    down: migration_20261114_154423_boite_unique.down,
+    name: '20261114_154423_boite_unique'
   },
 ];
