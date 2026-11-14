@@ -14,3 +14,4 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - 2026-11-14 — Connecteurs affiche la présence des clés, jamais leur valeur ; le test e2e le vérifie — règle racine 7.
 - 2026-11-14 — erreur à ne pas refaire : nouvelle vue ou nouveau composant Payload sans `pnpm generate:importmap` → page vide (« PayloadComponent not found in importMap »). Régénérer et commiter `src/app/(payload)/admin/importMap.js`.
 - 2026-11-14 — erreur à ne pas refaire : `.vercelignore` exclut `*.md` ; tout dossier de `.md` lu à l’exécution (ex. `company/`) doit y être réautorisé (`!company/**/*.md`), sinon le déploiement Vercel échoue alors que la CI passe.
+- 2026-11-14 — Médiathèque (lot 6) : `/admin/cockpit/medias` remplace la liste Payload dans le menu ; la vue tableau reste accessible. Remplacer partout et supprimer : administrateur ou patron ; supprimer seulement une photo utilisée nulle part.

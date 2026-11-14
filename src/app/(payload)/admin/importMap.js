@@ -13,6 +13,7 @@ import { ActiviteView as ActiviteView_a18b68465649c0548ea58716b9c395ea } from '@
 import { ConversationsView as ConversationsView_0887f003de926f6a5bbdb253d3438cd6 } from '@/modules/pilotage/admin/views/ConversationsView'
 import { MemoireView as MemoireView_2d355bc2f40dc33fae5453dc5a2e665b } from '@/modules/pilotage/admin/views/MemoireView'
 import { ConnecteursView as ConnecteursView_7cb1c970d821dff83d472f93853b8afd } from '@/modules/pilotage/admin/views/ConnecteursView'
+import { MediasView as MediasView_7f8246c5dfa5b9f427a727aeccfe7a00 } from '@/modules/pilotage/admin/views/MediasView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 
@@ -33,6 +34,7 @@ export const importMap = {
   "@/modules/pilotage/admin/views/ConversationsView#ConversationsView": ConversationsView_0887f003de926f6a5bbdb253d3438cd6,
   "@/modules/pilotage/admin/views/MemoireView#MemoireView": MemoireView_2d355bc2f40dc33fae5453dc5a2e665b,
   "@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView": ConnecteursView_7cb1c970d821dff83d472f93853b8afd,
+  "@/modules/pilotage/admin/views/MediasView#MediasView": MediasView_7f8246c5dfa5b9f427a727aeccfe7a00,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e
 }

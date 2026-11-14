@@ -31,7 +31,7 @@ export function KillSwitch({ mode, labels }: { mode: string; labels: Record<stri
     <div>
       <div className="dl-seg" role="radiogroup" aria-label={labels.title} style={{ flexWrap: 'wrap' }}>
         {(['off', 'drain', 'stop', 'cut'] as const).map((m) => (
-          <button key={m} type="button" role="radio" aria-checked={mode === m} aria-pressed={mode === m} disabled={pending} onClick={() => save('/api/globals/controls', { killSwitch: m })}>{labels[m]}</button>
+          <button key={m} type="button" role="radio" aria-checked={mode === m} disabled={pending} onClick={() => save('/api/globals/controls', { killSwitch: m })}>{labels[m]}</button>
         ))}
       </div>
       <Err e={error} />
@@ -94,7 +94,7 @@ export function ToolModes({ agentId, tools, modes, labels }: { agentId: number; 
                 <td style={{ padding: '5px 0', borderTop: '1px solid var(--dl-ln)', textAlign: 'end' }}>
                   <div className="dl-seg" role="radiogroup" aria-label={t.label}>
                     {(['default', 'execute', 'propose', 'forbidden'] as const).map((k) => (
-                      <button key={k} type="button" role="radio" aria-checked={m === k} aria-pressed={m === k} disabled={pending} onClick={() => set(t.value, k)}>{k === 'default' ? `${labels.default} (${labels[t.def]})` : labels[k]}</button>
+                      <button key={k} type="button" role="radio" aria-checked={m === k} disabled={pending} onClick={() => set(t.value, k)}>{k === 'default' ? `${labels.default} (${labels[t.def]})` : labels[k]}</button>
                     ))}
                   </div>
                 </td>

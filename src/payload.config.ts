@@ -8,6 +8,7 @@ import { en } from '@payloadcms/translations/languages/en'
 import { fr } from '@payloadcms/translations/languages/fr'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import sharp from 'sharp'
 import { buildConfig } from 'payload'
 
 import { Users } from '@/platform/auth/Users'
@@ -63,6 +64,7 @@ export default buildConfig({
         cockpitConversations: { Component: '@/modules/pilotage/admin/views/ConversationsView#ConversationsView', path: '/cockpit/conversations' },
         cockpitMemoire: { Component: '@/modules/pilotage/admin/views/MemoireView#MemoireView', path: '/cockpit/memoire' },
         cockpitConnecteurs: { Component: '@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView', path: '/cockpit/connecteurs' },
+        cockpitMedias: { Component: '@/modules/pilotage/admin/views/MediasView#MediasView', path: '/cockpit/medias' },
       },
     },
   },
@@ -87,6 +89,8 @@ export default buildConfig({
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
     }),
   ],
+  // Formats des photos (vignette, carte, couverture, partage) en WebP, point focal.
+  sharp,
   db: postgresAdapter({
     pool: { connectionString: databaseUrl },
     migrationDir: path.resolve(dirname, 'migrations'),
