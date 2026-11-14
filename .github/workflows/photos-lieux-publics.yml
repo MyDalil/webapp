@@ -1,0 +1,32 @@
+name: Photos libres des lieux publics
+# Collecte des photos sous licence libre (Commons, Wikidata, OpenStreetMap) pour les lieux publics.
+# Le résultat est commité sur la branche qui a lancé la collecte ; l’import dans Neon passe par la migration de données.
+on:
+  workflow_dispatch:
+  push:
+    branches: ['agent/photos-lieux-publics']
+    paths: [scripts/import/fetch-place-photos.mjs, .github/workflows/photos-lieux-publics.yml]
+permissions:
+  contents: write
+concurrency:
+  group: photos-lieux-publics
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-place-photos.mjs
+        continue-on-error: true
+      - name: Commit des photos trouvées
+        if: always()
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add src/modules/annuaire/data/place-photos.json
+          git commit -m "Données : photos libres des lieux publics [skip ci]" || echo "rien de nouveau"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
