@@ -1,6 +1,6 @@
 import type { PayloadRequest, ServerProps, VisibleEntities } from 'payload'
 import { CommandBar } from './CommandBar'
-import { COCKPIT_VIEWS } from './data'
+import { viewsFor } from './data'
 import { asLang, t } from './i18n'
 import { buildNav, type Role } from './nav'
 
@@ -10,7 +10,7 @@ type Props = ServerProps & { req?: PayloadRequest; visibleEntities?: VisibleEnti
 export function CockpitBar({ req, visibleEntities, i18n }: Props) {
   if (!req?.user || !visibleEntities) return null
   const tr = t(asLang(i18n?.language))
-  const pages = buildNav(visibleEntities, COCKPIT_VIEWS, (req.user as { role?: Role }).role).flatMap((g) =>
+  const pages = buildNav(visibleEntities, viewsFor((req.user as { role?: Role }).role), (req.user as { role?: Role }).role).flatMap((g) =>
     g.items.map((i) => ({ label: g.key === 'autres' ? i.label : tr(`nav.${i.key}`, i.label), group: tr(`group.${g.key}`, g.label), href: i.href, icon: i.icon })),
   )
   const searchable = (['places', 'providers', 'classifieds', 'members', 'procedures'] as const).filter((c) => visibleEntities.collections.includes(c))

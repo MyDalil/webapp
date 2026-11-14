@@ -8,3 +8,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - 2026-11-14 — l’admin s’ouvre en français tant qu’aucune langue n’est choisie (`src/proxy.ts`, limité à /admin) — Payload suivait la langue du navigateur (anglais).
 - 2026-11-14 — menu ouvert par défaut au-dessus de 1024 px — Payload le fermait sur tout écran ≤ 1440 px, donc sur la plupart des ordinateurs.
 - 2026-11-14 — erreur à ne pas refaire : lancer les e2e sans `pnpm search:index` fait échouer la « Recherche complète » (index absent), sans lien avec le changement testé.
+- 2026-11-14 — écrans du cockpit (lot 5) : vues Payload `views.<clé> { path: '/cockpit/…' }` enveloppées par `CockpitPage` (gabarit Payload + connexion + rôle) — Payload n’applique ni gabarit ni contrôle d’accès aux vues à deux segments.
+- 2026-11-14 — `VIEW_ROLES` (admin/data.ts) décide qui voit un écran ; hors rôle, le menu retombe sur la liste Payload — un éditeur ne doit pas voir un lien qui lui répond « accès réservé ».
+- 2026-11-14 — Validation clôt ou annule la tâche ; la proposition n’est jamais appliquée automatiquement — un agent propose, l’équipe publie (règle « Saïd a le dernier mot »).
+- 2026-11-14 — Connecteurs affiche la présence des clés, jamais leur valeur ; le test e2e le vérifie — règle racine 7.
+- 2026-11-14 — erreur à ne pas refaire : nouvelle vue ou nouveau composant Payload sans `pnpm generate:importmap` → page vide (« PayloadComponent not found in importMap »). Régénérer et commiter `src/app/(payload)/admin/importMap.js`.
+- 2026-11-14 — erreur à ne pas refaire : `.vercelignore` exclut `*.md` ; tout dossier de `.md` lu à l’exécution (ex. `company/`) doit y être réautorisé (`!company/**/*.md`), sinon le déploiement Vercel échoue alors que la CI passe.
