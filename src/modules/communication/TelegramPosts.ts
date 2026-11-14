@@ -1,5 +1,6 @@
 import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
 import { actorOf, isAgent, isPatronUser, isStaffUser } from '@/platform/access'
+import { channelOnDecision } from './telegram/channel'
 
 /** États qui mettent un message sur le canal (ou le programment). Réservés au patron. */
 const PUBLISHING = ['scheduled', 'publishing', 'published', 'deleted'] as const
@@ -41,7 +42,7 @@ export const TelegramPosts: CollectionConfig = {
     update: ({ req: { user } }) => (isStaffUser(user) ? true : isAgent(user) ? { status: { equals: 'draft' } } : false),
     delete: ({ req: { user } }) => isPatronUser(user),
   },
-  hooks: { beforeChange: [onlyPatronPublishes] },
+  hooks: { beforeChange: [onlyPatronPublishes], afterChange: [channelOnDecision] },
   fields: [
     { name: 'title', type: 'text', label: 'Titre interne', required: true },
     {

@@ -76,8 +76,8 @@ export async function notify(payload: Payload, req: PayloadRequest | undefined, 
       const delivery = { ...pending }
       await Promise.all(
         channels.map(async (c) => {
-          if (c === 'telegram_said') delivery[c] = await sendTelegram('said', text)
-          else if (c === 'telegram_rad') delivery[c] = await sendTelegram('rad', text)
+          if (c === 'telegram_said') delivery[c] = await sendTelegram('said', text, payload)
+          else if (c === 'telegram_rad') delivery[c] = await sendTelegram('rad', text, payload)
           else if (c === 'email') {
             const html = layout(`${PHASE_LABEL[n.phase]} · ${n.agentLabel}`, paragraphs(`${n.title}\n${n.body ?? ''}\n${actionId}`), { label: 'Voir le travail', href: link })
             delivery[c] = await send(TEAM, `[DALIL] ${PHASE_LABEL[n.phase]} · ${n.agentLabel} — ${n.title}`.slice(0, 140), html).then((ok) => (ok ? 'accepté' : process.env.RESEND_API_KEY ? 'échec' : 'non configuré'), () => 'échec')
