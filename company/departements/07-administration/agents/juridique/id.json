@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_administration_juridique_01",
+  "slug": "juridique",
+  "name": "Juridique",
+  "department": "07-administration",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-relecture"
+  ],
+  "version": "1.0.0"
+}

@@ -1,4 +1,6 @@
 import { purgeContributionPhotos } from '@/modules/messages'
+import { runQueue } from '@/modules/agents'
+import { publishDue } from '@/modules/communication'
 import { annoncesTaxonomyRows, dailyClassifiedTasks, reindexClassifieds } from '@/modules/annonces'
 import { annuaireTaxonomyRows, reindexPlaces } from '@/modules/annuaire'
 import { reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
@@ -8,6 +10,7 @@ import { rebuildIndex } from '@/platform/search/rebuild'
 import { reindexProcedures, reindexRepresentations } from '@/modules/contenus'
 import { purgeRateLimits } from '@/platform/security/rateLimit'
 import { dailyBackup } from '@/platform/backup/run'
+import { purgeTrash } from '@/platform/trash'
 
 import { runTask, type TaskOutcome } from '@/platform/tasks/run'
 import { recordError } from '@/platform/monitoring/errors'
@@ -34,6 +37,10 @@ export async function GET(req: Request) {
   out.photosProposees = await runTask('photos-proposees', purgeContributionPhotos)
   out.annonces = await runTask('annonces', dailyClassifiedTasks)
   out.limitesDeDebit = await runTask('limites-de-debit', purgeRateLimits)
+  out.corbeille = await runTask('corbeille', async () => purgeTrash(await payload()))
+  // Filet quotidien : file des agents (si une passe a été interrompue) et publications du canal à échéance.
+  out.agents = await runTask('agents', async () => runQueue(await payload(), { budgetMs: 60_000 }))
+  out.canalTelegram = await runTask('canal-telegram', async () => publishDue(await payload()))
   // Index de recherche : tenu à jour à chaque enregistrement (crochets des métiers). Reconstruction complète une fois
   // par semaine (vendredi, heure d’Alger), filet de sécurité qui économise le calcul de la base.
   const friday = new Date().toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'Africa/Algiers' }) === 'Friday'
