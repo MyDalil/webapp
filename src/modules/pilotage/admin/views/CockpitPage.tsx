@@ -23,7 +23,7 @@ export async function CockpitPage(props: AdminViewServerProps & { roles?: Role[]
   return (
     <DefaultTemplate i18n={req.i18n} locale={locale} params={params} payload={req.payload} permissions={permissions} req={req} searchParams={searchParams} user={req.user ?? undefined} visibleEntities={visibleEntities}>
       <div className="dl dl-pv">
-        {allowed ? await render({ req, lang, tr, role, isAdmin: role === 'patron' || role === 'admin', userName: String(user.name ?? '') }) : <p className="dl-empty">{tr('ui.forbidden', 'Accès réservé à Saïd et aux administrateurs.')}</p>}
+        {allowed ? await render({ req, lang, tr, role, isAdmin: role === 'patron' || role === 'admin', userName: String(user.name ?? '') }) : <><h1>{tr('ui.forbidden.t', 'Accès réservé')}</h1><p className="dl-empty">{tr('ui.forbidden', 'Accès réservé à Saïd et aux administrateurs.')}</p></>}
       </div>
     </DefaultTemplate>
   )

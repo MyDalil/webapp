@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import sharp from 'sharp'
+import { signIn } from './session'
 
 /**
  * Médiathèque du cockpit (lot 6) : glisser-déposer, doublons, 4 formats WebP, point focal, remplacement partout.
@@ -10,7 +11,7 @@ const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', pas
 async function login(page: Page) {
   await page.context().clearCookies()
   await page.request.post('/api/users/first-register', { data: ADMIN })
-  expect((await page.request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+  await signIn(page.request, ADMIN)
 }
 
 /** Photo unique à chaque exécution (couleur tirée au hasard) : pas de faux doublon entre deux passages. */
@@ -58,7 +59,7 @@ test.describe.serial('Cockpit — Médiathèque @ecriture', () => {
 
   test('remplacer partout : un message passe de la photo A à la photo B', async ({ request }) => {
     const r = request
-    await r.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
+    await signIn(r, ADMIN)
     const up = async (name: string) => {
       const res = await r.post('/api/media', { multipart: { file: { name, mimeType: 'image/jpeg', buffer: await photo(1000, 700) }, _payload: JSON.stringify({ alt: name }) } })
       expect(res.ok(), `envoi ${name}`).toBe(true)

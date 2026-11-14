@@ -31,7 +31,8 @@ export function TachesView(props: AdminViewServerProps) {
           <Section id="new" title={tr('taches.new', 'Nouvelle tâche')} sub={tr('taches.new.sub', 'Sans agent choisi, le CEO répartit le travail. Aussi par Telegram : un message libre crée une tâche.')}>
             <NewTaskForm agents={(agents.docs as unknown as Row[]).map((a) => ({ value: String(a.id), label: String(a.name) }))} labels={{ form: tr('taches.new', 'Nouvelle tâche'), title: tr('taches.f.title', 'Titre de la tâche'), instructions: tr('taches.f.instr', 'Consignes : quoi, où, pour quand, quelles sources'), agent: tr('taches.f.agent', 'Agent'), ceo: tr('taches.f.ceo', 'Le CEO choisit'), priority: tr('taches.f.prio', 'Priorité'), send: tr('taches.f.send', 'Créer la tâche'), 'prio.low': tr('prio.low', 'Basse'), 'prio.normal': tr('prio.normal', 'Normale'), 'prio.high': tr('prio.high', 'Haute'), 'prio.urgent': tr('prio.urgent', 'Urgente') }} />
           </Section>
-          <div className="dl-kanban" role="list" aria-label={tr('nav.taches', 'Tâches')}>
+          {/* tabIndex : la zone défile horizontalement ; elle doit être atteignable et défilable au clavier (WCAG 2.1.1). */}
+          <div className="dl-kanban" role="list" tabIndex={0} aria-label={tr('nav.taches', 'Tâches')}>
             {COLUMNS.map((c) => {
               const list = byCol.get(c) ?? []
               return (

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Cockpit /admin (lot 1). Crée ses comptes de test : réservé aux bases jetables (CI, local) → @ecriture.
@@ -10,8 +11,7 @@ const CONSEILLER = { email: 'conseiller.e2e@mydalil.com', password: 'Cockpit-tes
 async function ensureUsers(page: Page) {
   const r = page.request
   await r.post('/api/users/first-register', { data: ADMIN }) // sans effet si un compte existe déjà
-  const login = await r.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
-  expect(login.ok(), 'connexion admin de test').toBe(true)
+  await signIn(r, ADMIN)
   const exists = await r.get(`/api/users?where[email][equals]=${encodeURIComponent(CONSEILLER.email)}&limit=1`)
   if (((await exists.json()) as { totalDocs: number }).totalDocs === 0) {
     // Un autre fichier de tests peut le créer en même temps : seul compte le résultat.
@@ -23,8 +23,7 @@ async function ensureUsers(page: Page) {
 
 async function loginAs(page: Page, who: { email: string; password: string }) {
   await page.context().clearCookies()
-  const res = await page.request.post('/api/users/login', { data: { email: who.email, password: who.password } })
-  expect(res.ok()).toBe(true)
+  await signIn(page.request, who)
 }
 
 test.describe.serial('Cockpit admin @ecriture', () => {

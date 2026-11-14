@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Lot 3 : moteur d’agents (méthode ICM). Modèle de test déterministe (DALIL_TEST_LLM=1, refusé en production).
@@ -8,7 +9,7 @@ const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', pas
 
 async function login(request: APIRequestContext) {
   await request.post('/api/users/first-register', { data: ADMIN })
-  expect((await request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+  await signIn(request, ADMIN)
 }
 const agentBySlug = async (request: APIRequestContext, slug: string) => (await (await request.get(`/api/agents?where[slug][equals]=${slug}&limit=1&depth=0`)).json()).docs[0]
 

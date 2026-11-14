@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Lot 4 : webhook Telegram. Secret de test (TELEGRAM_WEBHOOK_SECRET) ; sans jeton de bot, les réponses ne partent pas,
@@ -17,7 +18,7 @@ test.describe.serial('Telegram @ecriture', () => {
   test.beforeAll(async ({ playwright, baseURL }) => {
     const r = await playwright.request.newContext({ baseURL })
     await r.post('/api/users/first-register', { data: ADMIN })
-    await r.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
+    await signIn(r, ADMIN)
     const me = (await (await r.get(`/api/users?where[email][equals]=${ADMIN.email}&limit=1`)).json()).docs[0]
     expect((await r.patch(`/api/users/${me.id}`, { data: { telegramId: String(CHAT) } })).ok()).toBe(true)
   })
@@ -31,7 +32,7 @@ test.describe.serial('Telegram @ecriture', () => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
     const marker = `Telegram ordre ${Date.now()}`
     expect((await hook(request, marker)).status()).toBe(200)
-    await request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
+    await signIn(request, ADMIN)
     const task = (await (await request.get(`/api/agent-tasks?where[title][equals]=${encodeURIComponent(marker)}&limit=1&depth=0`)).json()).docs[0]
     expect(task, 'tâche créée par Telegram').toBeTruthy()
     expect(task.origin).toBe('equipe')
@@ -50,13 +51,13 @@ test.describe.serial('Telegram @ecriture', () => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
     const marker = `Intrus ${Date.now()}`
     expect((await hook(request, marker, 111111111)).status()).toBe(200)
-    await request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
+    await signIn(request, ADMIN)
     expect((await (await request.get(`/api/agent-tasks?where[title][equals]=${encodeURIComponent(marker)}&limit=1`)).json()).totalDocs).toBe(0)
   })
 
   test('/finir puis /relancer pilotent l’arrêt général', async ({ request }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
-    await request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })
+    await signIn(request, ADMIN)
     await hook(request, '/finir')
     expect((await (await request.get('/api/globals/controls')).json()).killSwitch).toBe('drain')
     await hook(request, '/relancer')

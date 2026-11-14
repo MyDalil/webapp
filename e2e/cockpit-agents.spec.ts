@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Cockpit /admin, lot 5 : écrans des agents (salle de contrôle, tâches, validation, activité, conversations, mémoire, connecteurs).
@@ -19,8 +20,7 @@ const SCREENS = [
 
 async function login(page: Page, who: { email: string; password: string }) {
   await page.context().clearCookies()
-  const res = await page.request.post('/api/users/login', { data: { email: who.email, password: who.password } })
-  expect(res.ok(), `connexion ${who.email}`).toBe(true)
+  await signIn(page.request, who)
 }
 
 test.describe.serial('Cockpit — écrans des agents @ecriture', () => {

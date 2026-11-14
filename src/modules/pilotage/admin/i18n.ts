@@ -475,6 +475,7 @@ const AR: Record<string, string> = {
   'taches.retry': 'إعادة التشغيل (تصفير العدادات)',
   'conv.current': 'التعليمة الحالية',
   'conv.notask': 'لا توجد مهمة مفتوحة: أنشئ مهمة لإعطائه تعليمة.',
+  'ui.forbidden.t': 'وصول محدود',
 }
 
 const EN: Record<string, string> = {
@@ -950,6 +951,7 @@ const EN: Record<string, string> = {
   'taches.retry': 'Restart (counters reset)',
   'conv.current': 'current instruction',
   'conv.notask': 'No open task: create a task to give it an instruction.',
+  'ui.forbidden.t': 'Restricted access',
 }
 
 const FR: Record<string, string> = {

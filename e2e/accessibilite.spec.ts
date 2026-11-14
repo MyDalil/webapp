@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { signIn } from './session'
 
 /**
  * Accessibilité du cockpit (lot 11) : WCAG 2.1 A et AA (axe-core) sur chaque écran, en mode clair et en mode sombre.
@@ -11,7 +12,7 @@ const SCREENS = ['', '/cockpit/agents', '/cockpit/taches', '/cockpit/validation'
 async function login(page: Page) {
   await page.context().clearCookies()
   await page.request.post('/api/users/first-register', { data: ADMIN })
-  expect((await page.request.post('/api/users/login', { data: { email: ADMIN.email, password: ADMIN.password } })).ok()).toBe(true)
+  await signIn(page.request, ADMIN)
 }
 
 for (const theme of ['light', 'dark'] as const) {
