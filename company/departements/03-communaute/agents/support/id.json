@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_communaute_support_01",
+  "slug": "support",
+  "name": "Support",
+  "department": "03-communaute",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "active",
+  "workflows": [
+    "01-reponse"
+  ],
+  "version": "1.0.0"
+}

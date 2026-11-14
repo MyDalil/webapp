@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_croissance_communication_01",
+  "slug": "communication",
+  "name": "Communication",
+  "department": "04-croissance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-brouillon-canal"
+  ],
+  "version": "1.0.0"
+}

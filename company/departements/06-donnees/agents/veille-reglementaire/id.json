@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_donnees_veille_reglementaire_01",
+  "slug": "veille-reglementaire",
+  "name": "Veille réglementaire",
+  "department": "06-donnees",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-veille"
+  ],
+  "version": "1.0.0"
+}
