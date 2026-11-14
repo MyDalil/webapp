@@ -20,6 +20,9 @@ import { ModerationView as ModerationView_eecd1832955ee8db6a64e5ec744cee40 } fro
 import { AnnoncesView as AnnoncesView_eecd1832955ee8db6a64e5ec744cee40 } from '@/modules/pilotage/admin/views/CommunauteViews'
 import { ProsView as ProsView_eecd1832955ee8db6a64e5ec744cee40 } from '@/modules/pilotage/admin/views/CommunauteViews'
 import { MembresView as MembresView_eecd1832955ee8db6a64e5ec744cee40 } from '@/modules/pilotage/admin/views/CommunauteViews'
+import { IaView as IaView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
+import { SanteView as SanteView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
+import { SecuriteView as SecuriteView_f5806040924f1b380ec8b4a6cd3afc5a } from '@/modules/pilotage/admin/views/SystemeViews'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 
@@ -47,6 +50,9 @@ export const importMap = {
   "@/modules/pilotage/admin/views/CommunauteViews#AnnoncesView": AnnoncesView_eecd1832955ee8db6a64e5ec744cee40,
   "@/modules/pilotage/admin/views/CommunauteViews#ProsView": ProsView_eecd1832955ee8db6a64e5ec744cee40,
   "@/modules/pilotage/admin/views/CommunauteViews#MembresView": MembresView_eecd1832955ee8db6a64e5ec744cee40,
+  "@/modules/pilotage/admin/views/SystemeViews#IaView": IaView_f5806040924f1b380ec8b4a6cd3afc5a,
+  "@/modules/pilotage/admin/views/SystemeViews#SanteView": SanteView_f5806040924f1b380ec8b4a6cd3afc5a,
+  "@/modules/pilotage/admin/views/SystemeViews#SecuriteView": SecuriteView_f5806040924f1b380ec8b4a6cd3afc5a,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e
 }
