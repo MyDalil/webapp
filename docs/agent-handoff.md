@@ -34,4 +34,7 @@
 - Lot 8 `agent/cockpit-lot8` (Boîte unique) : `/admin/cockpit/boite`, emails reçus → demandes « email » (webhook prêt, DNS non touché), réponses avec fil, réponses préparées, note interne ; migration `20261114_154423_boite_unique` (valeur d’énumération + colonnes).
 - Vérifié en local sur le lot 8 : enregistrement idempotent, anti-boucle ; 180 unitaires, 164 parcours réussis.
 - Non vérifié : réception réelle d’un email (exige Resend Inbound + MX ou redirection Gandi, décision de Rad).
-- Prochaine action : lot 9, Communauté (Modération, Annonces avec score anti-arnaque, Professionnels, Membres).
+- Lot 8 : CI entièrement verte, déploiement Vercel réussi (PR #26). Lot 7 : la CI a échoué sur des tests instables en parallèle (tests différents à chaque passage, lot 8 au-dessus vert) ; job relancé.
+- Lot 9 `agent/cockpit-lot9` (Communauté) : `/admin/cockpit/{moderation,annonces,pros,membres}`, score anti-arnaque `src/modules/annonces/risk.ts` (testé), badges Modération et Professionnels. Aucune migration.
+- Vérifié en local sur le lot 9 : 187 unitaires, 177 parcours réussis.
+- Prochaine action : lot 10, Business et système (Newsletter, Traductions, Couverture, Recherches sans résultat, SEO, Analytics, Finances, IA et coûts, Sécurité, Santé, Audit, Réglages, Éditeur du site).
