@@ -7,7 +7,7 @@ Stack : Next.js 16 + Payload CMS 3 + Neon Postgres + Vercel (Blob pour les photo
 
 ## Règles absolues
 1. **Pas de design inventé.** Visuel = maquette validée (`src/styles/mockup.css`), contenus et fonctions = prototype (`src/modules/contenus/`). Améliorer = rendre fonctionnel/responsive, jamais restyler sans demande explicite de Rad.
-2. **Jamais de push direct sur `main`.** Travail sur `preview` → Rad teste sur preview.mydalil.com → feu vert explicite → merge `preview` → `main`.
+2. **Branche dédiée obligatoire.** Avant toute modification, chaque agent crée et active une branche dédiée depuis `preview`, puis vérifie avec `git branch --show-current` que la branche courante n'est ni `main`, ni `preview`, ni une autre branche partagée. Commits et pushs vont uniquement sur la branche dédiée → pull request vers `preview` → test sur preview.mydalil.com → feu vert explicite → promotion vers `main`. L'absence de protection GitHub payante n'autorise jamais une écriture directe sur une branche partagée.
 3. **Ne jamais inventer une information.** Une donnée sans source ni date de vérification s’affiche comme « à vérifier ».
 4. **La vérification est indépendante des revenus.** Le module `pros` (abonnements) ne peut ni attribuer ni modifier un statut ou un label du module `confiance`.
 5. **Les données vivent dans Neon, pas dans la mémoire des agents.** Les fichiers `AGENTS.md`/`DECISIONS.md` contiennent des règles et des décisions, jamais des fiches, horaires ou statuts.
@@ -79,7 +79,7 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 ## Contrôles avant fusion (CI)
 - `.github/workflows/ci.yml`, à chaque PR vers `preview` ou `main` et à chaque push sur `preview` : frontières + types, tests unitaires, **base neuve** (Postgres + PostGIS) migrée depuis zéro, build complet, parcours essentiels Playwright (`e2e/`, ordinateur + mobile).
 - `.github/workflows/deploiement.yml`, après chaque déploiement Vercel réussi : parcours en lecture seule (`--grep-invert @ecriture`) sur l’adresse déployée.
-- Règles de branche GitHub : `preview` et `main` exigent les statuts « Frontières, types et tests unitaires », « Build et parcours essentiels » ; `main` exige en plus « Vercel » et « Parcours sur le déploiement ». Fusion `preview` → `main` seulement quand tout est vert **et** après le feu vert de Rad.
+- Discipline GitHub Free : avant toute fusion, relire manuellement les statuts « Frontières, types et tests unitaires » et « Build et parcours essentiels » ; la promotion vers `main` exige aussi « Vercel », « Parcours sur le déploiement » et le feu vert de Rad. Les agents ouvrent une pull request et ne fusionnent pas leur propre travail sans validation explicite.
 - Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
 
 ## Surveillance
