@@ -42,5 +42,8 @@
 - Lot 10b `agent/cockpit-lot10b` : `/admin/cockpit/{analytics,newsletter,finances,seo,couverture,traductions,recherches}` ; table `search_misses` (migration `20261114_170000_recherches_sans_resultat`, création de table seulement) ; 191 unitaires, 205 parcours réussis en local.
 - Non livré : « Éditeur du site » (périmètre à définir avec Rad).
 - Lot 11 `agent/cockpit-lot11` : accessibilité (axe-core, 25 écrans, clair et sombre, 0 défaut) ; revue indépendante : 18 défauts (5 élevés), tous corrigés ; tests ajoutés (tâche du CEO, test à froid refusé pendant l’arrêt, GET protégé). Local : 191 unitaires, 209 parcours réussis.
-- État : PR #19 à #30 empilées vers `preview`, aucune fusion. Prochaine action : feu vert de Rad, fusion dans l’ordre (#19 → #30), test sur preview.mydalil.com.
+- 14 novembre 2026, soir : PR #19 à #30 fusionnées dans `preview` (feu vert de Rad), dernier commit `8b5fc9c`. Sur `preview` : « Frontières, types et tests unitaires », « Build et parcours essentiels », « Vercel » et « Parcours sur le déploiement » réussis.
+- Avant la fusion, la CI du lot 11 a révélé une course dans Payload (deux connexions simultanées au même compte effacent une session) : tests sécurisés par `e2e/session.ts` ; défaut d’accessibilité du kanban vide corrigé. Reproduit et vérifié sur base neuve (209 parcours réussis).
+- Non vérifié à l’œil : preview.mydalil.com exige une connexion Vercel puis un compte /admin.
+- Prochaine action : promotion `preview` → `main` après feu vert explicite de Rad (migrations additives seulement : colonnes, tables, valeur d’énumération ; données différées `agents_equipe_icm`).
 - Décisions attendues de Rad : clés ANTHROPIC/OPENAI et budget mensuel des agents ; bot Telegram (jeton, secret, identifiants) ; réception des emails (sous-domaine ou redirection Gandi) ; suspension de membre ; périmètre de l’« Éditeur du site » ; double authentification de l’équipe.
