@@ -13,3 +13,13 @@
 - Relire les contrôles et les déploiements sur la révision courante avant toute livraison.
 - Prochaine action : vérifier la branche, le diff et la dernière décision du module avant de poursuivre la tâche confiée.
 - Aucun changement applicatif, migration ou lancement n’est attesté par ce rangement.
+
+## Cockpit /admin — 14 novembre 2026 (lots 1 à 5)
+
+- Branches empilées, chacune avec sa PR vers `preview` : lot 1 `agent/cockpit-lot1` (#19), lot 2 `agent/cockpit-lot2` (#20), lot 3 `agent/cockpit-lot3` (#21), lot 4 `agent/cockpit-lot4` (#22), lot 5 `agent/cockpit-lot5`. Aucune fusion faite : feu vert de Rad requis.
+- Déploiements Vercel Preview des lots 3 et 4 : réussis après le correctif `.vercelignore` (`!company/**/*.md`).
+- Lot 5 (écrans des agents) : `/admin/cockpit/{agents,taches,validation,activite,conversations,memoire,connecteurs}` dans `src/modules/pilotage/admin/views/`, enregistrés dans `payload.config.ts`, rôles dans `admin/data.ts` (`VIEW_ROLES`), textes FR/AR/EN dans `admin/i18n.ts`.
+- Vérifié en local sur le lot 5 : `pnpm check` OK, `pnpm lint` 0 erreur, `pnpm test` 163 réussis, `pnpm build` OK, e2e complets 139 réussis (`TELEGRAM_WEBHOOK_SECRET=ci-telegram-secret DALIL_TEST_LLM=1`, après `pnpm search:index`).
+- Non vérifié : parcours réel sur preview.mydalil.com (protégé par la connexion Vercel).
+- À fournir par Rad dans Vercel : clés ANTHROPIC/OPENAI, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET` ; dans /admin : budget mensuel des agents, `telegramId` des comptes, `telegramChannelId`.
+- Prochaine action : lot 6, Médiathèque glisser-déposer (`/admin/cockpit/medias`). Feuille de route : `docs/superpowers/plans/2026-11-14-cockpit-admin-feuille-de-route.md`.

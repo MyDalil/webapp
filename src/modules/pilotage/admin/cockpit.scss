@@ -142,3 +142,23 @@ html[dir='rtl'] .dl-pv h1 { font-family: 'IBM Plex Sans Arabic', sans-serif; let
 .step-nav__home .dl-mark { width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
 // Bouton « fermer » du menu : utile seulement quand le menu recouvre l’écran.
 @media (min-width: 769px) { .dl-nav .nav__mobile-close { display: none; } }
+
+// ── Écrans du cockpit (lot 5) : mêmes jetons, aucune couleur nouvelle ──
+.dl-inp { min-height: 36px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--dl-ln); background: var(--dl-s); color: var(--dl-tx); font: 500 13.5px/1.4 Inter, sans-serif; min-width: 0; box-sizing: border-box; }
+.dl-inp:focus { outline: 2px solid var(--dl-g); outline-offset: 1px; }
+.dl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.dl-meter { height: 6px; border-radius: 99px; background: var(--dl-s3); overflow: hidden; }
+.dl-meter > span { display: block; height: 100%; background: var(--dl-g); border-radius: inherit; }
+.dl-pre { margin: 6px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--dl-s2); border: 1px solid var(--dl-ln); font: 500 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; word-break: break-word; max-height: 360px; overflow: auto; color: var(--dl-tx); }
+.dl-kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 6px; align-items: start; }
+.dl-col { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: var(--dl-radius); background: var(--dl-s2); border: 1px solid var(--dl-ln); min-width: 0; }
+.dl-task { display: flex; flex-direction: column; gap: 6px; padding: 12px; }
+.dl-msg { padding: 10px 12px; border-radius: 12px; background: var(--dl-s2); max-width: 760px; }
+.dl-msg-agent { background: var(--dl-g-soft); margin-inline-start: auto; }
+.dl-pv .lbl { font-size: 12.5px; color: var(--dl-mu); }
+.dl-pv table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dl-pv th, .dl-pv td { padding: 8px; border-bottom: 1px solid var(--dl-ln); text-align: start; }
+@media (max-width: 768px) {
+  .dl-kanban { grid-auto-flow: row; grid-auto-columns: auto; overflow-x: visible; }
+  .dl-inp, .dl-btn, .dl-seg button { min-height: 44px; }
+}

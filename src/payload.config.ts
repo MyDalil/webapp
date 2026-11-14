@@ -53,7 +53,17 @@ export default buildConfig({
       Nav: '@/modules/pilotage/admin/CockpitNav#CockpitNav',
       graphics: { Icon: '@/modules/pilotage/admin/Brand#DalilIcon', Logo: '@/modules/pilotage/admin/Brand#DalilLogo' },
       actions: ['@/modules/pilotage/admin/CockpitBar#CockpitBar'],
-      views: { dashboard: { Component: '@/modules/pilotage/admin/PilotageView#PilotageView' } },
+      views: {
+        dashboard: { Component: '@/modules/pilotage/admin/PilotageView#PilotageView' },
+        // Écrans du cockpit (lot 5). Contrôle d’accès dans CockpitPage ; chemins listés dans admin/data.ts.
+        cockpitAgents: { Component: '@/modules/pilotage/admin/views/AgentsView#AgentsView', path: '/cockpit/agents' },
+        cockpitTaches: { Component: '@/modules/pilotage/admin/views/TachesView#TachesView', path: '/cockpit/taches' },
+        cockpitValidation: { Component: '@/modules/pilotage/admin/views/ValidationView#ValidationView', path: '/cockpit/validation' },
+        cockpitActivite: { Component: '@/modules/pilotage/admin/views/ActiviteView#ActiviteView', path: '/cockpit/activite' },
+        cockpitConversations: { Component: '@/modules/pilotage/admin/views/ConversationsView#ConversationsView', path: '/cockpit/conversations' },
+        cockpitMemoire: { Component: '@/modules/pilotage/admin/views/MemoireView#MemoireView', path: '/cockpit/memoire' },
+        cockpitConnecteurs: { Component: '@/modules/pilotage/admin/views/ConnecteursView#ConnecteursView', path: '/cockpit/connecteurs' },
+      },
     },
   },
   // Admin en français par défaut ; arabe (RTL) et anglais en un clic (cockpit, lot 1).
