@@ -1,0 +1,192 @@
+// Cockpit DALIL — jetons et habillage de /admin (clair et sombre).
+// Payload pose html[data-theme] : on redéfinit sa gamme neutre et son vert,
+// les écrans natifs (listes, formulaires) prennent ainsi les couleurs DALIL.
+
+:root {
+  --color-base-0: #ffffff; --color-base-50: #f6f5f1; --color-base-100: #eef1ee; --color-base-150: #e1e6e2;
+  --color-base-200: #d3dad5; --color-base-250: #c4ccc7; --color-base-300: #b3bdb7; --color-base-350: #a2ada6;
+  --color-base-400: #8f9b95; --color-base-450: #7d8a83; --color-base-500: #6b7872; --color-base-550: #5f6b66;
+  --color-base-600: #4e5a55; --color-base-650: #414c47; --color-base-700: #34403b; --color-base-750: #283431;
+  --color-base-800: #1d2a25; --color-base-850: #14211c; --color-base-900: #0c1a14; --color-base-950: #091510;
+  --color-base-1000: #06110d;
+  --color-success-50: #eef8f2; --color-success-100: #e5f4ec; --color-success-150: #cfead9; --color-success-200: #b5dfc5;
+  --color-success-250: #95d1ac; --color-success-300: #6fc08f; --color-success-350: #4fae75; --color-success-400: #2f9a5d;
+  --color-success-450: #16874a; --color-success-500: #006b3c; --color-success-550: #006135; --color-success-600: #00562f;
+  --color-success-650: #004b29; --color-success-700: #004023; --color-success-750: #00351d; --color-success-800: #002a17;
+  --color-success-850: #002011; --color-success-900: #00160b; --color-success-950: #000c06;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --dl-g: #006b3c; --dl-g-soft: #e5f4ec; --dl-on-g: #ffffff;
+  --dl-bg: #f6f5f1; --dl-s: #ffffff; --dl-s2: #f2f4f1; --dl-s3: #e6ece8; --dl-ln: #e1e6e2;
+  --dl-tx: #14201b; --dl-mu: #5f6b66;
+  --dl-wa: #a14a06; --dl-wa-soft: #fdf1de; --dl-da: #b91c1c; --dl-da-soft: #fdecec; --dl-in: #1d4ed8; --dl-in-soft: #e8effd;
+  --dl-sh: 0 1px 0 rgba(10, 30, 20, 0.04), 0 14px 34px -24px rgba(10, 30, 20, 0.28);
+  --dl-radius: 16px;
+}
+
+html[data-theme='dark'] {
+  --dl-g: #38d181; --dl-g-soft: rgba(56, 209, 129, 0.13); --dl-on-g: #06110d;
+  --dl-bg: #06110d; --dl-s: #0c1a14; --dl-s2: #11231b; --dl-s3: #1a3329; --dl-ln: rgba(168, 183, 175, 0.15);
+  --dl-tx: #eef5f1; --dl-mu: #9aaba3;
+  --dl-wa: #f5b440; --dl-wa-soft: rgba(245, 180, 64, 0.13); --dl-da: #f87171; --dl-da-soft: rgba(248, 113, 113, 0.13);
+  --dl-in: #8fb4ff; --dl-in-soft: rgba(122, 167, 255, 0.13);
+  --dl-sh: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 22px 44px -26px rgba(0, 0, 0, 0.7);
+  --theme-bg: var(--dl-bg);
+}
+
+html[data-theme='light'] { --theme-bg: var(--dl-bg); }
+html[dir='rtl'] { --font-body: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif; }
+body { font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+:where(.dl) :focus-visible { outline: 2px solid var(--dl-g); outline-offset: 2px; }
+
+// ── Menu ───────────────────────────────────────────────
+.dl-nav { background: var(--dl-s); border-inline-end: 1px solid var(--dl-ln); }
+.dl-nav__wrap { display: flex; flex-direction: column; gap: 2px; padding: 18px 12px 20px; min-height: 100%; }
+.dl-brand { display: flex; align-items: center; gap: 10px; padding: 2px 8px 10px; color: var(--dl-tx); text-decoration: none; }
+.dl-logo { width: 32px; height: 32px; border-radius: 10px; background: var(--dl-g); color: var(--dl-on-g); display: grid; place-items: center; font: 800 15px/1 Manrope, Inter, sans-serif; }
+.dl-brand b { display: block; font: 800 15px/1.2 Manrope, Inter, sans-serif; }
+.dl-brand small { color: var(--dl-mu); font-size: 11.5px; }
+.dl-grp { font: 600 11px/1.2 Inter, sans-serif; color: var(--dl-mu); text-transform: uppercase; letter-spacing: 0.07em; padding: 14px 10px 4px; }
+html[dir='rtl'] .dl-grp { letter-spacing: 0; text-transform: none; }
+.dl-nv { display: flex; align-items: center; gap: 10px; padding: 0 10px; min-height: 34px; border-radius: 9px; color: var(--dl-tx); text-decoration: none; font-weight: 500; font-size: 13.5px; transition: background 0.15s; }
+.dl-nv:hover { background: var(--dl-s2); }
+.dl-nv .dl-i { color: var(--dl-mu); }
+.dl-nv[aria-current='page'] { background: var(--dl-g-soft); color: var(--dl-g); font-weight: 600; }
+.dl-nv[aria-current='page'] .dl-i { color: var(--dl-g); }
+.dl-bdg { margin-inline-start: auto; font: 600 11px/1.5 Inter, sans-serif; padding: 0 7px; border-radius: 99px; background: var(--dl-s3); color: var(--dl-tx); }
+.dl-bdg.hot { background: var(--dl-g); color: var(--dl-on-g); }
+.dl-lk { margin-inline-start: auto; width: 15px; height: 15px; color: var(--dl-mu); }
+.dl-nav__foot { margin-top: auto; padding-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 1024px) { .dl-nv { min-height: 44px; font-size: 15px; } }
+
+// ── Éléments partagés ──────────────────────────────────
+.dl-i { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.dl-card { background: var(--dl-s); border: 1px solid var(--dl-ln); border-radius: var(--dl-radius); padding: 16px; box-shadow: var(--dl-sh); min-width: 0; color: var(--dl-tx); }
+.dl-pill { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1.6 Inter, sans-serif; padding: 1px 10px; border-radius: 99px; background: var(--dl-s2); color: var(--dl-tx); white-space: nowrap; }
+.dl-pill.ok { background: var(--dl-g-soft); color: var(--dl-g); }
+.dl-pill.wa { background: var(--dl-wa-soft); color: var(--dl-wa); }
+.dl-pill.da { background: var(--dl-da-soft); color: var(--dl-da); }
+.dl-pill.in { background: var(--dl-in-soft); color: var(--dl-in); }
+.dl-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--dl-ln); background: var(--dl-s); color: var(--dl-tx); font: 600 13px/1 Inter, sans-serif; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.dl-btn:hover { background: var(--dl-s2); }
+.dl-btn.pri { background: var(--dl-g); border-color: var(--dl-g); color: var(--dl-on-g); }
+.dl-btn.dan { color: var(--dl-da); border-color: color-mix(in srgb, var(--dl-da) 35%, transparent); }
+.dl-ib { width: 36px; height: 36px; flex: none; border-radius: 99px; display: grid; place-items: center; border: 0; background: none; color: var(--dl-tx); cursor: pointer; position: relative; }
+.dl-ib:hover { background: var(--dl-s2); }
+.dl-seg { display: inline-flex; padding: 3px; border-radius: 99px; background: var(--dl-s2); border: 1px solid var(--dl-ln); }
+.dl-seg button { border: 0; background: none; color: var(--dl-mu); font: 600 12px/1 Inter, sans-serif; padding: 0 11px; min-height: 28px; border-radius: 99px; cursor: pointer; }
+.dl-seg button[aria-pressed='true'], .dl-seg button[aria-checked='true'] { background: var(--dl-s); color: var(--dl-tx); box-shadow: var(--dl-sh); }
+.dl-mu { color: var(--dl-mu); }
+
+// ── Barre du haut ──────────────────────────────────────
+.dl-bar { display: flex; align-items: center; gap: 6px; }
+.dl-cmd { display: flex; align-items: center; gap: 8px; height: 38px; min-width: 260px; padding: 0 6px 0 14px; border-radius: 99px; background: var(--dl-s); border: 1px solid var(--dl-ln); color: var(--dl-mu); font: 500 13px Inter, sans-serif; cursor: pointer; box-shadow: var(--dl-sh); }
+.dl-kbd { font: 600 11px Inter, sans-serif; border: 1px solid var(--dl-ln); border-radius: 6px; padding: 1px 6px; color: var(--dl-mu); margin-inline-start: auto; }
+@media (max-width: 768px) { .dl-cmd { min-width: 0; width: 38px; padding: 0; justify-content: center; } .dl-cmd span, .dl-cmd .dl-kbd { display: none; } .dl-bar .dl-seg { display: none; } }
+
+// Palette de commandes
+.dl-pal-bg { position: fixed; inset: 0; z-index: 200; background: rgba(6, 17, 13, 0.45); backdrop-filter: blur(6px); display: flex; justify-content: center; padding: 10vh 16px 16px; animation: dl-in 0.18s ease-out; }
+.dl-pal { width: min(640px, 100%); max-height: 70vh; display: flex; flex-direction: column; background: var(--dl-s); color: var(--dl-tx); border: 1px solid var(--dl-ln); border-radius: 18px; box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6); overflow: hidden; }
+.dl-pal__in { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid var(--dl-ln); }
+.dl-pal__in input { flex: 1; min-width: 0; height: 54px; border: 0; background: none; outline: 0; color: var(--dl-tx); font: 500 15px Inter, sans-serif; }
+.dl-pal__list { overflow: auto; padding: 6px; }
+.dl-pal__sec { font: 600 11px Inter, sans-serif; color: var(--dl-mu); text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 10px 4px; }
+.dl-pal__it { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 42px; padding: 0 10px; border: 0; border-radius: 10px; background: none; color: var(--dl-tx); font: 500 14px Inter, sans-serif; text-align: start; cursor: pointer; text-decoration: none; }
+.dl-pal__it[aria-selected='true'], .dl-pal__it:hover { background: var(--dl-g-soft); color: var(--dl-g); }
+.dl-pal__it small { margin-inline-start: auto; color: var(--dl-mu); font-size: 12px; }
+.dl-pal__empty { padding: 18px 12px; color: var(--dl-mu); font-size: 13.5px; }
+@keyframes dl-in { from { opacity: 0; } }
+
+// ── Vue Pilotage ───────────────────────────────────────
+.dl-pv { padding: 8px var(--gutter-h) 40px; display: flex; flex-direction: column; gap: 18px; color: var(--dl-tx); }
+.dl-pv h1 { font: 700 26px/1.2 Manrope, Inter, sans-serif; letter-spacing: -0.02em; margin: 0; }
+html[dir='rtl'] .dl-pv h1 { font-family: 'IBM Plex Sans Arabic', sans-serif; letter-spacing: 0; }
+.dl-pv h2 { font: 700 15px/1.3 Manrope, Inter, sans-serif; margin: 0; }
+.dl-sub { color: var(--dl-mu); margin: 4px 0 0; font-size: 13.5px; }
+.dl-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.dl-sb { justify-content: space-between; }
+.dl-wr { flex-wrap: wrap; }
+.dl-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.dl-kpi { display: flex; gap: 12px; align-items: center; padding: 14px 16px; text-decoration: none; color: inherit; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.dl-kpi:hover { transform: translateY(-1px); }
+.dl-ico { width: 38px; height: 38px; flex: none; border-radius: 11px; display: grid; place-items: center; background: var(--dl-s2); }
+.dl-v { font: 700 24px/1 Manrope, Inter, sans-serif; letter-spacing: -0.02em; }
+.dl-u { font: 500 12px Inter, sans-serif; color: var(--dl-mu); margin-inline-start: 3px; }
+.dl-kl { color: var(--dl-mu); font-size: 12.5px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dl-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; align-items: start; }
+.dl-li { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--dl-ln); color: inherit; text-decoration: none; }
+.dl-li:first-of-type { border-top: 0; }
+.dl-empty { color: var(--dl-mu); font-size: 13.5px; padding: 12px 0 4px; }
+.dl-dot { width: 7px; height: 7px; border-radius: 99px; background: currentColor; flex: none; }
+.dl-live .dl-dot { animation: dl-pulse 1.6s ease-in-out infinite; }
+@keyframes dl-pulse { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .dl-live .dl-dot, .dl-pal-bg { animation: none; } .dl-kpi:hover { transform: none; } }
+
+// Mobile : indicateurs compacts sur deux colonnes ; bouton menu de Payload agrandi à 44 px.
+@media (max-width: 768px) {
+  .dl-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .dl-kpi { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; }
+  .dl-kpi .dl-ico { width: 32px; height: 32px; border-radius: 9px; }
+  .dl-v { font-size: 21px; }
+  .dl-kl { white-space: normal; }
+  .dl-pv h1 { font-size: 23px; }
+  .dl-cols { grid-template-columns: minmax(0, 1fr); }
+}
+.app-header__mobile-nav-toggler { padding: 11px; margin: -11px; box-sizing: content-box; }
+// Logo DALIL (graphics Payload)
+.dl-mark { width: 26px; height: 26px; border-radius: 8px; background: var(--dl-g); color: var(--dl-on-g); display: grid; place-items: center; font: 800 13px/1 Manrope, Inter, sans-serif; }
+.dl-logo-full { display: inline-flex; align-items: center; gap: 12px; color: var(--dl-tx); font: 800 28px/1 Manrope, Inter, sans-serif; letter-spacing: -0.02em; }
+.dl-logo-full .dl-mark { width: 44px; height: 44px; border-radius: 13px; font-size: 21px; }
+// Icône DALIL dans le fil d’Ariane de Payload (zone de 18 px).
+.step-nav__home > span:has(> .dl-mark) { width: auto; height: auto; overflow: visible; }
+.step-nav__home .dl-mark { width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+// Bouton « fermer » du menu : utile seulement quand le menu recouvre l’écran.
+@media (min-width: 769px) { .dl-nav .nav__mobile-close { display: none; } }
+
+// ── Écrans du cockpit (lot 5) : mêmes jetons, aucune couleur nouvelle ──
+.dl-inp { min-height: 36px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--dl-ln); background: var(--dl-s); color: var(--dl-tx); font: 500 13.5px/1.4 Inter, sans-serif; min-width: 0; box-sizing: border-box; }
+.dl-inp:focus { outline: 2px solid var(--dl-g); outline-offset: 1px; }
+.dl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.dl-meter { height: 6px; border-radius: 99px; background: var(--dl-s3); overflow: hidden; }
+.dl-meter > span { display: block; height: 100%; background: var(--dl-g); border-radius: inherit; }
+.dl-pre { margin: 6px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--dl-s2); border: 1px solid var(--dl-ln); font: 500 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; word-break: break-word; max-height: 360px; overflow: auto; color: var(--dl-tx); }
+.dl-kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 6px; align-items: start; }
+.dl-col { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: var(--dl-radius); background: var(--dl-s2); border: 1px solid var(--dl-ln); min-width: 0; }
+.dl-task { display: flex; flex-direction: column; gap: 6px; padding: 12px; }
+.dl-msg { padding: 10px 12px; border-radius: 12px; background: var(--dl-s2); max-width: 760px; }
+.dl-msg-agent { background: var(--dl-g-soft); margin-inline-start: auto; }
+.dl-pv .lbl { font-size: 12.5px; color: var(--dl-mu); }
+.dl-pv table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dl-pv th, .dl-pv td { padding: 8px; border-bottom: 1px solid var(--dl-ln); text-align: start; }
+@media (max-width: 768px) {
+  .dl-kanban { grid-auto-flow: row; grid-auto-columns: auto; overflow-x: visible; }
+  .dl-inp, .dl-btn, .dl-seg button { min-height: 44px; }
+}
+
+// ── Médiathèque (lot 6) ──
+.dl-seg a { display: inline-flex; align-items: center; color: var(--dl-mu); font: 600 12px/1 Inter, sans-serif; padding: 0 11px; min-height: 28px; border-radius: 99px; text-decoration: none; }
+.dl-seg a.on { background: var(--dl-s); color: var(--dl-tx); box-shadow: var(--dl-sh); }
+.dl-drop { display: grid; place-items: center; gap: 4px; text-align: center; min-height: 140px; padding: 20px; border: 2px dashed var(--dl-ln); border-radius: var(--dl-radius); background: var(--dl-s2); cursor: pointer; color: var(--dl-tx); transition: border-color 0.15s ease, background 0.15s ease; }
+.dl-drop:hover, .dl-drop.on { border-color: var(--dl-g); background: var(--dl-g-soft); }
+.dl-up { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px; border: 1px solid var(--dl-ln); border-radius: 12px; }
+.dl-up img { width: 96px; height: 72px; object-fit: cover; border-radius: 8px; background: var(--dl-s2); }
+.dl-medgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.dl-med { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--dl-ln); border-radius: 12px; color: inherit; text-decoration: none; background: var(--dl-s); min-width: 0; }
+.dl-med:hover, .dl-med[aria-current='true'] { border-color: var(--dl-g); }
+.dl-med img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--dl-s2); }
+.dl-med-t { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dl-medgrid2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+.dl-focal { position: relative; display: block; padding: 0; border: 1px solid var(--dl-ln); border-radius: 12px; overflow: hidden; cursor: crosshair; background: var(--dl-s2); width: 100%; }
+.dl-focal img { display: block; width: 100%; height: auto; max-height: 520px; object-fit: contain; }
+.dl-focal-pt { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 99px; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--dl-g), 0 2px 8px rgba(0, 0, 0, 0.4); pointer-events: none; }
+@media (max-width: 768px) {
+  .dl-medgrid2 { grid-template-columns: minmax(0, 1fr); }
+  .dl-medgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .dl-up { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .dl-up img { width: 64px; height: 48px; }
+  .dl-seg a { min-height: 40px; }
+}
+
+// ── Historique et corbeille (lot 7) ──
+.dl-frame { width: 100%; height: 640px; border: 1px solid var(--dl-ln); border-radius: 12px; background: #fff; }
+@media (max-width: 768px) { .dl-frame { height: 520px; } }

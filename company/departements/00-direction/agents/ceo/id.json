@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_direction_ceo_01",
+  "slug": "ceo",
+  "name": "CEO",
+  "department": "00-direction",
+  "reports_to": "humain:said",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5-5",
+  "status": "active",
+  "workflows": [
+    "01-routage-des-ordres"
+  ],
+  "version": "1.0.0"
+}
