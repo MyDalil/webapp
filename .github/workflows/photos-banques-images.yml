@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     branches: ['agent/photos-banques-images']
-    paths: [scripts/import/fetch-stock-candidates.mjs, .github/workflows/photos-banques-images.yml]
+    paths: [scripts/import/fetch-stock-candidates.mjs, scripts/import/fetch-stock-thumbs.mjs, scripts/import/stock-candidates.json, .github/workflows/photos-banques-images.yml]
 permissions:
   contents: write
 jobs:
@@ -16,7 +16,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - run: node scripts/import/fetch-stock-thumbs.mjs
       - run: node scripts/import/fetch-stock-candidates.mjs
+        if: env.PEXELS_API_KEY != '' || env.PIXABAY_API_KEY != '' || env.UNSPLASH_ACCESS_KEY != ''
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
