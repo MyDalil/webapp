@@ -43,6 +43,8 @@ export const Places: CollectionConfig = {
     preview: (doc) => `/api/preview?slug=${doc.slug}`,
   },
   versions: { drafts: true },
+  // Corbeille : « supprimer » met de côté 30 jours, restaurable (cockpit › Historique et corbeille).
+  trash: true,
   defaultSort: 'name',
   access: { read: publishedOrStaff, create: isStaff, update: isStaff, delete: isAdmin },
   hooks: { beforeOperation: [markTechnicalUpdate], beforeValidate: [prepare], beforeChange: [guardPublication('_status'), keepPublishedBase, requireProof], afterChange: [refresh, indexPlace], afterDelete: [unindexPlace] },

@@ -11,7 +11,8 @@ const wilayaName = (code?: string | null) => WILAYAS.find((w) => String(w.code) 
 
 /** Ligne d’index d’une adresse publiée (`null` : à retirer de l’index). */
 export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow | null {
-  if (p._status !== 'published' || !p.slug || !p.name) return null
+  // Une adresse dans la corbeille sort de l’index (mise à la corbeille = mise à jour, pas suppression).
+  if (p._status !== 'published' || !p.slug || !p.name || p.deletedAt) return null
   const sector = SECTORS.find((s) => s.slug === p.sector)
   return {
     type: 'adresse',

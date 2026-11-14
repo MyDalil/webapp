@@ -42,6 +42,7 @@ export const NAV_GROUPS: GroupDef[] = [
   ] },
   { key: 'contenu', label: 'Contenu', items: [
     { key: 'fiches', label: 'Lieux et fiches', icon: 'file', targets: [col('places')] },
+    { key: 'historique', label: 'Historique et corbeille', icon: 'clock', targets: [view('/cockpit/historique')] },
     { key: 'evenements', label: 'Événements', icon: 'calendar', targets: [col('events')] },
     { key: 'praticiens', label: 'Praticiens de santé', icon: 'heart', targets: [col('practitioners')] },
     { key: 'prestataires', label: 'Prestataires', icon: 'tool', targets: [col('providers')] },

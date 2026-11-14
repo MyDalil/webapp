@@ -6,14 +6,15 @@ import { useState, useTransition } from 'react'
  * Bouton d’action du cockpit : appel à l’API REST de Payload (droits de la session), puis rafraîchissement.
  * L’erreur renvoyée par le serveur (garde-fou, droit) s’affiche telle quelle sous le bouton.
  */
-export function Act({ path, method = 'PATCH', body, label, className = 'dl-btn', confirm, disabled }: { path: string; method?: 'PATCH' | 'POST' | 'DELETE'; body?: unknown; label: string; className?: string; confirm?: string; disabled?: boolean }) {
+export function Act({ path, method = 'PATCH', body, label, className = 'dl-btn', confirm, disabled, stampField }: { path: string; method?: 'PATCH' | 'POST' | 'DELETE'; body?: unknown; label: string; className?: string; confirm?: string; disabled?: boolean; /** Champ rempli avec la date du clic (ex. deletedAt). */ stampField?: string }) {
   const router = useRouter()
   const [pending, start] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const run = async () => {
     if (confirm && !window.confirm(confirm)) return
     setError(null)
-    const r = await fetch(path, { method, credentials: 'include', headers: { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) })
+    const payload = stampField ? { ...(body as Record<string, unknown> | undefined), [stampField]: new Date().toISOString() } : body
+    const r = await fetch(path, { method, credentials: 'include', headers: { 'content-type': 'application/json' }, body: payload === undefined ? undefined : JSON.stringify(payload) })
     if (!r.ok) {
       const j = (await r.json().catch(() => ({}))) as { errors?: Array<{ message?: string }>; error?: string; detail?: string }
       setError(j.errors?.[0]?.message ?? j.error ?? j.detail ?? `Erreur ${r.status}`)

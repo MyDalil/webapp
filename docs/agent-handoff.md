@@ -26,4 +26,8 @@
 - Lot 6 `agent/cockpit-lot6` (Médiathèque) : glisser-déposer, 4 formats WebP (`sharp` ajouté), point focal (recadrage vérifié), descriptions FR/AR/EN, doublons par SHA-256, utilisation et remplacement partout, migration `20261114_150104_cockpit_mediatheque` (ajout de colonnes seulement).
 - Vérifié en local sur le lot 6 : `pnpm check` OK, lint 0 erreur, `pnpm test` 171 réussis, build OK, e2e complets 151 réussis.
 - Non vérifié : recadrage du point focal avec Vercel Blob (vérifié sur disque local seulement) ; les descriptions AR/EN ne sont pas encore lues par le site public (lot 10, Traductions).
-- Prochaine action : lot 7, Édition de fiche (aperçu FR/AR/EN, historique, restauration). Feuille de route : `docs/superpowers/plans/2026-11-14-cockpit-admin-feuille-de-route.md`.
+- Lot 6 : CI entièrement verte et déploiement Vercel Preview réussi (PR #24).
+- Lot 7 `agent/cockpit-lot7` (Historique et corbeille) : `/admin/cockpit/historique`, corbeille 30 jours sur les adresses (`trash: true`, migration `20261114_152745_cockpit_corbeille`, ajout de colonnes), purge quotidienne, SQL brut de l’annuaire filtré sur `deleted_at`, index de recherche mis à jour.
+- Vérifié en local sur le lot 7 : corbeille → page 404 et hors index ; restauration → retour ; purge 31 j supprimée, 29 j gardée ; restaurer une version crée un brouillon sans toucher la version publiée ; 173 unitaires, 156 parcours réussis.
+- Limite : la corbeille couvre les adresses seulement ; les autres collections suppriment toujours définitivement (administrateur seul).
+- Prochaine action : lot 8, Boîte unique (besoin externe : Resend Inbound, MX chez Gandi) ; à défaut, lot 9 Communauté.
