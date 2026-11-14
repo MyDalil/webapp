@@ -31,16 +31,15 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setOpen((o) => !o) }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setQ(''); setSel(0); setOpen((o) => !o) }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-  useEffect(() => { if (open) { setQ(''); setSel(0); setTimeout(() => input.current?.focus(), 0) } }, [open])
 
   // Recherche dans les données, avec les droits de la session (API REST de Payload).
   useEffect(() => {
-    if (!open || q.trim().length < 2) { setHits([]); return }
+    if (!open || q.trim().length < 2) return
     const ctl = new AbortController()
     const id = setTimeout(async () => {
       const lists = await Promise.all(searchable.map(async (c) => {
@@ -62,7 +61,8 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
     const n = norm(q.trim())
     return (n ? pages.filter((p) => norm(p.label).includes(n) || norm(p.group).includes(n)) : pages).slice(0, n ? 8 : 12)
   }, [q, pages])
-  const all = [...pageHits, ...hits]
+  const shown = q.trim().length < 2 ? [] : hits
+  const all = [...pageHits, ...shown]
 
   const go = useCallback((href: string) => { setOpen(false); router.push(href) }, [router])
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -75,7 +75,7 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
   const lang = i18n.language
   return (
     <div className="dl-bar dl">
-      <button type="button" className="dl-cmd" onClick={() => setOpen(true)} aria-haspopup="dialog" aria-label={labels.search}>
+      <button type="button" className="dl-cmd" onClick={() => { setQ(''); setSel(0); setOpen(true) }} aria-haspopup="dialog" aria-label={labels.search}>
         <Icon name="search" /><span>{labels.search}</span><span className="dl-kbd">⌘K</span>
       </button>
       <div className="dl-seg" role="group" aria-label={labels.lang}>
@@ -91,7 +91,7 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
           <div className="dl-pal" role="dialog" aria-modal="true" aria-label={labels.search} onKeyDown={onKeyDown}>
             <div className="dl-pal__in">
               <Icon name="search" />
-              <input ref={input} value={q} onChange={(e) => { setQ(e.target.value); setSel(0) }} placeholder={labels.placeholder} aria-label={labels.placeholder} role="combobox" aria-expanded="true" aria-controls="dl-pal-list" />
+              <input ref={input} autoFocus value={q} onChange={(e) => { setQ(e.target.value); setSel(0) }} placeholder={labels.placeholder} aria-label={labels.placeholder} role="combobox" aria-expanded="true" aria-controls="dl-pal-list" />
               <button type="button" className="dl-ib" onClick={() => setOpen(false)} aria-label={labels.close}><Icon name="x" /></button>
             </div>
             <div className="dl-pal__list" id="dl-pal-list" role="listbox">
@@ -101,8 +101,8 @@ export function CommandBar({ pages, searchable, labels }: { pages: Page[]; searc
                   <Icon name={p.icon} /><span>{p.label}</span><small>{p.group}</small>
                 </button>
               ))}
-              {hits.length > 0 && <div className="dl-pal__sec">{labels.results}</div>}
-              {hits.map((h, j) => {
+              {shown.length > 0 && <div className="dl-pal__sec">{labels.results}</div>}
+              {shown.map((h, j) => {
                 const i = pageHits.length + j
                 return (
                   <button key={h.href} type="button" role="option" aria-selected={sel === i} className="dl-pal__it" onMouseEnter={() => setSel(i)} onClick={() => go(h.href)}>

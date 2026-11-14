@@ -60,7 +60,7 @@ export function CockpitNavClient({ groups, killSwitchOn, labels }: { groups: { k
               <span style={{ fontWeight: 600, fontSize: 13 }}>{labels.killswitch}</span>
               <span className={killSwitchOn ? 'dl-pill da' : 'dl-pill ok'}>{killSwitchOn ? labels.ksOn : labels.ksOff}</span>
             </Link>
-            <a href="/admin/logout" className="dl-nv"><Icon name="logout" /><span>{labels.logout}</span></a>
+            <Link href="/admin/logout" className="dl-nv" prefetch={false}><Icon name="logout" /><span>{labels.logout}</span></Link>
           </div>
         </nav>
       </div>
