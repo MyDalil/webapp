@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_donnees_analyste_01",
+  "slug": "analyste",
+  "name": "Analyste",
+  "department": "06-donnees",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-couverture"
+  ],
+  "version": "1.0.0"
+}
