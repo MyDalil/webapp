@@ -142,7 +142,8 @@ async function geoMatch(r) {
 }
 
 // --- Exécution ----------------------------------------------------------------------------------------------------
-const previous = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).photos || {} : {}
+// Résultats précédents gardés seulement s’ils ont passé le contrôle de qualité (champ « quality » présent).
+const previous = Object.fromEntries(Object.entries(existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).photos || {} : {}).filter(([, list]) => list.every((p) => 'quality' in p)))
 const result = { ...previous }
 const details = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).details || {} : {}
 const stats = { wikidata: 0, osmCommons: 0, geo: 0, none: 0 }
