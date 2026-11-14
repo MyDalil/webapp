@@ -1,0 +1,31 @@
+name: Photos haut de gamme (Pexels, Pixabay, Unsplash)
+# Candidats par catégorie de lieu public, téléchargés en vignettes pour un choix à l’œil.
+# Clés gratuites dans les secrets du dépôt : PEXELS_API_KEY, PIXABAY_API_KEY, UNSPLASH_ACCESS_KEY.
+on:
+  workflow_dispatch:
+  push:
+    branches: ['agent/photos-banques-images']
+    paths: [scripts/import/fetch-stock-candidates.mjs, .github/workflows/photos-banques-images.yml]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/import/fetch-stock-candidates.mjs
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      - name: Commit des candidats
+        run: |
+          git config user.name "dalil-import"
+          git config user.email "salam@mydalil.com"
+          git add -f data/stock-candidates
+          git commit -m "Données : candidats photos haut de gamme [skip ci]" || echo "rien de nouveau"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
