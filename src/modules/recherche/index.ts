@@ -3,3 +3,4 @@ export { INTENT_SYSTEM, intentFrom, localIntent, parseJson, withDefaults, type I
 export { ROBOTS_DISALLOW, indexXml, sitemapFiles, sitemapUrls, urlsetXml } from './sitemap'
 export { detectPlace } from './place'
 export { searchEverything, suggest, type SearchGroup, type SearchResults } from './results'
+export { listMisses, normalizeMiss, purgeMisses, recordMiss } from './misses'

@@ -38,4 +38,7 @@
 - Lot 9 `agent/cockpit-lot9` (Communauté) : `/admin/cockpit/{moderation,annonces,pros,membres}`, score anti-arnaque `src/modules/annonces/risk.ts` (testé), badges Modération et Professionnels. Aucune migration.
 - Vérifié en local sur le lot 9 : 187 unitaires, 177 parcours réussis.
 - Lot 10 découpé : 10a Système `agent/cockpit-lot10a` (`/admin/cockpit/{ia,sante,securite}`), aucune migration ; 187 unitaires, 185 parcours réussis en local.
-- Prochaine action : lot 10b Business (Analytics, Newsletter, Finances, SEO, Couverture, Traductions, Recherches sans résultat), puis lot 11 (finition, accessibilité, revue indépendante).
+- Lots 7 et 9 : CI entièrement verte (après relance du lot 7).
+- Lot 10b `agent/cockpit-lot10b` : `/admin/cockpit/{analytics,newsletter,finances,seo,couverture,traductions,recherches}` ; table `search_misses` (migration `20261114_170000_recherches_sans_resultat`, création de table seulement) ; 191 unitaires, 205 parcours réussis en local.
+- Non livré : « Éditeur du site » (périmètre à définir avec Rad).
+- Prochaine action : lot 11 — finition, accessibilité WCAG AA, revue indépendante (sous-agent), rapport honnête.

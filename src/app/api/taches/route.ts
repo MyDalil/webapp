@@ -11,6 +11,7 @@ import { reindexProcedures, reindexRepresentations } from '@/modules/contenus'
 import { purgeRateLimits } from '@/platform/security/rateLimit'
 import { dailyBackup } from '@/platform/backup/run'
 import { purgeTrash } from '@/platform/trash'
+import { purgeMisses } from '@/modules/recherche'
 
 import { runTask, type TaskOutcome } from '@/platform/tasks/run'
 import { recordError } from '@/platform/monitoring/errors'
@@ -38,6 +39,7 @@ export async function GET(req: Request) {
   out.annonces = await runTask('annonces', dailyClassifiedTasks)
   out.limitesDeDebit = await runTask('limites-de-debit', purgeRateLimits)
   out.corbeille = await runTask('corbeille', async () => purgeTrash(await payload()))
+  out.recherchesSansResultat = await runTask('recherches-sans-resultat', async () => purgeMisses(await payload()))
   // Filet quotidien : file des agents (si une passe a été interrompue) et publications du canal à échéance.
   out.agents = await runTask('agents', async () => runQueue(await payload(), { budgetMs: 60_000 }))
   out.canalTelegram = await runTask('canal-telegram', async () => publishDue(await payload()))

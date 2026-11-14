@@ -82,6 +82,7 @@ export const NAV_GROUPS: GroupDef[] = [
     { key: 'finances', label: 'Finances', icon: 'wallet', targets: [view('/cockpit/finances')] },
     { key: 'analytics', label: 'Analytics', icon: 'chart', targets: [view('/cockpit/analytics'), col('visitor-sessions')] },
     { key: 'seo', label: 'SEO', icon: 'search', targets: [view('/cockpit/seo')] },
+    { key: 'recherches', label: 'Recherches sans résultat', icon: 'search', targets: [view('/cockpit/recherches')] },
   ] },
   { key: 'systeme', label: 'Système', items: [
     { key: 'ia', label: 'IA et coûts', icon: 'cpu', targets: [view('/cockpit/ia'), col('ai-usage')] },
