@@ -14,8 +14,10 @@ async function ensureUsers(page: Page) {
   expect(login.ok(), 'connexion admin de test').toBe(true)
   const exists = await r.get(`/api/users?where[email][equals]=${encodeURIComponent(CONSEILLER.email)}&limit=1`)
   if (((await exists.json()) as { totalDocs: number }).totalDocs === 0) {
+    // Un autre fichier de tests peut le créer en même temps : seul compte le résultat.
     const created = await r.post('/api/users', { data: { ...CONSEILLER, role: 'conseiller' } })
-    expect(created.ok(), 'création du conseiller de test').toBe(true)
+    const again = await r.get(`/api/users?where[email][equals]=${encodeURIComponent(CONSEILLER.email)}&limit=1`)
+    expect(created.ok() || ((await again.json()) as { totalDocs: number }).totalDocs === 1, 'création du conseiller de test').toBe(true)
   }
 }
 
@@ -60,7 +62,11 @@ test.describe.serial('Cockpit admin @ecriture', () => {
     await loginAs(page, ADMIN)
     await page.goto('/admin')
     await expect(page.locator('.dl-cmd')).toBeVisible({ timeout: 30_000 })
-    await page.keyboard.press('Control+k')
+    // Le raccourci n’agit qu’une fois la page hydratée : on réessaie jusqu’à l’ouverture de la palette.
+    await expect(async () => {
+      await page.keyboard.press('Control+k')
+      await expect(page.getByRole('combobox')).toBeVisible({ timeout: 2_000 })
+    }).toPass({ timeout: 30_000 })
     await page.getByRole('combobox').fill('médiat')
     await expect(page.getByRole('option', { name: /Médiathèque/ })).toBeVisible()
     await page.keyboard.press('Enter')
