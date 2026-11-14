@@ -32,6 +32,10 @@ export const TOOLS = [
   { label: 'Lire la boîte de réception', value: 'read-inbox' },
   { label: 'Lire la santé technique', value: 'read-health' },
   { label: 'Donner un avis sur les annonces à contrôler', value: 'review-classifieds' },
+  { label: 'Traduire FR → AR / EN', value: 'translate' },
+  { label: 'Écrire les textes alternatifs des images', value: 'write-alt-text' },
+  { label: 'Ajouter des étiquettes', value: 'suggest-tags' },
+  { label: 'Réparer les liens cassés', value: 'fix-broken-links' },
 ] as const
 
 export const TASK_STATUS = [

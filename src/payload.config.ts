@@ -20,7 +20,7 @@ import { EmailDeliveries } from '@/platform/mailing/EmailDeliveries'
 import { auditPlugin } from '@/platform/audit/audit'
 import { Controls } from '@/platform/controls/Controls'
 import { AccompagnementRequests, AccompagnementSettings, Packs } from '@/modules/accompagnement/collections'
-import { AgentMessages, AgentTasks, Agents } from '@/modules/agents/collections'
+import { AgentMessages, AgentNotifications, AgentTasks, Agents } from '@/modules/agents/collections'
 import { ClassifiedMessages, Classifieds } from '@/modules/annonces/collections'
 import { Events, FeaturedDestination, Places } from '@/modules/annuaire/collections'
 import { ContributionPhotos, Submissions } from '@/modules/messages/collections'
@@ -59,7 +59,7 @@ export default buildConfig({
   // Admin en français par défaut ; arabe (RTL) et anglais en un clic (cockpit, lot 1).
   i18n: { supportedLanguages: { fr, ar, en }, fallbackLanguage: 'fr' },
   globals: [FeaturedDestination, Controls, AccompagnementSettings],
-  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AiUsage, ErrorLogs, TaskRuns, EmailDeliveries, AuditLog],
+  collections: [Places, Events, Practitioners, Appointments, Providers, Missions, MissionMessages, ProviderReviews, ProviderDocuments, Classifieds, ClassifiedMessages, Packs, AccompagnementRequests, Procedures, Platforms, Representations, Media, Submissions, ContributionPhotos, Subscribers, Campaigns, TelegramPosts, Members, VisitorSessions, Users, Agents, AgentTasks, AgentMessages, AgentNotifications, AiUsage, ErrorLogs, TaskRuns, EmailDeliveries, AuditLog],
   editor: lexicalEditor(),
   // Emails de l’admin (mot de passe oublié…) envoyés depuis salam@mydalil.com via Resend.
   ...(process.env.RESEND_API_KEY

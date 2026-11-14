@@ -5,7 +5,7 @@ const ALL_COLLECTIONS = [
   'places', 'events', 'practitioners', 'appointments', 'providers', 'missions', 'mission-messages', 'provider-reviews', 'provider-documents',
   'classifieds', 'classified-messages', 'packs', 'demandes-accompagnement', 'procedures', 'platforms', 'representations', 'media', 'submissions',
   'contribution-photos', 'subscribers', 'campaigns', 'telegram-posts', 'members', 'visitor-sessions', 'users', 'agents', 'agent-tasks',
-  'agent-messages', 'ai-usage', 'error-logs', 'task-runs', 'email-deliveries', 'audit-log',
+  'agent-messages', 'agent-notifications', 'ai-usage', 'error-logs', 'task-runs', 'email-deliveries', 'audit-log',
 ]
 const ALL_GLOBALS = ['featured-destination', 'controls', 'accompagnement']
 

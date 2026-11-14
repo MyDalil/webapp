@@ -37,6 +37,7 @@ test.describe.serial('Cockpit admin @ecriture', () => {
     await page.goto('/admin')
     await expect(page.getByRole('heading', { level: 1, name: /Bonjour Saïd/ })).toBeVisible({ timeout: 30_000 })
     await expect(page.locator('.dl-kpi')).toHaveCount(8)
+    await expect(page.getByRole('heading', { level: 2, name: 'Fil d’activité' })).toBeVisible()
     for (const g of ['Pilotage', 'Agents', 'Contenu', 'Communauté', 'Communication', 'Système']) await expect(page.locator('.dl-grp', { hasText: g })).toHaveCount(1)
     await expect(page.locator('.dl-nv[aria-current="page"]')).toHaveText(/Vue d’ensemble/)
     if (test.info().project.name === 'ordinateur') await expect(page.locator('aside.dl-nav')).toHaveClass(/nav--nav-open/)
