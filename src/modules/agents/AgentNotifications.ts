@@ -101,6 +101,13 @@ export async function notify(payload: Payload, req: PayloadRequest | undefined, 
 /** Chaque changement d’état d’une tâche produit sa notification (avant / pendant / après / ordre). */
 export const notifyTaskChange: CollectionAfterChangeHook = async ({ doc, previousDoc, operation, req }) => {
   const phase = phaseOf(operation === 'create' ? undefined : previousDoc, doc)
+  // Une tâche à faire (création, reprise, nouvelle directive) par un humain ou le système : la file avance après la réponse.
+  const byAgent = (req.user as { collection?: string } | null)?.collection === 'agents'
+  const directiveChanged = operation === 'update' && doc.directive !== previousDoc?.directive
+  if (!byAgent && (doc.status === 'new' || (doc.status === 'running' && (previousDoc?.status !== 'running' || directiveChanged)))) {
+    const run = async () => { const { runQueue } = await import('./runtime/queue'); await runQueue(req.payload).catch((e) => console.error('[agents] file', e)) }
+    try { after(run) } catch { /* hors requête : la tâche planifiée prendra le relais */ }
+  }
   if (!phase) return doc
   const agent = doc.agent && typeof doc.agent === 'object' ? doc.agent : null
   let agentLabel = (agent as { name?: string } | null)?.name ?? null

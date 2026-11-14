@@ -31,10 +31,18 @@ export const Agents: CollectionConfig = {
           defaultValue: 'active',
           options: [
             { label: 'Actif', value: 'active' },
+            { label: 'En réserve (activable en un clic)', value: 'reserve' },
             { label: 'En pause', value: 'paused' },
             { label: 'Désactivé', value: 'disabled' },
           ],
         },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'roleId', type: 'text', label: 'Identifiant de rôle', index: true, admin: { readOnly: true, description: 'agent_id du dossier company/ (méthode ICM).' } },
+        { name: 'department', type: 'text', label: 'Département', index: true, admin: { readOnly: true } },
       ],
     },
     { name: 'mission', type: 'textarea', label: 'Mission', required: true },
@@ -49,6 +57,14 @@ export const Agents: CollectionConfig = {
     },
     { name: 'scopes', type: 'select', hasMany: true, label: 'Rubriques autorisées', options: [...RUBRIQUES] },
     { name: 'tools', type: 'select', hasMany: true, label: 'Outils autorisés', options: [...TOOLS] },
+    {
+      type: 'row',
+      fields: [
+        { name: 'coldTestResult', type: 'select', label: 'Test à froid', options: [{ label: 'Réussi', value: 'pass' }, { label: 'Échoué', value: 'fail' }], admin: { readOnly: true } },
+        { name: 'coldTestAt', type: 'date', label: 'Testé le', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
+        { name: 'coldTestDetail', type: 'text', label: 'Résultat du test', admin: { readOnly: true } },
+      ],
+    },
     {
       name: 'toolModes',
       type: 'array',
@@ -84,7 +100,7 @@ export const Agents: CollectionConfig = {
       name: 'memory',
       type: 'textarea',
       label: 'Mémoire résumée',
-      admin: { description: 'Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (src/modules/agents/equipe/<agent>/).' },
+      admin: { description: 'Faits utiles appris au fil des tâches. Courte, revue par l’équipe. Les règles et skills sont dans le dépôt (company/departements/<nn>/agents/<rôle>/).' },
     },
   ],
 }

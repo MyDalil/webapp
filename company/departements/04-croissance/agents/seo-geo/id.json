@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_croissance_seo_geo_01",
+  "slug": "seo-geo",
+  "name": "SEO / GEO",
+  "department": "04-croissance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-page"
+  ],
+  "version": "1.0.0"
+}

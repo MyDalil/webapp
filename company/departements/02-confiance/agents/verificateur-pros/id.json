@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_confiance_verificateur_pros_01",
+  "slug": "verificateur-pros",
+  "name": "Vérificateur pros",
+  "department": "02-confiance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-candidature"
+  ],
+  "version": "1.0.0"
+}

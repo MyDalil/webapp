@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_croissance_partenariats_01",
+  "slug": "partenariats",
+  "name": "Partenariats",
+  "department": "04-croissance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-prospection"
+  ],
+  "version": "1.0.0"
+}

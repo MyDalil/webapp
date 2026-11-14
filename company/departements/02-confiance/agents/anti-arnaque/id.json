@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_confiance_anti_arnaque_01",
+  "slug": "anti-arnaque",
+  "name": "Anti-arnaque",
+  "department": "02-confiance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "reserve",
+  "workflows": [
+    "01-score-annonce"
+  ],
+  "version": "1.0.0"
+}

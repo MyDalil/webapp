@@ -3,7 +3,7 @@
 Département responsable : **CEO Office**. Lire aussi `AGENTS.md` à la racine (règles communes).
 
 ## Rôle
-L'équipe d'agents IA de DALIL : CEO, Editorial, Trust au départ. Ils proposent. Un humain publie.
+L'équipe d'agents IA de DALIL, organisée en dossiers (méthode ICM, `company/` à la racine) : 8 départements, 16 rôles — 6 actifs (CEO, Rédacteur, Traducteur, Médiathèque, Modérateur, Support), 10 en réserve activables en un clic. Ils proposent. Un humain publie.
 
 ## Gouvernance (décisions de Rad, 17 oct. 2026)
 - Saïd est le patron (rôle `patron`). Le CEO lui rend compte de tout.
@@ -19,7 +19,11 @@ L'équipe d'agents IA de DALIL : CEO, Editorial, Trust au départ. Ils proposent
   Un agent ne peut ni valider, ni annuler, ni mettre en pause. Il ne touche pas aux champs humains.
 - `AgentMessages.ts` — fil des échanges (agents entre eux, agents ↔ Saïd et Rad). Ajout seul. Auteur signé par la session.
 - `referentiel.ts` — rubriques, outils, états, mots interdits.
-- `equipe/<agent>/AGENT.md` — mission et règles de chaque agent. `equipe/_commun/` — règles de tous.
+- `company/` (racine du dépôt) — la société en fichiers : `AGENTS.md` (L0), `CONTEXT.md` (routage), `_config/`, `departements/<nn>/agents/<rôle>/{id.json, guardrails.json, AGENT.md}`, `workflows/<nn>/<nn-étape>/CONTEXT.md`.
+- `policy.ts` — autonomie (exécute / propose / refus), plancher codé.
+- `AgentNotifications.ts`, `notify.ts` — fil d’activité avant / pendant / après / ordre.
+- `runtime/` — moteur : `company.ts` (lecture ICM), `llm.ts` (Anthropic, OpenAI, coût), `engine.ts` (boucle d’étapes, arrêt coopératif, budgets), `tools.ts` (outils réels), `queue.ts` (file, verrou), `activation.ts` (test à froid).
+- Routes : `/api/agents/run` (file : CRON_SECRET ou admin), `/api/agents/role` (activer, remettre en réserve).
 
 ## Dépend de
 `platform/access`, `platform/controls` (arrêt général), `platform/audit`.

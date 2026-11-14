@@ -16,7 +16,9 @@ describe('politique d’autonomie des agents', () => {
 
   it('le réglage Neon de l’agent prime sur le défaut', () => {
     expect(decide({ ...base, tool: 'translate', agentModes: { translate: 'propose' } }).mode).toBe('propose')
-    expect(decide({ ...base, tool: 'draft-content', agentModes: { 'draft-content': 'execute' } }).mode).toBe('execute')
+    expect(decide({ ...base, tool: 'review-classifieds', agentModes: { 'review-classifieds': 'execute' } }).mode).toBe('execute')
+    // Un brouillon reste une proposition, même réglé « exécute ».
+    expect(decide({ ...base, tool: 'draft-content', agentModes: { 'draft-content': 'execute' } }).mode).toBe('propose')
   })
 
   it('les interdictions dures ne se lèvent jamais, même réglées « exécute »', () => {

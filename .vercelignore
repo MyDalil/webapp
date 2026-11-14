@@ -3,3 +3,5 @@ src/migrations/*.json
 *.md
 .env*
 /legacy
+# Le moteur d’agents lit la société en fichiers (company/, méthode ICM) au build et à l’exécution.
+!company/**/*.md

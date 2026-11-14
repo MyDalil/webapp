@@ -100,6 +100,13 @@ export const AgentTasks: CollectionConfig = {
     },
     { name: 'result', type: 'textarea', label: 'Résultat ou rapport' },
     {
+      type: 'row',
+      fields: [
+        { name: 'stage', type: 'text', label: 'Étape du workflow', admin: { readOnly: true } },
+      ],
+    },
+    { name: 'trace', type: 'json', label: 'Trace des étapes', admin: { readOnly: true, description: 'Outils appelés, propositions, refus (30 dernières lignes).' } },
+    {
       name: 'proposal',
       type: 'json',
       label: 'Proposition à valider',

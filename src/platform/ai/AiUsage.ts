@@ -12,7 +12,7 @@ export const AiUsage: CollectionConfig = {
   },
   access: { read: isStaff, create: () => false, update: () => false, delete: isAdmin },
   fields: [
-    { type: 'row', fields: [{ name: 'feature', type: 'select', required: true, label: 'Usage', options: [{ label: 'Reformulation', value: 'reformulate' }, { label: 'Compréhension d’une demande', value: 'understand' }] }, { name: 'member', type: 'relationship', relationTo: 'members', label: 'Compte', index: true }] },
+    { type: 'row', fields: [{ name: 'feature', type: 'select', required: true, label: 'Usage', options: [{ label: 'Reformulation', value: 'reformulate' }, { label: 'Compréhension d’une demande', value: 'understand' }, { label: 'Agent IA', value: 'agent' }] }, { name: 'member', type: 'relationship', relationTo: 'members', label: 'Compte', index: true }, { name: 'agent', type: 'relationship', relationTo: 'agents', label: 'Agent', index: true }] },
     { type: 'row', fields: [{ name: 'inputTokens', type: 'number', label: 'Jetons entrée' }, { name: 'outputTokens', type: 'number', label: 'Jetons sortie' }, { name: 'costMicros', type: 'number', label: 'Coût (µ$)' }, { name: 'model', type: 'text', label: 'Modèle' }] },
   ],
 }

@@ -1,0 +1,14 @@
+{
+  "agent_id": "agent_confiance_moderateur_01",
+  "slug": "moderateur",
+  "name": "Modérateur",
+  "department": "02-confiance",
+  "reports_to": "agent_direction_ceo_01",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "status": "active",
+  "workflows": [
+    "01-annonces-a-controler"
+  ],
+  "version": "1.0.0"
+}
