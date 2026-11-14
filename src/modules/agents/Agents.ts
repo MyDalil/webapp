@@ -50,6 +50,22 @@ export const Agents: CollectionConfig = {
     { name: 'scopes', type: 'select', hasMany: true, label: 'Rubriques autorisées', options: [...RUBRIQUES] },
     { name: 'tools', type: 'select', hasMany: true, label: 'Outils autorisés', options: [...TOOLS] },
     {
+      name: 'toolModes',
+      type: 'array',
+      label: 'Autonomie par outil',
+      admin: { description: 'Vide = réglage par défaut (mode mixte). Les interdictions dures et Vie musulmane restent refusées par le code, quel que soit ce réglage.' },
+      access: { update: ({ req: { user } }) => isStaffUser(user) },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'tool', type: 'select', label: 'Outil', required: true, options: [...TOOLS] },
+            { name: 'mode', type: 'select', label: 'Mode', required: true, options: [{ label: 'Exécute seul (notifié)', value: 'execute' }, { label: 'Propose (validation humaine)', value: 'propose' }, { label: 'Interdit', value: 'forbidden' }] },
+          ],
+        },
+      ],
+    },
+    {
       name: 'triggers',
       type: 'select',
       hasMany: true,

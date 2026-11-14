@@ -5,6 +5,7 @@ import { depsFor } from './data'
 import { asLang, t } from './i18n'
 import { Icon } from './icons'
 
+const PHASE_PILL: Record<string, string> = { before: 'dl-pill in', during: 'dl-pill ok', after: 'dl-pill', order: 'dl-pill wa' }
 const TONE: Record<Kpi['tone'], string> = { ok: 'var(--dl-g)', wa: 'var(--dl-wa)', da: 'var(--dl-da)', in: 'var(--dl-in)' }
 const nf = (lang: string) => new Intl.NumberFormat(lang === 'ar' ? 'ar-DZ' : lang === 'en' ? 'en-GB' : 'fr-FR', { maximumFractionDigits: 2 })
 
@@ -23,11 +24,12 @@ export async function PilotageView({ initPageResult }: AdminViewServerProps) {
       return null
     }
   }
-  const [kpis, agents, review, contrib] = await Promise.all([
+  const [kpis, agents, review, contrib, feed] = await Promise.all([
     getPilotageKpis(depsFor(req), new Date()),
     find('agents', { sort: 'name', limit: 12, depth: 0 }),
     find('agent-tasks', { where: { status: { equals: 'review' } }, sort: '-updatedAt' }),
     find('submissions', { where: { status: { equals: 'new' } }, sort: '-createdAt', depth: 0 }),
+    find('agent-notifications', { sort: '-createdAt', limit: 6, depth: 0 }),
   ])
   const name = String((req.user as { name?: string } | null)?.name ?? '').split(' ')[0]
   const day = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-DZ' : lang === 'en' ? 'en-GB' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())
@@ -90,6 +92,16 @@ export async function PilotageView({ initPageResult }: AdminViewServerProps) {
               <span className="dl-ico" style={{ color: 'var(--dl-in)' }}><Icon name="inbox" /></span>
               <span style={{ flex: 1, minWidth: 0 }}><b style={{ display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{String(c.subject)}</b><span className="dl-mu" style={{ fontSize: 12.5 }}>{String(c.kind ?? '')}</span></span>
               <Icon name="chev" />
+            </Link>
+          ))}
+        </section>
+        <section className="dl-card" aria-labelledby="pv-feed">
+          <div className="dl-row dl-sb"><h2 id="pv-feed">{tr('pv.feed')}</h2><Link className="dl-btn" href="/admin/collections/agent-notifications">{tr('pv.all')}</Link></div>
+          <p className="dl-sub">{tr('pv.feed.sub')}</p>
+          {feed === null || feed.length === 0 ? <p className="dl-empty">{tr('pv.feed.none')}</p> : feed.map((f) => (
+            <Link key={f.id} href={`/admin/collections/agent-notifications/${f.id}`} className="dl-li" style={{ alignItems: 'flex-start' }}>
+              <span className={PHASE_PILL[String(f.phase)] ?? 'dl-pill'} style={{ minWidth: 64, justifyContent: 'center' }}>{tr(`phase.${String(f.phase)}`)}</span>
+              <span style={{ flex: 1, minWidth: 0 }}><b style={{ display: 'block', fontSize: 13.5 }}>{String(f.agentLabel ?? '')} · {String(f.title)}</b><code className="dl-mu" style={{ fontSize: 11.5 }}>{String(f.actionId ?? '').slice(0, 17)}…</code></span>
             </Link>
           ))}
         </section>

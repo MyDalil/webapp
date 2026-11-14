@@ -1,5 +1,6 @@
 import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
 import { isAgent, isPatronUser, isStaffUser } from '@/platform/access'
+import { notifyTaskChange } from './AgentNotifications'
 import { AGENT_STATUSES, RUBRIQUES, TASK_STATUS, touchesForbidden, type TaskStatus } from './referentiel'
 
 /** Champs qu’un agent n’a jamais le droit de changer sur une tâche. */
@@ -60,7 +61,7 @@ export const AgentTasks: CollectionConfig = {
     update: ({ req: { user } }) => (isStaffUser(user) ? true : isAgent(user) ? { agent: { equals: user.id } } : false),
     delete: () => false,
   },
-  hooks: { beforeChange: [guard] },
+  hooks: { beforeChange: [guard], afterChange: [notifyTaskChange] },
   fields: [
     { name: 'title', type: 'text', label: 'Tâche', required: true },
     { name: 'instructions', type: 'textarea', label: 'Consignes', required: true },

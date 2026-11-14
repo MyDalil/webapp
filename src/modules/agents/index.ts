@@ -1,1 +1,4 @@
 export { RUBRIQUES, TOOLS, TASK_STATUS, FORBIDDEN_FOR_AGENTS, touchesForbidden, type TaskStatus } from './referentiel'
+export { decide, modesOf, DEFAULT_MODES, HARD_FORBIDDEN, type Mode, type Decision } from './policy'
+export { notify, type Notice } from './AgentNotifications'
+export { channelsFor, phaseOf, DEFAULT_NOTIFY, type Phase, type ChannelKey } from './notify'

@@ -24,6 +24,8 @@ const AR: Record<string, string> = {
   'pv.hello': 'مرحبًا', 'pv.sub': 'إليك ما يحتاج إلى انتباهك.', 'pv.kpis': 'المؤشرات الرئيسية', 'pv.agents': 'الوكلاء', 'pv.agents.sub': 'الحالة الحالية لكل وكيل.',
   'pv.agents.none': 'لا يوجد وكيل مسجل بعد.', 'pv.review': 'بانتظار المصادقة', 'pv.review.sub': 'أعمال الوكلاء التي تنتظر قرارك.', 'pv.review.none': 'لا شيء بانتظار المصادقة.',
   'pv.contrib': 'مساهمات جديدة', 'pv.contrib.sub': 'اقتراحات الزوار التي يجب معالجتها.', 'pv.contrib.none': 'لا توجد مساهمة جديدة.', 'pv.all': 'عرض الكل',
+  'pv.feed': 'سجل النشاط', 'pv.feed.sub': 'قبل كل إجراء للوكلاء وأثناءه وبعده، مع معرّفه.', 'pv.feed.none': 'لا يوجد نشاط للوكلاء بعد.',
+  'phase.before': 'قبل', 'phase.during': 'أثناء', 'phase.after': 'بعد', 'phase.order': 'أمر',
   'pv.status.active': 'نشط', 'pv.status.paused': 'متوقف مؤقتًا', 'pv.status.disabled': 'معطل',
   'kpi.visiteurs': 'الزوار خلال 24 ساعة', 'kpi.contributions': 'مساهمات للمعالجة', 'kpi.validation': 'أعمال وكلاء للمصادقة', 'kpi.annonces': 'إعلانات للمراجعة',
   'kpi.fiches': 'بطاقات منشورة', 'kpi.aVerifier': 'بطاقات للتحقق (الفريق)', 'kpi.coutIa': 'تكلفة الذكاء الاصطناعي هذا الشهر', 'kpi.erreurs': 'أخطاء غير محلولة',
@@ -51,6 +53,8 @@ const EN: Record<string, string> = {
   'pv.hello': 'Hello', 'pv.sub': 'Here is what needs your attention.', 'pv.kpis': 'Key indicators', 'pv.agents': 'Agents', 'pv.agents.sub': 'Current state of each agent.',
   'pv.agents.none': 'No agent registered yet.', 'pv.review': 'Awaiting approval', 'pv.review.sub': 'Agent work waiting for your decision.', 'pv.review.none': 'Nothing awaits approval.',
   'pv.contrib': 'New contributions', 'pv.contrib.sub': 'Visitor suggestions to process.', 'pv.contrib.none': 'No new contribution.', 'pv.all': 'See all',
+  'pv.feed': 'Activity feed', 'pv.feed.sub': 'Before, during and after each agent action, with its ID.', 'pv.feed.none': 'No agent activity yet.',
+  'phase.before': 'Before', 'phase.during': 'During', 'phase.after': 'After', 'phase.order': 'Order',
   'pv.status.active': 'Active', 'pv.status.paused': 'Paused', 'pv.status.disabled': 'Disabled',
   'kpi.visiteurs': 'Visitors in 24 h', 'kpi.contributions': 'Contributions to process', 'kpi.validation': 'Agent work to approve', 'kpi.annonces': 'Classifieds to review',
   'kpi.fiches': 'Published listings', 'kpi.aVerifier': 'Listings to verify (team)', 'kpi.coutIa': 'AI cost this month', 'kpi.erreurs': 'Unresolved errors',
@@ -66,6 +70,8 @@ const FR: Record<string, string> = {
   'pv.agents.none': 'Aucun agent enregistré pour l’instant.', 'pv.review': 'À valider', 'pv.review.sub': 'Le travail des agents qui attend votre décision.', 'pv.review.none': 'Rien n’attend de validation.',
   'pv.contrib': 'Nouvelles contributions', 'pv.contrib.sub': 'Les propositions des visiteurs à traiter.', 'pv.contrib.none': 'Aucune nouvelle contribution.', 'pv.all': 'Tout voir',
   'pv.status.active': 'Actif', 'pv.status.paused': 'En pause', 'pv.status.disabled': 'Désactivé',
+  'pv.feed': 'Fil d’activité', 'pv.feed.sub': 'Avant, pendant et après chaque action d’agent, avec son identifiant.', 'pv.feed.none': 'Aucune activité d’agent pour l’instant.',
+  'phase.before': 'Avant', 'phase.during': 'Pendant', 'phase.after': 'Après', 'phase.order': 'Ordre',
 }
 
 const DICT: Record<Lang, Record<string, string>> = { fr: FR, ar: AR, en: EN }

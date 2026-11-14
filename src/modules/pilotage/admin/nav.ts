@@ -30,7 +30,7 @@ const REVIEW = 'where%5Bstatus%5D%5Bequals%5D=review'
 export const NAV_GROUPS: GroupDef[] = [
   { key: 'pilotage', label: 'Pilotage', items: [
     { key: 'overview', label: 'Vue d’ensemble', icon: 'grid', targets: [view('')] },
-    { key: 'activite', label: 'Fil d’activité', icon: 'activity', targets: [view('/cockpit/activite')] },
+    { key: 'activite', label: 'Fil d’activité', icon: 'activity', targets: [view('/cockpit/activite'), col('agent-notifications')] },
   ] },
   { key: 'agents', label: 'Agents', items: [
     { key: 'salle', label: 'Salle de contrôle', icon: 'bot', targets: [view('/cockpit/agents'), col('agents')] },
