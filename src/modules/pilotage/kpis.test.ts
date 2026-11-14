@@ -39,6 +39,6 @@ describe('indicateurs du Pilotage', () => {
 
   it('badges du menu', async () => {
     const b = await getBadges({ count: async (c) => (c === 'agent-tasks' ? 2 : 1), sum: async () => 0 })
-    expect(b).toEqual({ validation: 2, taches: 2, contributions: 1, inbox: 1, annonces: 1 })
+    expect(b).toEqual({ validation: 2, taches: 2, contributions: 1, inbox: 1, annonces: 1, moderation: 1, pros: 1 })
   })
 })
