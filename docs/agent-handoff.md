@@ -37,4 +37,5 @@
 - Lot 8 : CI entièrement verte, déploiement Vercel réussi (PR #26). Lot 7 : la CI a échoué sur des tests instables en parallèle (tests différents à chaque passage, lot 8 au-dessus vert) ; job relancé.
 - Lot 9 `agent/cockpit-lot9` (Communauté) : `/admin/cockpit/{moderation,annonces,pros,membres}`, score anti-arnaque `src/modules/annonces/risk.ts` (testé), badges Modération et Professionnels. Aucune migration.
 - Vérifié en local sur le lot 9 : 187 unitaires, 177 parcours réussis.
-- Prochaine action : lot 10, Business et système (Newsletter, Traductions, Couverture, Recherches sans résultat, SEO, Analytics, Finances, IA et coûts, Sécurité, Santé, Audit, Réglages, Éditeur du site).
+- Lot 10 découpé : 10a Système `agent/cockpit-lot10a` (`/admin/cockpit/{ia,sante,securite}`), aucune migration ; 187 unitaires, 185 parcours réussis en local.
+- Prochaine action : lot 10b Business (Analytics, Newsletter, Finances, SEO, Couverture, Traductions, Recherches sans résultat), puis lot 11 (finition, accessibilité, revue indépendante).
