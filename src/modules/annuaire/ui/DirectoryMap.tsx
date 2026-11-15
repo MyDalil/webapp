@@ -131,7 +131,6 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
   const data = useRef<GeoJSON.FeatureCollection>(toGeoJSON(places))
   // Dernières adresses et dernier zoom connus : le cadrage se refait à chaque chargement du style, même si la carte est recréée.
   const latest = useRef({ places, zoom })
-  latest.current = { places, zoom }
   const marker = useRef<maplibregl.Marker | null>(null)
   /** Cadre la carte sur les adresses ; une adresse seule reçoit un vrai repère, visible à tout niveau de zoom. */
   const frame = (m: MLMap) => {
@@ -209,6 +208,7 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
   useEffect(() => {
     const m = map.current
     data.current = toGeoJSON(places)
+    latest.current = { places, zoom }
     if (!m) return
     const apply = () => {
       ;(m.getSource('places') as GeoJSONSource | undefined)?.setData(data.current)
