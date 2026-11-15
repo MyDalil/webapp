@@ -47,3 +47,10 @@
 - Non vérifié à l’œil : preview.mydalil.com exige une connexion Vercel puis un compte /admin.
 - Prochaine action : promotion `preview` → `main` après feu vert explicite de Rad (migrations additives seulement : colonnes, tables, valeur d’énumération ; données différées `agents_equipe_icm`).
 - Décisions attendues de Rad : clés ANTHROPIC/OPENAI et budget mensuel des agents ; bot Telegram (jeton, secret, identifiants) ; réception des emails (sous-domaine ou redirection Gandi) ; suspension de membre ; périmètre de l’« Éditeur du site » ; double authentification de l’équipe.
+
+## Production — 15 novembre 2026
+
+- `preview` promu en production (PR #34, feu vert de Rad) : `main` = `a509c94`, déploiement Vercel et « Parcours sur le déploiement » réussis.
+- Panne ancienne trouvée et corrigée : `CRON_SECRET` absent en production, donc aucune tâche quotidienne n’avait jamais tourné (sauvegardes, rappels, expirations, index). Variable ajoutée (Production, Secret), production redéployée, passe lancée depuis Vercel › Cron Jobs. `/api/sante` : `taches.ok: true`, première sauvegarde `2026-11-15T00:01:42Z`. Issue #17 fermée.
+- Accès : le compte Vercel `tablenow101` est membre de l’équipe `soualjawab1-6994` (projet `mydalil`) ; le connecteur Vercel de Claude lit les déploiements et journaux, mais Vercel lui refuse les variables de production (une valeur secrète se saisit par un humain).
+- Observation non corrigée : chaque bouton « favori » appelle `GET /api/favorites` séparément (N requêtes par page de liste) ; pas d’erreur, coût inutile.
