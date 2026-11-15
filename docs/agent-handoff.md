@@ -94,3 +94,9 @@
 - Constat : aucun test automatique ne couvre réservation, dépôt d’annonce, demande de service, inscription d’un pro. À écrire, avec un membre de test.
 - Constat : en production, `/services/*` montre des prestataires « Exemple — … ». Décision de Rad attendue.
 - Production inchangée : `main` = `0bb38c2`.
+
+## 2026-11-15 — Production `8daf941`, puis accueil court (branche `agent/accueil-court`)
+- Production : `main` = `8daf941` (13 h 27 UTC), vérifiée sur www.mydalil.com : rubriques rangées, Santé en liste unique, fourre-tout rangés, 471 institutions importées, photos libres, plus de prestataire d’exemple.
+- Sur cette branche, pour `preview` seulement : accueil en six blocs (10 400 → 5 658 px à 1440 px) ; diaporama sans lieu de santé ; annonces d’exemple masquées en production ; remplacement annuaire pour déménagement et cours ; `e2e/membre.spec.ts` couvre rendez-vous, dépôt d’annonce, demande de service, fiche de prestataire (8 réussis en local).
+- Blocs retirés de l’accueil : Santé, À domicile, Vie musulmane, destination en parallaxe, Papiers, Repères, Installation. Code mort laissé dans `HomeView.tsx` (variables `musulmane`, `dest`) : à nettoyer si Rad valide.
+- Reste : promotion vers `main` après accord de Rad ; relecture une à une des photos libres ; ménage et aide à domicile sans professionnel à montrer.

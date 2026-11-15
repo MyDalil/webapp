@@ -82,8 +82,12 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
   const [results, counts] = await Promise.all([searchProviders({ category: cat, activity: q.activite, wilaya: q.wilaya, commune: q.commune, gender: q.genre, language: q.langue }), categoryCounts()])
   const current = CATEGORIES.find((c) => c.value === cat)
   // Sans prestataire inscrit : les professionnels de l’annuaire du même métier, quand il y en a (jamais de page vide ni de faux prestataire).
-  const fallbackSector: Record<string, string> = { bricolage: 'maison-travaux' }
-  const nearby: PlaceCard[] = !results.length && cat && fallbackSector[cat] ? (await searchPlaces({ sector: fallbackSector[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
+  const fallback: Record<string, { sector: string; category?: string }> = {
+    bricolage: { sector: 'maison-travaux' },
+    demenagement: { sector: 'transports-mobilite', category: 'Transporteurs' },
+    'cours-particuliers': { sector: 'education-formation', category: 'Écoles de langues' },
+  }
+  const nearby: PlaceCard[] = !results.length && cat && fallback[cat] ? (await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
   const communes = q.wilaya ? communesOf(q.wilaya) : []
   const action = fixedCategory ? `/services/${fixedCategory}` : '/services'
   return (
