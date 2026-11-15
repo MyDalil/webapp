@@ -66,3 +66,9 @@
 - Fait : migration différée des villes en français (`src/modules/annuaire/cityName.ts` + test). Base de test : 2 140 → 292 villes en arabe. `pnpm check` et `pnpm test` (194) réussis. Build et parcours : laissés à la CI.
 - Non fait : contacts manquants (22 404 fiches), photos (choix A/B de Rad en attente), revue visuelle 375/1440, revue du cockpit avec Rad.
 - En attente : accord explicite de Rad pour promouvoir `preview` vers `main` (lot coût `4d89d02`).
+
+## 2026-11-15 — Rubriques rangées (branche `agent/rubriques-rangees`)
+- Production : `main` = `0bb38c2` (lot coût + villes en français), vérifié par `/api/sante`.
+- Fait sur cette branche : `CategoryTiles` (villes en raccourci + sous-catégories en cases) sur les pages de rubrique et de catégorie ; écoles rangées par niveau (`schoolCategory.ts`, migration différée `20261115_120000_ecoles_par_niveau`) ; diaporama d’accueil sans bureau officiel.
+- Vérifié en local : `pnpm check`, `pnpm test` (197), `pnpm build`, page Collèges vue à 375 px et 1440 px. Parcours Playwright : laissés à la CI.
+- Reste : cases de catégories vides non masquées ; mêmes rangements à faire pour les autres rubriques ; PR #31, #32 (conflit), #35 à reprendre ; photos ; contrôle de rendez-vous, annonces, services.

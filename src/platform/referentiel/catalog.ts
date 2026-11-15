@@ -50,10 +50,14 @@ export const SECTORS: Sector[] = [
   "description": "Comparer les parcours, les programmes et les conditions de scolarité.",
   "categories": [
    "Crèches",
-   "Écoles",
+   "Écoles primaires",
+   "Collèges",
+   "Lycées",
    "Universités",
    "Formation professionnelle",
-   "Écoles de langues"
+   "Écoles de langues",
+   "Auto-écoles",
+   "Écoles"
   ],
   "criteria": [
    "Programme",
