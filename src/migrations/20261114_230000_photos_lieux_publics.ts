@@ -2,7 +2,7 @@ import { sql, type MigrateDownArgs, type MigrateUpArgs } from '@payloadcms/db-po
 import { deferred } from '@/platform/deferredData'
 import collected from '@/modules/annuaire/data/place-photos.json'
 import bodies from '@/modules/annuaire/data/public-bodies.json'
-import { importPlaces, type ImportRecord } from '@/modules/annuaire'
+import { importPlaces, type ImportRecord } from '@/modules/annuaire/importPlaces'
 import { COMMUNES } from '@/platform/referentiel/communes'
 
 /** Wilaya d’une institution sans wilaya déclarée : celle de la commune la plus proche (centre de commune, Wikidata). */

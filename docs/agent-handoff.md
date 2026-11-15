@@ -86,3 +86,11 @@
 - Fait ici : page `/praticiens` en une seule liste ; lien d’inscription sur les fiches « Médecins ».
 - Vérifié en local : check, build ; parcours des 13 rubriques en 375 px — 75 pages de catégorie, 13 fiches, 13 pages de ville : toutes à 200, au moins une fiche, aucune erreur de script.
 - Reste : autres fourre-tout (Administrations, Services automobiles, Médecins sans spécialité) ; accueil à raccourcir (maquette d’abord) ; trois entrées du menu ; PR #31, #32, #35 ; promotion vers `main` après accord de Rad.
+
+## 2026-11-15 — Rangement, suite (branche `agent/rangement-suite`)
+- Contient : fourre-tout rangés (`categoryRules.ts`, migration `20261115_150000_fourre_tout_ranges`) ; quatre entrées au menu Vie pratique ; fusion des branches #31 (guides), #35 (photo d’illustration), #32 (photos libres et coordonnées, import corrigé, 13 images retirées).
+- Base de test après migrations : 470 institutions créées, 204 fiches avec photo libre, 232 fiches complétées ; Dentistes 890.
+- Parcours faits à la main en local, membre de test connecté : prise de rendez-vous confirmée (`/api/rdv` 201). Formulaire d’annonce, page prestataire et premier écran de l’espace pro affichés, mais envoi non vérifié.
+- Constat : aucun test automatique ne couvre réservation, dépôt d’annonce, demande de service, inscription d’un pro. À écrire, avec un membre de test.
+- Constat : en production, `/services/*` montre des prestataires « Exemple — … ». Décision de Rad attendue.
+- Production inchangée : `main` = `0bb38c2`.
