@@ -95,7 +95,8 @@ export async function HomeView({ lang }: { lang: Lang }) {
     (p: PlaceCard) =>
       s.includes(p.sector)
 
-  // Diaporama mixte : une mosquée, un lieu de santé, une sortie, un bureau officiel, puis les incontournables.
+  // Diaporama mixte : une mosquée, un lieu de santé, un monument, un site naturel, puis les incontournables.
+  // Pas de bureau officiel (Rad, 2026-11-15) : leurs photos libres montrent des cérémonies, pas le lieu.
   const mixed = [
     pick(inSector('mosquees-priere'), (p) => p.category === 'Mosquées'),
     pick(inSector('sante-soins')),
@@ -103,7 +104,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
       inSector('culture-nature-loisirs'),
       (p) => p.category === 'Monuments et sites historiques',
     ),
-    pick(inSector('administrations-services-publics')),
+    pick(inSector('culture-nature-loisirs'), (p) => p.category !== 'Monuments et sites historiques'),
   ].filter((p) => p !== undefined)
   const slidePlaces = [...mixed, ...top.filter((p) => !used.has(p.slug))].slice(0, 6)
   slidePlaces.forEach((p) => used.add(p.slug))

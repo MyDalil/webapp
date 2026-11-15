@@ -77,3 +77,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Décision : les villes importées en arabe ou en écritures mêlées passent en français par `cityName.ts` (partie latine déjà présente, sinon commune du référentiel avec le même nom arabe). Migration `20261115_100000_villes_en_francais`.
 - Raison : 2 140 fiches montraient une ville en arabe dans les pages françaises. Résultat mesuré sur la base de test : 2 140 → 292.
 - Règle : aucune translittération automatique. Les 292 fiches restantes gardent leur valeur ; un humain les corrige dans /admin.
+
+## 2026-11-15 — Rubriques rangées par sous-catégorie
+- Décision (Rad) : une page de rubrique ou de catégorie n’affiche plus le nombre d’adresses ni la liste des wilayas. Elle montre trois villes en raccourci (Alger, Oran, Constantine) et les sous-catégories en cases (`ui/CategoryTiles.tsx`). L’interface validée reste : même langage que le menu.
+- Décision (Rad) : « Écoles » est rangé par niveau — Écoles primaires, Collèges, Lycées, Auto-écoles (dans Éducation, pas dans Transports), plus Crèches, Universités, Formation professionnelle, Écoles de langues. Les écoles coraniques vont dans Vie musulmane et gardent une case dans Éducation.
+- Règle : le niveau se lit dans le nom (`schoolCategory.ts`). Un nom qui ne le dit pas reste dans « Écoles », affiché « Autres écoles ». Mesure sur la base de test : 8 216 → 3 526 non classées.
+- Accueil : le diaporama ne prend plus de bureau officiel (photo de cérémonie en première image).

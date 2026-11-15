@@ -4,8 +4,8 @@ import type { Lang } from '@/platform/i18n'
 export const HOME_T = {
   fr: {
     heroEyebrow: 'Guide & Services en Algérie',
-    heroTitle: 'Trouvez ce qu’il vous faut en Algérie.',
-    heroLead: 'Mosquées, médecins, artisans, sorties, démarches, annonces : tout au même endroit.',
+    heroTitle: 'Le guide pratique de l’Algérie.',
+    heroLead: 'Adresses, santé, services, annonces et démarches, dans tout le pays.',
     rubricsEyebrow: 'Les rubriques',
     rubricsTitle: 'Que souhaitez-vous faire aujourd’hui ?',
     rubricsLead: 'Choisissez une rubrique : DALIL vous guide pas à pas.',
@@ -72,8 +72,8 @@ export const HOME_T = {
   },
   en: {
     heroEyebrow: 'Guide & Services in Algeria',
-    heroTitle: 'Find what you need in Algeria.',
-    heroLead: 'Mosques, doctors, tradespeople, outings, paperwork, classifieds: all in one place.',
+    heroTitle: 'The practical guide to Algeria.',
+    heroLead: 'Places, healthcare, services, classifieds and paperwork, across the country.',
     rubricsEyebrow: 'Sections',
     rubricsTitle: 'What would you like to do today?',
     rubricsLead: 'Pick a section: DALIL guides you step by step.',
@@ -140,8 +140,8 @@ export const HOME_T = {
   },
   ar: {
     heroEyebrow: 'دليل وخدمات في الجزائر',
-    heroTitle: 'اعثر على ما تحتاجه في الجزائر.',
-    heroLead: 'مساجد، أطباء، حرفيون، نزهات، إجراءات، إعلانات: كل شيء في مكان واحد.',
+    heroTitle: 'الدليل العملي للجزائر.',
+    heroLead: 'عناوين، صحة، خدمات، إعلانات وإجراءات، في كامل البلاد.',
     rubricsEyebrow: 'الأقسام',
     rubricsTitle: 'ماذا تودّ أن تفعل اليوم؟',
     rubricsLead: 'اختر قسمًا: دليل يرافقك خطوة بخطوة.',
