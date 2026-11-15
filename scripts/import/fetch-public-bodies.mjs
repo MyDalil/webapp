@@ -2,7 +2,7 @@
 // établissements de l’État, tribunaux, hôpitaux, universités, musées, bibliothèques, gares et aéroports.
 // Faits seulement (nom, coordonnées, site, téléphone, email, adresse). Lancé par GitHub Actions.
 // Sortie : src/modules/annuaire/data/public-bodies.json (ImportRecord[], importé par migration de données).
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 
 const UA = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 const OUT = 'src/modules/annuaire/data/public-bodies.json'
@@ -59,8 +59,6 @@ SELECT ?item ?fr ?ar ?en ?coord ?website ?phone ?email ?address ?wilayaLabel ?ci
   ?item wdt:P31/wdt:P279* wd:${cls} ; wdt:P17 wd:Q262 .
   FILTER NOT EXISTS { ?item wdt:P576 [] }
   FILTER NOT EXISTS { ?item wdt:P3999 [] }
-  # Exclut les territoires (communes, daïras, wilayas) : Wikidata les range aussi parmi les organisations publiques.
-  FILTER NOT EXISTS { ?item wdt:P31/wdt:P279* wd:Q56061 }
   OPTIONAL { ?item rdfs:label ?fr FILTER(lang(?fr) = "fr") }
   OPTIONAL { ?item rdfs:label ?ar FILTER(lang(?ar) = "ar") }
   OPTIONAL { ?item rdfs:label ?en FILTER(lang(?en) = "en") }
@@ -104,5 +102,13 @@ SELECT ?item ?fr ?ar ?en ?coord ?website ?phone ?email ?address ?wilayaLabel ?ci
   console.log(category, cls, rows.length, 'lignes,', n, 'institutions')
   await sleep(2000)
 }
-writeFileSync(OUT, JSON.stringify([...out.values()]))
+// Wikidata range aussi les communes parmi les « organisations publiques » : une fiche « Administrations » qui porte
+// le nom d’une commune, ou qui n’a aucun mot d’institution, est un territoire et pas un bâtiment — exclue.
+const norm = (x) => String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+const COMMUNE_NAMES = new Set(JSON.parse(readFileSync('src/platform/referentiel/communes.json', 'utf8')).map((c) => norm(c.name)))
+const INSTITUTION = /\b(agence|direction|office|centre|caisse|banque|institut|conseil|commission|autorite|haut|cour|tribunal|ministere|entreprise|societe|etablissement|organisme|observatoire|fonds|bureau|service|inspection|delegation|secretariat|chambre|federation|union|comite|academie|ecole|radio|television|algerie|algerienne|national|nationale|sonatrach|sonelgaz|douane|surete|gendarmerie|protection|parquet|wilaya|daira|apc|mairie|assemblee|senat|presidence|gouvernement|police|armee|cnas|casnos|cnr|anem|cnep)\b/
+// Un lieu sans coordonnées n’est pas une adresse (ex. « gouvernement de l’Algérie ») : exclu.
+const kept = [...out.values()].filter((r) => r.lat != null && r.lng != null).filter((r) => r.category !== 'Administrations' || (!COMMUNE_NAMES.has(norm(r.name)) && INSTITUTION.test(norm(r.name))))
+console.log('Territoires exclus :', out.size - kept.length)
+writeFileSync(OUT, JSON.stringify(kept))
 console.log('Total', out.size)
