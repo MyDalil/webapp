@@ -1,114 +1,114 @@
 [
  {
   "n": 1,
-  "id": "osm:node/3031574391",
-  "place": "Bureau de poste Baba Hassen — Bureaux de poste, بابا حسن",
-  "via": "wikidata",
-  "page": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D8%A8%D8%B1%D9%8A%D8%AF_%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%B2%D9%8A_-_%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1.jpg"
+  "id": "osm:node/446470040",
+  "place": "Station service Tripoli Hossein Dey — Services automobiles, Hussein Dey",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Rue_Tripoli_%D8%B4%D8%A7%D8%B1%D8%B9_%D8%B7%D8%B1%D8%A7%D8%A8%D9%84%D8%B3_-_panoramio_(1).jpg"
  },
  {
   "n": 2,
-  "id": "osm:way/334335507",
-  "place": "Mosquée Khaled ibn Al-Walid — Mosquées, Ouled Khaled",
+  "id": "osm:way/458530473",
+  "place": "Mosquée El Moudjahid — Mosquées, Blida",
   "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:APC_Ouled_Khaled_%D8%AF%D8%A7%D8%B1_%D8%A7%D9%84%D8%A8%D9%84%D8%AF%D9%8A%D8%A9_-_panoramio.jpg"
+  "page": "https://commons.wikimedia.org/wiki/File:Mosqu%C3%A9e_El_Moudjahid_-_panoramio.jpg"
  },
  {
   "n": 3,
-  "id": "osm:way/237164994",
-  "place": "Mosquée Abdallah Ibn Salam — Mosquées, Oran",
+  "id": "osm:way/534623356",
+  "place": "Lycée Salah Eddine Al Ayoubi — Écoles, Batna",
   "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Abdallah_Ibn_Salam_Mosque,_Oran.jpg"
+  "page": "https://commons.wikimedia.org/wiki/File:Lyc%C3%A9e_salah_eddine_-_panoramio.jpg"
  },
  {
   "n": 4,
-  "id": "osm:way/353906439",
-  "place": "Aéroport Militaire de Mostaganem — Gares et stations, Sayada",
+  "id": "osm:node/2155392412",
+  "place": "Aïn Defla — Gares et stations, Aïn Defla",
   "via": "wikidata",
-  "page": "https://commons.wikimedia.org/wiki/File:A%C3%A9roport_de_mostaganem_2.jpg"
+  "page": "https://commons.wikimedia.org/wiki/File:Gare_de_A%C3%AFn_Defla_-_566966883212694233.jpg"
  },
  {
   "n": 5,
-  "id": "ovt:22a5f2eb-d5d9-40f1-9307-7d5f7a24025e",
-  "place": "Madghacen — Monuments et sites historiques, Boumia",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Madghacen_01.jpg"
+  "id": "osm:way/26456258",
+  "place": "CHU Mohamed Lamine Debaghine — Hôpitaux, Bab El Oued",
+  "via": "osmCommons",
+  "page": "https://commons.wikimedia.org/wiki/File:Hopital_Mohamed_Lamine_Debaghine_%C3%A0_Alger.jpg"
  },
  {
   "n": 6,
-  "id": "osm:node/14030964126",
-  "place": "DJELFA AMOURAH — Bureaux de poste, AMOURAH",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Amoura_%C3%A0_Djelfa_%D8%B9%D9%85%D9%88%D8%B1%D8%A9_%D8%A8%D8%A7%D9%84%D8%AC%D9%84%D9%81%D8%A9_(37481099024).jpg"
+  "id": "Q3097813",
+  "place": "Sétif — Gares et stations, Sétif",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Gare_de_S%C3%A9tif_(S%C3%A9tif_main_station),_S%C3%A9tif,_Algeria_June_2024_(cropped).jpg"
  },
  {
   "n": 7,
-  "id": "osm:way/190373999",
-  "place": "Mosquée Ennour — Mosquées, Médéa",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Djamaa_Ennour_%D8%AC%D8%A7%D9%85%D8%B9_%D8%A7%D9%84%D9%86%D9%88%D8%B1_-_panoramio_(1).jpg"
+  "id": "Q16640177",
+  "place": "Grotte des Beni Add — Cascades, gorges et grottes, Aïn Fezza",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Grottes_des_Beni_Add_%C3%A0_A%C3%AFn_Fezza,_Tlemcen_-_06.jpg"
  },
  {
   "n": 8,
-  "id": "osm:node/14030964324",
-  "place": "DRARIA — Bureaux de poste, DRARIA",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Draria_%D8%A7%D9%84%D8%AF%D8%B1%D8%A7%D8%B1%D9%8A%D8%A9_-_panoramio_(2).jpg"
+  "id": "Q116773895",
+  "place": "Grand Bassin — Parcs, Tlemcen",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:SDC10030.JPG"
  },
  {
   "n": 9,
-  "id": "osm:node/6594337753",
-  "place": "Mosquée Darguina — Mosquées, Darguina",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Cimeti%C3%A8re_des_martyrs_-_Darguina_%D9%85%D9%82%D8%A8%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D9%87%D8%AF%D8%A7%D8%A1_-_%D8%AF%D8%B1%D9%82%D9%8A%D9%86%D8%A9_-_panoramio.jpg"
+  "id": "Q45908489",
+  "place": "Mosquée de Bouira — Mosquées, Bouira",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Mosqu%C3%A9e_EL-KODS_Cheikh_el-ayfa_1_-_panoramio.jpg"
  },
  {
   "n": 10,
-  "id": "osm:way/345729575",
-  "place": "Bureau de poste de Ain Taya — Bureaux de poste, Aïn Taya",
+  "id": "Q23796361",
+  "place": "Plage des Pins — Plages, Tipaza",
   "via": "wikidata",
-  "page": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D8%A8%D8%B1%D9%8A%D8%AF_%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%B2%D9%8A_-_%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1.jpg"
+  "page": "https://commons.wikimedia.org/wiki/File:Clubdespinslesoir.JPG"
  },
  {
   "n": 11,
-  "id": "osm:node/14030963433",
-  "place": "HANNACHA — Bureaux de poste, HANNACHA",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Hannacha_%D8%AD%D9%86%D8%A7%D8%B4%D8%A9_-_panoramio_(1).jpg"
+  "id": "Q134996668",
+  "place": "gare multimodale de Bouhinoun — Gares et stations, Tizi Ouzou",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:TC_Tizi_Ouzou_-_2026-06-18_-_IMG_0005.jpg"
  },
  {
   "n": 12,
-  "id": "osm:way/454545852",
-  "place": "Lycée El Amrani — Écoles, Batna",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:School_El_amrani_1.jpg"
+  "id": "Q21511925",
+  "place": "Casbah de Béjaïa — Monuments et sites historiques, Béjaïa",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Fort_au_dessus_du_port_%C3%A0_B%C3%A9ja%C3%AFa_2.jpg"
  },
  {
   "n": 13,
-  "id": "osm:way/588714158",
-  "place": "Lycée Latroch Djilali — Écoles, Mostaganem",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Lyc%C3%A9e_Latroch_Djilali.jpg"
+  "id": "Q635192",
+  "place": "Sebkha d’Oran — Lacs et oasis, Oran",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Sebkha_D%27Oran.jpg"
  },
  {
   "n": 14,
-  "id": "osm:node/14030964286",
-  "place": "MAHELMA — Bureaux de poste, MAHELMA",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:Eglise_de_Mahelma_%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%84%D9%85%D8%A9_-_panoramio.jpg"
+  "id": "Q113827285",
+  "place": "Iomnium — Sites archéologiques, Tizi Ouzou",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Tigzirt_roman_ruins_01.jpg"
  },
  {
   "n": 15,
-  "id": "osm:relation/17977173",
-  "place": "La Grande Mosquée — Mosquées, Alger",
+  "id": "Q60746446",
+  "place": "Basilique Sainte-Crispine — Monuments et sites historiques, Tébessa",
   "via": "wikidata",
-  "page": "https://commons.wikimedia.org/wiki/File:%D9%85%D8%B3%D8%AC%D8%AF_%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9_%D8%A7%D9%84%D9%83%D8%A8%D9%8A%D8%B13.JPG"
+  "page": "https://commons.wikimedia.org/wiki/File:Basilique_de_T%C3%A9bessa_-_%D8%A7%D9%84%D9%83%D9%86%D9%8A%D8%B3%D8%A9_%D8%A7%D9%84%D8%B1%D9%88%D9%85%D8%A7%D9%86%D9%8A%D8%A9_3.jpg"
  },
  {
   "n": 16,
-  "id": "osm:way/369685404",
-  "place": "Mairie d'El Alia — Services municipaux, El Allia",
-  "via": "geo",
-  "page": "https://commons.wikimedia.org/wiki/File:El_Alia_Ouargla_-_panoramio_(35).jpg"
+  "id": "Q109312786",
+  "place": "Rabia Tahar — Gares et stations, Bab Ezzouar",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Vue_station_metro_rabia_tahar.jpg"
  }
 ]
