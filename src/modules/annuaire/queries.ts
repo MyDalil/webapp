@@ -7,7 +7,7 @@ import { draftMode } from 'next/headers'
 import type { Media, Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { RESULT_LABEL, STATUS_LABEL } from '@/modules/confiance'
-import { cityPhoto } from './listings'
+import { categoryPhoto, cityPhoto } from './listings'
 
 /** Centre des principales villes : position approximative tant que la fiche n’a pas de coordonnées exactes. */
 const CITY_CENTER: Record<string, [number, number]> = {
@@ -82,8 +82,8 @@ export function toCard(p: Place): PlaceCard {
     sectorTitle: sectorTitle(p.sector),
     place: p.place ?? '',
     status: p.verification ?? 'spotted',
-    // Vignette : la vraie photo du lieu, sinon rien (pictogramme de la catégorie) — jamais la photo de la ville.
-    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 960, external(p)[0].width) : ''),
+    // Vignette : la vraie photo du lieu, sinon la photo d’illustration de sa catégorie, sinon pictogramme — jamais la photo de la ville.
+    photo: mediaUrl(p.photos?.[0], 'thumb') ?? (external(p)[0] ? sized(external(p)[0].url, 960, external(p)[0].width) : (categoryPhoto(p.category)?.src.replace('w=1600', 'w=480') ?? '')),
     cover: coverOf(p),
     credit: coverCredit(p)?.text ?? null,
     score: p.score ?? 0,
@@ -106,12 +106,14 @@ const sized = (url: string, w: number, original?: number | null) => {
 /** Photos d’événements ou de personnes (réunions, visites officielles, période Covid) : jamais en couverture d’un lieu. */
 const PEOPLE_PHOTO = /secretary|meet_and_greet|employees|families|covid|mask|delegation|ceremony|minister|ministre|president|ambassador|meeting|visit_of|_visits_|conference/i
 const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url && !PEOPLE_PHOTO.test(x.url))
-export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1920, external(p)[0].width) : cityPhoto(p.city))
+export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1920, external(p)[0].width) : (categoryPhoto(p.category)?.src ?? cityPhoto(p.city)))
 /** Crédit de la couverture quand elle vient d’une source libre (obligatoire par la licence). */
 export const coverCredit = (p: Place) => {
   if (mediaUrl(p.photos?.[0], 'cover')) return null
   const x = external(p)[0]
-  return x ? { text: `Photo : ${x.author} · ${x.license}`, href: x.page } : null
+  if (x) return { text: `Photo : ${x.author} · ${x.license}`, href: x.page }
+  const c = categoryPhoto(p.category)
+  return c ? { text: `Photo d’illustration : ${c.credit}`, href: null } : null
 }
 export const galleryOf = (p: Place) => [
   ...(p.photos ?? []).flatMap((m) => (m && typeof m === 'object' && m.url ? [{ url: m.sizes?.cover?.url ?? m.url, alt: m.alt, credit: m.credit ?? null, href: null as string | null }] : [])),

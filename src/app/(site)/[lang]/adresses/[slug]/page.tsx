@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
-import { factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
+import { categoryPhoto, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
@@ -46,9 +46,16 @@ export default async function PlacePage({ params }: Props) {
   const facts = factsOf(p as never).filter((f) => f.label !== 'Catégorie')
   const nearby = await nearbyCards(p, 6)
   const photos = galleryOf(p)
-  // Sans photo du lieu : photo de la ville si DALIL en a une (créditée comme illustration), sinon visuel neutre.
+  // Sans photo du lieu : photo d’illustration de la catégorie, sinon de la ville (créditées comme illustration), sinon visuel neutre.
+  const catPic = categoryPhoto(p.category)
   const cityPic = knownCityPhoto(p.city)
-  const gallery = photos.length ? photos : cityPic ? [{ url: cityPic, alt: p.city, credit: `Photo d’illustration : ${p.city}`, href: null }] : []
+  const gallery = photos.length
+    ? photos
+    : catPic
+      ? [{ url: catPic.src, alt: p.category, credit: `Photo d’illustration : ${catPic.credit}`, href: null }]
+      : cityPic
+        ? [{ url: cityPic, alt: p.city, credit: `Photo d’illustration : ${p.city}`, href: null }]
+        : []
   const contacts = [
     p.phone && { label: p.phone, href: `tel:${p.phone.replace(/\s/g, '')}`, kind: 'Téléphone' },
     p.whatsapp && { label: p.whatsapp, href: `https://wa.me/${p.whatsapp.replace(/\D/g, '')}`, kind: 'WhatsApp' },
