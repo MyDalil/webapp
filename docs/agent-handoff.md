@@ -54,3 +54,10 @@
 - Panne ancienne trouvée et corrigée : `CRON_SECRET` absent en production, donc aucune tâche quotidienne n’avait jamais tourné (sauvegardes, rappels, expirations, index). Variable ajoutée (Production, Secret), production redéployée, passe lancée depuis Vercel › Cron Jobs. `/api/sante` : `taches.ok: true`, première sauvegarde `2026-11-15T00:01:42Z`. Issue #17 fermée.
 - Accès : le compte Vercel `tablenow101` est membre de l’équipe `soualjawab1-6994` (projet `mydalil`) ; le connecteur Vercel de Claude lit les déploiements et journaux, mais Vercel lui refuse les variables de production (une valeur secrète se saisit par un humain).
 - Observation non corrigée : chaque bouton « favori » appelle `GET /api/favorites` séparément (N requêtes par page de liste) ; pas d’erreur, coût inutile.
+
+## Préparation du lancement — 15 novembre 2026
+
+- Audit : projet Claude `claude/audit-2026-11-15-lancement.md` (coût par visite, données, finition).
+- Branche `agent/optimisation-cout` : coût par visite (voir `src/platform/DECISIONS.md`), page d’erreur, `/test` retirée, fiches au nom provisoire hors des listes. Local, base neuve : check OK, lint 0 erreur, 191 unitaires, 213 parcours réussis ; liste 250 → 30 requêtes.
+- À vérifier après déploiement : en-tête `x-vercel-cache` des listes `/services`, `/praticiens`, `/annonces` (cache CDN de 2 min).
+- Reste avant lancement : lieux officiels (complétude, contacts, villes en français), photos, finition visuelle page par page, revue du cockpit avec Rad, CSS (365 Ko chargés partout).

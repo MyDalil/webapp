@@ -7,6 +7,8 @@ export async function GET(req: Request) {
   const type = clean(url.searchParams.get('type'), 40)
   const key = clean(url.searchParams.get('key'), 200)
   const s = await readSession()
+  // Sans paramètre : toutes les clés « type:clé » du membre, en une réponse (une requête par page, plus une par bouton).
+  if (!type && !key) return json({ keys: (s?.state.favorites ?? []).map((f) => `${f.itemType}:${f.itemKey}`) })
   return json({ saved: !!s?.state.favorites.some((f) => f.itemType === type && f.itemKey === key) })
 }
 

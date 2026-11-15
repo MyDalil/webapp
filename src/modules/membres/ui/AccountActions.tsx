@@ -1,5 +1,6 @@
 'use client'
 
+import { clearMemberHint } from '@/platform/ui/memberHint'
 import { useLangRouter } from '@/platform/ui/lang'
 import { useState } from 'react'
 
@@ -9,6 +10,7 @@ export function AccountActions() {
   const [busy, setBusy] = useState(false)
   const logout = async () => {
     await fetch('/api/members/logout', { method: 'POST', credentials: 'include' })
+    clearMemberHint()
     router.push('/')
     router.refresh()
   }
@@ -16,6 +18,7 @@ export function AccountActions() {
     if (!window.confirm('Supprimer définitivement votre compte ? Vos rendez-vous à venir seront annulés et vos données effacées.')) return
     setBusy(true)
     await fetch('/api/compte', { method: 'DELETE' })
+    clearMemberHint()
     router.push('/')
     router.refresh()
   }

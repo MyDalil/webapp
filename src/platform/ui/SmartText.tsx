@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccount } from './memberHint'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type KeyboardEvent } from 'react'
 import { DICTATION_LANGS, dictationSupported, preferredLang, rememberLang, startDictation, type Dictation, type DictationLang } from './speech'
 
@@ -27,12 +28,7 @@ type Props = {
 
 export type SmartTextHandle = { focus: () => void; value: () => string; set: (v: string) => void }
 
-let memberCheck: Promise<boolean> | null = null
-const isMember = () =>
-  (memberCheck ??= fetch('/api/compte', { cache: 'no-store' })
-    .then((r) => r.json())
-    .then((d) => Boolean(d.member?.verified))
-    .catch(() => false))
+const isMember = () => getAccount().then((d) => Boolean(d.member?.verified))
 
 async function cleanup(text: string, mode: 'dictation' | 'improve', sentence: boolean) {
   const r = await fetch('/api/ia/texte', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text, mode, sentence }) })

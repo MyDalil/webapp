@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { memberHintSetCookie } from '@/platform/ui/memberHint'
 import { completeSignup, sendCode, verifyCode } from '@/modules/membres'
 import { guard } from '@/platform/security/rateLimit'
 import { proofError } from '@/platform/security/proof'
@@ -14,7 +15,10 @@ export async function POST(req: Request) {
     if (robot) return NextResponse.json({ error: robot }, { status: 403, headers: { 'cache-control': 'no-store' } })
   }
   const r = b.action === 'send' ? await sendCode(b.email) : b.action === 'verify' ? await verifyCode(b.challenge, b.code) : b.action === 'complete' ? await completeSignup(b) : { status: 400, body: { error: 'Action inconnue.' } }
-  const headers: Record<string, string> = { 'cache-control': 'no-store' }
-  if ('cookie' in r && r.cookie) headers['set-cookie'] = r.cookie
-  return NextResponse.json(r.body, { status: r.status, headers })
+  const res = NextResponse.json(r.body, { status: r.status, headers: { 'cache-control': 'no-store' } })
+  if ('cookie' in r && r.cookie) {
+    res.headers.append('set-cookie', r.cookie)
+    res.headers.append('set-cookie', memberHintSetCookie()) // indice lisible : la page sait qu’il faut lire le compte
+  }
+  return res
 }

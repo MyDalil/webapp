@@ -37,6 +37,12 @@ const dirname = path.dirname(filename)
 
 /** Base DALIL : intégration Neon du compte Vercel DALIL (préfixe DALIL_). */
 const databaseUrl = process.env.DALIL_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
+/**
+ * Connexion du pool : `sslmode=require` (URL Neon) est déjà traité comme `verify-full` par le pilote, qui l’écrit
+ * en avertissement à chaque démarrage. On écrit `verify-full` : même sécurité, plus de journal inutile.
+ * `databaseUrl` reste intact : le secret de secours en dépend.
+ */
+const poolUrl = databaseUrl.replace(/([?&]sslmode=)(require|prefer|verify-ca)\b/, '$1verify-full')
 
 /** PAYLOAD_SECRET si défini, sinon dérivé de l’URL de base (secrète, injectée par Neon). */
 const secret =
@@ -108,7 +114,7 @@ export default buildConfig({
   // Formats des photos (vignette, carte, couverture, partage) en WebP, point focal.
   sharp,
   db: postgresAdapter({
-    pool: { connectionString: databaseUrl },
+    pool: { connectionString: poolUrl },
     migrationDir: path.resolve(dirname, 'migrations'),
     prodMigrations: migrations,
     push: false,

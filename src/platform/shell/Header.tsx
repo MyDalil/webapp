@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccount } from '@/platform/ui/memberHint'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
@@ -91,8 +92,8 @@ export function Header({ search }: { search?: React.ReactNode } = {}) {
   useEffect(() => {
     setMenu(null)
     setMobile(false)
-    fetch('/api/compte', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : null))
+    // Une seule lecture du compte par page, et aucune pour un visiteur sans compte (coût minimal).
+    getAccount()
       .then((j) => {
         setWho(j?.member ? (j.member.kind === 'pro' ? '/espace-pro' : '/mon-compte') : null)
         // Nouvel appareil : on reprend la wilaya enregistrée dans le compte.
