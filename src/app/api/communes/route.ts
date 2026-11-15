@@ -5,5 +5,5 @@ import { communesOf } from '@/platform/referentiel/communes'
 export function GET(req: Request) {
   const wilaya = Number(new URL(req.url).searchParams.get('wilaya'))
   const communes = wilaya ? communesOf(wilaya).map(({ id, name, ar }) => ({ id, name, ar })) : []
-  return NextResponse.json({ communes }, { headers: { 'cache-control': 'public, max-age=86400' } })
+  return NextResponse.json({ communes }, { headers: { 'cache-control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000' } })
 }

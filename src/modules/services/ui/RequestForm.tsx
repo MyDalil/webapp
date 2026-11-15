@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccount } from '@/platform/ui/memberHint'
 import Link from '@/platform/ui/Link'
 import { useLangRouter } from '@/platform/ui/lang'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -47,9 +48,8 @@ export function RequestForm({ slug, name, offers, communes, clientele, initialAc
     load()
   }, [load])
   useEffect(() => {
-    fetch('/api/compte', { cache: 'no-store' })
-      .then((r) => r.json())
-      .then((d) => setMe(d.member))
+    getAccount()
+      .then((d) => setMe(d.member as never))
       .catch(() => setMe(null))
   }, [])
   useEffect(() => setStart(null), [activity, hours, date])

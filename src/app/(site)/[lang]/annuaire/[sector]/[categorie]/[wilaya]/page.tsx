@@ -6,6 +6,9 @@ import { CategoryPage } from '../CategoryPage'
 
 type Props = { params: Promise<{ sector: string; categorie: string; wilaya: string }> }
 export const revalidate = 3600
+// Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
+// Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
+export const generateStaticParams = async () => []
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { sector, categorie, wilaya } = await params

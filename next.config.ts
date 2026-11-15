@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Listes publiques calculées à la demande (filtres dans l’adresse), identiques pour tous les visiteurs :
+        // gardées 2 minutes par le CDN de Vercel, puis rafraîchies en arrière-plan. Cent visites de la même liste
+        // = un seul calcul serveur. Jamais les pages de compte, de fiche d’annonce ou de messagerie.
+        source: '/:lang(en|ar)?/:list(services|praticiens|annonces)/:cat(bricolage|menage|garde-enfants|cours-particuliers|aide-domicile|demenagement|immobilier|emploi|vehicules|objets)?',
+        headers: [{ key: 'Vercel-CDN-Cache-Control', value: 'public, s-maxage=120, stale-while-revalidate=600' }],
+      },
+      {
         source: '/((?!admin|api).*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -35,6 +42,8 @@ const nextConfig: NextConfig = {
     return [
       { source: '/fr', destination: '/', permanent: true },
       { source: '/fr/:path*', destination: '/:path*', permanent: true },
+      // Ancienne page du prototype : plus de fonction serveur pour une simple redirection.
+      { source: '/:lang(en|ar)?/test', destination: '/mon-compte', permanent: true },
     ]
   },
   async rewrites() {

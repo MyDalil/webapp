@@ -55,6 +55,7 @@ import * as migration_20261114_150104_cockpit_mediatheque from './20261114_15010
 import * as migration_20261114_152745_cockpit_corbeille from './20261114_152745_cockpit_corbeille';
 import * as migration_20261114_154423_boite_unique from './20261114_154423_boite_unique';
 import * as migration_20261114_170000_recherches_sans_resultat from './20261114_170000_recherches_sans_resultat';
+import * as migration_20261115_100000_villes_en_francais from './20261115_100000_villes_en_francais';
 
 export const migrations = [
   {
@@ -341,5 +342,10 @@ export const migrations = [
     up: migration_20261114_170000_recherches_sans_resultat.up,
     down: migration_20261114_170000_recherches_sans_resultat.down,
     name: '20261114_170000_recherches_sans_resultat',
+  },
+  {
+    up: migration_20261115_100000_villes_en_francais.up,
+    down: migration_20261115_100000_villes_en_francais.down,
+    name: '20261115_100000_villes_en_francais',
   },
 ];

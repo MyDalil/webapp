@@ -1,4 +1,5 @@
 import Link from '@/platform/ui/Link'
+import { smallPhoto } from '@/platform/referentiel/photos'
 import type { ReactNode } from 'react'
 import { Carousel } from './Carousel'
 import { Icon } from './Icon'
@@ -42,7 +43,7 @@ export function PhotoTile({ t, i = 0 }: { t: Tile; i?: number }) {
   return (
     <div className="xp-tile-wrap" data-reveal style={{ ['--i' as string]: i % 6 }}>
       <Link href={t.href} className="city-tile top-tile xp-tile">
-        <div className={`city-tile-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${t.photo})` } : undefined}>
+        <div className={`city-tile-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${smallPhoto(t.photo)})` } : undefined}>
           {!t.photo && t.icon && (
             <span className="xp-tile-icon" aria-hidden="true">
               <Icon name={t.icon} />

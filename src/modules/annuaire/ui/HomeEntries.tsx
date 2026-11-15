@@ -1,5 +1,6 @@
 'use client'
 
+import { smallPhoto } from '@/platform/referentiel/photos'
 import Link from '@/platform/ui/Link'
 import { Carousel } from '@/platform/ui/Carousel'
 import { count, type Lang } from '@/platform/i18n'
@@ -47,7 +48,7 @@ export function HomeEntries({ stats, lang = 'fr' }: { stats: EntryPhotos; lang?:
             <Link href={d.href} className="city-tile">
               <div
                 className="city-tile-img"
-                style={s.photo ? { backgroundImage: `url(${s.photo.src})` } : undefined}
+                style={s.photo ? { backgroundImage: `url(${smallPhoto(s.photo.src)})` } : undefined}
               />
               <div className="city-tile-body">
                 <h3>{title}</h3>

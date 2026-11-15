@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccount } from '@/platform/ui/memberHint'
 import Link from '@/platform/ui/Link'
 import { useEffect, useState } from 'react'
 import { shellText } from '../i18n'
@@ -24,9 +25,8 @@ export function JoinCircle() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
   useEffect(() => {
-    fetch('/api/compte', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((me) => setHidden(Boolean(me?.member)))
+    getAccount()
+      .then((me) => setHidden(Boolean(me.member)))
       .catch(() => {})
   }, [])
   // Fiches détaillées : un seul bouton flottant (l’assistant) ; la bulle d’inscription s’efface.

@@ -47,3 +47,22 @@
 - Non vérifié à l’œil : preview.mydalil.com exige une connexion Vercel puis un compte /admin.
 - Prochaine action : promotion `preview` → `main` après feu vert explicite de Rad (migrations additives seulement : colonnes, tables, valeur d’énumération ; données différées `agents_equipe_icm`).
 - Décisions attendues de Rad : clés ANTHROPIC/OPENAI et budget mensuel des agents ; bot Telegram (jeton, secret, identifiants) ; réception des emails (sous-domaine ou redirection Gandi) ; suspension de membre ; périmètre de l’« Éditeur du site » ; double authentification de l’équipe.
+
+## Production — 15 novembre 2026
+
+- `preview` promu en production (PR #34, feu vert de Rad) : `main` = `a509c94`, déploiement Vercel et « Parcours sur le déploiement » réussis.
+- Panne ancienne trouvée et corrigée : `CRON_SECRET` absent en production, donc aucune tâche quotidienne n’avait jamais tourné (sauvegardes, rappels, expirations, index). Variable ajoutée (Production, Secret), production redéployée, passe lancée depuis Vercel › Cron Jobs. `/api/sante` : `taches.ok: true`, première sauvegarde `2026-11-15T00:01:42Z`. Issue #17 fermée.
+- Accès : le compte Vercel `tablenow101` est membre de l’équipe `soualjawab1-6994` (projet `mydalil`) ; le connecteur Vercel de Claude lit les déploiements et journaux, mais Vercel lui refuse les variables de production (une valeur secrète se saisit par un humain).
+- Observation non corrigée : chaque bouton « favori » appelle `GET /api/favorites` séparément (N requêtes par page de liste) ; pas d’erreur, coût inutile.
+
+## Préparation du lancement — 15 novembre 2026
+
+- Audit : projet Claude `claude/audit-2026-11-15-lancement.md` (coût par visite, données, finition).
+- Branche `agent/optimisation-cout` : coût par visite (voir `src/platform/DECISIONS.md`), page d’erreur, `/test` retirée, fiches au nom provisoire hors des listes. Local, base neuve : check OK, lint 0 erreur, 191 unitaires, 213 parcours réussis ; liste 250 → 30 requêtes.
+- À vérifier après déploiement : en-tête `x-vercel-cache` des listes `/services`, `/praticiens`, `/annonces` (cache CDN de 2 min).
+- Reste avant lancement : lieux officiels (complétude, contacts, villes en français), photos, finition visuelle page par page, revue du cockpit avec Rad, CSS (365 Ko chargés partout).
+
+## 2026-11-15 — Lancement, données (branche `agent/lancement-donnees`)
+- Fait : migration différée des villes en français (`src/modules/annuaire/cityName.ts` + test). Base de test : 2 140 → 292 villes en arabe. `pnpm check` et `pnpm test` (194) réussis. Build et parcours : laissés à la CI.
+- Non fait : contacts manquants (22 404 fiches), photos (choix A/B de Rad en attente), revue visuelle 375/1440, revue du cockpit avec Rad.
+- En attente : accord explicite de Rad pour promouvoir `preview` vers `main` (lot coût `4d89d02`).

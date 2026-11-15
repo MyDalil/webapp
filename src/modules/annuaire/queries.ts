@@ -130,7 +130,7 @@ async function client() {
 export const getPlaces = cache(async (): Promise<PlaceCard[]> => {
   try {
     const payload = await client()
-    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, depth: 1, limit: 1500, sort: '-score', overrideAccess: false })
+    const { docs } = await payload.find({ collection: 'places', where: { and: [{ _status: { equals: 'published' } }, { name: { not_like: 'nom à compléter' } }] }, depth: 1, limit: 1500, sort: '-score', overrideAccess: false })
     return docs.map(toCard)
   } catch {
     return []
@@ -143,7 +143,8 @@ export type PlaceSearch = { sector?: string; category?: string; wilaya?: string;
 export async function searchPlaces(f: PlaceSearch, limit = 400): Promise<{ places: PlaceCard[]; total: number }> {
   try {
     const payload = await client()
-    const and: Where[] = [{ _status: { equals: 'published' } }]
+    // Fiche au nom provisoire : sa page reste utile sur place, mais elle n’apparaît pas dans les listes.
+    const and: Where[] = [{ _status: { equals: 'published' } }, { name: { not_like: 'nom à compléter' } }]
     if (f.sector) and.push({ sector: { equals: f.sector } })
     if (f.category) and.push({ category: { equals: f.category } })
     const w = f.wilaya ? WILAYAS.find((x) => x.name === f.wilaya || String(x.code) === f.wilaya) : undefined
