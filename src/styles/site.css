@@ -122,6 +122,8 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
   .place-panel-list .place-row:nth-child(odd) { border-right: 1px solid var(--line); }
   .place-panel-list .place-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
 }
+/* Guide : adresses liées alignées sur la colonne du guide (pas de marge propre). */
+.xp-body .place-panel { padding: 0; margin-top: 16px; }
 .sr-list > li.sr-place { padding: 0; }
 .sr-list > li.sr-place .place-row { padding: 12px 14px; }
 .map-lang { display: flex; }
