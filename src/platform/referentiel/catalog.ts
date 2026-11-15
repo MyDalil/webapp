@@ -81,6 +81,7 @@ export const SECTORS: Sector[] = [
   "description": "Identifier les structures de soins et les professionnels adaptés à son besoin.",
   "categories": [
    "Médecins",
+   "Dentistes",
    "Cliniques",
    "Hôpitaux",
    "Laboratoires",
@@ -276,6 +277,9 @@ export const SECTORS: Sector[] = [
    "Location de véhicules",
    "Déménagement",
    "Services automobiles",
+   "Stations-service",
+   "Lavage auto",
+   "Pièces et accessoires auto",
     "Gares et stations"
   ],
   "criteria": [
@@ -342,14 +346,18 @@ export const SECTORS: Sector[] = [
   "title": "Administrations & Services publics",
   "description": "Identifier le service compétent et les contacts utiles.",
   "categories": [
-   "Administrations",
+   "Wilayas et daïras",
+   "Services municipaux",
+   "Tribunaux",
+   "Sécurité sociale",
+   "Impôts et douanes",
    "Ministères",
    "Ambassades",
    "Consulats",
-   "Services municipaux",
    "Bureaux de poste",
    "Offices du tourisme",
-    "Contacts utiles et urgences"
+    "Contacts utiles et urgences",
+   "Administrations"
   ],
   "criteria": [
    "Compétence territoriale",

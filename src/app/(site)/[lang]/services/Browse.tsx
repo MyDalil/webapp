@@ -87,7 +87,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
         <div className="container">
           <p className="eyebrow">{current ? 'Services' : 'Services à domicile'}</p>
           <h1>{current ? `${current.label}.` : 'Trouvez le bon prestataire, près de chez vous.'}</h1>
-          <p className="auth-lead">Décrivez votre besoin : DALIL vous indique les professionnels disponibles. Avant publication, chaque prestataire fait contrôler son identité et son statut légal (et son casier judiciaire pour les enfants, les aînés et les cours). Le prestataire accepte ou décline sous 24 h, sinon la demande expire. Échanges dans la messagerie DALIL.</p>
+          <p className="auth-lead">Choisissez un professionnel près de chez vous. DALIL contrôle son identité et son statut légal. Réponse sous 24 h.</p>
           <form className="praticiens-search" action={action}>
             {!fixedCategory && (
               <label>

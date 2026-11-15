@@ -1,6 +1,6 @@
 /** Annuaire & Lieux — porte d’entrée serveur. */
 export * from './queries'
-export { LISTINGS, cityPhoto, formatDate, knownCityPhoto, type Listing } from './listings'
+export { LISTINGS, categoryPhoto, cityPhoto, formatDate, knownCityPhoto, type Listing } from './listings'
 export { NATURE_CATEGORIES } from './filters'
 export { PLACE_TYPES } from './weekend'
 export { importPlaces, type ImportRecord } from './importPlaces'
