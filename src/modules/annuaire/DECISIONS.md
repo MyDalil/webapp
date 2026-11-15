@@ -72,3 +72,8 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - 2026-11-02 — Les 69 wilayas sont proposées dans tous les filtres et formulaires, sans mention « en transition » (décision de Rad : « en transition ne veut rien dire »). Le décret 26-206 ne publie pas la liste des communes : un prestataire d’une nouvelle wilaya intervient dans toute la wilaya jusqu’à sa publication.
 - 2026-11-14 — corbeille 30 jours sur les adresses (`trash: true`) : « supprimer » met de côté, la fiche sort de l’index et du site, se restaure ; la tâche quotidienne supprime définitivement après 30 jours (`src/platform/trash`). Toute requête SQL brute sur `places` filtre `deleted_at IS NULL`.
 - 2026-11-15 — les fiches au nom provisoire (« nom à compléter », 3 327) sortent des listes et des vitrines ; leur page reste accessible. Raison : une liste publique ne montre pas de fiche sans nom.
+
+## 2026-11-15 — Villes en français
+- Décision : les villes importées en arabe ou en écritures mêlées passent en français par `cityName.ts` (partie latine déjà présente, sinon commune du référentiel avec le même nom arabe). Migration `20261115_100000_villes_en_francais`.
+- Raison : 2 140 fiches montraient une ville en arabe dans les pages françaises. Résultat mesuré sur la base de test : 2 140 → 292.
+- Règle : aucune translittération automatique. Les 292 fiches restantes gardent leur valeur ; un humain les corrige dans /admin.

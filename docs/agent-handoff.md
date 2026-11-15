@@ -61,3 +61,8 @@
 - Branche `agent/optimisation-cout` : coût par visite (voir `src/platform/DECISIONS.md`), page d’erreur, `/test` retirée, fiches au nom provisoire hors des listes. Local, base neuve : check OK, lint 0 erreur, 191 unitaires, 213 parcours réussis ; liste 250 → 30 requêtes.
 - À vérifier après déploiement : en-tête `x-vercel-cache` des listes `/services`, `/praticiens`, `/annonces` (cache CDN de 2 min).
 - Reste avant lancement : lieux officiels (complétude, contacts, villes en français), photos, finition visuelle page par page, revue du cockpit avec Rad, CSS (365 Ko chargés partout).
+
+## 2026-11-15 — Lancement, données (branche `agent/lancement-donnees`)
+- Fait : migration différée des villes en français (`src/modules/annuaire/cityName.ts` + test). Base de test : 2 140 → 292 villes en arabe. `pnpm check` et `pnpm test` (194) réussis. Build et parcours : laissés à la CI.
+- Non fait : contacts manquants (22 404 fiches), photos (choix A/B de Rad en attente), revue visuelle 375/1440, revue du cockpit avec Rad.
+- En attente : accord explicite de Rad pour promouvoir `preview` vers `main` (lot coût `4d89d02`).
