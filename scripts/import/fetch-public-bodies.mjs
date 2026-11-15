@@ -59,6 +59,8 @@ SELECT ?item ?fr ?ar ?en ?coord ?website ?phone ?email ?address ?wilayaLabel ?ci
   ?item wdt:P31/wdt:P279* wd:${cls} ; wdt:P17 wd:Q262 .
   FILTER NOT EXISTS { ?item wdt:P576 [] }
   FILTER NOT EXISTS { ?item wdt:P3999 [] }
+  # Exclut les territoires (communes, daïras, wilayas) : Wikidata les range aussi parmi les organisations publiques.
+  FILTER NOT EXISTS { ?item wdt:P31/wdt:P279* wd:Q56061 }
   OPTIONAL { ?item rdfs:label ?fr FILTER(lang(?fr) = "fr") }
   OPTIONAL { ?item rdfs:label ?ar FILTER(lang(?ar) = "ar") }
   OPTIONAL { ?item rdfs:label ?en FILTER(lang(?en) = "en") }

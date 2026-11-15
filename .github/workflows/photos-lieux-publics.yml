@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     branches: ['agent/photos-lieux-publics']
-    paths: [scripts/import/fetch-place-photos.mjs, scripts/import/fetch-public-bodies.mjs, .github/workflows/photos-lieux-publics.yml]
+    paths: [scripts/import/fetch-place-photos.mjs, scripts/import/fetch-public-bodies.mjs, scripts/import/sample-place-photos.mjs, .github/workflows/photos-lieux-publics.yml]
 permissions:
   contents: write
 concurrency:
@@ -22,6 +22,9 @@ jobs:
       - run: node scripts/import/fetch-public-bodies.mjs
         continue-on-error: true
       - run: node scripts/import/fetch-place-photos.mjs
+        if: ${{ !contains(github.event.head_commit.message, '[corps-seuls]') }}
+        continue-on-error: true
+      - run: node scripts/import/sample-place-photos.mjs
         continue-on-error: true
       - name: Commit des photos trouvées
         if: always()
@@ -29,6 +32,7 @@ jobs:
           git config user.name "dalil-import"
           git config user.email "salam@mydalil.com"
           git add src/modules/annuaire/data/place-photos.json src/modules/annuaire/data/public-bodies.json
+          git add -f data/photo-sample || true
           git commit -m "Données : institutions publiques et photos libres [skip ci]" || echo "rien de nouveau"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
