@@ -34,7 +34,7 @@ test.describe('Langues', () => {
     await expect(page.locator('h1').first()).toHaveText('The practical guide to Algeria.')
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
     await page.goto('/ar')
-    await expect(page.locator('h1').first()).toHaveText('اعثر على ما تحتاجه في الجزائر.')
+    await expect(page.locator('h1').first()).toHaveText('الدليل العملي للجزائر.')
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
     await expect(page.locator('.section-head h2').first()).toHaveText('ماذا تودّ أن تفعل اليوم؟')
     expect(errors).toEqual([])
