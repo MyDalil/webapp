@@ -1,5 +1,13 @@
 # Reprise — 12 novembre 2026
 
+## Mise à jour — 14 novembre 2026 (soir) : écoles et photos des lieux publics
+
+- PR #31 `agent/guides-annuaire-ecoles` → `preview` : les guides liés à une rubrique de l’annuaire montrent ses catégories non vides et 6 adresses. Cause corrigée : « École & famille » (Vie pratique) ne menait à aucune école. `pnpm check` OK ; build/e2e laissés à la CI.
+- PR #32 (brouillon) `agent/photos-lieux-publics` → `preview` : collecte `scripts/import/fetch-place-photos.mjs` (workflow « Photos libres des lieux publics », lancé au push) puis migration différée `20261114_230000_photos_lieux_publics`.
+- Sources : Wikidata, OpenStreetMap (wikimedia_commons), Commons géographique avec contrôle du nom. Pas de réseaux sociaux (conditions de Meta, droit d’auteur, décision annuaire du 2026-10-08).
+- Prochaine action : attendre la fin du workflow (commit de `src/modules/annuaire/data/place-photos.json`), relire le volume trouvé, passer la PR #32 en prête, CI, test sur preview.
+- Limite connue : les sources libres couvrent peu les écoles et mosquées de quartier. Couverture complète : Mapillary (compte à créer) ou Google Places (payant) — décision de Rad attendue.
+
 ## Mise à jour — 14 novembre 2026
 
 - `MyDalil/webapp` reste inchangé comme dépôt canonique et reste sur GitHub Free.
@@ -66,3 +74,23 @@
 - Fait : migration différée des villes en français (`src/modules/annuaire/cityName.ts` + test). Base de test : 2 140 → 292 villes en arabe. `pnpm check` et `pnpm test` (194) réussis. Build et parcours : laissés à la CI.
 - Non fait : contacts manquants (22 404 fiches), photos (choix A/B de Rad en attente), revue visuelle 375/1440, revue du cockpit avec Rad.
 - En attente : accord explicite de Rad pour promouvoir `preview` vers `main` (lot coût `4d89d02`).
+
+## 2026-11-15 — Rubriques rangées (branche `agent/rubriques-rangees`)
+- Production : `main` = `0bb38c2` (lot coût + villes en français), vérifié par `/api/sante`.
+- Fait sur cette branche : `CategoryTiles` (villes en raccourci + sous-catégories en cases) sur les pages de rubrique et de catégorie ; écoles rangées par niveau (`schoolCategory.ts`, migration différée `20261115_120000_ecoles_par_niveau`) ; diaporama d’accueil sans bureau officiel.
+- Vérifié en local : `pnpm check`, `pnpm test` (197), `pnpm build`, page Collèges vue à 375 px et 1440 px. Parcours Playwright : laissés à la CI.
+- Reste : cases de catégories vides non masquées ; mêmes rangements à faire pour les autres rubriques ; PR #31, #32 (conflit), #35 à reprendre ; photos ; contrôle de rendez-vous, annonces, services.
+
+## 2026-11-15 — Santé, liste unique (branche `agent/sante-liste-unique`)
+- `preview` contient #40 (rubriques rangées, écoles par niveau, titre d’accueil). Production inchangée : `main` = `0bb38c2`.
+- Fait ici : page `/praticiens` en une seule liste ; lien d’inscription sur les fiches « Médecins ».
+- Vérifié en local : check, build ; parcours des 13 rubriques en 375 px — 75 pages de catégorie, 13 fiches, 13 pages de ville : toutes à 200, au moins une fiche, aucune erreur de script.
+- Reste : autres fourre-tout (Administrations, Services automobiles, Médecins sans spécialité) ; accueil à raccourcir (maquette d’abord) ; trois entrées du menu ; PR #31, #32, #35 ; promotion vers `main` après accord de Rad.
+
+## 2026-11-15 — Rangement, suite (branche `agent/rangement-suite`)
+- Contient : fourre-tout rangés (`categoryRules.ts`, migration `20261115_150000_fourre_tout_ranges`) ; quatre entrées au menu Vie pratique ; fusion des branches #31 (guides), #35 (photo d’illustration), #32 (photos libres et coordonnées, import corrigé, 13 images retirées).
+- Base de test après migrations : 470 institutions créées, 204 fiches avec photo libre, 232 fiches complétées ; Dentistes 890.
+- Parcours faits à la main en local, membre de test connecté : prise de rendez-vous confirmée (`/api/rdv` 201). Formulaire d’annonce, page prestataire et premier écran de l’espace pro affichés, mais envoi non vérifié.
+- Constat : aucun test automatique ne couvre réservation, dépôt d’annonce, demande de service, inscription d’un pro. À écrire, avec un membre de test.
+- Constat : en production, `/services/*` montre des prestataires « Exemple — … ». Décision de Rad attendue.
+- Production inchangée : `main` = `0bb38c2`.

@@ -122,6 +122,8 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
   .place-panel-list .place-row:nth-child(odd) { border-right: 1px solid var(--line); }
   .place-panel-list .place-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
 }
+/* Guide : adresses liées alignées sur la colonne du guide (pas de marge propre). */
+.xp-body .place-panel { padding: 0; margin-top: 16px; }
 .sr-list > li.sr-place { padding: 0; }
 .sr-list > li.sr-place .place-row { padding: 12px 14px; }
 .map-lang { display: flex; }
@@ -143,3 +145,16 @@ select:not([multiple]):not(.legacy *) { -webkit-appearance: none; appearance: no
 body:has(.xp-community) .site-footer .newsletter { display: none; }
 body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer { border-top: 0 !important; box-shadow: none; }
 .site-footer-wrap .site-footer { border-top-color: var(--line); }
+
+/* Rubriques de l’annuaire : trois villes en raccourci, puis les sous-catégories en cases (Rad, 2026-11-15). Même langage que le menu : pictogramme en couleur sur fond teinté. */
+.cat-nav { display: grid; gap: 14px; margin-top: 18px; }
+.cat-cities { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 10px; }
+.cat-tile { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: 600 .9rem/1.25 Inter, sans-serif; text-decoration: none; transition: border-color .2s ease, background .2s ease; }
+.cat-tile:hover { border-color: var(--rc); background: color-mix(in srgb, var(--rc) 5%, var(--surface)); }
+.cat-tile[aria-current="page"] { border-color: var(--rc); background: color-mix(in srgb, var(--rc) 9%, var(--surface)); }
+.cat-tile:focus-visible { outline: 3px solid color-mix(in srgb, var(--rc) 45%, transparent); outline-offset: 2px; }
+.cat-tile-ico { display: grid; place-items: center; flex: 0 0 auto; width: 36px; height: 36px; border-radius: 11px; background: color-mix(in srgb, var(--rc) 12%, var(--surface)); color: var(--rc); }
+.cat-tile-ico svg { width: 19px; height: 19px; stroke-width: 1.7; fill: none; stroke: currentColor; }
+@media (max-width: 520px) { .cat-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cat-tile { padding: 8px 10px; font-size: .84rem; } }
+.pl-claim { margin: 12px 0 0; font-size: .9rem; } .pl-claim a { color: var(--green); font-weight: 600; text-decoration: none; } .pl-claim a:hover { text-decoration: underline; }

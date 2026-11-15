@@ -17,3 +17,9 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - **Chevauchement** : un créneau qui touche un rendez-vous confirmé (intervalle complet) n’est plus proposé ; plages superposées fusionnées ; contrainte d’exclusion Postgres `appointments_no_overlap` (btree_gist) contre deux réservations simultanées.
 - **Visio** : réservable seulement si `VIDEO_PROVIDER` désigne un fournisseur implémenté dans `platform/video.ts` (aucun aujourd’hui). Sans salle créée, la réservation est annulée et le patient prévenu.
 - **Rappels** : marqués envoyés seulement si Resend les accepte, retentés à l’exécution suivante (jusqu’à 2 h avant), clé d’idempotence par rendez-vous. Le motif n’entre jamais dans la mesure d’audience.
+
+## 2026-11-15 — Page Santé : une seule liste
+- Décision (Rad) : la page `/praticiens` montre toujours les praticiens réservables en ligne, puis les médecins et établissements de l’annuaire (médecins d’abord). Plus de titre négatif « Pas encore de praticien ».
+- Décision (Rad) : chaque fiche « Médecins » de l’annuaire porte le lien « Vous êtes ce praticien ? Activez la prise de rendez-vous ».
+- Rappel : le praticien de démonstration n’existe jamais en production (migration `20261016_120000_demo_praticien`).
+- Raison : jamais de vitrine vide ni de faux praticien ; chaque fiche sert à recruter le praticien.

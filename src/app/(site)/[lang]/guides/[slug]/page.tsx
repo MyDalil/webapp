@@ -5,7 +5,10 @@ import { GUIDE_VISUALS, guideView } from '@/modules/contenus'
 import { offerState, packForGuide } from '@/modules/accompagnement'
 import { Choice, Transparency } from '@/modules/accompagnement/ui'
 import { FavoriteButton } from '@/modules/membres/ui'
-import { GUIDES } from '@/platform/referentiel/catalog'
+import { getPlaceCounts, searchPlaces } from '@/modules/annuaire'
+import { PlacePanel } from '@/modules/annuaire/ui'
+import { GUIDES, SECTORS } from '@/platform/referentiel/catalog'
+import { categoryPath } from '@/platform/referentiel/slug'
 import { PHOTOS } from '@/platform/referentiel/photos'
 import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { Visual } from '@/platform/ui/Visual'
@@ -21,6 +24,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return g ? { title: `${g.title}`, description: g.lead } : {}
 }
 
+/** Pictogramme d’une catégorie liée ; à défaut, l’épingle. */
+const CATEGORY_ICON: Record<string, string> = {
+  Crèches: 'baby',
+  Écoles: 'school',
+  Universités: 'books',
+  'Formation professionnelle': 'briefcase',
+  'Écoles de langues': 'globe',
+}
+/** Pas de compteurs sur les listes Administrations (décision de Rad, oct. 2026). */
+const NO_COUNT = new Set(['administrations-services-publics'])
+
 const dateFr = (d: string) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 
 /** Guide pratique au format « application » (même modèle que les fiches de démarche). Contenu : prototype validé. */
@@ -32,6 +46,12 @@ export default async function GuidePage({ params }: Props) {
   const pack = await packForGuide(`/guides/${slug}`)
   const open = (await offerState()).mode === 'ouvert'
   const others = GUIDES.filter((x) => x.slug !== slug && x.category === GUIDES.find((y) => y.slug === slug)?.category).slice(0, 6)
+  // Annuaire lié au guide (ex. « École et vie de famille » → Éducation & Formation) : catégories non vides, puis les adresses les mieux classées.
+  const linked = SECTORS.filter((s) => s.guides.includes(slug))
+  const counts = linked.length ? await getPlaceCounts() : null
+  const categories = linked.flatMap((s) => s.categories.filter((c) => (counts?.category[c] ?? 0) > 0).map((c) => ({ sector: s, category: c, n: counts!.category[c] })))
+  const main = linked.find((s) => (counts?.sector[s.slug] ?? 0) > 0)
+  const top = main ? await searchPlaces({ sector: main.slug }, 6) : null
   return (
     <article className="xp">
       <XpHero compact photo={v.photo ? PHOTOS[v.photo].src : undefined} credit={v.photo ? PHOTOS[v.photo].credit : null} eyebrow={g.label} title={g.title} lead={g.lead} back={{ href: '/guides', label: 'Tous les guides' }}>
@@ -50,6 +70,33 @@ export default async function GuidePage({ params }: Props) {
           ))}
         </ol>
       </section>
+
+      {categories.length > 0 && (
+        <section className="sr-group" aria-label="Adresses DALIL">
+          <h2>Trouver une adresse</h2>
+          <p className="sr-note">Listes par wilaya, avec recherche, filtres et carte.</p>
+          <ul className="sr-list">
+            {categories.map(({ sector, category, n }) => (
+              <li key={`${sector.slug}-${category}`}>
+                <Link href={categoryPath(sector.slug, category)} className="sr-row">
+                  <span className="sr-icon" aria-hidden="true">
+                    <Icon name={CATEGORY_ICON[category] ?? 'pin'} />
+                  </span>
+                  <span className="sr-text">
+                    <b>{category}</b>
+                    <small>{NO_COUNT.has(sector.slug) ? sector.title : `${n} adresse${n > 1 ? 's' : ''} · ${sector.title}`}</small>
+                  </span>
+                  <span />
+                  <span className="sr-chev" aria-hidden="true">›</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {main && top && top.places.length > 0 && (
+            <PlacePanel places={top.places} more={{ href: `/annuaire/${main.slug}`, label: `Rechercher dans ${main.title}` }} />
+          )}
+        </section>
+      )}
 
       {pack && (
         <>

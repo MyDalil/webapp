@@ -2,6 +2,8 @@ import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import Link from '@/platform/ui/Link'
 import { CATEGORIES, categoryCounts, categoryLabel, searchProviders, type ProviderCard } from '@/modules/services'
 import { WILAYAS } from '@/platform/referentiel/catalog'
+import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
+import { PlacePanel } from '@/modules/annuaire/ui'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel, LANGUAGES } from '@/platform/referentiel/languages'
 import { IconLabel } from '@/platform/ui/Icon'
@@ -79,6 +81,9 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
   const cat = fixedCategory ?? q.categorie
   const [results, counts] = await Promise.all([searchProviders({ category: cat, activity: q.activite, wilaya: q.wilaya, commune: q.commune, gender: q.genre, language: q.langue }), categoryCounts()])
   const current = CATEGORIES.find((c) => c.value === cat)
+  // Sans prestataire inscrit : les professionnels de l’annuaire du même métier, quand il y en a (jamais de page vide ni de faux prestataire).
+  const fallbackSector: Record<string, string> = { bricolage: 'maison-travaux' }
+  const nearby: PlaceCard[] = !results.length && cat && fallbackSector[cat] ? (await searchPlaces({ sector: fallbackSector[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
   const communes = q.wilaya ? communesOf(q.wilaya) : []
   const action = fixedCategory ? `/services/${fixedCategory}` : '/services'
   return (
@@ -87,7 +92,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
         <div className="container">
           <p className="eyebrow">{current ? 'Services' : 'Services à domicile'}</p>
           <h1>{current ? `${current.label}.` : 'Trouvez le bon prestataire, près de chez vous.'}</h1>
-          <p className="auth-lead">Décrivez votre besoin : DALIL vous indique les professionnels disponibles. Avant publication, chaque prestataire fait contrôler son identité et son statut légal (et son casier judiciaire pour les enfants, les aînés et les cours). Le prestataire accepte ou décline sous 24 h, sinon la demande expire. Échanges dans la messagerie DALIL.</p>
+          <p className="auth-lead">Choisissez un professionnel près de chez vous. DALIL contrôle son identité et son statut légal. Réponse sous 24 h.</p>
           <form className="praticiens-search" action={action}>
             {!fixedCategory && (
               <label>
@@ -206,8 +211,9 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
           </ul>
         ) : (
           <div className="praticiens-empty">
-            <h2>Aucun prestataire pour cette recherche, pour l’instant.</h2>
-            <p>Les prestataires rejoignent DALIL au fur et à mesure, après vérification. Élargissez la recherche ou revenez bientôt.</p>
+            <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Les premiers prestataires arrivent.'}</h2>
+            <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Les prestataires rejoignent DALIL après contrôle de leur identité. Revenez bientôt.'}</p>
+            {!!nearby.length && <PlacePanel places={nearby} />}
             <Link className="button outline" href="/espace-pro?espace=services">
               Vous êtes prestataire ? Rejoindre DALIL
             </Link>

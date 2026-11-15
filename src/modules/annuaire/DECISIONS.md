@@ -77,3 +77,14 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Décision : les villes importées en arabe ou en écritures mêlées passent en français par `cityName.ts` (partie latine déjà présente, sinon commune du référentiel avec le même nom arabe). Migration `20261115_100000_villes_en_francais`.
 - Raison : 2 140 fiches montraient une ville en arabe dans les pages françaises. Résultat mesuré sur la base de test : 2 140 → 292.
 - Règle : aucune translittération automatique. Les 292 fiches restantes gardent leur valeur ; un humain les corrige dans /admin.
+
+## 2026-11-15 — Rubriques rangées par sous-catégorie
+- Décision (Rad) : une page de rubrique ou de catégorie n’affiche plus le nombre d’adresses ni la liste des wilayas. Elle montre trois villes en raccourci (Alger, Oran, Constantine) et les sous-catégories en cases (`ui/CategoryTiles.tsx`). L’interface validée reste : même langage que le menu.
+- Décision (Rad) : « Écoles » est rangé par niveau — Écoles primaires, Collèges, Lycées, Auto-écoles (dans Éducation, pas dans Transports), plus Crèches, Universités, Formation professionnelle, Écoles de langues. Les écoles coraniques vont dans Vie musulmane et gardent une case dans Éducation.
+- Règle : le niveau se lit dans le nom (`schoolCategory.ts`). Un nom qui ne le dit pas reste dans « Écoles », affiché « Autres écoles ». Mesure sur la base de test : 8 216 → 3 526 non classées.
+- Accueil : le diaporama ne prend plus de bureau officiel (photo de cérémonie en première image).
+- 2026-11-15 — **Photos d’illustration par catégorie** (lieux publics) : sans vraie photo, la fiche et sa vignette montrent une photo haut de gamme de sa catégorie (Pexels, licence gratuite à usage commercial, ou photo du site), créditée « Photo d’illustration ». Ordre : photo DALIL → photo libre du lieu → illustration de catégorie → photo de la ville → pictogramme. Choix à l’œil : paysage, net, sans visage d’enfant, jamais un monument identifiable pour un autre lieu — demande de Rad (« niveau Shutterstock »). **À ne pas refaire** : prendre une photo sur sa seule description (ex. « Arc de Constantin » de Pexels = Rome).
+
+## 2026-11-15 — Fourre-tout rangés, photos libres relues
+- Décision (Rad) : « Médecins », « Services automobiles » et « Administrations » sont rangés d’après le nom (`categoryRules.ts`) : Dentistes ; Stations-service, Lavage auto, Pièces et accessoires auto ; Tribunaux, Sécurité sociale, Impôts et douanes, Wilayas et daïras. Sans indice dans le nom, la fiche garde sa catégorie.
+- Photos libres (#32) : retirées avant intégration — photos de zaouïa, de mausolée de cheikh, plans, cartes, vignette sans nom (10 images). Règle : une photo libre montre le lieu, jamais un plan ni un lieu exclu de DALIL.

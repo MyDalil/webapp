@@ -21,3 +21,8 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - **Décision** : un prestataire d’exemple par catégorie (11, `demo`, slug `exemple-<catégorie>`), créé partout, prix « à convenir » (aucun tarif inventé).
 - **Production** : une fiche `demo` est un exemple — badge, demandes refusées par le serveur, formulaire remplacé, page non indexée. Hors production, elle reste une fiche de test réservable.
 - **Masquage** : un vrai prestataire publié dans la catégorie masque l’exemple ; les compteurs ne comptent que les vrais.
+
+## 2026-11-15 — Plus de prestataire d’exemple en production (décision de Rad)
+- **Décision** : en production, les fiches `demo` ne sont plus listées. Remplace « Aucune catégorie vide » du 2026-10-26 pour la production ; hors production, l’exemple reste pour tester.
+- **À la place** : les professionnels de l’annuaire du même métier quand il y en a (bricolage → Maison & travaux), sinon un message d’attente et le lien d’inscription.
+- **Raison** : un guide de confiance ne montre pas de faux prestataire.
