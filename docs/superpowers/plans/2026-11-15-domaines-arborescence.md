@@ -54,7 +54,7 @@
 
 ### Task 5: Réglages Vercel et GitHub
 
-- [ ] Autoriser l'équipe Vercel `soualjawab1-6994`.
-- [ ] Rediriger le projet historique et vérifier la protection Preview.
+- [x] Autoriser l'équipe Vercel `soualjawab1-6994`.
+- [x] Neutraliser le projet historique et vérifier la protection Preview.
 - [ ] Remplacer l'URL de présentation GitHub par `https://www.mydalil.com`.
 - [ ] Vérifier statuts HTTP, `Location`, canoniques, robots et boucles.

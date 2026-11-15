@@ -9,8 +9,8 @@ Faire de `https://www.mydalil.com` l'unique origine canonique, conserver `https:
 - `www.mydalil.com` est l'adresse canonique visible et indexable.
 - `mydalil.com` redirige en 308 vers `www.mydalil.com`, chemin et paramètres conservés.
 - `preview.mydalil.com` reste protégé par Vercel et interdit à l'indexation.
-- `mydalil.vercel.app` redirige en permanence vers `www.mydalil.com`.
-- `dalil-algerie-public.vercel.app` redirige vers `www.mydalil.com` depuis son propre projet Vercel.
+- L'alias Vercel automatique du projet principal redirige en permanence vers `www.mydalil.com`.
+- L'ancien prototype n'est plus accessible au public ; sa source reste conservée.
 - Les URL techniques de déploiement Vercel restent protégées.
 - Canoniques, Open Graph, emails, robots et sitemaps utilisent la même origine selon l'environnement.
 

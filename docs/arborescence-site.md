@@ -9,8 +9,8 @@ Mise à jour : 15 novembre 2026. Ce document décrit les routes publiques, les a
 | Production canonique | `https://www.mydalil.com` | seule origine indexable |
 | Domaine racine | `https://mydalil.com` | redirection 308 vers `www` |
 | Preview | `https://preview.mydalil.com` | authentification Vercel, `noindex` |
-| Alias Vercel principal | `https://mydalil.vercel.app` | redirection 308 vers `www` |
-| Ancien projet | `https://dalil-algerie-public.vercel.app` | redirection 308 à régler dans son projet Vercel |
+| Alias technique principal | adresse Vercel automatique | redirection 308 vers `www`, chemin et paramètres conservés |
+| Ancien prototype | adresse technique historique | accès public désactivé, source conservée |
 
 Le français est servi sans préfixe. Les mêmes pages utilisent `/en` en anglais et `/ar` en arabe. Toute adresse `/fr/**` est redirigée vers la forme française sans préfixe.
 

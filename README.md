@@ -8,9 +8,7 @@ Comprendre une démarche, découvrir un lieu ou trouver le bon interlocuteur : D
 
 ## Ce dépôt
 
-`MyDalil/webapp` contient le produit actuel : application Next.js, administration Payload CMS et modules métier. Les données sont hébergées dans Neon ; Vercel assure le déploiement web.
-
-L’ancien projet Vercel `mydalil-prototype` conserve le prototype à l’adresse `dalil-algerie-public.vercel.app`. Il est distinct du projet Vercel actuel `mydalil` et ne doit pas remplacer son application ou ses données.
+`MyDalil/webapp` contient le produit actuel : application Next.js, administration Payload CMS et modules métier. Les données sont hébergées dans Neon ; Vercel assure le déploiement web. L’ancien prototype est archivé et n’est plus accessible au public.
 
 ## Environnements
 
