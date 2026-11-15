@@ -1,3 +1,5 @@
+import { ROUTE_ALIASES } from './siteRoutes'
+
 export type SiteRedirect = {
   source: string
   destination: string
@@ -5,17 +7,7 @@ export type SiteRedirect = {
   has?: { type: 'host'; value: string }[]
 }
 
-const aliases = [
-  ['/login', '/connexion'],
-  ['/signin', '/connexion'],
-  ['/inscription', '/connexion/particulier?tab=signup'],
-  ['/signup', '/connexion/particulier?tab=signup'],
-  ['/mot-de-passe-oublie', '/connexion'],
-  ['/compte', '/mon-compte'],
-  ['/professionnels/espace', '/espace-pro'],
-] as const
-
-const localizedAliases: SiteRedirect[] = aliases.flatMap(([source, destination]) => [
+const localizedAliases: SiteRedirect[] = ROUTE_ALIASES.flatMap(([source, destination]) => [
   { source, destination, permanent: true },
   ...(['en', 'ar'] as const).map((lang) => ({
     source: `/${lang}${source}`,

@@ -7,6 +7,7 @@ import { CATEGORIES as SERVICE_CATEGORIES, getProviderSitemap } from '@/modules/
 import { SITE } from '@/platform/site'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
+import { ROBOTS_PRIVATE_PATHS } from '@/platform/siteRoutes'
 
 /**
  * Plan du site dynamique : uniquement les pages publiques et les contenus publiés (annonces : en ligne et non expirées).
@@ -84,6 +85,11 @@ export const indexXml = (files: string[]) =>
     .join('\n')}\n</sitemapindex>\n`
 
 /** Robots : tout bloqué hors production (preview, branches) ; en production, espaces privés et outils exclus. */
-const PRIVATE = ['/mon-compte', '/espace', '/espace-pro', '/missions', '/connexion', '/onboarding', '/test', '/newsletter/', '/annonces/deposer', '/annonces/messagerie', '/recherche', '/professionnels/espace']
 /** Espaces privés et outils, dans les trois langues (/x, /en/x, /ar/x). */
-export const ROBOTS_DISALLOW = ['/admin', '/api/', ...PRIVATE, ...PRIVATE.map((p) => `/en${p}`), ...PRIVATE.map((p) => `/ar${p}`)]
+export const ROBOTS_DISALLOW = [
+  '/admin',
+  '/api/',
+  ...ROBOTS_PRIVATE_PATHS,
+  ...ROBOTS_PRIVATE_PATHS.map((path) => `/en${path}`),
+  ...ROBOTS_PRIVATE_PATHS.map((path) => `/ar${path}`),
+]
