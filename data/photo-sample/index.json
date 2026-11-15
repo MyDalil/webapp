@@ -1,1 +1,114 @@
-[]
+[
+ {
+  "n": 1,
+  "id": "osm:node/3031574391",
+  "place": "Bureau de poste Baba Hassen — Bureaux de poste, بابا حسن",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D8%A8%D8%B1%D9%8A%D8%AF_%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%B2%D9%8A_-_%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1.jpg"
+ },
+ {
+  "n": 2,
+  "id": "osm:way/334335507",
+  "place": "Mosquée Khaled ibn Al-Walid — Mosquées, Ouled Khaled",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:APC_Ouled_Khaled_%D8%AF%D8%A7%D8%B1_%D8%A7%D9%84%D8%A8%D9%84%D8%AF%D9%8A%D8%A9_-_panoramio.jpg"
+ },
+ {
+  "n": 3,
+  "id": "osm:way/237164994",
+  "place": "Mosquée Abdallah Ibn Salam — Mosquées, Oran",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Abdallah_Ibn_Salam_Mosque,_Oran.jpg"
+ },
+ {
+  "n": 4,
+  "id": "osm:way/353906439",
+  "place": "Aéroport Militaire de Mostaganem — Gares et stations, Sayada",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:A%C3%A9roport_de_mostaganem_2.jpg"
+ },
+ {
+  "n": 5,
+  "id": "ovt:22a5f2eb-d5d9-40f1-9307-7d5f7a24025e",
+  "place": "Madghacen — Monuments et sites historiques, Boumia",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Madghacen_01.jpg"
+ },
+ {
+  "n": 6,
+  "id": "osm:node/14030964126",
+  "place": "DJELFA AMOURAH — Bureaux de poste, AMOURAH",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Amoura_%C3%A0_Djelfa_%D8%B9%D9%85%D9%88%D8%B1%D8%A9_%D8%A8%D8%A7%D9%84%D8%AC%D9%84%D9%81%D8%A9_(37481099024).jpg"
+ },
+ {
+  "n": 7,
+  "id": "osm:way/190373999",
+  "place": "Mosquée Ennour — Mosquées, Médéa",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Djamaa_Ennour_%D8%AC%D8%A7%D9%85%D8%B9_%D8%A7%D9%84%D9%86%D9%88%D8%B1_-_panoramio_(1).jpg"
+ },
+ {
+  "n": 8,
+  "id": "osm:node/14030964324",
+  "place": "DRARIA — Bureaux de poste, DRARIA",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Draria_%D8%A7%D9%84%D8%AF%D8%B1%D8%A7%D8%B1%D9%8A%D8%A9_-_panoramio_(2).jpg"
+ },
+ {
+  "n": 9,
+  "id": "osm:node/6594337753",
+  "place": "Mosquée Darguina — Mosquées, Darguina",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Cimeti%C3%A8re_des_martyrs_-_Darguina_%D9%85%D9%82%D8%A8%D8%B1%D8%A9_%D8%A7%D9%84%D8%B4%D9%87%D8%AF%D8%A7%D8%A1_-_%D8%AF%D8%B1%D9%82%D9%8A%D9%86%D8%A9_-_panoramio.jpg"
+ },
+ {
+  "n": 10,
+  "id": "osm:way/345729575",
+  "place": "Bureau de poste de Ain Taya — Bureaux de poste, Aïn Taya",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D8%A8%D8%B1%D9%8A%D8%AF_%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%B2%D9%8A_-_%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1.jpg"
+ },
+ {
+  "n": 11,
+  "id": "osm:node/14030963433",
+  "place": "HANNACHA — Bureaux de poste, HANNACHA",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Hannacha_%D8%AD%D9%86%D8%A7%D8%B4%D8%A9_-_panoramio_(1).jpg"
+ },
+ {
+  "n": 12,
+  "id": "osm:way/454545852",
+  "place": "Lycée El Amrani — Écoles, Batna",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:School_El_amrani_1.jpg"
+ },
+ {
+  "n": 13,
+  "id": "osm:way/588714158",
+  "place": "Lycée Latroch Djilali — Écoles, Mostaganem",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Lyc%C3%A9e_Latroch_Djilali.jpg"
+ },
+ {
+  "n": 14,
+  "id": "osm:node/14030964286",
+  "place": "MAHELMA — Bureaux de poste, MAHELMA",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Eglise_de_Mahelma_%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%84%D9%85%D8%A9_-_panoramio.jpg"
+ },
+ {
+  "n": 15,
+  "id": "osm:relation/17977173",
+  "place": "La Grande Mosquée — Mosquées, Alger",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:%D9%85%D8%B3%D8%AC%D8%AF_%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9_%D8%A7%D9%84%D9%83%D8%A8%D9%8A%D8%B13.JPG"
+ },
+ {
+  "n": 16,
+  "id": "osm:way/369685404",
+  "place": "Mairie d'El Alia — Services municipaux, El Allia",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:El_Alia_Ouargla_-_panoramio_(35).jpg"
+ }
+]
