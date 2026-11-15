@@ -155,3 +155,4 @@ body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer 
 .cat-tile-ico { display: grid; place-items: center; flex: 0 0 auto; width: 36px; height: 36px; border-radius: 11px; background: color-mix(in srgb, var(--rc) 12%, var(--surface)); color: var(--rc); }
 .cat-tile-ico svg { width: 19px; height: 19px; stroke-width: 1.7; fill: none; stroke: currentColor; }
 @media (max-width: 520px) { .cat-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cat-tile { padding: 8px 10px; font-size: .84rem; } }
+.pl-claim { margin: 12px 0 0; font-size: .9rem; } .pl-claim a { color: var(--green); font-weight: 600; text-decoration: none; } .pl-claim a:hover { text-decoration: underline; }

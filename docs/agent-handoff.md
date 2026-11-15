@@ -72,3 +72,9 @@
 - Fait sur cette branche : `CategoryTiles` (villes en raccourci + sous-catégories en cases) sur les pages de rubrique et de catégorie ; écoles rangées par niveau (`schoolCategory.ts`, migration différée `20261115_120000_ecoles_par_niveau`) ; diaporama d’accueil sans bureau officiel.
 - Vérifié en local : `pnpm check`, `pnpm test` (197), `pnpm build`, page Collèges vue à 375 px et 1440 px. Parcours Playwright : laissés à la CI.
 - Reste : cases de catégories vides non masquées ; mêmes rangements à faire pour les autres rubriques ; PR #31, #32 (conflit), #35 à reprendre ; photos ; contrôle de rendez-vous, annonces, services.
+
+## 2026-11-15 — Santé, liste unique (branche `agent/sante-liste-unique`)
+- `preview` contient #40 (rubriques rangées, écoles par niveau, titre d’accueil). Production inchangée : `main` = `0bb38c2`.
+- Fait ici : page `/praticiens` en une seule liste ; lien d’inscription sur les fiches « Médecins ».
+- Vérifié en local : check, build ; parcours des 13 rubriques en 375 px — 75 pages de catégorie, 13 fiches, 13 pages de ville : toutes à 200, au moins une fiche, aucune erreur de script.
+- Reste : autres fourre-tout (Administrations, Services automobiles, Médecins sans spécialité) ; accueil à raccourcir (maquette d’abord) ; trois entrées du menu ; PR #31, #32, #35 ; promotion vers `main` après accord de Rad.
