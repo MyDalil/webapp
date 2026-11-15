@@ -5,7 +5,8 @@ import { categoryPath } from '@/platform/referentiel/slug'
 /** Pictogramme d’une sous-catégorie ; sans entrée ici, celui de la rubrique. */
 const ICON: Record<string, string> = {
   Crèches: 'baby', 'Écoles primaires': 'book', Collèges: 'books', Lycées: 'school', Universités: 'building', 'Formation professionnelle': 'wrench',
-  'Écoles de langues': 'globe', 'Auto-écoles': 'car', 'Écoles coraniques': 'mosque', Médecins: 'health', Pharmacies: 'drop', Hôpitaux: 'building',
+  'Écoles de langues': 'globe', Dentistes: 'sparkle', 'Stations-service': 'drop', 'Lavage auto': 'brush', 'Pièces et accessoires auto': 'box', Tribunaux: 'shield',
+  'Sécurité sociale': 'heart', 'Impôts et douanes': 'cash', 'Wilayas et daïras': 'building', 'Services municipaux': 'users', Ministères: 'globe', 'Auto-écoles': 'car', 'Écoles coraniques': 'mosque', Médecins: 'health', Pharmacies: 'box', Hôpitaux: 'building',
   Vétérinaires: 'paw', Restaurants: 'utensils', Cafés: 'cup', 'Salons de thé': 'cup', Hôtels: 'home', 'Salles de sport': 'dumbbell', Mosquées: 'mosque',
   'Bureaux de poste': 'mail', Ambassades: 'globe', Consulats: 'passport', Banques: 'cash', Librairies: 'books', Habillement: 'shirt', Plages: 'sun',
   Parcs: 'leaf', Jardins: 'leaf', 'Services automobiles': 'car', 'Location de véhicules': 'key', Déménagement: 'truck', Artisans: 'wrench',
@@ -17,7 +18,7 @@ const SECTOR_ICON: Record<string, string> = {
 }
 const TONES = ['#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#db2777', '#0891b2', '#ca8a04', '#dc2626', '#0d9488', '#4f46e5']
 /** Le reste non classé d’une rubrique se lit « Autres … » à côté des niveaux précis. */
-const LABEL: Record<string, string> = { Écoles: 'Autres écoles' }
+const LABEL: Record<string, string> = { Écoles: 'Autres écoles', Administrations: 'Autres administrations', 'Services automobiles': 'Garages et entretien' }
 /** Une catégorie rangée dans une autre rubrique mais attendue ici aussi (décision de Rad, 2026-11-15). */
 const ALSO: Record<string, [sector: string, category: string][]> = { 'education-formation': [['mosquees-priere', 'Écoles coraniques']] }
 const CITIES: [code: number, name: string][] = [[16, 'Alger'], [31, 'Oran'], [25, 'Constantine']]

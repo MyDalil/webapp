@@ -182,7 +182,7 @@ export default async function PlacePage({ params }: Props) {
               <SaveButton itemType="listing" itemKey={p.slug ?? slug} label={p.name} variant="button" />
               <PlaceActions name={p.name} />
             </div>
-            {p.sector === 'sante-soins' && p.category === 'Médecins' && (
+            {p.sector === 'sante-soins' && ['Médecins', 'Dentistes'].includes(p.category) && (
               <p className="pl-claim">
                 <Link href="/connexion/professionnel">Vous êtes ce praticien ? Activez la prise de rendez-vous ›</Link>
               </p>

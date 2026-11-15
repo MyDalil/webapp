@@ -21,7 +21,8 @@ async function healthPlaces(wilaya?: string, specialty?: string): Promise<PlaceC
   // Les médecins d’abord, puis cliniques et hôpitaux ; pharmacies et laboratoires ne sont pas des praticiens.
   const pick = (list: PlaceCard[]) => {
     const kept = list.filter((p) => category || !['Pharmacies', 'Laboratoires'].includes(p.category))
-    return [...kept.filter((p) => p.category === 'Médecins'), ...kept.filter((p) => p.category !== 'Médecins')].slice(0, 12)
+    const doctor = (p: PlaceCard) => ['Médecins', 'Dentistes'].includes(p.category)
+    return [...kept.filter(doctor), ...kept.filter((p) => !doctor(p))].slice(0, 12)
   }
   const local = wilaya ? pick((await searchPlaces({ sector: 'sante-soins', category, wilaya }, 120)).places) : []
   if (local.length) return local
