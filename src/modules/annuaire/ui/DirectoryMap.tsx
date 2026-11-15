@@ -129,6 +129,26 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
   const box = useRef<HTMLDivElement>(null)
   const map = useRef<MLMap | null>(null)
   const data = useRef<GeoJSON.FeatureCollection>(toGeoJSON(places))
+  // Dernières adresses et dernier zoom connus : le cadrage se refait à chaque chargement du style, même si la carte est recréée.
+  const latest = useRef({ places, zoom })
+  latest.current = { places, zoom }
+  const marker = useRef<maplibregl.Marker | null>(null)
+  /** Cadre la carte sur les adresses ; une adresse seule reçoit un vrai repère, visible à tout niveau de zoom. */
+  const frame = (m: MLMap) => {
+    const { places: list, zoom: z } = latest.current
+    const located = list.filter((p) => p.pos)
+    marker.current?.remove()
+    marker.current = null
+    if (located.length === 1) {
+      const at: [number, number] = [located[0].pos![1], located[0].pos![0]]
+      m.jumpTo({ center: at, zoom: z ?? (located[0].exact ? 15 : 11) })
+      if (list.length === 1) marker.current = new maplibregl.Marker({ color: located[0].exact ? GREEN : '#7fb89a' }).setLngLat(at).addTo(m)
+    } else if (located.length > 1) {
+      const b = new maplibregl.LngLatBounds()
+      for (const p of located) b.extend([p.pos![1], p.pos![0]])
+      m.fitBounds(b, { padding: 48, maxZoom: 12, duration: 0 })
+    } else m.fitBounds(ALGERIA, { duration: 0 })
+  }
 
   useEffect(() => {
     if (!box.current || map.current) return
@@ -152,6 +172,7 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
     m.on('style.load', () => {
       applyLabels(m, lang)
       addLayers(m, data.current)
+      frame(m)
     })
     m.on('click', 'clusters', async (e) => {
       const f = e.features?.[0]
@@ -174,6 +195,7 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
       m.on('mouseleave', id, () => (m.getCanvas().style.cursor = ''))
     }
     map.current = m
+    frame(m) // tout de suite : le repère et le cadrage n’attendent pas le chargement du fond de carte
     // Le cadre peut changer de taille (carte ouverte sur mobile, rotation) : la carte suit.
     const ro = new ResizeObserver(() => m.resize())
     ro.observe(box.current)
@@ -190,16 +212,10 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
     if (!m) return
     const apply = () => {
       ;(m.getSource('places') as GeoJSONSource | undefined)?.setData(data.current)
-      const located = places.filter((p) => p.pos)
-      if (located.length === 1) m.jumpTo({ center: [located[0].pos![1], located[0].pos![0]], zoom: zoom ?? (located[0].exact ? 15 : 11) })
-      else if (located.length > 1) {
-        const b = new maplibregl.LngLatBounds()
-        for (const p of located) b.extend([p.pos![1], p.pos![0]])
-        m.fitBounds(b, { padding: 48, maxZoom: 12, duration: 0 })
-      } else m.fitBounds(ALGERIA, { duration: 0 })
+      frame(m)
     }
-    if (m.isStyleLoaded() && m.getSource('places')) apply()
-    else m.once('idle', apply)
+    apply()
+    if (!(m.isStyleLoaded() && m.getSource('places'))) m.once('idle', apply)
   }, [places, zoom])
 
   return <div ref={box} className="leaflet-box" />

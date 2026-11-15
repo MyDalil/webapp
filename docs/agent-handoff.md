@@ -100,3 +100,8 @@
 - Sur cette branche, pour `preview` seulement : accueil en six blocs (10 400 → 5 658 px à 1440 px) ; diaporama sans lieu de santé ; annonces d’exemple masquées en production ; remplacement annuaire pour déménagement et cours ; `e2e/membre.spec.ts` couvre rendez-vous, dépôt d’annonce, demande de service, fiche de prestataire (8 réussis en local).
 - Blocs retirés de l’accueil : Santé, À domicile, Vie musulmane, destination en parallaxe, Papiers, Repères, Installation. Code mort laissé dans `HomeView.tsx` (variables `musulmane`, `dest`) : à nettoyer si Rad valide.
 - Reste : promotion vers `main` après accord de Rad ; relecture une à une des photos libres ; ménage et aide à domicile sans professionnel à montrer.
+
+## 2026-11-15 (soir) — Fiches et carte (branche `agent/fiches-et-carte`)
+- Demandes de Rad : bloc Sahara remis sur l’accueil ; repère sur la carte d’une fiche ; fiches d’exemple de retour en production (prestataires, annonces) ; médecins de l’annuaire au format de fiche riche sur `/praticiens` ; états vides qui invitent à s’inscrire.
+- Vérifié en local : check, build, 90 parcours (dont `membre`), repère présent sur une fiche (`.maplibregl-marker`). Fond de carte non vérifiable en local (tuiles bloquées) : à voir sur preview.
+- Production inchangée : `main` = `8daf941` (les prestataires d’exemple y sont encore masqués jusqu’à la prochaine promotion).

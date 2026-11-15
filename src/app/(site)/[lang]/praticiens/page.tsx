@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitioners, specialtyLabel } from '@/modules/sante'
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
-import { PlacePanel } from '@/modules/annuaire/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 
 export const metadata: Metadata = { title: 'Trouver un praticien', description: 'Trouvez un professionnel de santé près de vous : coordonnées, et rendez-vous en ligne chez les praticiens qui le proposent.' }
@@ -142,7 +141,35 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
         <div className="praticiens-empty">
           <h2>{wilaya ? `Médecins et établissements à ${wilaya}` : 'Médecins et établissements de santé'}</h2>
           <p>Appelez directement ou préparez votre visite. Le rendez-vous en ligne s’ajoute dès qu’un praticien rejoint DALIL.</p>
-          {!!nearby.length && <PlacePanel places={nearby} />}
+          {!!nearby.length && (
+            <ul className="praticien-list">
+              {nearby.map((p) => (
+                <li key={p.slug} className="praticien-card">
+                  <div className="praticien-photo" style={p.photo && !p.photo.includes('/images/lieu') ? { backgroundImage: `url(${p.photo})` } : undefined} aria-hidden="true">
+                    {(!p.photo || p.photo.includes('/images/lieu')) && p.name.replace(/^(Dr\.?|Docteur|Cabinet|Clinique)\s*/i, '').charAt(0).toUpperCase()}
+                  </div>
+                  <div className="praticien-body">
+                    <Link href={`/adresses/${p.slug}`}>
+                      <h2>{p.name}</h2>
+                    </Link>
+                    <p>{p.category}</p>
+                    <p className="muted-line">{p.city}</p>
+                    <div className="praticien-tags">
+                      <span className="chip chip-plain">Annuaire DALIL</span>
+                      {!!p.languages.length && <span className="chip chip-plain">{p.languages.map(languageLabel).join(' · ')}</span>}
+                    </div>
+                  </div>
+                  <div className="praticien-next">
+                    <small>Rendez-vous en ligne</small>
+                    <b>Bientôt disponible</b>
+                    <Link className="button primary" href={`/adresses/${p.slug}`}>
+                      Voir la fiche et appeler
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
           <p>
             <Link href={`/annuaire/sante-soins${q.wilaya ? `?wilaya=${q.wilaya}` : ''}`}>Tous les établissements de santé ›</Link>
           </p>

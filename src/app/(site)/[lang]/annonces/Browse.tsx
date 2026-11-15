@@ -156,7 +156,7 @@ export async function Browse({ q, fixedCategory }: { q: SearchQuery; fixedCatego
           <div className="praticiens-empty">
             <h2>Publiez la première annonce ici.</h2>
             <p>Le dépôt est gratuit. DALIL contrôle chaque annonce avant sa mise en ligne.</p>
-            <Link className="button outline" href={`/annonces/deposer${current ? `?categorie=${current.value}` : ''}`}>
+            <Link className="button primary" href={`/annonces/deposer${current ? `?categorie=${current.value}` : ''}`}>
               Déposer une annonce
             </Link>
           </div>

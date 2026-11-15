@@ -87,7 +87,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
     demenagement: { sector: 'transports-mobilite', category: 'Transporteurs' },
     'cours-particuliers': { sector: 'education-formation', category: 'Écoles de langues' },
   }
-  const nearby: PlaceCard[] = !results.length && cat && fallback[cat] ? (await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
+  const nearby: PlaceCard[] = !results.some((r) => !r.demo) && cat && fallback[cat] ? (await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
   const communes = q.wilaya ? communesOf(q.wilaya) : []
   const action = fixedCategory ? `/services/${fixedCategory}` : '/services'
   return (
@@ -213,13 +213,14 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
               <Card key={p.slug} p={p} activity={q.activite} />
             ))}
           </ul>
-        ) : (
+        ) : null}
+        {(!results.length || nearby.length > 0) && (
           <div className="praticiens-empty">
-            <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Les premiers prestataires arrivent.'}</h2>
-            <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Les prestataires rejoignent DALIL après contrôle de leur identité. Revenez bientôt.'}</p>
+            <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Soyez le premier prestataire de cette catégorie.'}</h2>
+            <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Votre fiche, vos prestations et vos disponibilités, visibles dans toute votre wilaya. L’inscription est gratuite.'}</p>
             {!!nearby.length && <PlacePanel places={nearby} />}
-            <Link className="button outline" href="/espace-pro?espace=services">
-              Vous êtes prestataire ? Rejoindre DALIL
+            <Link className="button primary" href="/espace-pro?espace=services">
+              Créer ma fiche de prestataire
             </Link>
           </div>
         )}

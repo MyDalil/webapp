@@ -88,3 +88,7 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 ## 2026-11-15 — Fourre-tout rangés, photos libres relues
 - Décision (Rad) : « Médecins », « Services automobiles » et « Administrations » sont rangés d’après le nom (`categoryRules.ts`) : Dentistes ; Stations-service, Lavage auto, Pièces et accessoires auto ; Tribunaux, Sécurité sociale, Impôts et douanes, Wilayas et daïras. Sans indice dans le nom, la fiche garde sa catégorie.
 - Photos libres (#32) : retirées avant intégration — photos de zaouïa, de mausolée de cheikh, plans, cartes, vignette sans nom (10 images). Règle : une photo libre montre le lieu, jamais un plan ni un lieu exclu de DALIL.
+
+## 2026-11-15 — Repère sur la carte d’une fiche
+- Défaut : la carte d’une fiche restait cadrée sur toute l’Algérie, sans repère. Cause : le cadrage n’était appliqué qu’une fois, après un événement « idle » ; quand la carte était recréée, il était perdu.
+- Correction (`ui/DirectoryMap.tsx`) : le cadrage se refait à chaque chargement du style et à la création ; une adresse seule reçoit un vrai repère (marqueur), vert plein si la position est exacte, vert clair si elle est approximative.

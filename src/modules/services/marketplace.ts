@@ -87,11 +87,9 @@ export async function searchProviders(q: { category?: string; activity?: string;
   const { docs } = await p.find({ collection: 'providers', where: { and }, depth: 1, limit: 300, overrideAccess: true })
   const cards = docs.filter((d) => !q.commune || covers(d, q.commune)).map(toCard)
   // Une fiche d’exemple s’efface dès qu’un vrai prestataire couvre sa catégorie.
-  // En production, aucune fiche d’exemple n’est montrée au public (Rad, 2026-11-15) : jamais de faux prestataire.
   const realCats = new Set(cards.filter((c) => !c.demo).flatMap((c) => c.categories))
-  const hideDemo = process.env.VERCEL_ENV === 'production'
   return cards
-    .filter((c) => !c.demo || (!hideDemo && c.categories.some((x) => !realCats.has(x))))
+    .filter((c) => !c.demo || c.categories.some((x) => !realCats.has(x)))
     .sort((a, b) => Number(a.demo) - Number(b.demo) || (b.rating ?? 0) * Math.log2(2 + b.reviews) - (a.rating ?? 0) * Math.log2(2 + a.reviews) || b.missionsDone - a.missionsDone)
 }
 
