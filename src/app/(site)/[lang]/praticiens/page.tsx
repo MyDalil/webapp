@@ -18,24 +18,29 @@ const groups = [...new Set(SPECIALTIES.map((s) => s.group))]
  */
 async function healthPlaces(wilaya?: string, specialty?: string): Promise<PlaceCard[]> {
   const category = specialty === 'hijama' ? 'Hijama' : undefined
-  const pick = (list: PlaceCard[]) => list.filter((p) => category || !['Pharmacies', 'Laboratoires'].includes(p.category)).slice(0, 6)
-  const local = wilaya ? pick((await searchPlaces({ sector: 'sante-soins', category, wilaya }, 60)).places) : []
+  // Les médecins d’abord, puis cliniques et hôpitaux ; pharmacies et laboratoires ne sont pas des praticiens.
+  const pick = (list: PlaceCard[]) => {
+    const kept = list.filter((p) => category || !['Pharmacies', 'Laboratoires'].includes(p.category))
+    return [...kept.filter((p) => p.category === 'Médecins'), ...kept.filter((p) => p.category !== 'Médecins')].slice(0, 12)
+  }
+  const local = wilaya ? pick((await searchPlaces({ sector: 'sante-soins', category, wilaya }, 120)).places) : []
   if (local.length) return local
-  return pick((await searchPlaces({ sector: 'sante-soins', category }, 60)).places)
+  return pick((await searchPlaces({ sector: 'sante-soins', category }, 120)).places)
 }
 
 export default async function Practitioners({ searchParams }: { searchParams: Promise<Q> }) {
   const q = await searchParams
   const results = await searchPractitioners({ specialty: q.specialite, wilaya: q.wilaya, mode: q.mode, language: q.langue, text: q.q?.slice(0, 80) })
   const wilaya = q.wilaya ? WILAYAS.find((w) => String(w.code) === q.wilaya)?.name : null
-  const nearby = results.length ? [] : await healthPlaces(q.wilaya, q.specialite)
+  // Une seule liste (Rad, 2026-11-15) : les praticiens réservables en ligne, puis les médecins de l’annuaire. Jamais de page vide.
+  const nearby = await healthPlaces(q.wilaya, q.specialite)
   return (
     <div className="praticiens">
       <section className="praticiens-hero">
         <div className="container">
           <p className="eyebrow">Santé</p>
           <h1>Trouver un praticien.</h1>
-          <p className="auth-lead">Trouvez un professionnel de santé près de vous. Rendez-vous en ligne seulement chez les praticiens qui le proposent ; identité et diplômes contrôlés avant publication.</p>
+          <p className="auth-lead">Trouvez un professionnel de santé près de vous. Prenez rendez-vous en ligne quand le praticien le propose, sinon appelez-le.</p>
           <form className="praticiens-search" action="/praticiens">
             <label>
               <span>Spécialité</span>
@@ -90,12 +95,12 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
       <section className="section container">
         {results.length > 0 && (
           <p className="praticiens-count">
-            {results.length} praticien{results.length > 1 ? 's' : ''}
+            {results.length} praticien{results.length > 1 ? 's' : ''} avec rendez-vous en ligne
             {q.specialite ? ` · ${specialtyLabel(q.specialite)}` : ''}
             {wilaya ? ` · ${wilaya}` : ''}
           </p>
         )}
-        {results.length ? (
+        {results.length > 0 && (
           <ul className="praticien-list">
             {results.map((p) => (
               <li key={p.slug} className="praticien-card">
@@ -132,21 +137,18 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
               </li>
             ))}
           </ul>
-        ) : (
-          <div className="praticiens-empty">
-            <h2>Pas encore de praticien réservable en ligne ici.</h2>
-            <p>Les praticiens rejoignent DALIL au fur et à mesure, après vérification. En attendant, voici des établissements de santé{wilaya ? ` à ${wilaya} et alentour` : ''}.</p>
-            {!!nearby.length && (
-              <PlacePanel places={nearby} />
-            )}
-            <p>
-              <Link href={`/annuaire/sante-soins${q.wilaya ? `?wilaya=${q.wilaya}` : ''}`}>Tous les établissements de santé ›</Link>
-            </p>
-            <Link className="button outline" href="/connexion/professionnel">
-              Vous êtes praticien ? Rejoindre DALIL
-            </Link>
-          </div>
         )}
+        <div className="praticiens-empty">
+          <h2>{wilaya ? `Médecins et établissements à ${wilaya}` : 'Médecins et établissements de santé'}</h2>
+          <p>Appelez directement ou préparez votre visite. Le rendez-vous en ligne s’ajoute dès qu’un praticien rejoint DALIL.</p>
+          {!!nearby.length && <PlacePanel places={nearby} />}
+          <p>
+            <Link href={`/annuaire/sante-soins${q.wilaya ? `?wilaya=${q.wilaya}` : ''}`}>Tous les établissements de santé ›</Link>
+          </p>
+          <Link className="button outline" href="/connexion/professionnel">
+            Vous êtes praticien ? Activez la prise de rendez-vous
+          </Link>
+        </div>
       </section>
     </div>
   )
