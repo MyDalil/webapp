@@ -1,5 +1,6 @@
 'use client'
 
+import { getAccount } from '@/platform/ui/memberHint'
 import Link from '@/platform/ui/Link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -46,9 +47,8 @@ export function SlotPicker({ slug, name, modes, visioSoon, cancelNoticeHours }: 
     load()
   }, [load])
   useEffect(() => {
-    fetch('/api/compte', { cache: 'no-store' })
-      .then((r) => r.json())
-      .then((d) => setMember(d.member))
+    getAccount()
+      .then((d) => setMember(d.member as never))
       .catch(() => setMember(null))
   }, [])
 

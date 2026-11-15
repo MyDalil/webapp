@@ -4,6 +4,13 @@
  */
 export type Photo = { src: string; alt: string; credit: string }
 
+/**
+ * Petit format (720 px, ~45 Ko au lieu de ~250 Ko) pour les tuiles et les cartes : `public/images/photos/sm/`.
+ * Les grands visuels (héros, bandes parallaxe) gardent l’original. Une autre origine (Blob, autre dossier) est rendue telle quelle.
+ * Nouvelle photo dans `public/images/photos/` : produire aussi son petit format (même nom, dossier `sm/`).
+ */
+export const smallPhoto = (src?: string | null) => (src && /^\/images\/photos\/[^/]+\.webp$/.test(src) ? src.replace('/images/photos/', '/images/photos/sm/') : src ?? undefined)
+
 export const PHOTOS = {
   alger: { src: '/images/algeria/alger.webp', alt: 'Baie d’Alger', credit: 'Baie d’Alger · Manini row · CC BY-SA 4.0' },
   annaba: { src: '/images/algeria/annaba.webp', alt: 'Littoral d’Annaba', credit: 'Annaba · Lola.number01 · CC BY-SA 4.0' },

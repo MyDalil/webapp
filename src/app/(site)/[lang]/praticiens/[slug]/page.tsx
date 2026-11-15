@@ -18,6 +18,9 @@ import { PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
 import { videoEnabled } from '@/platform/video'
 
 export const revalidate = 3600
+// Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
+// Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
+export const generateStaticParams = async () => []
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

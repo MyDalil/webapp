@@ -1,5 +1,4 @@
 import { suggest } from '@/modules/recherche'
-import { json } from '@/platform/http'
 import { guard } from '@/platform/security/rateLimit'
 
 /** Propositions pendant la frappe (barre de l’accueil) : catégories, puis contenus. */
@@ -8,5 +7,6 @@ export async function GET(req: Request) {
   if (limited) return limited
   const q = new URL(req.url).searchParams.get('q') ?? ''
   const items = (await suggest(q)).map(({ type, url, title, subtitle, badge }) => ({ type, url, title, subtitle, badge }))
-  return json({ items })
+  // Mêmes propositions pour tous : servies par le CDN 5 min (une frappe déjà vue ne coûte ni fonction ni base).
+  return Response.json({ items }, { headers: { 'cache-control': 'public, s-maxage=300, stale-while-revalidate=600' } })
 }

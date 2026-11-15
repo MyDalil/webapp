@@ -1,5 +1,6 @@
 'use client'
 
+import { favKey, markFavorite, savedFavorites } from './favoritesStore'
 import { useEffect, useState } from 'react'
 import { Icon } from '@/platform/ui/Icon'
 import { toast } from '@/platform/shell/toast'
@@ -12,9 +13,8 @@ export function SaveButton({ itemType, itemKey, label, variant = 'icon' }: { ite
 
   useEffect(() => {
     let alive = true
-    fetch(`/api/favorites?type=${encodeURIComponent(itemType)}&key=${encodeURIComponent(itemKey)}`)
-      .then((r) => r.json())
-      .then((j) => alive && setSaved(!!j.saved))
+    savedFavorites()
+      .then((set) => alive && setSaved(set.has(favKey(itemType, itemKey))))
       .catch(() => {})
     return () => {
       alive = false
@@ -37,6 +37,7 @@ export function SaveButton({ itemType, itemKey, label, variant = 'icon' }: { ite
       }
       if (!r.ok) throw new Error()
       setSaved(!saved)
+      markFavorite(itemType, itemKey, !saved)
       toast(saved ? 'Retiré de vos favoris' : 'Ajouté à vos favoris')
     } catch {
       toast('Enregistrement impossible, réessayez')

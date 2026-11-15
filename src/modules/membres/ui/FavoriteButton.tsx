@@ -1,5 +1,6 @@
 'use client'
 
+import { favKey, markFavorite, savedFavorites } from './favoritesStore'
 import { useEffect, useState } from 'react'
 import { openLogin } from '@/platform/shell/LoginDialog'
 import { toast } from '@/platform/shell/toast'
@@ -12,9 +13,8 @@ export function FavoriteButton({ itemType, itemKey, label }: { itemType: string;
 
   useEffect(() => {
     let alive = true
-    fetch(`/api/favorites?type=${encodeURIComponent(itemType)}&key=${encodeURIComponent(itemKey)}`)
-      .then((r) => r.json())
-      .then((r) => alive && setSaved(!!r.saved))
+    savedFavorites()
+      .then((set) => alive && setSaved(set.has(favKey(itemType, itemKey))))
       .catch(() => {})
     return () => {
       alive = false
@@ -37,6 +37,7 @@ export function FavoriteButton({ itemType, itemKey, label }: { itemType: string;
       if (!r.ok) throw new Error(j.error || 'Enregistrement impossible.')
       const msg = saved ? 'Favori retiré.' : 'Ajouté à vos favoris.'
       setSaved(!saved)
+      markFavorite(itemType, itemKey, !saved)
       setStatus(msg)
       toast(msg)
     } catch (e) {

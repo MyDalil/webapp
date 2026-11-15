@@ -14,7 +14,7 @@ import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
 import { ParallaxBand, SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
-import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
+import { PHOTOS, smallPhoto, type PhotoKey } from '@/platform/referentiel/photos'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon, iconFor, iconTone } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
@@ -234,7 +234,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               {latest.map((c, i) => (
                 <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
                   {c.photo ? (
-                    <div className="city-tile-img" style={{ backgroundImage: `url(${c.photo})` }} />
+                    <div className="city-tile-img" style={{ backgroundImage: `url(${smallPhoto(c.photo)})` }} />
                   ) : (
                     <div className="city-tile-img is-icon is-annonce">
                       <span className="xp-tile-icon" aria-hidden="true">
