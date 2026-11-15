@@ -1,5 +1,13 @@
 # Reprise — 12 novembre 2026
 
+## Mise à jour — 14 novembre 2026 (soir) : écoles et photos des lieux publics
+
+- PR #31 `agent/guides-annuaire-ecoles` → `preview` : les guides liés à une rubrique de l’annuaire montrent ses catégories non vides et 6 adresses. Cause corrigée : « École & famille » (Vie pratique) ne menait à aucune école. `pnpm check` OK ; build/e2e laissés à la CI.
+- PR #32 (brouillon) `agent/photos-lieux-publics` → `preview` : collecte `scripts/import/fetch-place-photos.mjs` (workflow « Photos libres des lieux publics », lancé au push) puis migration différée `20261114_230000_photos_lieux_publics`.
+- Sources : Wikidata, OpenStreetMap (wikimedia_commons), Commons géographique avec contrôle du nom. Pas de réseaux sociaux (conditions de Meta, droit d’auteur, décision annuaire du 2026-10-08).
+- Prochaine action : attendre la fin du workflow (commit de `src/modules/annuaire/data/place-photos.json`), relire le volume trouvé, passer la PR #32 en prête, CI, test sur preview.
+- Limite connue : les sources libres couvrent peu les écoles et mosquées de quartier. Couverture complète : Mapillary (compte à créer) ou Google Places (payant) — décision de Rad attendue.
+
 ## Mise à jour — 14 novembre 2026
 
 - `MyDalil/webapp` reste inchangé comme dépôt canonique et reste sur GitHub Free.

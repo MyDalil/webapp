@@ -1,0 +1,114 @@
+[
+ {
+  "n": 1,
+  "id": "osm:node/446470040",
+  "place": "Station service Tripoli Hossein Dey — Services automobiles, Hussein Dey",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Rue_Tripoli_%D8%B4%D8%A7%D8%B1%D8%B9_%D8%B7%D8%B1%D8%A7%D8%A8%D9%84%D8%B3_-_panoramio_(1).jpg"
+ },
+ {
+  "n": 2,
+  "id": "osm:way/458530473",
+  "place": "Mosquée El Moudjahid — Mosquées, Blida",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Mosqu%C3%A9e_El_Moudjahid_-_panoramio.jpg"
+ },
+ {
+  "n": 3,
+  "id": "osm:way/534623356",
+  "place": "Lycée Salah Eddine Al Ayoubi — Écoles, Batna",
+  "via": "geo",
+  "page": "https://commons.wikimedia.org/wiki/File:Lyc%C3%A9e_salah_eddine_-_panoramio.jpg"
+ },
+ {
+  "n": 4,
+  "id": "osm:node/2155392412",
+  "place": "Aïn Defla — Gares et stations, Aïn Defla",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Gare_de_A%C3%AFn_Defla_-_566966883212694233.jpg"
+ },
+ {
+  "n": 5,
+  "id": "osm:way/26456258",
+  "place": "CHU Mohamed Lamine Debaghine — Hôpitaux, Bab El Oued",
+  "via": "osmCommons",
+  "page": "https://commons.wikimedia.org/wiki/File:Hopital_Mohamed_Lamine_Debaghine_%C3%A0_Alger.jpg"
+ },
+ {
+  "n": 6,
+  "id": "Q3097813",
+  "place": "Sétif — Gares et stations, Sétif",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Gare_de_S%C3%A9tif_(S%C3%A9tif_main_station),_S%C3%A9tif,_Algeria_June_2024_(cropped).jpg"
+ },
+ {
+  "n": 7,
+  "id": "Q16640177",
+  "place": "Grotte des Beni Add — Cascades, gorges et grottes, Aïn Fezza",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Grottes_des_Beni_Add_%C3%A0_A%C3%AFn_Fezza,_Tlemcen_-_06.jpg"
+ },
+ {
+  "n": 8,
+  "id": "Q116773895",
+  "place": "Grand Bassin — Parcs, Tlemcen",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:SDC10030.JPG"
+ },
+ {
+  "n": 9,
+  "id": "Q45908489",
+  "place": "Mosquée de Bouira — Mosquées, Bouira",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Mosqu%C3%A9e_EL-KODS_Cheikh_el-ayfa_1_-_panoramio.jpg"
+ },
+ {
+  "n": 10,
+  "id": "Q23796361",
+  "place": "Plage des Pins — Plages, Tipaza",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Clubdespinslesoir.JPG"
+ },
+ {
+  "n": 11,
+  "id": "Q134996668",
+  "place": "gare multimodale de Bouhinoun — Gares et stations, Tizi Ouzou",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:TC_Tizi_Ouzou_-_2026-06-18_-_IMG_0005.jpg"
+ },
+ {
+  "n": 12,
+  "id": "Q21511925",
+  "place": "Casbah de Béjaïa — Monuments et sites historiques, Béjaïa",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Fort_au_dessus_du_port_%C3%A0_B%C3%A9ja%C3%AFa_2.jpg"
+ },
+ {
+  "n": 13,
+  "id": "Q635192",
+  "place": "Sebkha d’Oran — Lacs et oasis, Oran",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Sebkha_D%27Oran.jpg"
+ },
+ {
+  "n": 14,
+  "id": "Q113827285",
+  "place": "Iomnium — Sites archéologiques, Tizi Ouzou",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Tigzirt_roman_ruins_01.jpg"
+ },
+ {
+  "n": 15,
+  "id": "Q60746446",
+  "place": "Basilique Sainte-Crispine — Monuments et sites historiques, Tébessa",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Basilique_de_T%C3%A9bessa_-_%D8%A7%D9%84%D9%83%D9%86%D9%8A%D8%B3%D8%A9_%D8%A7%D9%84%D8%B1%D9%88%D9%85%D8%A7%D9%86%D9%8A%D8%A9_3.jpg"
+ },
+ {
+  "n": 16,
+  "id": "Q109312786",
+  "place": "Rabia Tahar — Gares et stations, Bab Ezzouar",
+  "via": "wikidata",
+  "page": "https://commons.wikimedia.org/wiki/File:Vue_station_metro_rabia_tahar.jpg"
+ }
+]

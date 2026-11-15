@@ -58,6 +58,7 @@ import * as migration_20261114_170000_recherches_sans_resultat from './20261114_
 import * as migration_20261115_100000_villes_en_francais from './20261115_100000_villes_en_francais';
 import * as migration_20261115_120000_ecoles_par_niveau from './20261115_120000_ecoles_par_niveau';
 import * as migration_20261115_150000_fourre_tout_ranges from './20261115_150000_fourre_tout_ranges';
+import * as migration_20261114_230000_photos_lieux_publics from './20261114_230000_photos_lieux_publics';
 
 export const migrations = [
   {
@@ -359,5 +360,10 @@ export const migrations = [
     up: migration_20261115_150000_fourre_tout_ranges.up,
     down: migration_20261115_150000_fourre_tout_ranges.down,
     name: '20261115_150000_fourre_tout_ranges',
+  },
+  {
+    up: migration_20261114_230000_photos_lieux_publics.up,
+    down: migration_20261114_230000_photos_lieux_publics.down,
+    name: '20261114_230000_photos_lieux_publics',
   },
 ];
