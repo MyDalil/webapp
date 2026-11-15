@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     branches: ['agent/photos-lieux-publics']
-    paths: [scripts/import/fetch-place-photos.mjs, scripts/import/fetch-public-bodies.mjs, scripts/import/sample-place-photos.mjs, .github/workflows/photos-lieux-publics.yml]
+    paths: [scripts/import/fetch-place-photos.mjs, scripts/import/fetch-public-bodies.mjs, scripts/import/sample-place-photos.mjs, scripts/import/clean-place-photos.mjs, .github/workflows/photos-lieux-publics.yml]
 permissions:
   contents: write
 concurrency:
@@ -24,6 +24,8 @@ jobs:
       - run: node scripts/import/fetch-place-photos.mjs
         if: ${{ !contains(github.event.head_commit.message, '[corps-seuls]') }}
         continue-on-error: true
+      - run: node scripts/import/clean-place-photos.mjs
+        if: ${{ !contains(github.event.head_commit.message, '[corps-seuls]') }}
       - run: node scripts/import/sample-place-photos.mjs
         continue-on-error: true
       - name: Commit des photos trouvées
