@@ -1,10 +1,10 @@
-import { readdirSync, statSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { ROUTES } from '@/modules/contenus'
 import { ROBOTS_PRIVATE_PATHS, SITE_ROUTE_GROUPS } from '@/platform/siteRoutes'
 
 const appRoot = join(process.cwd(), 'src/app/(site)/[lang]')
+const legacyRoutes = JSON.parse(readFileSync(join(process.cwd(), 'src/modules/contenus/routes.json'), 'utf8')) as string[]
 
 function pagePatterns(directory = appRoot): string[] {
   return readdirSync(directory).flatMap((name) => {
@@ -29,8 +29,8 @@ describe('registre de l’arborescence', () => {
   })
 
   test('conserve toutes les routes historiques comme source de contenu', () => {
-    expect(ROUTES.every((route) => route.startsWith('/'))).toBe(true)
-    expect(new Set(ROUTES).size).toBe(ROUTES.length)
+    expect(legacyRoutes.every((route) => route.startsWith('/'))).toBe(true)
+    expect(new Set(legacyRoutes).size).toBe(legacyRoutes.length)
     expect(SITE_ROUTE_GROUPS.legacyContent).toEqual(['/[...slug]'])
   })
 
