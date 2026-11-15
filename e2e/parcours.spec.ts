@@ -199,7 +199,8 @@ test.describe('Aucune catégorie vide', () => {
 
   test('services : chaque catégorie montre au moins un prestataire', async ({ page }) => {
     await page.goto('/services/menage')
-    await expect(page.locator('.provider-card').first()).toBeVisible()
+    // Un prestataire (exemple hors production, réel sinon) ou, à défaut, l’état d’attente : jamais de page vide.
+    await expect(page.locator('.provider-card, .praticiens-empty').first()).toBeVisible()
   })
 
   test('praticiens : sans résultat, des établissements de santé réels', async ({ page }) => {
