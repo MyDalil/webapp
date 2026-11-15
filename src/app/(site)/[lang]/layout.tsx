@@ -37,8 +37,7 @@ import { HeaderSearch } from '@/modules/recherche/ui'
 import { notFound } from 'next/navigation'
 import { isLang, LANGS_ALL, type Lang } from '@/platform/i18n'
 import { LangProvider } from '@/platform/ui/lang'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://mydalil.com'
+import { SITE } from '@/platform/site'
 
 const metadata: Metadata = {
   metadataBase: new URL(SITE),

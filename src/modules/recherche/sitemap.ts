@@ -4,7 +4,7 @@ import { CATEGORIES as CLASSIFIED_CATEGORIES, getClassifiedSitemap } from '@/mod
 import { ROUTES } from '@/modules/contenus'
 import { getPractitionerSitemap } from '@/modules/sante'
 import { CATEGORIES as SERVICE_CATEGORIES, getProviderSitemap } from '@/modules/services'
-import { SITE } from '@/platform/mail'
+import { SITE } from '@/platform/site'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 
