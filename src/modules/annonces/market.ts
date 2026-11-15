@@ -86,7 +86,9 @@ export async function searchClassifieds(q: SearchQuery, limit = 60): Promise<Cla
   const { docs } = await p.find({ collection: 'classifieds', where: { and }, sort, limit: limit + 40, depth: 1, overrideAccess: true })
   // Une annonce d’exemple s’efface dès qu’une vraie annonce existe dans le même type ; les vraies d’abord.
   const real = new Set(docs.filter((d) => !d.example).map((d) => d.subcategory))
-  const kept = docs.filter((d) => !d.example || !real.has(d.subcategory))
+  // En production, aucune annonce d’exemple n’est montrée au public (Rad, 2026-11-15).
+  const hideExamples = process.env.VERCEL_ENV === 'production'
+  const kept = docs.filter((d) => !d.example || (!hideExamples && !real.has(d.subcategory)))
   return [...kept.filter((d) => !d.example), ...kept.filter((d) => d.example)].slice(0, limit).map(toCard)
 }
 

@@ -193,7 +193,8 @@ test.describe('Aucune catégorie vide', () => {
   for (const c of ['immobilier', 'emploi', 'vehicules', 'objets']) {
     test(`annonces ${c} : au moins une annonce`, async ({ page }) => {
       await page.goto(`/annonces/${c}`)
-      await expect(page.locator('.classified-card').first()).toBeVisible()
+      // Une annonce (exemple hors production, réelle sinon) ou l’invitation à publier : jamais de page vide.
+      await expect(page.locator('.classified-card, .praticiens-empty').first()).toBeVisible()
     })
   }
 

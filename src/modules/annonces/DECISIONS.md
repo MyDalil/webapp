@@ -19,3 +19,7 @@
 - **Décision** : un score explicable trie la file de contrôle ; chaque point vient d’un signal visible. Il ne publie, ne refuse et ne masque rien.
 - **Raison** : règle « rien n’est publié sans un humain » ; un score opaque ou automatique créerait des refus injustes.
 - **À ne pas refaire** : transformer le score en refus automatique ; comparer un prix à une médiane calculée sur moins de 5 annonces.
+
+## 2026-11-15 — Plus d’annonce d’exemple en production (décision de Rad)
+- **Décision** : en production, les annonces `example` ne sont plus listées. Hors production, elles restent pour tester. Une catégorie sans annonce invite à publier la première.
+- **Raison** : un guide de confiance ne montre pas de fausse annonce.

@@ -99,7 +99,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
   // Pas de bureau officiel (Rad, 2026-11-15) : leurs photos libres montrent des cérémonies, pas le lieu.
   const mixed = [
     pick(inSector('mosquees-priere'), (p) => p.category === 'Mosquées'),
-    pick(inSector('sante-soins')),
     pick(
       inSector('culture-nature-loisirs'),
       (p) => p.category === 'Monuments et sites historiques',
@@ -149,6 +148,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
 
   return (
     <div className="xp" lang={lang} dir={lang === 'ar' ? 'rtl' : undefined}>
+      {/* Accueil court (Rad, 2026-11-15) : recherche, rubriques, annonces, découvrir, professionnels, newsletter. Le reste vit dans les pages de rubrique. */}
       <section className="xp-hero">
         <Slideshow slides={slides} />
         <div className="xp-hero-shade" />
@@ -171,32 +171,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
           </div>
         </div>
         <HomeEntries stats={photos} lang={lang} />
-      </section>
-
-      {/* Santé et À domicile en carrousels photo (Rad, 2026-10-31) : grandes tuiles regroupées, photos sans visage. */}
-      <section className="section">
-        <SectionHead eyebrow={T.santeEyebrow} title={T.santeTitle} text={T.santeLead} />
-        <TileCarousel
-          label={T.santeEyebrow}
-          tiles={[
-            { href: '/praticiens?specialite=medecine-generale', title: T.sante[0][0], sub: T.sante[0][1], photo: PHOTOS['sante-consultation'].src, icon: 'health' },
-            { href: '/praticiens', title: T.sante[1][0], sub: T.sante[1][1], photo: PHOTOS['sante-specialistes'].src, icon: 'health' },
-            { href: '/annuaire/sante-soins', title: T.sante[2][0], sub: T.sante[2][1], photo: PHOTOS.pharmacie.src, icon: 'health' },
-          ]}
-        />
-      </section>
-
-      <section className="section section-tint">
-        <SectionHead eyebrow={T.domicileEyebrow} title={T.domicileTitle} text={T.domicileLead} />
-        <TileCarousel
-          label={T.domicileEyebrow}
-          tiles={[
-            { href: '/services/bricolage', title: T.domicile[0][0], sub: T.domicile[0][1], photo: PHOTOS['domicile-travaux'].src, icon: 'briefcase' },
-            { href: '/services/menage', title: T.domicile[1][0], sub: T.domicile[1][1], photo: PHOTOS['domicile-entretien'].src, icon: 'home' },
-            { href: '/services/garde-enfants', title: T.domicile[2][0], sub: T.domicile[2][1], photo: PHOTOS['domicile-famille'].src, icon: 'users' },
-            { href: '/services/cours-particuliers', title: T.domicile[3][0], sub: T.domicile[3][1], photo: PHOTOS['domicile-cours'].src, icon: 'school' },
-          ]}
-        />
       </section>
 
       <section className="section">
@@ -256,31 +230,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
           </>
         )}
       </section>
-
-      {musulmane && (
-        <section className="section section-tint">
-          <div className="container">
-            <div className="section-head" data-reveal>
-              <div>
-                <p className="eyebrow">{T.musulmaneEyebrow}</p>
-                <h2>{T.musulmaneTitle}</h2>
-                <p className="section-lead">{T.musulmaneLead}</p>
-              </div>
-            </div>
-          </div>
-          <TileCarousel
-            label={T.musulmaneEyebrow}
-            tiles={musulmane.entries.map(([href, icon, title, sub], i): Tile => {
-              const category = new URL(href, 'https://mydalil.com').searchParams.get('category')
-              const p = category ? byCategory(category) : undefined
-              // Photo propre au sujet, sinon photo libre choisie, sinon pictogramme (jamais une case vide).
-              const own = p && !p.photo.startsWith('/images/lieu') && !p.photo.includes('/images/algeria/') ? p.photo : null
-              const t = lang === 'fr' ? null : MUSULMANE_T[lang][i]
-              return { href, title: t?.[0] ?? title, sub: t?.[1] ?? sub, photo: MUSULMANE_PHOTO[title] ?? own ?? PHOTOS['djamaa-el-kebir'].src, icon }
-            })}
-          />
-        </section>
-      )}
 
       <section className="section xp-band">
         <div className="container">
@@ -344,54 +293,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
         </Carousel>
       </section>
 
-      {destination && (
-        <section className="xp-parallax" aria-label={destination.place.name}>
-          <div
-            className="xp-parallax-img"
-            data-parallax="0.18"
-            style={{ backgroundImage: `url(${destination.place.cover})` }}
-          />
-          <div className="xp-parallax-shade" />
-          <div className="container xp-parallax-content" data-reveal>
-            <p className="eyebrow inverse">{dest!.eyebrow}</p>
-            <h2>{dest!.title}</h2>
-            <p>{dest!.text}</p>
-            <Link className="button light" href={`/adresses/${destination.place.slug}`}>
-              {dest!.cta}
-            </Link>
-          </div>
-          {destination.place.credit && (
-            <small className="xp-credit">{destination.place.credit}</small>
-          )}
-        </section>
-      )}
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head" data-reveal>
-            <div>
-              <p className="eyebrow">{T.demarchesEyebrow}</p>
-              <h2>{T.demarchesTitle}</h2>
-              <p className="section-lead">{T.demarchesLead}</p>
-            </div>
-          </div>
-        </div>
-        <GuideTiles slugs={DEMARCHES} label={T.demarchesLabel} lang={lang} />
-      </section>
-
-      <section className="section section-tint">
-        <div className="container">
-          <div className="section-head" data-reveal>
-            <div>
-              <p className="eyebrow">{T.vivreEyebrow}</p>
-              <h2>{T.vivreTitle}</h2>
-              <p className="section-lead">{T.vivreLead}</p>
-            </div>
-          </div>
-        </div>
-        <GuideTiles slugs={VIVRE} label={T.vivreLabel} lang={lang} />
-      </section>
-
       <ParallaxBand photo={PHOTOS['ghardaia-marche'].src} credit={PHOTOS['ghardaia-marche'].credit} eyebrow={T.proEyebrow} title={T.proTitle} text={T.proText}>
         <div className="xp-actions">
           <Link className="button primary" href="/professionnels/rejoindre">
@@ -399,17 +300,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
           </Link>
           <Link className="button light" href="/label">
             {T.proLabel}
-          </Link>
-        </div>
-      </ParallaxBand>
-
-      <ParallaxBand photo={PHOTOS['alger-mer'].src} credit={PHOTOS['alger-mer'].credit} eyebrow={T.installEyebrow} title={T.installTitle} text={T.installText}>
-        <div className="xp-actions">
-          <Link className="button primary" href="/installation">
-            {T.installStart}
-          </Link>
-          <Link className="button light" href="/diagnostic">
-            {T.installPlan}
           </Link>
         </div>
       </ParallaxBand>
