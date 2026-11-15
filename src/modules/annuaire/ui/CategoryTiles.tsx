@@ -26,8 +26,10 @@ const CITIES: [code: number, name: string][] = [[16, 'Alger'], [31, 'Oran'], [25
  * En-tête de navigation d’une rubrique de l’annuaire : trois villes en raccourci, puis les sous-catégories en cases
  * (pictogramme en couleur + nom). Remplace le nombre brut d’adresses et la liste de toutes les wilayas.
  */
-export function CategoryTiles({ sector, categories, active, wilaya }: { sector: string; categories: string[]; active?: string; wilaya?: number | null }) {
-  const tiles: [sector: string, category: string][] = [...categories.map((c): [string, string] => [sector, c]), ...(ALSO[sector] ?? [])]
+export function CategoryTiles({ sector, categories, active, wilaya, counts }: { sector: string; categories: string[]; active?: string; wilaya?: number | null; counts?: Record<string, number> }) {
+  // Une case ne mène jamais à une catégorie vide (la catégorie ouverte reste affichée).
+  const filled = (c: string) => !counts || c === active || (counts[c] ?? 0) > 0
+  const tiles: [sector: string, category: string][] = [...categories.filter(filled).map((c): [string, string] => [sector, c]), ...(ALSO[sector] ?? []).filter(([, c]) => filled(c))]
   return (
     <div className="cat-nav">
       <nav className="cat-cities" aria-label="Villes">

@@ -31,7 +31,7 @@ test.describe('Langues', () => {
   test('/en et /ar : même accueil, traduit, arabe de droite à gauche', async ({ page }) => {
     const errors = watchErrors(page)
     await page.goto('/en')
-    await expect(page.locator('h1').first()).toHaveText('Find what you need in Algeria.')
+    await expect(page.locator('h1').first()).toHaveText('The practical guide to Algeria.')
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
     await page.goto('/ar')
     await expect(page.locator('h1').first()).toHaveText('اعثر على ما تحتاجه في الجزائر.')

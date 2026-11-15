@@ -1,6 +1,6 @@
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
-import { searchPlaces } from '@/modules/annuaire'
+import { getPlaceCounts, searchPlaces } from '@/modules/annuaire'
 import { CategoryTiles, Directory } from '@/modules/annuaire/ui'
 import { categoryBySlug, categoryPath, wilayaBySlug } from '@/platform/referentiel/slug'
 
@@ -17,6 +17,7 @@ export async function CategoryPage({ sector, categorie, wilaya }: { sector: stri
   const national = w && !here.total ? await searchPlaces({ sector: s.slug, category }) : null
   const fallback = !here.total && !national?.total ? await searchPlaces({ sector: s.slug }) : null
   const shown = here.total ? here : national?.total ? national : fallback!
+  const counts = await getPlaceCounts()
   return (
     <>
       <section className="page-intro container compact">
@@ -37,7 +38,7 @@ export async function CategoryPage({ sector, categorie, wilaya }: { sector: stri
               ? `Pas encore d’adresse « ${category} » dans la wilaya de ${w!.name}. Voici celles du reste du pays.`
               : `Pas encore d’adresse « ${category} ». Voici les autres adresses de la rubrique ${s.title}.`}
         </p>
-        <CategoryTiles sector={s.slug} categories={s.categories} active={category} wilaya={w ? Number(w.code) : null} />
+        <CategoryTiles counts={counts.category} sector={s.slug} categories={s.categories} active={category} wilaya={w ? Number(w.code) : null} />
       </section>
       <Directory
         places={shown.places}

@@ -8,10 +8,11 @@ import { schoolCategory } from '@/modules/annuaire/schoolCategory'
  * Un nom qui ne dit pas son niveau reste dans « Écoles ». Fiche et versions mises à jour ensemble.
  */
 export const up = deferred('20261115_120000_ecoles_par_niveau', async ({ db }: MigrateUpArgs): Promise<void> => {
-  const { rows } = await db.execute(sql`SELECT id, name FROM places WHERE sector = 'education-formation' AND category = 'Écoles'`)
+  const { rows } = await db.execute(sql`SELECT id, name, name_ar FROM places WHERE sector = 'education-formation' AND category = 'Écoles'`)
   const groups = new Map<string, number[]>()
-  for (const r of rows as Array<{ id: number; name: string }>) {
-    const t = schoolCategory(r.name ?? '')
+  for (const r of rows as Array<{ id: number; name: string; name_ar: string | null }>) {
+    // Le nom d’abord ; le nom arabe seulement quand le nom ne dit rien.
+    const t = schoolCategory(r.name ?? '') ?? schoolCategory(r.name_ar ?? '')
     if (!t) continue
     const key = `${t.sector}|${t.category}`
     groups.set(key, [...(groups.get(key) ?? []), Number(r.id)])
