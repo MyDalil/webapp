@@ -3,10 +3,12 @@ import type { Payload } from 'payload'
 import type { Appointment, Media, Member, Practitioner } from '@/payload-types'
 import { payload as getPayload } from '@/platform/http'
 import { currentMember } from '@/modules/membres'
-import { createVideoRoom, videoEnabled } from '@/platform/video'
+import { createVideoRoom, videoEnabled, videoToken, videoWindow } from '@/platform/video'
 import { algiersDate, isBookable, slotsBetween, type Mode } from './availability'
 import { bookingCancelled, bookingConfirmed, bookingReminder, bookingToPractitioner } from './emails'
 import { specialtyLabel } from './specialties'
+import { agendaLinks, icsCalendar, validAgendaToken, type CalEvent } from './calendar'
+import { SITE } from '@/platform/mail'
 
 export type BookingError = { error: string; status: number }
 const fail = (error: string, status = 400): BookingError => ({ error, status })
@@ -156,7 +158,7 @@ export async function book(input: { slug: string; start: string; mode: Mode; rea
   }
   if (input.mode === 'visio') {
     // Pas de confirmation sans salle : un échec du fournisseur annule la réservation (créneau libéré).
-    const url = await createVideoRoom({ appointmentId: doc.id, start: doc.start, end: doc.end }).catch(() => null)
+    const url = await createVideoRoom({ appointmentId: doc.id, start: doc.start, end: doc.end, demo: Boolean(practitioner.demo) }).catch(() => null)
     if (!url) {
       await p.delete({ collection: 'appointments', id: doc.id, overrideAccess: true }).catch(() => {})
       return fail('La salle de visio n’a pas pu être créée. Rendez-vous non enregistré : réessayez ou choisissez le cabinet.', 503)
@@ -166,9 +168,9 @@ export async function book(input: { slug: string; start: string; mode: Mode; rea
   if (previous) await cancel(previous.id, 'patient', 'Rendez-vous déplacé', { silent: true, ignoreNotice: true })
 
   const rdv = rdvInfo(practitioner, doc, member)
-  await bookingConfirmed({ to: member.email, firstName: member.firstName }, rdv).catch(() => {})
+  await bookingConfirmed({ to: member.email, firstName: member.firstName }, { ...rdv, ics: icsCalendar([appointmentEvent(practitioner, doc, false)]) }).catch(() => {})
   const owner = await ownerOf(practitioner)
-  if (owner) await bookingToPractitioner({ to: owner.email }, rdv).catch(() => {})
+  if (owner) await bookingToPractitioner({ to: owner.email }, { ...rdv, ics: icsCalendar([appointmentEvent(practitioner, doc, true, member)]) }).catch(() => {})
   return { id: doc.id }
 }
 
@@ -185,7 +187,65 @@ const rdvInfo = (pr: Practitioner, a: Appointment, patient?: Member | null) => (
   reason: a.reason,
   cancelNoticeHours: pr.cancelNoticeHours,
   patientName: patient ? `${patient.firstName} ${patient.lastName}` : undefined,
+  demo: Boolean(pr.demo),
 })
+
+/** Événement d’agenda d’un rendez-vous, vu par le patient ou par le praticien. */
+function appointmentEvent(pr: Practitioner, a: Appointment, forPractitioner: boolean, patient?: Member | null): CalEvent {
+  const visio = a.mode === 'visio'
+  const who = forPractitioner ? (patient ? `${patient.firstName} ${patient.lastName}` : 'Patient') : pr.name
+  return {
+    uid: `rdv-${a.id}`,
+    start: a.start,
+    end: a.end,
+    summary: `${pr.demo ? '[Démonstration] ' : ''}Rendez-vous${visio ? ' en visio' : ''} — ${who}`,
+    location: visio ? (a.videoUrl ?? 'Visio (lien dans DALIL)') : [pr.cabinetName, pr.address, pr.city].filter(Boolean).join(', '),
+    description: [visio && a.videoUrl ? `Lien de la consultation : ${a.videoUrl}` : null, forPractitioner && a.reason ? `Motif : ${a.reason}` : null, forPractitioner ? `Agenda : ${SITE}/espace-pro` : `Gérer : ${SITE}/mon-compte`].filter(Boolean).join('\n'),
+    url: visio && a.videoUrl ? a.videoUrl : `${SITE}${forPractitioner ? '/espace-pro' : '/mon-compte'}`,
+    cancelled: a.status === 'cancelled',
+  }
+}
+
+/** Fichier .ics d’un rendez-vous, pour son patient ou le praticien propriétaire de l’agenda. */
+export async function appointmentIcs(id: number, member: Member): Promise<string | null> {
+  const p = await getPayload()
+  const a = await p.findByID({ collection: 'appointments', id, depth: 2, overrideAccess: true }).catch(() => null)
+  if (!a) return null
+  const pr = a.practitioner as Practitioner
+  const patient = a.patient as Member
+  const ownerId = typeof pr.owner === 'object' ? pr.owner?.id : pr.owner
+  if (patient?.id === member.id) return icsCalendar([appointmentEvent(pr, a as Appointment, false)])
+  if (ownerId === member.id) return icsCalendar([appointmentEvent(pr, a as Appointment, true, patient)])
+  return null
+}
+
+/** Abonnement d’agenda d’un praticien (lien secret) : rendez-vous des 30 derniers jours et à venir. */
+export async function practitionerFeed(id: number, token: string): Promise<string | null> {
+  if (!validAgendaToken(id, token)) return null
+  const p = await getPayload()
+  const pr = await p.findByID({ collection: 'practitioners', id, depth: 0, overrideAccess: true }).catch(() => null)
+  if (!pr) return null
+  const { docs } = await p.find({ collection: 'appointments', where: { and: [{ practitioner: { equals: id } }, { start: { greater_than_equal: new Date(Date.now() - 30 * 864e5).toISOString() } }] }, depth: 1, limit: 1000, sort: 'start', overrideAccess: true })
+  return icsCalendar(
+    docs.map((a) => appointmentEvent(pr as Practitioner, a as Appointment, true, a.patient as Member)),
+    `DALIL — ${pr.name}`,
+  )
+}
+
+/** Liens « Connecter mon agenda » du praticien connecté. */
+export const myAgendaLinks = (pr: Practitioner) => agendaLinks(SITE, pr.id)
+
+/**
+ * Démonstration : les rendez-vous pris chez un praticien d’exemple sont effacés une fois l’heure passée
+ * (tâche quotidienne). L’agenda d’exemple reste libre pour les visiteurs suivants.
+ */
+export async function purgeDemoAppointments() {
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'practitioners', where: { demo: { equals: true } }, depth: 0, limit: 50, overrideAccess: true, select: { demo: true } })
+  if (!docs.length) return { deleted: 0 }
+  const res = await p.delete({ collection: 'appointments', overrideAccess: true, where: { and: [{ practitioner: { in: docs.map((d) => d.id) } }, { end: { less_than: new Date().toISOString() } }] } })
+  return { deleted: res.docs?.length ?? 0 }
+}
 
 async function ownerOf(pr: Practitioner): Promise<Member | null> {
   if (!pr.owner) return null
@@ -332,4 +392,30 @@ export async function exportSanteData(member: Member) {
     rendezVous: docs.map((a) => ({ praticien: (a.practitioner as Practitioner)?.name, debut: a.start, fin: a.end, mode: a.mode, statut: a.status, motif: a.reason ?? null, annulePar: a.cancelledBy ?? null, consentementLe: a.consentAt, creeLe: a.createdAt })),
     fichePraticien: safe,
   }
+}
+
+export type VideoAccess =
+  | { state: 'open'; token: string; serverUrl: string; title: string; demo: boolean; closesAt: number }
+  | { state: 'early'; title: string; opensAt: number }
+  | { state: 'closed' | 'cancelled' | 'forbidden' | 'missing' | 'disabled' }
+
+/** Entrée dans la salle de visio : patient ou praticien du rendez-vous seulement, et seulement autour de l’heure. */
+export async function videoAccess(id: number, member: Member): Promise<VideoAccess> {
+  if (!videoEnabled()) return { state: 'disabled' }
+  const p = await getPayload()
+  const a = await p.findByID({ collection: 'appointments', id, depth: 2, overrideAccess: true }).catch(() => null)
+  if (!a || a.mode !== 'visio') return { state: 'missing' }
+  const pr = a.practitioner as Practitioner
+  const patient = a.patient as Member
+  const ownerId = typeof pr.owner === 'object' ? pr.owner?.id : pr.owner
+  const isPatient = patient?.id === member.id
+  if (!isPatient && ownerId !== member.id) return { state: 'forbidden' }
+  if (a.status !== 'confirmed') return { state: 'cancelled' }
+  const { opensAt, closesAt } = videoWindow(a.start, a.end, Boolean(pr.demo))
+  const title = isPatient ? `Consultation avec ${pr.name}` : `Consultation avec ${patient.firstName} ${patient.lastName}`
+  if (Date.now() > closesAt) return { state: 'closed' }
+  if (Date.now() < opensAt) return { state: 'early', title, opensAt }
+  const t = await videoToken({ appointmentId: a.id, identity: `${isPatient ? 'patient' : 'praticien'}-${member.id}`, name: isPatient ? `${member.firstName} ${member.lastName}` : pr.name, closesAt })
+  if (!t) return { state: 'disabled' }
+  return { state: 'open', ...t, title, demo: Boolean(pr.demo), closesAt }
 }

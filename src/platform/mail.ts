@@ -1,11 +1,11 @@
 import { Resend } from 'resend'
+import { SITE } from './site'
+
+export { SITE } from './site'
 
 /** Adresse d’envoi et de réponse de DALIL (domaine vérifié chez Resend ; salam@ est redirigée vers la boîte de l’équipe). */
 export const FROM = 'DALIL <salam@mydalil.com>'
 export const TEAM = process.env.DALIL_TEAM_EMAIL || 'salam@mydalil.com'
-/** Les liens des emails pointent vers l’environnement qui les envoie (preview → preview.mydalil.com). */
-export const SITE = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_ENV === 'preview' ? 'https://preview.mydalil.com' : 'https://www.mydalil.com')
-
 const client = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export const esc = (s: unknown) =>
@@ -35,7 +35,7 @@ ${cta ? `<tr><td style="padding-top:24px"><a href="${esc(cta.href)}" style="disp
 </table></td></tr></table></body></html>`
 }
 
-type Options = { headers?: Record<string, string>; idempotencyKey?: string }
+type Options = { headers?: Record<string, string>; idempotencyKey?: string; attachments?: { filename: string; content: string; contentType?: string }[] }
 
 /** Suivi en base (email-deliveries) : chargé à la demande, jamais bloquant (la CLI Payload charge aussi ce fichier). */
 async function track(fn: (p: { db: unknown }, t: typeof import('./mailing/track')) => Promise<unknown>) {
@@ -61,7 +61,7 @@ export async function send(to: string, subject: string, html: string, opts: Opti
   let id: string | null = null
   let err: string | null = null
   try {
-    const { data, error } = await client.emails.send({ from: FROM, to, replyTo: TEAM, subject, html, headers: opts.headers }, key ? { idempotencyKey: key } : undefined)
+    const { data, error } = await client.emails.send({ from: FROM, to, replyTo: TEAM, subject, html, headers: opts.headers, attachments: opts.attachments?.map((a) => ({ filename: a.filename, content: Buffer.from(a.content).toString('base64'), contentType: a.contentType })) }, key ? { idempotencyKey: key } : undefined)
     ok = !error
     id = data?.id ?? null
     if (error) err = error.name

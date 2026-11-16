@@ -1,5 +1,15 @@
 # Reprise — 12 novembre 2026
 
+## Mise à jour — 15 novembre 2026 : domaines et arborescence
+
+- Branche `agent/domaines-arborescence`, créée depuis `preview`.
+- Origine canonique unique : `https://www.mydalil.com`. Le domaine racine et l'alias technique principal redirigent en 308 vers `www` ; `preview.mydalil.com` reste protégé et non indexable.
+- L'ancien prototype est passé en accès propriétaire uniquement ; son ancienne adresse technique renvoie désormais 401.
+- Toutes les pages App Router sont classées dans `src/platform/siteRoutes.ts` ; le test de registre couvre 46 routes dédiées et les exclusions robots/sitemap.
+- Alias de connexion et de compte normalisés dans `src/platform/routes.ts`, avec variantes françaises, anglaises et arabes.
+- Vérifié localement : `pnpm check` réussi ; 222 tests unitaires réussis. La compilation Next.js et TypeScript réussit avec un secret local, puis le build s'arrête seulement faute de PostgreSQL local sur `localhost:5432`.
+- Livraison : PR vers `preview`, puis build et parcours déployés à vérifier avant toute promotion vers `main`.
+
 ## Mise à jour — 14 novembre 2026 (soir) : écoles et photos des lieux publics
 
 - PR #31 `agent/guides-annuaire-ecoles` → `preview` : les guides liés à une rubrique de l’annuaire montrent ses catégories non vides et 6 adresses. Cause corrigée : « École & famille » (Vie pratique) ne menait à aucune école. `pnpm check` OK ; build/e2e laissés à la CI.

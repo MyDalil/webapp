@@ -57,12 +57,16 @@ export function AppointmentList({ items, side, onChange }: { items: A[]; side: '
                   <span>
                     <a href={`tel:${a.patient?.phone}`}>{a.patient?.phone}</a> · <a href={`mailto:${a.patient?.email}`}>{a.patient?.email}</a>
                   </span>
+                  {a.mode === 'visio' && a.videoUrl && a.status === 'confirmed' && <a href={a.videoUrl} target="_blank" rel="noopener noreferrer">Ouvrir la visio</a>}
                   {a.reason && <small>Motif : {a.reason}</small>}
                 </>
               )}
             </div>
             {a.status === 'confirmed' && (
               <div className="rdv-actions">
+                <a className="button outline" href={`/api/rdv/${a.id}/agenda`} download>
+                  Ajouter à mon agenda
+                </a>
                 {side === 'patient' && a.canCancel && (
                   <Link className="button outline" href={`/praticiens/${a.practitioner.slug}?replaces=${a.id}`}>
                     Déplacer

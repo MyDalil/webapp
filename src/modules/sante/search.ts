@@ -18,7 +18,7 @@ export function practitionerRow(p: Partial<Practitioner> & { id: number | string
     title: p.name,
     subtitle: [specs.join(', '), p.city].filter(Boolean).join(' · '),
     wilaya: p.wilaya ?? null,
-    badge: p.demo ? 'Démo' : 'Rendez-vous en ligne',
+    badge: p.demo ? 'Exemple' : 'Rendez-vous en ligne',
     boost: p.demo ? -0.6 : 0.4,
     text: [p.title, ...specs, ...groups, 'médecin docteur rendez-vous santé', p.cabinetName, p.city, p.address, wilayaName(p.wilaya)].filter(Boolean).join(' '),
   }

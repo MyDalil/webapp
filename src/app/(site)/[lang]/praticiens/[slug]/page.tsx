@@ -29,6 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? {
         title: `${p.name} — prendre rendez-vous`,
         description: `${(p.specialties ?? []).map(specialtyLabel).join(', ')} à ${p.city}. Réservation en ligne.`,
+        // Praticien d’exemple : visible sur DALIL, jamais proposé à Google.
+        ...(p.demo ? { robots: { index: false, follow: true } } : {}),
       }
     : {}
 }
@@ -86,8 +88,9 @@ export default async function Practitioner({ params }: Props) {
           />
           {p.demo && (
             <p className="praticien-notice">
-              Fiche de démonstration : réservez librement pour tester, aucune consultation n’aura
-              lieu.
+              Exemple : ce praticien n’existe pas. Essayez tout le parcours — réservation, email de
+              confirmation, ajout à votre agenda, visio — sans engagement. Aucune consultation n’aura lieu ; le
+              rendez-vous est effacé après l’heure prévue.
             </p>
           )}
           {complementary && (

@@ -7,6 +7,7 @@ import { DAYS, LANGUAGES, SPECIALTIES } from '../specialties'
 import { SmartText } from '@/platform/ui/SmartText'
 
 type Rule = { day: string; start: string; end: string; mode: 'both' | 'cabinet' | 'visio' }
+type Calendar = { feed: string; google: string; apple: string; outlook: string }
 type Closure = { from: string; to: string; note?: string }
 type P = Record<string, unknown> & { id?: number; status?: string; slug?: string; name?: string; weekly?: Rule[]; closures?: Closure[]; specialties?: string[]; languages?: string[]; modes?: string[] }
 
@@ -24,7 +25,7 @@ async function save(body: unknown) {
 
 /** Espace praticien : création de la fiche, horaires, congés et agenda des rendez-vous. */
 export function ProSpace({ wilayas }: { wilayas: { code: number; name: string }[] }) {
-  const [data, setData] = useState<{ practitioner: P | null; agenda: never[] } | null>(null)
+  const [data, setData] = useState<{ practitioner: P | null; agenda: never[]; calendar: Calendar | null } | null>(null)
   const [tab, setTab] = useState<'agenda' | 'horaires' | 'fiche'>('agenda')
   const [msg, setMsg] = useState<{ type: 'ok' | 'error'; text: string } | null>(null)
   const load = () =>
@@ -86,6 +87,7 @@ export function ProSpace({ wilayas }: { wilayas: { code: number; name: string }[
           <AppointmentList items={data.agenda} side="practitioner" onChange={load} />
         </section>
       )}
+      {tab === 'agenda' && data.calendar && <CalendarConnect links={data.calendar} />}
       {tab === 'horaires' && <HoursForm pr={pr} onSubmit={onSave} />}
       {tab === 'fiche' && <ProfileForm initial={pr} wilayas={wilayas} onSubmit={onSave} />}
     </>
@@ -327,5 +329,24 @@ function HoursForm({ pr, onSubmit }: { pr: P; onSubmit: (b: unknown) => void }) 
       </button>
       <button className="button primary auth-submit">Enregistrer mes horaires</button>
     </form>
+  )
+}
+
+/** Connecter son agenda : abonnement en un clic (Google, Apple, Outlook), mis à jour automatiquement. */
+function CalendarConnect({ links }: { links: Calendar }) {
+  const [copied, setCopied] = useState(false)
+  const copy = () => navigator.clipboard?.writeText(links.feed).then(() => setCopied(true), () => {})
+  return (
+    <section className="account-block">
+      <h2>Connecter mon agenda</h2>
+      <p className="muted-line">Vos rendez-vous DALIL apparaissent dans votre agenda habituel. Ils se mettent à jour seuls : nouveaux rendez-vous, déplacements, annulations.</p>
+      <div className="cal-connect">
+        <a className="button outline" href={links.google} target="_blank" rel="noopener noreferrer">Google Agenda</a>
+        <a className="button outline" href={links.apple}>Apple Calendrier</a>
+        <a className="button outline" href={links.outlook} target="_blank" rel="noopener noreferrer">Outlook</a>
+        <button type="button" className="button outline" onClick={copy}>{copied ? 'Lien copié' : 'Copier le lien'}</button>
+      </div>
+      <small className="muted-line">Lien personnel : ne le partagez pas. Il montre les noms de vos patients.</small>
+    </section>
   )
 }

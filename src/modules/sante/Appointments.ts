@@ -20,7 +20,7 @@ export const Appointments: CollectionConfig = {
     { type: 'row', fields: [{ name: 'mode', type: 'select', required: true, options: [{ label: 'Au cabinet', value: 'cabinet' }, { label: 'En visio', value: 'visio' }] }, { name: 'status', type: 'select', required: true, defaultValue: 'confirmed', index: true, options: [{ label: 'Confirmé', value: 'confirmed' }, { label: 'Annulé', value: 'cancelled' }, { label: 'Honoré', value: 'completed' }, { label: 'Non honoré', value: 'no_show' }] }] },
     { name: 'reason', type: 'textarea', label: 'Motif (court, sans détail médical)', maxLength: 300 },
     { type: 'row', fields: [{ name: 'cancelledBy', type: 'select', options: [{ label: 'Patient', value: 'patient' }, { label: 'Praticien', value: 'practitioner' }, { label: 'Équipe', value: 'staff' }] }, { name: 'cancelReason', type: 'text', label: 'Motif d’annulation' }] },
-    { name: 'videoUrl', type: 'text', label: 'Lien visio', admin: { description: 'Généré par le service visio (non choisi pour l’instant).' } },
+    { name: 'videoUrl', type: 'text', label: 'Lien visio', admin: { description: 'Page DALIL de la salle de visio (LiveKit), réservée au patient et au praticien.' } },
     { type: 'row', fields: [{ name: 'consentAt', type: 'date', required: true, label: 'Consentement du patient' }, { name: 'reminderSentAt', type: 'date', label: 'Rappel envoyé' }] },
     /** Garantit qu’un créneau n’est réservé qu’une fois : vidé à l’annulation. */
     { name: 'slotKey', type: 'text', unique: true, index: true, admin: { readOnly: true, hidden: true } },

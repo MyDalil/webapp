@@ -247,14 +247,8 @@ body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer 
 .assistant-orb svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .smart-improve svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .seal::before, .seal::after { content: none; }
-@media (max-width: 900px) { .place-cards.dm-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 640px) {
-  .g-tabs a { height: 44px; padding: 0 9px; font-size: .84rem; }
-  .g-tabs b { display: none; }
-  .sr-steps.g-steps.swipe > * { flex-basis: 62%; }
-  .cat-tiles.is-rail { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-template-columns: none; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 -16px; padding: 2px 16px 6px; scroll-padding: 0 16px; }
-  .cat-tiles.is-rail::-webkit-scrollbar { display: none; }
-  .cat-tiles.is-rail .cat-tile { scroll-snap-align: start; }
-  .place-cards.swipe > * { flex-basis: 58%; }
-  .g-sources.swipe > * { flex-basis: 82%; }
-}
+.cal-connect { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; } .cal-connect .button { flex: 0 0 auto; }
+.visio-page { padding-block: 16px 32px; } .visio-wrap { display: grid; gap: 10px; } .visio-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .95rem; }
+.visio-room { height: min(78vh, 760px); border-radius: 16px; overflow: hidden; --lk-accent-bg: var(--green); --lk-bg: #0f1a14; }
+@media (max-width: 640px) { .visio-room { height: calc(100dvh - 140px); border-radius: 12px; } }
+.visio-end { display: grid; gap: 12px; padding: 32px 0; } .visio-end-actions { display: flex; flex-wrap: wrap; gap: 8px; }

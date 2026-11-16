@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { ROBOTS_DISALLOW } from '@/modules/recherche'
-import { SITE } from '@/platform/mail'
+import { SITE } from '@/platform/site'
 
 // Preview et branches de test : jamais indexées.
 export const dynamic = 'force-dynamic'

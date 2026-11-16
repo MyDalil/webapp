@@ -3,7 +3,7 @@ import { runQueue } from '@/modules/agents'
 import { publishDue } from '@/modules/communication'
 import { annoncesTaxonomyRows, dailyClassifiedTasks, reindexClassifieds } from '@/modules/annonces'
 import { annuaireTaxonomyRows, reindexPlaces } from '@/modules/annuaire'
-import { reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
+import { purgeDemoAppointments, reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
 import { dailyServicesTasks, reindexProviders, servicesTaxonomyRows } from '@/modules/services'
 import { fail, json, payload } from '@/platform/http'
 import { rebuildIndex } from '@/platform/search/rebuild'
@@ -34,6 +34,7 @@ export async function GET(req: Request) {
   if (req.headers.get('authorization') !== `Bearer ${secret}`) return fail('Accès refusé.', 401)
   const out: Record<string, TaskOutcome> = {}
   out.rendezVous = await runTask('rappels-rendez-vous', sendReminders, { failed: (r) => ((r as { failed?: number }).failed ? `${(r as { failed: number }).failed} rappel(s) non acceptés par le fournisseur` : null) })
+  out.rendezVousDemo = await runTask('rendez-vous-demo', purgeDemoAppointments)
   out.services = await runTask('services', dailyServicesTasks)
   out.photosProposees = await runTask('photos-proposees', purgeContributionPhotos)
   out.annonces = await runTask('annonces', dailyClassifiedTasks)
