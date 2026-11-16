@@ -12,7 +12,7 @@ const ics = (r: Rdv) => (r.ics ? { attachments: [{ filename: 'rendez-vous-dalil.
 const when = (r: Rdv) => `${algiersLongDate(r.start)} à ${algiersTime(r.start)} (heure d’Alger)`
 const where = (r: Rdv) =>
   r.mode === 'visio'
-    ? `En visio. ${r.videoUrl ? `Lien de la consultation : <a href="${esc(r.videoUrl)}">${esc(r.videoUrl)}</a>` : 'Le lien de la consultation vous sera envoyé avant le rendez-vous.'}`
+    ? `En visio, dans votre navigateur, sans application. ${r.videoUrl ? `Lien de la consultation (ouvert 15 min avant) : <a href="${esc(r.videoUrl)}">${esc(r.videoUrl)}</a>` : 'Le lien de la consultation vous sera envoyé avant le rendez-vous.'}`
     : `Au cabinet : ${esc([r.address, r.city].filter(Boolean).join(', ') || 'adresse indiquée sur la fiche du praticien')}`
 const pay = (r: Rdv) =>
   r.fee || r.payment ? `<p>Tarif : ${esc(r.fee ?? 'indiqué par le praticien')}${r.payment ? ` · Paiement : ${esc(r.payment)}` : ''}. Vous réglez directement le praticien ; DALIL n’encaisse rien.${r.paymentLink ? ` <a href="${esc(r.paymentLink)}">Lien de paiement du praticien</a>.` : ''}</p>` : ''

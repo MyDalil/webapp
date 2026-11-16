@@ -3,7 +3,7 @@ import type { Payload } from 'payload'
 import type { Appointment, Media, Member, Practitioner } from '@/payload-types'
 import { payload as getPayload } from '@/platform/http'
 import { currentMember } from '@/modules/membres'
-import { createVideoRoom, videoEnabled } from '@/platform/video'
+import { createVideoRoom, videoEnabled, videoToken, videoWindow } from '@/platform/video'
 import { algiersDate, isBookable, slotsBetween, type Mode } from './availability'
 import { bookingCancelled, bookingConfirmed, bookingReminder, bookingToPractitioner } from './emails'
 import { specialtyLabel } from './specialties'
@@ -392,4 +392,30 @@ export async function exportSanteData(member: Member) {
     rendezVous: docs.map((a) => ({ praticien: (a.practitioner as Practitioner)?.name, debut: a.start, fin: a.end, mode: a.mode, statut: a.status, motif: a.reason ?? null, annulePar: a.cancelledBy ?? null, consentementLe: a.consentAt, creeLe: a.createdAt })),
     fichePraticien: safe,
   }
+}
+
+export type VideoAccess =
+  | { state: 'open'; token: string; serverUrl: string; title: string; demo: boolean; closesAt: number }
+  | { state: 'early'; title: string; opensAt: number }
+  | { state: 'closed' | 'cancelled' | 'forbidden' | 'missing' | 'disabled' }
+
+/** Entrée dans la salle de visio : patient ou praticien du rendez-vous seulement, et seulement autour de l’heure. */
+export async function videoAccess(id: number, member: Member): Promise<VideoAccess> {
+  if (!videoEnabled()) return { state: 'disabled' }
+  const p = await getPayload()
+  const a = await p.findByID({ collection: 'appointments', id, depth: 2, overrideAccess: true }).catch(() => null)
+  if (!a || a.mode !== 'visio') return { state: 'missing' }
+  const pr = a.practitioner as Practitioner
+  const patient = a.patient as Member
+  const ownerId = typeof pr.owner === 'object' ? pr.owner?.id : pr.owner
+  const isPatient = patient?.id === member.id
+  if (!isPatient && ownerId !== member.id) return { state: 'forbidden' }
+  if (a.status !== 'confirmed') return { state: 'cancelled' }
+  const { opensAt, closesAt } = videoWindow(a.start, a.end, Boolean(pr.demo))
+  const title = isPatient ? `Consultation avec ${pr.name}` : `Consultation avec ${patient.firstName} ${patient.lastName}`
+  if (Date.now() > closesAt) return { state: 'closed' }
+  if (Date.now() < opensAt) return { state: 'early', title, opensAt }
+  const t = await videoToken({ appointmentId: a.id, identity: `${isPatient ? 'patient' : 'praticien'}-${member.id}`, name: isPatient ? `${member.firstName} ${member.lastName}` : pr.name, closesAt })
+  if (!t) return { state: 'disabled' }
+  return { state: 'open', ...t, title, demo: Boolean(pr.demo), closesAt }
 }

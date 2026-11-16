@@ -44,7 +44,7 @@ export const SITE_ROUTE_GROUPS = {
     '/villes/[slug]',
   ],
   auth: ['/connexion', '/connexion/[kind]', '/connexion/nouveau-mot-de-passe', '/connexion/verifier', '/onboarding'],
-  private: ['/annonces/deposer', '/annonces/messagerie', '/espace', '/espace-pro', '/missions/[id]', '/mon-compte', '/newsletter/confirmation', '/newsletter/desinscription'],
+  private: ['/annonces/deposer', '/annonces/messagerie', '/espace', '/espace-pro', '/missions/[id]', '/mon-compte', '/newsletter/confirmation', '/newsletter/desinscription', '/visio/[id]'],
   legacyContent: ['/[...slug]'],
   admin: ['/admin', '/admin/**'],
   api: ['/api/**'],
@@ -60,6 +60,7 @@ export const SITE_ROUTE_GROUPS = {
 
 export const ROBOTS_PRIVATE_PATHS = [
   '/mon-compte',
+  '/visio',
   '/espace',
   '/espace-pro',
   '/missions',

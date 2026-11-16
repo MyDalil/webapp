@@ -164,3 +164,7 @@ body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer 
 .pl-head h1 { margin: 0; }
 .pl-logo { flex: none; width: 56px; height: 56px; object-fit: contain; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
 .cal-connect { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; } .cal-connect .button { flex: 0 0 auto; }
+.visio-page { padding-block: 16px 32px; } .visio-wrap { display: grid; gap: 10px; } .visio-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .95rem; }
+.visio-room { height: min(78vh, 760px); border-radius: 16px; overflow: hidden; --lk-accent-bg: var(--green); --lk-bg: #0f1a14; }
+@media (max-width: 640px) { .visio-room { height: calc(100dvh - 140px); border-radius: 12px; } }
+.visio-end { display: grid; gap: 12px; padding: 32px 0; } .visio-end-actions { display: flex; flex-wrap: wrap; gap: 8px; }
