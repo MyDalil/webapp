@@ -63,6 +63,9 @@ export function CategoryTiles({ sector, categories, active, wilaya, counts }: { 
  * Catégories hors annuaire (guides, rubriques) : puces du modèle de l’accueil — pastille ronde en couleur,
  * contour fin, aucun fond derrière le mot (maquette validée par Rad, 2026-11-16). Sur mobile, trois rangées qui défilent.
  */
+/** 1 564 : espace fine insécable, sans dépendre des données de langue du serveur. */
+const thousands = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202f')
+
 export function CategoryGrid({ items, all }: { items: { sector: string; category: string; n?: number }[]; all?: { href: string; n?: number } }) {
   return (
     <nav className="cat-chips" aria-label="Catégories">
@@ -72,7 +75,7 @@ export function CategoryGrid({ items, all }: { items: { sector: string; category
             <Icon name={ICON[category] ?? SECTOR_ICON[sector] ?? 'pin'} />
           </span>
           {LABEL[category] ?? category}
-          {n != null && <small>{n.toLocaleString('fr-FR')}</small>}
+          {n != null && <small>{thousands(n)}</small>}
         </Link>
       ))}
       {all && (
@@ -81,7 +84,7 @@ export function CategoryGrid({ items, all }: { items: { sector: string; category
             <Icon name="arrow" />
           </span>
           Tout voir
-          {all.n != null && <small>{all.n.toLocaleString('fr-FR')}</small>}
+          {all.n != null && <small>{thousands(all.n)}</small>}
         </Link>
       )}
     </nav>

@@ -27,3 +27,8 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 ## 2026-11-15 — Accueil court (demande de Rad, à valider sur preview)
 - Décision : l’accueil garde six blocs — recherche, rubriques, annonces, découvrir, professionnels, newsletter. Les blocs par rubrique (Santé, À domicile, Vie musulmane, destination, Papiers, Repères, Installation) sont retirés : ils répétaient le menu et les six portes.
 - Diaporama : mosquée, monument, site naturel, puis incontournables. Plus de lieu de santé ni de bureau officiel (photos libres non relues).
+
+## 2026-11-16 — Standard des pages guide (maquette validée par Rad)
+- Décision : onglets fixes, frise des étapes, catégories en puces (modèle de l'accueil), cartes photo en bande, sources en grille 2 × 2, bandeau d'action vert ; grille de 8 px ; boutons de 40 px ; sur mobile, carrousels, rien d'empilé.
+- Portée (Rad) : norme de toutes les pages similaires (guides, démarches, rubriques d'information). Hors norme : Services, Santé et pages d'usage comparable, qui demandent une présentation propre à leur usage — à définir avec Rad avant tout code.
+- Maquette : https://claude.ai/artifact/WydWifCueg4g656ZNRsh9r
