@@ -257,6 +257,10 @@ export interface Place {
    */
   intro?: string | null;
   /**
+   * Entreprises et organismes seulement. Logo fourni par l’établissement ou repris de son site officiel. Affiché à côté du nom, jamais à la place d’une photo du lieu.
+   */
+  logo?: (number | null) | Media;
+  /**
    * La première sert de couverture.
    */
   photos?: (number | Media)[] | null;
@@ -2522,6 +2526,7 @@ export interface PlacesSelect<T extends boolean = true> {
   sector?: T;
   category?: T;
   intro?: T;
+  logo?: T;
   photos?: T;
   externalPhotos?:
     | T

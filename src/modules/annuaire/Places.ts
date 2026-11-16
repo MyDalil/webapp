@@ -76,6 +76,13 @@ export const Places: CollectionConfig = {
               ],
             },
             { name: 'intro', type: 'textarea', label: 'Présentation', admin: { description: 'Deux ou trois phrases factuelles.' } },
+            {
+              name: 'logo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Logo officiel',
+              admin: { description: 'Entreprises et organismes seulement. Logo fourni par l’établissement ou repris de son site officiel. Affiché à côté du nom, jamais à la place d’une photo du lieu.' },
+            },
             { name: 'photos', type: 'upload', relationTo: 'media', hasMany: true, label: 'Photos', admin: { description: 'La première sert de couverture.' } },
             {
               name: 'externalPhotos',
