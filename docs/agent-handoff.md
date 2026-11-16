@@ -121,3 +121,11 @@
 - Relu par Fable (advisor) ; ses 7 remarques traitées.
 - Local : check, 201 tests, build, 88 parcours dont le repère de carte ; 375 px et 1440 px sans débordement. Le parcours « service » d’un membre échoue en local seulement (créneaux déjà pris par des essais précédents sur la même base) ; il passe sur base neuve en CI.
 - Méthode de travail (Rad, 2026-11-16) : Opus exécute ; Fable donne son avis quand le lot le justifie, puis Opus applique.
+
+## 2026-11-16 (soir) — Praticien d’exemple, visio LiveKit, agenda (branche `agent/demo-praticien-visio`)
+- Demandes de Rad : Dr Démo visible en production avec tout le parcours ; visio ; connexion calendrier. Daily écarté (moteur non open source) → LiveKit.
+- Fait : migration `20261116_150000_demo_praticien_production` (7 j/7, 8 h–20 h, badge « Exemple », noindex) ; purge quotidienne `rendez-vous-demo` ; `.ics` joint aux emails + `/api/rdv/[id]/agenda` ; abonnement praticien `/api/agenda/[id]/[jeton].ics` (Google, Apple, Outlook) ; page `/visio/[id]` (LiveKit, patient et praticien seulement, fenêtre 15 min avant / 30 min après, sans enregistrement).
+- Vérifié : `pnpm check`, `pnpm test` (229), compilation Next ; CI du push `preview` (40fd646) verte ; Vercel preview vert ; Dr Démo affiché sur preview.mydalil.com/praticiens avec « Exemple ».
+- Écart de procédure : `preview` avancé en avance rapide par push direct (demande explicite de Rad « push sur preview »), sans PR. À ne pas refaire : passer par une PR.
+- Bloqué : visio inactive tant que `VIDEO_PROVIDER=livekit`, `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` manquent dans Vercel. Il faut un serveur LiveKit (auto-hébergé sur un VPS, ou LiveKit Cloud). L’espace de travail des agents ne peut pas joindre cloud.livekit.io (réseau filtré).
+- Production inchangée : `main` = `d154793`.

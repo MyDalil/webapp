@@ -23,7 +23,7 @@ src/
     access.ts         rôles et droits (patron, admin, editor, conseiller) ; agents IA à part ; un compte public n’est jamais staff
     audit/            journal d’audit en ajout seul (toutes collections)
     controls/         commandes : arrêt général, agents, Telegram, maintenance, budgets
-    video.ts          visio des consultations (fournisseur à brancher)
+    video.ts          visio des consultations (LiveKit, open source ; clés à brancher)
     http.ts           réponses /api, validation, accès Payload
     mail.ts           emails Resend (gabarit, envoi, désinscription)
     auth/             comptes équipe /admin (Users)
