@@ -2,6 +2,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { SITE_REDIRECTS } from './src/platform/routes'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
@@ -39,12 +40,7 @@ const nextConfig: NextConfig = {
   },
   // Langues : le français est servi à la racine (/x → /fr/x en interne), l’anglais et l’arabe sous /en et /ar.
   async redirects() {
-    return [
-      { source: '/fr', destination: '/', permanent: true },
-      { source: '/fr/:path*', destination: '/:path*', permanent: true },
-      // Ancienne page du prototype : plus de fonction serveur pour une simple redirection.
-      { source: '/:lang(en|ar)?/test', destination: '/mon-compte', permanent: true },
-    ]
+    return SITE_REDIRECTS
   },
   async rewrites() {
     return {

@@ -28,7 +28,7 @@ import '@/styles/v1.css'
 import { Header } from '@/platform/shell/Header'
 import { Assistant } from '@/modules/recherche/ui'
 import { LoginDialog } from '@/platform/shell/LoginDialog'
-import { Toast } from '@/platform/shell/Toast'
+import { Toast } from '@/platform/shell/ToastView'
 import { Motion } from '@/platform/ui/Motion'
 import { JoinCircle } from '@/platform/shell/JoinCircle'
 import { Tree } from '@/modules/contenus/ui'
@@ -37,8 +37,7 @@ import { HeaderSearch } from '@/modules/recherche/ui'
 import { notFound } from 'next/navigation'
 import { isLang, LANGS_ALL, type Lang } from '@/platform/i18n'
 import { LangProvider } from '@/platform/ui/lang'
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://mydalil.com'
+import { SITE } from '@/platform/site'
 
 const metadata: Metadata = {
   metadataBase: new URL(SITE),
