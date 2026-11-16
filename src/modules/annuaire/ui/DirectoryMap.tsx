@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import * as maplibregl from 'maplibre-gl'
+import { directionsUrl } from '../directions'
 import type { GeoJSONSource, Map as MLMap } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -150,11 +151,24 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
     marker.current?.remove()
     marker.current = null
     const one = list.length === 1 && list[0].pos ? list[0] : null
-    if (one) marker.current = new maplibregl.Marker({ color: one.exact ? GREEN : '#7fb89a' }).setLngLat([one.pos![1], one.pos![0]]).addTo(m)
+    if (!one) return
+    marker.current = new maplibregl.Marker({ color: one.exact ? GREEN : '#7fb89a' }).setLngLat([one.pos![1], one.pos![0]]).addTo(m)
+    // Le repère fait comme « Itinéraire » : ouvre le trajet vers l’adresse.
+    const el = marker.current.getElement()
+    const go = () => window.open(directionsUrl(one.pos!), '_blank', 'noopener')
+    el.style.cursor = 'pointer'
+    el.setAttribute('role', 'link')
+    el.setAttribute('tabindex', '0')
+    el.setAttribute('aria-label', `Itinéraire vers ${one.name}`)
+    el.title = 'Itinéraire'
+    el.addEventListener('click', (e) => { e.stopPropagation(); go() })
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') go() })
   }
 
   useEffect(() => {
     if (!box.current || map.current) return
+    // Worker servi depuis public/ (copié au build) : sans lui, aucune tuile ne se dessine.
+    maplibregl.setWorkerUrl(`/maplibre-gl-worker.mjs?v=${maplibregl.getVersion()}`)
     // Caméra posée dès la création, à partir des adresses : un seul jeu de tuiles, aucun recadrage au chargement.
     const m = new maplibregl.Map({ container: box.current, style: styleUrl(), ...camera(places, zoom), scrollZoom: false, touchZoomRotate: true, dragRotate: false, touchPitch: false, attributionControl: { compact: true } })
     m.touchZoomRotate.disableRotation()

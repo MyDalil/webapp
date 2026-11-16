@@ -121,3 +121,8 @@
 - Relu par Fable (advisor) ; ses 7 remarques traitées.
 - Local : check, 201 tests, build, 88 parcours dont le repère de carte ; 375 px et 1440 px sans débordement. Le parcours « service » d’un membre échoue en local seulement (créneaux déjà pris par des essais précédents sur la même base) ; il passe sur base neuve en CI.
 - Méthode de travail (Rad, 2026-11-16) : Opus exécute ; Fable donne son avis quand le lot le justifie, puis Opus applique.
+
+## 2026-11-16 — Branche agent/fiches-et-carte
+- Fait : fond de carte réparé (worker MapLibre copié au build), repère = itinéraire, pages guide au standard validé, étoiles ✦ remplacées par des pictogrammes.
+- Vérifié en local : check, 229 tests unitaires, build, 224 parcours Playwright (36 ignorés).
+- Prochaine action : vérifier sur preview que le fond de carte se dessine ; questions à Rad sur Services et Santé avant toute maquette.

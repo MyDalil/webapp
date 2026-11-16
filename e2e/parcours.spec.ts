@@ -84,11 +84,24 @@ test.describe('Annuaire', () => {
   })
 
   test('fiche lieu : la carte porte le repère de l’adresse', async ({ page }) => {
+    const workerErrors: string[] = []
+    page.on('console', (m) => { if (m.type() === 'error' && /worker/i.test(m.text())) workerErrors.push(m.text()) })
+    const worker = page.waitForResponse((r) => r.url().includes('maplibre-gl-worker'), { timeout: 15_000 })
     await page.goto('/adresses/darna-said-hamdine')
     const map = page.locator('.pl-map')
     test.skip(!(await map.count()), 'fiche sans position')
     await map.scrollIntoViewIfNeeded()
     await expect(map.locator('.maplibregl-marker')).toHaveCount(1, { timeout: 15_000 })
+    // Le worker dessine le fond de carte : il doit se charger comme un script.
+    const res = await worker
+    expect(res.status()).toBe(200)
+    expect(res.headers()['content-type']).toMatch(/javascript/)
+    expect(workerErrors).toEqual([])
+    // Le repère ouvre l’itinéraire, comme le bouton.
+    const href = await page.getByRole('link', { name: 'Itinéraire', exact: true }).getAttribute('href')
+    await page.evaluate(() => { const w = window as unknown as { opened: string[] }; w.opened = []; window.open = (u) => { w.opened.push(String(u)); return null } })
+    await map.locator('.maplibregl-marker').click()
+    expect(await page.evaluate(() => (window as unknown as { opened: string[] }).opened)).toEqual([href])
   })
 
   test('fiche lieu : modèle unique, sans débordement ni case « à confirmer »', async ({ page }) => {

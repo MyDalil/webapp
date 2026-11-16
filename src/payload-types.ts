@@ -920,7 +920,7 @@ export interface Appointment {
   cancelledBy?: ('patient' | 'practitioner' | 'staff') | null;
   cancelReason?: string | null;
   /**
-   * Généré par le service visio (non choisi pour l’instant).
+   * Page DALIL de la salle de visio (LiveKit), réservée au patient et au praticien.
    */
   videoUrl?: string | null;
   consentAt: string;
