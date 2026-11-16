@@ -132,7 +132,9 @@ function camera(list: Pin[], zoom?: number): { center: [number, number]; zoom: n
   if (located.length > 1) {
     const b = new maplibregl.LngLatBounds()
     for (const p of located) b.extend([p.pos![1], p.pos![0]])
-    return { bounds: b, fitBoundsOptions: { padding: 48, maxZoom: 12, duration: 0 } }
+    // Liste locale (une wilaya, une ville) : cadrée sur ses adresses. Liste nationale : vue de l’Algérie, moins de tuiles et de libellés à charger.
+    const wide = b.getEast() - b.getWest() > 6 || b.getNorth() - b.getSouth() > 4
+    if (!wide) return { bounds: b, fitBoundsOptions: { padding: 48, maxZoom: 12, duration: 0 } }
   }
   return { bounds: ALGERIA, fitBoundsOptions: { padding: 24, duration: 0 } }
 }
