@@ -92,3 +92,9 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 ## 2026-11-15 — Repère sur la carte d’une fiche
 - Défaut : la carte d’une fiche restait cadrée sur toute l’Algérie, sans repère. Cause : le cadrage n’était appliqué qu’une fois, après un événement « idle » ; quand la carte était recréée, il était perdu.
 - Correction (`ui/DirectoryMap.tsx`) : le cadrage se refait à chaque chargement du style et à la création ; une adresse seule reçoit un vrai repère (marqueur), vert plein si la position est exacte, vert clair si elle est approximative.
+
+## 2026-11-16 — Logo officiel, carte sans recadrage
+- Décision (Rad) : les entreprises et organismes peuvent avoir leur logo officiel (champ `logo`, taille média `logo` non recadrée), affiché à côté du nom sur la fiche, jamais à la place d’une photo du lieu. Le logo vient de l’établissement ou de son site officiel ; aucun logo n’est récupéré en masse.
+- Carte : la caméra est calculée avant la création de la carte (adresse seule → centrée ; plusieurs → toutes visibles). Plus de recadrage au chargement : un seul jeu de tuiles, et le visiteur qui déplace la carte n’est plus ramené en arrière. Le repère est posé à part, sans bouger la caméra.
+- Contrôle de coût (`e2e/cout.spec.ts`) : compte à part les requêtes vers DALIL (ce que Vercel et Neon facturent), seuils = mesure du 16/11 + 15 % ; le total, tuiles et photos tierces comprises, garde ses seuils d’origine (120 / 60).
+- Méthode : lot relu par Fable avant le passage sur preview (défauts relevés : recadrages multiples de la carte, faux avis sur les fiches d’exemple, « Bientôt disponible » sans source).

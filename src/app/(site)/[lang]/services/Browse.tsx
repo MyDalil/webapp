@@ -40,14 +40,14 @@ function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
           <h2>{p.name}</h2>
         </Link>
         <p className="provider-rating">
-          {p.rating ? (
+          {p.rating && !p.demo ? (
             <>
               <b>{stars(p.rating)}</b> · {p.reviews} avis vérifié{p.reviews > 1 ? 's' : ''}
             </>
           ) : (
             'Nouveau sur DALIL'
           )}
-          {p.missionsDone ? ` · ${p.missionsDone} mission${p.missionsDone > 1 ? 's' : ''}` : ''}
+          {p.missionsDone && !p.demo ? ` · ${p.missionsDone} mission${p.missionsDone > 1 ? 's' : ''}` : ''}
         </p>
         <ul className="provider-offers">
           {offers.map((o) => (
@@ -214,7 +214,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
             ))}
           </ul>
         ) : null}
-        {(!results.length || nearby.length > 0) && (
+        {(!results.some((r) => !r.demo) || nearby.length > 0) && (
           <div className="praticiens-empty">
             <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Soyez le premier prestataire de cette catégorie.'}</h2>
             <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Votre fiche, vos prestations et vos disponibilités, visibles dans toute votre wilaya. L’inscription est gratuite.'}</p>

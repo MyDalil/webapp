@@ -67,7 +67,7 @@ export default async function PlacePage({ params }: Props) {
   const statusLine = status === 'verified' || status === 'labelled' ? `Vérifiée par DALIL${updated ? ` le ${updated}` : ''}` : status === 'checking' ? 'Vérification DALIL en cours' : 'À vérifier · visite DALIL à venir'
   // Logo officiel (entreprises, organismes) : à côté du nom, jamais à la place d’une photo.
   const logo = p.logo && typeof p.logo === 'object' ? p.logo : null
-  const logoUrl = logo?.url ?? null // original : les tailles du média recadrent en 4:3, un logo doit rester entier
+  const logoUrl = logo?.sizes?.logo?.url ?? logo?.url ?? null
   const directions = pos ? `https://www.google.com/maps/dir/?api=1&destination=${pos[0]},${pos[1]}` : null
 
   return (
@@ -179,7 +179,7 @@ export default async function PlacePage({ params }: Props) {
               {p.category} · {latinCity(p.city)}
             </span>
             <div className="pl-head">
-              {logoUrl && <img className="pl-logo" src={logoUrl} alt={`Logo ${p.name}`} width={56} height={56} loading="lazy" />}
+              {logoUrl && <img className="pl-logo" src={logoUrl} alt="" width={56} height={56} />}
               <h1>{p.name}</h1>
             </div>
             {(p.nameAr || p.nameEn) && <p className="pl-alt">{[p.nameEn, p.nameAr].filter(Boolean).join(' · ')}</p>}

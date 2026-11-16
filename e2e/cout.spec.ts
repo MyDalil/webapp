@@ -29,7 +29,8 @@ for (const path of ['/', '/annuaire/sante-soins/hopitaux']) {
     expect(seen.rsc, 'aucun préchargement de lien').toBe(0)
     expect(seen.favoris, 'aucun appel de favoris').toBe(0)
     expect(seen.compte, 'une vérification de compte au plus').toBeLessThanOrEqual(1)
-    expect(seen.ours, 'requêtes vers DALIL').toBeLessThan(path === '/' ? 60 : 45)
-    expect(seen.total, 'requêtes de la page, services tiers compris').toBeLessThan(path === '/' ? 140 : 90)
+    // Seuils : mesure du 16/11/2026 (accueil 39, liste 33 vers DALIL) + 15 % environ ; total inchangé.
+    expect(seen.ours, 'requêtes vers DALIL').toBeLessThan(path === '/' ? 46 : 39)
+    expect(seen.total, 'requêtes de la page, services tiers compris').toBeLessThan(path === '/' ? 120 : 60)
   })
 }

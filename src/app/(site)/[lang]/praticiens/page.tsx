@@ -150,7 +150,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
                   </div>
                   <div className="praticien-body">
                     <Link href={`/adresses/${p.slug}`}>
-                      <h2>{p.name}</h2>
+                      <h3>{p.name}</h3>
                     </Link>
                     <p>{p.category}</p>
                     <p className="muted-line">{p.city}</p>
@@ -160,8 +160,8 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
                     </div>
                   </div>
                   <div className="praticien-next">
-                    <small>Rendez-vous en ligne</small>
-                    <b>Bientôt disponible</b>
+                    <small>Prise de contact</small>
+                    <b>Sur appel</b>
                     <Link className="button primary" href={`/adresses/${p.slug}`}>
                       Voir la fiche et appeler
                     </Link>

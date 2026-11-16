@@ -105,3 +105,9 @@
 - Demandes de Rad : bloc Sahara remis sur l’accueil ; repère sur la carte d’une fiche ; fiches d’exemple de retour en production (prestataires, annonces) ; médecins de l’annuaire au format de fiche riche sur `/praticiens` ; états vides qui invitent à s’inscrire.
 - Vérifié en local : check, build, 90 parcours (dont `membre`), repère présent sur une fiche (`.maplibregl-marker`). Fond de carte non vérifiable en local (tuiles bloquées) : à voir sur preview.
 - Production inchangée : `main` = `8daf941` (les prestataires d’exemple y sont encore masqués jusqu’à la prochaine promotion).
+
+## 2026-11-16 — Lot fiches et carte (branche `agent/fiches-et-carte`, PR #46)
+- Contenu : repère et caméra de la carte (`DirectoryMap`), bloc Sahara remis, fiches d’exemple de retour en production (sans avis ni missions affichés), médecins de l’annuaire au format de fiche (« Sur appel »), logo officiel (`Places.logo` + taille média `logo`, migrations `20261116_085202_place_logo` et `20261116_090342_media_logo_size`, ajouts seulement), contrôle de coût recentré.
+- Relu par Fable (advisor) ; ses 7 remarques traitées.
+- Local : check, 201 tests, build, 88 parcours dont le repère de carte ; 375 px et 1440 px sans débordement. Le parcours « service » d’un membre échoue en local seulement (créneaux déjà pris par des essais précédents sur la même base) ; il passe sur base neuve en CI.
+- Méthode de travail (Rad, 2026-11-16) : Opus exécute ; Fable donne son avis quand le lot le justifie, puis Opus applique.
