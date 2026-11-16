@@ -21,5 +21,11 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 ## 2026-11-15 — Page Santé : une seule liste
 - Décision (Rad) : la page `/praticiens` montre toujours les praticiens réservables en ligne, puis les médecins et établissements de l’annuaire (médecins d’abord). Plus de titre négatif « Pas encore de praticien ».
 - Décision (Rad) : chaque fiche « Médecins » de l’annuaire porte le lien « Vous êtes ce praticien ? Activez la prise de rendez-vous ».
-- Rappel : le praticien de démonstration n’existe jamais en production (migration `20261016_120000_demo_praticien`).
+- Rappel (remplacé le 2026-11-16, voir plus bas) : le praticien de démonstration n’existait pas en production.
 - Raison : jamais de vitrine vide ni de faux praticien ; chaque fiche sert à recruter le praticien.
+
+## 2026-11-16 — Praticien d’exemple en production, visio et agenda (décision de Rad)
+- **Décision (Rad)** : les premiers médecins qui visitent DALIL doivent trouver le praticien d’exemple avec tout le parcours : agenda, réservation, email, ajout à l’agenda, visio. On n’attend pas une première inscription. Remplace la règle du 2026-10-26 « jamais de faux praticien en production ».
+- **Garde-fous** : badge « Exemple » partout ; bandeau sur la fiche ; mention « Démonstration » dans les emails et l’agenda ; fiche exclue du plan du site et de Google (`noindex`) ; rendez-vous d’exemple effacés après l’heure prévue (tâche `rendez-vous-demo`). Migration `20261116_150000_demo_praticien_production`, ouvert 7 j/7 de 8 h à 20 h.
+- **Visio** : fournisseur Daily (navigateur, sans application). Salle par rendez-vous, nom aléatoire, 2 participants au plus, ouverte 15 min avant et fermée 30 min après, sans enregistrement. Salle d’exemple ouverte dès la réservation. Activation : `VIDEO_PROVIDER=daily` + `DAILY_API_KEY`.
+- **Agenda** : fichier `.ics` joint aux emails et téléchargeable (`/api/rdv/[id]/agenda`) ; abonnement du praticien par lien secret (`/api/agenda/[id]/[jeton].ics`, jeton HMAC sans stockage) pour Google, Apple, Outlook. Synchronisation dans les deux sens : plus tard (vérification Google requise).

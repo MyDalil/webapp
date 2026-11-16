@@ -163,3 +163,4 @@ body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer 
 .pl-head { display: flex; align-items: center; gap: 14px; }
 .pl-head h1 { margin: 0; }
 .pl-logo { flex: none; width: 56px; height: 56px; object-fit: contain; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.cal-connect { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; } .cal-connect .button { flex: 0 0 auto; }

@@ -61,6 +61,7 @@ import * as migration_20261115_120000_ecoles_par_niveau from './20261115_120000_
 import * as migration_20261115_150000_fourre_tout_ranges from './20261115_150000_fourre_tout_ranges';
 import * as migration_20261116_085202_place_logo from './20261116_085202_place_logo';
 import * as migration_20261116_090342_media_logo_size from './20261116_090342_media_logo_size';
+import * as migration_20261116_150000_demo_praticien_production from './20261116_150000_demo_praticien_production';
 
 export const migrations = [
   {
@@ -377,5 +378,10 @@ export const migrations = [
     up: migration_20261116_090342_media_logo_size.up,
     down: migration_20261116_090342_media_logo_size.down,
     name: '20261116_090342_media_logo_size'
+  },
+  {
+    up: migration_20261116_150000_demo_praticien_production.up,
+    down: migration_20261116_150000_demo_praticien_production.down,
+    name: '20261116_150000_demo_praticien_production',
   },
 ];

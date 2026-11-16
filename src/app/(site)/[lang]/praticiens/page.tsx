@@ -114,7 +114,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
                   <p>{p.specialties.map(specialtyLabel).join(' · ')}{p.specialties.some(isComplementary) ? ' (pratique complémentaire)' : ''}</p>
                   <p className="muted-line">{[p.address, p.city].filter(Boolean).join(', ')}</p>
                   <div className="praticien-tags">
-                    {p.demo && <span className="chip chip-plain">Démo</span>}
+                    {p.demo && <span className="chip chip-plain">Exemple</span>}
                     {p.verified && <span className="chip">Identité et diplôme vérifiés</span>}
                     {p.modes.includes('visio') && <span className="chip">Visio</span>}
                     {p.fee && <span className="chip chip-plain">{p.fee}</span>}
