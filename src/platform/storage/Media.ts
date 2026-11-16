@@ -37,6 +37,8 @@ export const Media: CollectionConfig = {
       { name: 'card', width: 800, height: 600, position: 'centre', formatOptions: webp(80) },
       { name: 'cover', width: 1600, height: 900, position: 'centre', formatOptions: webp(82) },
       { name: 'og', width: 1200, height: 630, position: 'centre', formatOptions: webp(82) },
+      // Logo officiel : contenu entier, jamais recadré, petit poids.
+      { name: 'logo', width: 160, height: 160, fit: 'inside', withoutEnlargement: true, formatOptions: webp(85) },
     ],
     adminThumbnail: 'thumb',
     focalPoint: true,

@@ -61,8 +61,9 @@ test.describe('Parcours d’un membre', () => {
     await member(page, `service-${info.project.name}`)
     await page.goto('/prestataires/exemple-bricolage')
     await page.locator('main button', { hasText: 'Petits travaux' }).first().click()
-    await page.locator('main button', { hasText: /^(lun|mar|mer|jeu)/ }).nth(info.project.name === 'mobile' ? 1 : 0).click()
-    await page.locator('main button', { hasText: /^\d\d:\d\d$/ }).nth(info.project.name === 'mobile' ? 3 : 0).click()
+    // Premier jour ouvert (les jours passés ou fermés sont désactivés selon la date du test).
+    await page.locator('main button.req-day:not([disabled])').nth(info.project.name === 'mobile' ? 1 : 0).click()
+    await page.locator('main button:not([disabled])', { hasText: /^\d\d:\d\d$/ }).nth(info.project.name === 'mobile' ? 3 : 0).click()
     await page.selectOption('main select[name=commune]', { index: 1 })
     await page.fill('main input[name=address]', '12 rue de test, bâtiment A')
     await page.fill('main textarea[name=details]', 'Pose de deux étagères. Demande de test des parcours automatiques.')

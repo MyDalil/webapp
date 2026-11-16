@@ -83,6 +83,14 @@ test.describe('Annuaire', () => {
     await expect(page.getByText(/à vérifier/i).first()).toBeVisible()
   })
 
+  test('fiche lieu : la carte porte le repère de l’adresse', async ({ page }) => {
+    await page.goto('/adresses/darna-said-hamdine')
+    const map = page.locator('.pl-map')
+    test.skip(!(await map.count()), 'fiche sans position')
+    await map.scrollIntoViewIfNeeded()
+    await expect(map.locator('.maplibregl-marker')).toHaveCount(1, { timeout: 15_000 })
+  })
+
   test('fiche lieu : modèle unique, sans débordement ni case « à confirmer »', async ({ page }) => {
     await page.goto('/adresses/darna-said-hamdine')
     await expect(page.locator('.pl-id h1')).toBeVisible()
@@ -206,7 +214,7 @@ test.describe('Aucune catégorie vide', () => {
 
   test('praticiens : sans résultat, des établissements de santé réels', async ({ page }) => {
     await page.goto('/praticiens?specialite=orthophonie&wilaya=16')
-    await expect(page.locator('.praticien-card, .praticiens-empty .place-panel a').first()).toBeVisible()
+    await expect(page.locator('.praticien-card').first()).toBeVisible()
   })
 })
 

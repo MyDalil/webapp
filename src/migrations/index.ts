@@ -55,10 +55,12 @@ import * as migration_20261114_150104_cockpit_mediatheque from './20261114_15010
 import * as migration_20261114_152745_cockpit_corbeille from './20261114_152745_cockpit_corbeille';
 import * as migration_20261114_154423_boite_unique from './20261114_154423_boite_unique';
 import * as migration_20261114_170000_recherches_sans_resultat from './20261114_170000_recherches_sans_resultat';
+import * as migration_20261114_230000_photos_lieux_publics from './20261114_230000_photos_lieux_publics';
 import * as migration_20261115_100000_villes_en_francais from './20261115_100000_villes_en_francais';
 import * as migration_20261115_120000_ecoles_par_niveau from './20261115_120000_ecoles_par_niveau';
 import * as migration_20261115_150000_fourre_tout_ranges from './20261115_150000_fourre_tout_ranges';
-import * as migration_20261114_230000_photos_lieux_publics from './20261114_230000_photos_lieux_publics';
+import * as migration_20261116_085202_place_logo from './20261116_085202_place_logo';
+import * as migration_20261116_090342_media_logo_size from './20261116_090342_media_logo_size';
 
 export const migrations = [
   {
@@ -339,12 +341,17 @@ export const migrations = [
   {
     up: migration_20261114_154423_boite_unique.up,
     down: migration_20261114_154423_boite_unique.down,
-    name: '20261114_154423_boite_unique'
+    name: '20261114_154423_boite_unique',
   },
   {
     up: migration_20261114_170000_recherches_sans_resultat.up,
     down: migration_20261114_170000_recherches_sans_resultat.down,
     name: '20261114_170000_recherches_sans_resultat',
+  },
+  {
+    up: migration_20261114_230000_photos_lieux_publics.up,
+    down: migration_20261114_230000_photos_lieux_publics.down,
+    name: '20261114_230000_photos_lieux_publics',
   },
   {
     up: migration_20261115_100000_villes_en_francais.up,
@@ -362,8 +369,13 @@ export const migrations = [
     name: '20261115_150000_fourre_tout_ranges',
   },
   {
-    up: migration_20261114_230000_photos_lieux_publics.up,
-    down: migration_20261114_230000_photos_lieux_publics.down,
-    name: '20261114_230000_photos_lieux_publics',
+    up: migration_20261116_085202_place_logo.up,
+    down: migration_20261116_085202_place_logo.down,
+    name: '20261116_085202_place_logo',
+  },
+  {
+    up: migration_20261116_090342_media_logo_size.up,
+    down: migration_20261116_090342_media_logo_size.down,
+    name: '20261116_090342_media_logo_size'
   },
 ];

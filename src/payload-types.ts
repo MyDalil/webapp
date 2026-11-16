@@ -257,6 +257,10 @@ export interface Place {
    */
   intro?: string | null;
   /**
+   * Entreprises et organismes seulement. Logo fourni par l’établissement ou repris de son site officiel. Affiché à côté du nom, jamais à la place d’une photo du lieu.
+   */
+  logo?: (number | null) | Media;
+  /**
    * La première sert de couverture.
    */
   photos?: (number | Media)[] | null;
@@ -529,6 +533,14 @@ export interface Media {
       filename?: string | null;
     };
     og?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    logo?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -2522,6 +2534,7 @@ export interface PlacesSelect<T extends boolean = true> {
   sector?: T;
   category?: T;
   intro?: T;
+  logo?: T;
   photos?: T;
   externalPhotos?:
     | T
@@ -3157,6 +3170,16 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
         og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        logo?:
           | T
           | {
               url?: T;

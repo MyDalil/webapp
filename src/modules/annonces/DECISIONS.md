@@ -23,3 +23,6 @@
 ## 2026-11-15 — Plus d’annonce d’exemple en production (décision de Rad)
 - **Décision** : en production, les annonces `example` ne sont plus listées. Hors production, elles restent pour tester. Une catégorie sans annonce invite à publier la première.
 - **Raison** : un guide de confiance ne montre pas de fausse annonce.
+
+## 2026-11-15 (soir) — Les fiches d’exemple reviennent en production (décision de Rad)
+- **Décision** : le masquage des exemples en production, décidé le matin, est annulé. Rad veut les fiches d’exemple complètes : une page reste belle et donne envie de s’inscrire même sans inscrit. Les règles du 2026-10-26 s’appliquent de nouveau (badge « Exemple », demandes refusées en production, hors compteurs).

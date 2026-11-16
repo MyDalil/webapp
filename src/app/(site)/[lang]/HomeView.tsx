@@ -148,7 +148,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
 
   return (
     <div className="xp" lang={lang} dir={lang === 'ar' ? 'rtl' : undefined}>
-      {/* Accueil court (Rad, 2026-11-15) : recherche, rubriques, annonces, découvrir, professionnels, newsletter. Le reste vit dans les pages de rubrique. */}
+      {/* Accueil court (Rad, 2026-11-15) : recherche, rubriques, annonces, découvrir, destination (Sahara), professionnels, newsletter. Le reste vit dans les pages de rubrique. */}
       <section className="xp-hero">
         <Slideshow slides={slides} />
         <div className="xp-hero-shade" />
@@ -292,6 +292,28 @@ export async function HomeView({ lang }: { lang: Lang }) {
           ))}
         </Carousel>
       </section>
+
+      {destination && (
+        <section className="xp-parallax" aria-label={destination.place.name}>
+          <div
+            className="xp-parallax-img"
+            data-parallax="0.18"
+            style={{ backgroundImage: `url(${destination.place.cover})` }}
+          />
+          <div className="xp-parallax-shade" />
+          <div className="container xp-parallax-content" data-reveal>
+            <p className="eyebrow inverse">{dest!.eyebrow}</p>
+            <h2>{dest!.title}</h2>
+            <p>{dest!.text}</p>
+            <Link className="button light" href={`/adresses/${destination.place.slug}`}>
+              {dest!.cta}
+            </Link>
+          </div>
+          {destination.place.credit && (
+            <small className="xp-credit">{destination.place.credit}</small>
+          )}
+        </section>
+      )}
 
       <ParallaxBand photo={PHOTOS['ghardaia-marche'].src} credit={PHOTOS['ghardaia-marche'].credit} eyebrow={T.proEyebrow} title={T.proTitle} text={T.proText}>
         <div className="xp-actions">

@@ -125,14 +125,38 @@ function addLayers(m: MLMap, data: GeoJSON.FeatureCollection) {
   })
 }
 
+/** Caméra pour une liste d’adresses : une seule → centrée dessus ; plusieurs → toutes visibles ; aucune → l’Algérie. */
+function camera(list: Pin[], zoom?: number): { center: [number, number]; zoom: number } | { bounds: maplibregl.LngLatBoundsLike; fitBoundsOptions: maplibregl.FitBoundsOptions } {
+  const located = list.filter((p) => p.pos)
+  if (located.length === 1) return { center: [located[0].pos![1], located[0].pos![0]], zoom: zoom ?? (located[0].exact ? 15 : 11) }
+  if (located.length > 1) {
+    const b = new maplibregl.LngLatBounds()
+    for (const p of located) b.extend([p.pos![1], p.pos![0]])
+    // Liste locale (une wilaya, une ville) : cadrée sur ses adresses. Liste nationale : vue de l’Algérie, moins de tuiles et de libellés à charger.
+    const wide = b.getEast() - b.getWest() > 6 || b.getNorth() - b.getSouth() > 4
+    if (!wide) return { bounds: b, fitBoundsOptions: { padding: 48, maxZoom: 12, duration: 0 } }
+  }
+  return { bounds: ALGERIA, fitBoundsOptions: { padding: 24, duration: 0 } }
+}
+
 export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number }) {
   const box = useRef<HTMLDivElement>(null)
   const map = useRef<MLMap | null>(null)
   const data = useRef<GeoJSON.FeatureCollection>(toGeoJSON(places))
+  const marker = useRef<maplibregl.Marker | null>(null)
+  const mounted = useRef(false)
+  /** Repère d’une adresse seule (vert plein : position exacte ; vert clair : approximative). Ne bouge jamais la caméra. */
+  const pin = (m: MLMap, list: Pin[]) => {
+    marker.current?.remove()
+    marker.current = null
+    const one = list.length === 1 && list[0].pos ? list[0] : null
+    if (one) marker.current = new maplibregl.Marker({ color: one.exact ? GREEN : '#7fb89a' }).setLngLat([one.pos![1], one.pos![0]]).addTo(m)
+  }
 
   useEffect(() => {
     if (!box.current || map.current) return
-    const m = new maplibregl.Map({ container: box.current, style: styleUrl(), bounds: ALGERIA, fitBoundsOptions: { padding: 24 }, scrollZoom: false, touchZoomRotate: true, dragRotate: false, touchPitch: false, attributionControl: { compact: true } })
+    // Caméra posée dès la création, à partir des adresses : un seul jeu de tuiles, aucun recadrage au chargement.
+    const m = new maplibregl.Map({ container: box.current, style: styleUrl(), ...camera(places, zoom), scrollZoom: false, touchZoomRotate: true, dragRotate: false, touchPitch: false, attributionControl: { compact: true } })
     m.touchZoomRotate.disableRotation()
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
     let lang = initialLang()
@@ -174,6 +198,7 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
       m.on('mouseleave', id, () => (m.getCanvas().style.cursor = ''))
     }
     map.current = m
+    pin(m, places)
     // Le cadre peut changer de taille (carte ouverte sur mobile, rotation) : la carte suit.
     const ro = new ResizeObserver(() => m.resize())
     ro.observe(box.current)
@@ -182,24 +207,24 @@ export function DirectoryMap({ places, zoom }: { places: Pin[]; zoom?: number })
       m.remove()
       map.current = null
     }
+    // Création unique : la caméra initiale vient du premier rendu ; les rendus suivants passent par l’effet ci-dessous.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     const m = map.current
     data.current = toGeoJSON(places)
-    if (!m) return
-    const apply = () => {
-      ;(m.getSource('places') as GeoJSONSource | undefined)?.setData(data.current)
-      const located = places.filter((p) => p.pos)
-      if (located.length === 1) m.jumpTo({ center: [located[0].pos![1], located[0].pos![0]], zoom: zoom ?? (located[0].exact ? 15 : 11) })
-      else if (located.length > 1) {
-        const b = new maplibregl.LngLatBounds()
-        for (const p of located) b.extend([p.pos![1], p.pos![0]])
-        m.fitBounds(b, { padding: 48, maxZoom: 12, duration: 0 })
-      } else m.fitBounds(ALGERIA, { duration: 0 })
+    // Premier rendu : la caméra et le repère sont déjà posés à la création.
+    if (!mounted.current) {
+      mounted.current = true
+      return
     }
-    if (m.isStyleLoaded() && m.getSource('places')) apply()
-    else m.once('idle', apply)
+    if (!m) return
+    ;(m.getSource('places') as GeoJSONSource | undefined)?.setData(data.current)
+    const c = camera(places, zoom)
+    if ('center' in c) m.jumpTo(c)
+    else m.fitBounds(c.bounds, c.fitBoundsOptions)
+    pin(m, places)
   }, [places, zoom])
 
   return <div ref={box} className="leaflet-box" />
