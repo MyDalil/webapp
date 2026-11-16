@@ -1,5 +1,15 @@
 # Reprise — 12 novembre 2026
 
+## Mise à jour — 15 novembre 2026 : domaines et arborescence
+
+- Branche `agent/domaines-arborescence`, créée depuis `preview`.
+- Origine canonique unique : `https://www.mydalil.com`. Le domaine racine et l'alias technique principal redirigent en 308 vers `www` ; `preview.mydalil.com` reste protégé et non indexable.
+- L'ancien prototype est passé en accès propriétaire uniquement ; son ancienne adresse technique renvoie désormais 401.
+- Toutes les pages App Router sont classées dans `src/platform/siteRoutes.ts` ; le test de registre couvre 46 routes dédiées et les exclusions robots/sitemap.
+- Alias de connexion et de compte normalisés dans `src/platform/routes.ts`, avec variantes françaises, anglaises et arabes.
+- Vérifié localement : `pnpm check` réussi ; 222 tests unitaires réussis. La compilation Next.js et TypeScript réussit avec un secret local, puis le build s'arrête seulement faute de PostgreSQL local sur `localhost:5432`.
+- Livraison : PR vers `preview`, puis build et parcours déployés à vérifier avant toute promotion vers `main`.
+
 ## Mise à jour — 14 novembre 2026 (soir) : écoles et photos des lieux publics
 
 - PR #31 `agent/guides-annuaire-ecoles` → `preview` : les guides liés à une rubrique de l’annuaire montrent ses catégories non vides et 6 adresses. Cause corrigée : « École & famille » (Vie pratique) ne menait à aucune école. `pnpm check` OK ; build/e2e laissés à la CI.
@@ -94,3 +104,20 @@
 - Constat : aucun test automatique ne couvre réservation, dépôt d’annonce, demande de service, inscription d’un pro. À écrire, avec un membre de test.
 - Constat : en production, `/services/*` montre des prestataires « Exemple — … ». Décision de Rad attendue.
 - Production inchangée : `main` = `0bb38c2`.
+
+## 2026-11-15 — Production `8daf941`, puis accueil court (branche `agent/accueil-court`)
+- Production : `main` = `8daf941` (13 h 27 UTC), vérifiée sur www.mydalil.com : rubriques rangées, Santé en liste unique, fourre-tout rangés, 471 institutions importées, photos libres, plus de prestataire d’exemple.
+- Sur cette branche, pour `preview` seulement : accueil en six blocs (10 400 → 5 658 px à 1440 px) ; diaporama sans lieu de santé ; annonces d’exemple masquées en production ; remplacement annuaire pour déménagement et cours ; `e2e/membre.spec.ts` couvre rendez-vous, dépôt d’annonce, demande de service, fiche de prestataire (8 réussis en local).
+- Blocs retirés de l’accueil : Santé, À domicile, Vie musulmane, destination en parallaxe, Papiers, Repères, Installation. Code mort laissé dans `HomeView.tsx` (variables `musulmane`, `dest`) : à nettoyer si Rad valide.
+- Reste : promotion vers `main` après accord de Rad ; relecture une à une des photos libres ; ménage et aide à domicile sans professionnel à montrer.
+
+## 2026-11-15 (soir) — Fiches et carte (branche `agent/fiches-et-carte`)
+- Demandes de Rad : bloc Sahara remis sur l’accueil ; repère sur la carte d’une fiche ; fiches d’exemple de retour en production (prestataires, annonces) ; médecins de l’annuaire au format de fiche riche sur `/praticiens` ; états vides qui invitent à s’inscrire.
+- Vérifié en local : check, build, 90 parcours (dont `membre`), repère présent sur une fiche (`.maplibregl-marker`). Fond de carte non vérifiable en local (tuiles bloquées) : à voir sur preview.
+- Production inchangée : `main` = `8daf941` (les prestataires d’exemple y sont encore masqués jusqu’à la prochaine promotion).
+
+## 2026-11-16 — Lot fiches et carte (branche `agent/fiches-et-carte`, PR #46)
+- Contenu : repère et caméra de la carte (`DirectoryMap`), bloc Sahara remis, fiches d’exemple de retour en production (sans avis ni missions affichés), médecins de l’annuaire au format de fiche (« Sur appel »), logo officiel (`Places.logo` + taille média `logo`, migrations `20261116_085202_place_logo` et `20261116_090342_media_logo_size`, ajouts seulement), contrôle de coût recentré.
+- Relu par Fable (advisor) ; ses 7 remarques traitées.
+- Local : check, 201 tests, build, 88 parcours dont le repère de carte ; 375 px et 1440 px sans débordement. Le parcours « service » d’un membre échoue en local seulement (créneaux déjà pris par des essais précédents sur la même base) ; il passe sur base neuve en CI.
+- Méthode de travail (Rad, 2026-11-16) : Opus exécute ; Fable donne son avis quand le lot le justifie, puis Opus applique.

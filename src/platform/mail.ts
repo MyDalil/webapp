@@ -1,11 +1,11 @@
 import { Resend } from 'resend'
+import { SITE } from './site'
+
+export { SITE } from './site'
 
 /** Adresse d’envoi et de réponse de DALIL (domaine vérifié chez Resend ; salam@ est redirigée vers la boîte de l’équipe). */
 export const FROM = 'DALIL <salam@mydalil.com>'
 export const TEAM = process.env.DALIL_TEAM_EMAIL || 'salam@mydalil.com'
-/** Les liens des emails pointent vers l’environnement qui les envoie (preview → preview.mydalil.com). */
-export const SITE = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_ENV === 'preview' ? 'https://preview.mydalil.com' : 'https://www.mydalil.com')
-
 const client = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export const esc = (s: unknown) =>

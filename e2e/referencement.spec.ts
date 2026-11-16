@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 const locs = (xml: string) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
-const PRIVATE = /\/(admin|api|mon-compte|espace|espace-pro|missions|connexion|onboarding|recherche|newsletter)(\/|$)|\/annonces\/(deposer|messagerie)/
+const PRIVATE = /\/(admin|api|mon-compte|espace|espace-pro|missions|connexion|onboarding|recherche|newsletter|login|signin|inscription|signup|mot-de-passe-oublie|compte)(\/|$)|\/annonces\/(deposer|messagerie)|\/professionnels\/espace/
 
 test.describe('Référencement', () => {
   test.beforeEach(() => test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit'))
@@ -43,5 +43,24 @@ test.describe('Référencement', () => {
 
   test('fichier de plan inconnu : 404', async ({ request }) => {
     expect((await request.get('/sitemaps/inconnu.xml')).status()).toBe(404)
+  })
+
+  test('les alias de compte redirigent vers une seule arborescence', async ({ request }) => {
+    for (const [source, destination] of [
+      ['/login', '/connexion'],
+      ['/inscription', '/connexion/particulier?tab=signup'],
+      ['/mot-de-passe-oublie', '/connexion'],
+      ['/compte', '/mon-compte'],
+      ['/professionnels/espace', '/espace-pro'],
+      ['/en/login', '/en/connexion'],
+      ['/ar/inscription', '/ar/connexion/particulier?tab=signup'],
+    ]) {
+      const res = await request.get(source, { maxRedirects: 0 })
+      expect(res.status(), source).toBe(308)
+      const location = new URL(res.headers().location, 'https://www.mydalil.com')
+      const expected = new URL(destination, 'https://www.mydalil.com')
+      expect(location.pathname, source).toBe(expected.pathname)
+      expect(location.search, source).toBe(expected.search)
+    }
   })
 })

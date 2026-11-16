@@ -65,6 +65,9 @@ export default async function PlacePage({ params }: Props) {
     p.facebook && { label: 'Facebook', href: social(p.facebook, 'https://facebook.com/'), kind: 'Facebook' },
   ].filter(Boolean) as { label: string; href: string; kind: string }[]
   const statusLine = status === 'verified' || status === 'labelled' ? `Vérifiée par DALIL${updated ? ` le ${updated}` : ''}` : status === 'checking' ? 'Vérification DALIL en cours' : 'À vérifier · visite DALIL à venir'
+  // Logo officiel (entreprises, organismes) : à côté du nom, jamais à la place d’une photo.
+  const logo = p.logo && typeof p.logo === 'object' ? p.logo : null
+  const logoUrl = logo?.sizes?.logo?.url ?? logo?.url ?? null
   const directions = pos ? `https://www.google.com/maps/dir/?api=1&destination=${pos[0]},${pos[1]}` : null
 
   return (
@@ -175,7 +178,10 @@ export default async function PlacePage({ params }: Props) {
             <span className="pl-tag">
               {p.category} · {latinCity(p.city)}
             </span>
-            <h1>{p.name}</h1>
+            <div className="pl-head">
+              {logoUrl && <img className="pl-logo" src={logoUrl} alt="" width={56} height={56} />}
+              <h1>{p.name}</h1>
+            </div>
             {(p.nameAr || p.nameEn) && <p className="pl-alt">{[p.nameEn, p.nameAr].filter(Boolean).join(' · ')}</p>}
             {(status === 'verified' || status === 'labelled') && <p className={`pl-status is-${status}`}>{statusLine}</p>}
             <div className="pl-actions">

@@ -40,14 +40,14 @@ function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
           <h2>{p.name}</h2>
         </Link>
         <p className="provider-rating">
-          {p.rating ? (
+          {p.rating && !p.demo ? (
             <>
               <b>{stars(p.rating)}</b> · {p.reviews} avis vérifié{p.reviews > 1 ? 's' : ''}
             </>
           ) : (
             'Nouveau sur DALIL'
           )}
-          {p.missionsDone ? ` · ${p.missionsDone} mission${p.missionsDone > 1 ? 's' : ''}` : ''}
+          {p.missionsDone && !p.demo ? ` · ${p.missionsDone} mission${p.missionsDone > 1 ? 's' : ''}` : ''}
         </p>
         <ul className="provider-offers">
           {offers.map((o) => (
@@ -82,8 +82,12 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
   const [results, counts] = await Promise.all([searchProviders({ category: cat, activity: q.activite, wilaya: q.wilaya, commune: q.commune, gender: q.genre, language: q.langue }), categoryCounts()])
   const current = CATEGORIES.find((c) => c.value === cat)
   // Sans prestataire inscrit : les professionnels de l’annuaire du même métier, quand il y en a (jamais de page vide ni de faux prestataire).
-  const fallbackSector: Record<string, string> = { bricolage: 'maison-travaux' }
-  const nearby: PlaceCard[] = !results.length && cat && fallbackSector[cat] ? (await searchPlaces({ sector: fallbackSector[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
+  const fallback: Record<string, { sector: string; category?: string }> = {
+    bricolage: { sector: 'maison-travaux' },
+    demenagement: { sector: 'transports-mobilite', category: 'Transporteurs' },
+    'cours-particuliers': { sector: 'education-formation', category: 'Écoles de langues' },
+  }
+  const nearby: PlaceCard[] = !results.some((r) => !r.demo) && cat && fallback[cat] ? (await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
   const communes = q.wilaya ? communesOf(q.wilaya) : []
   const action = fixedCategory ? `/services/${fixedCategory}` : '/services'
   return (
@@ -209,13 +213,14 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
               <Card key={p.slug} p={p} activity={q.activite} />
             ))}
           </ul>
-        ) : (
+        ) : null}
+        {(!results.some((r) => !r.demo) || nearby.length > 0) && (
           <div className="praticiens-empty">
-            <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Les premiers prestataires arrivent.'}</h2>
-            <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Les prestataires rejoignent DALIL après contrôle de leur identité. Revenez bientôt.'}</p>
+            <h2>{nearby.length ? 'Professionnels de l’annuaire' : 'Soyez le premier prestataire de cette catégorie.'}</h2>
+            <p>{nearby.length ? 'Appelez directement. La demande en ligne s’ajoute dès qu’un prestataire rejoint DALIL.' : 'Votre fiche, vos prestations et vos disponibilités, visibles dans toute votre wilaya. L’inscription est gratuite.'}</p>
             {!!nearby.length && <PlacePanel places={nearby} />}
-            <Link className="button outline" href="/espace-pro?espace=services">
-              Vous êtes prestataire ? Rejoindre DALIL
+            <Link className="button primary" href="/espace-pro?espace=services">
+              Créer ma fiche de prestataire
             </Link>
           </div>
         )}

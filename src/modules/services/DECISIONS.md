@@ -26,3 +26,6 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - **Décision** : en production, les fiches `demo` ne sont plus listées. Remplace « Aucune catégorie vide » du 2026-10-26 pour la production ; hors production, l’exemple reste pour tester.
 - **À la place** : les professionnels de l’annuaire du même métier quand il y en a (bricolage → Maison & travaux), sinon un message d’attente et le lien d’inscription.
 - **Raison** : un guide de confiance ne montre pas de faux prestataire.
+
+## 2026-11-15 (soir) — Les fiches d’exemple reviennent en production (décision de Rad)
+- **Décision** : le masquage des exemples en production, décidé le matin, est annulé. Rad veut les fiches d’exemple complètes : une page reste belle et donne envie de s’inscrire même sans inscrit. Les règles du 2026-10-26 s’appliquent de nouveau (badge « Exemple », demandes refusées en production, hors compteurs).
