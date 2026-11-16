@@ -6,6 +6,7 @@ import { toast } from '@/platform/shell/toast'
 import { preferredLang, startDictation, type Dictation, type DictationLang } from '@/platform/ui/speech'
 import type { Intent } from '../intent'
 import { useWilaya } from '@/platform/shell/wilaya'
+import { Icon } from '@/platform/ui/Icon'
 import { useLang, usePath } from '@/platform/ui/lang'
 
 const ASSIST = {
@@ -222,7 +223,7 @@ export function Assistant() {
   return (
     <div className={`assistant-dock ${expanded ? 'expanded' : ''} ${compact || (tucked && !expanded && !text && !panel) ? 'is-compact' : ''}`}>
       <button className="assistant-orb" type="button" aria-label={A.open} onClick={openOrb}>
-        <span aria-hidden="true">✦</span>
+        <Icon name="chat" />
       </button>
       <form className={`assistant-bar is-chat${listening ? ' is-listening' : ''}${text.trim() ? ' has-text' : ''}`} onSubmit={submit}>
         {panel && turns.length > 0 && (

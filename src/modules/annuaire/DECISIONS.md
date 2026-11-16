@@ -98,3 +98,11 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Carte : la caméra est calculée avant la création de la carte (adresse seule → centrée ; plusieurs → toutes visibles). Plus de recadrage au chargement : un seul jeu de tuiles, et le visiteur qui déplace la carte n’est plus ramené en arrière. Le repère est posé à part, sans bouger la caméra.
 - Contrôle de coût (`e2e/cout.spec.ts`) : compte à part les requêtes vers DALIL (ce que Vercel et Neon facturent), seuils = mesure du 16/11 + 15 % ; le total, tuiles et photos tierces comprises, garde ses seuils d’origine (120 / 60).
 - Méthode : lot relu par Fable avant le passage sur preview (défauts relevés : recadrages multiples de la carte, faux avis sur les fiches d’exemple, « Bientôt disponible » sans source).
+
+## 2026-11-16 — Fond de carte gris : worker MapLibre introuvable
+- Constat : sur preview et en production, fond de carte gris. Console : « Worker failed to load », le serveur renvoie du HTML.
+- Cause : MapLibre 6 cherche `maplibre-gl-worker.mjs` à côté de son fichier. Next le regroupe dans un chunk : le worker n'y est pas.
+- Décision : `scripts/copy-map-worker.mjs` copie le worker dans `public/` au début de `build` et `dev` ; `DirectoryMap` appelle `setWorkerUrl`. Fichier copié ignoré par git.
+- Garde-fou : le test « la carte porte le repère » exige le worker en 200, type JavaScript, sans erreur console.
+- À ne pas refaire : un repère visible ne prouve pas que la carte se dessine. Vérifier aussi le fond.
+- 2026-11-16 (Rad) : un clic sur le repère d'une fiche ouvre l'itinéraire, comme le bouton « Itinéraire ». Une seule fonction `directionsUrl` pour les deux. Testé dans le même parcours.

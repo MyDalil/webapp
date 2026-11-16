@@ -1,4 +1,6 @@
 import Link from '@/platform/ui/Link'
+import { Visual } from '@/platform/ui/Visual'
+import { categoryPhoto } from '../listings'
 import { SaveButton } from '@/modules/membres/ui'
 import { Icon } from '@/platform/ui/Icon'
 
@@ -72,5 +74,38 @@ export function PlacePanel({ places, more }: { places: PlaceRowData[]; more?: { 
         </Link>
       )}
     </div>
+  )
+}
+
+/**
+ * Adresses en cartes photo (guides, rubriques) : même carte que les guides voisins ; carrousel sur mobile.
+ * Sans photo du lieu, la photo de sa catégorie ; à défaut, le pictogramme de la rubrique. Jamais de case vide.
+ */
+export function PlaceCards({ places }: { places: PlaceRowData[] }) {
+  return (
+    <ul className="dm-cards place-cards swipe">
+      {places.map((p) => {
+        const src = placeholderOf(p.photo) ? categoryPhoto(p.category)?.src : p.photo
+        const [icon] = SECTOR_VISUAL[p.sector ?? ''] ?? ['pin']
+        return (
+          <li key={p.slug} className="dm-card">
+            <Link href={`/adresses/${p.slug}`} className="dm-card-main">
+              <span className="dm-card-media">
+                <Visual src={src ?? undefined} icon={icon} tone="vert" />
+                <span className="place-badge" aria-hidden="true">
+                  <Icon name={icon} />
+                </span>
+              </span>
+              <span className="dm-card-text">
+                <b>{p.name}</b>
+                <small>
+                  {p.category} · {p.city}
+                </small>
+              </span>
+            </Link>
+          </li>
+        )
+      })}
+    </ul>
   )
 }

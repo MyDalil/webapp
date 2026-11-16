@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
-import { categoryPhoto, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
+import { categoryPhoto, directionsUrl, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
@@ -68,7 +68,7 @@ export default async function PlacePage({ params }: Props) {
   // Logo officiel (entreprises, organismes) : à côté du nom, jamais à la place d’une photo.
   const logo = p.logo && typeof p.logo === 'object' ? p.logo : null
   const logoUrl = logo?.sizes?.logo?.url ?? logo?.url ?? null
-  const directions = pos ? `https://www.google.com/maps/dir/?api=1&destination=${pos[0]},${pos[1]}` : null
+  const directions = pos ? directionsUrl(pos) : null
 
   return (
     <div className="pl">

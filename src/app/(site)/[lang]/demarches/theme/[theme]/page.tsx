@@ -4,6 +4,7 @@ import Link from '@/platform/ui/Link'
 import { DEMARCHES, THEMES, listProcedures, themeByKey, topicsOf } from '@/modules/contenus'
 import { ThemeBrowser, type BrowserItem } from '@/modules/contenus/ui'
 import { XpHero } from '@/platform/ui/Xp'
+import { Icon } from '@/platform/ui/Icon'
 import { PHOTOS } from '@/platform/referentiel/photos'
 
 type Props = { params: Promise<{ theme: string }> }
@@ -39,7 +40,7 @@ export default async function ThemePage({ params }: Props) {
               {featured.map((d) => (
                 <li key={d.slug}>
                   <Link href={`/demarches/${d.slug}`} className="sr-row is-wrap">
-                    <span className="sr-icon" aria-hidden="true">★</span>
+                    <span className="sr-icon" aria-hidden="true"><Icon name="file" /></span>
                     <span className="sr-text">
                       <b>{d.title}</b>
                       <small>{d.summary}</small>
