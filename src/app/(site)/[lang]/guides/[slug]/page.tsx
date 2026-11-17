@@ -44,14 +44,10 @@ export default async function GuidePage({ params }: Props) {
   const categories = linked.flatMap((s) => s.categories.filter((c) => (counts?.category[c] ?? 0) > 0).map((c) => ({ sector: s, category: c, n: counts!.category[c] })))
   const main = linked.find((s) => (counts?.sector[s.slug] ?? 0) > 0)
   const top = main ? await searchPlaces({ sector: main.slug }, 6) : null
-  // Date de consultation commune à toutes les sources : affichée une seule fois, en tête.
-  const dates = [...new Set(g.sources.map((x) => x.date).filter(Boolean))]
-  const sourceDate = dates.length === 1 && g.sources.every((x) => x.date) ? dates[0]! : null
   const counted = categories.reduce((t, c) => t + (NO_COUNT.has(c.sector.slug) ? 0 : c.n), 0)
   const tabs = [
     { id: 'etapes', label: 'Étapes', n: g.steps.length },
     ...(categories.length ? [{ id: 'adresses', label: 'Adresses', n: categories.length }] : []),
-    ...(g.sources.length ? [{ id: 'sources', label: 'Sources', n: g.sources.length }] : []),
   ]
   return (
     <article className="xp g-page">
@@ -96,35 +92,6 @@ export default async function GuidePage({ params }: Props) {
               <PlaceCards places={top.places} />
             </>
           )}
-        </section>
-      )}
-      {g.sources.length > 0 && (
-        <section className="sr-group" id="sources" aria-label="Sources et interlocuteurs">
-          <div className="g-head">
-            <h2>Sources officielles</h2>
-            {sourceDate && <small>Consultées le {dateFr(sourceDate)}</small>}
-          </div>
-          <ul className="sr-list g-sources swipe">
-            {g.sources.map((s) => (
-              <li key={s.url}>
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="sr-row is-wrap">
-                  <span className="sr-icon" aria-hidden="true">
-                    <Icon name="check" />
-                  </span>
-                  <span className="sr-text">
-                    <b>{s.title}</b>
-                    <small>
-                      {s.publisher}
-                      {s.date && s.date !== sourceDate ? ` · consulté le ${dateFr(s.date)}` : ''}
-                    </small>
-                  </span>
-                  <span />
-                  <span className="sr-chev" aria-hidden="true">›</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p className="sr-note">Ces références éclairent le sujet ; elles ne certifient aucun établissement recommandé par DALIL.</p>
         </section>
       )}
       <div className="g-cta">

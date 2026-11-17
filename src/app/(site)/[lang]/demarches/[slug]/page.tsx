@@ -158,25 +158,6 @@ export default async function DemarchePage({ params }: Props) {
 
       {pack && <Why />}
 
-      <section className="sr-group" aria-label="Sources">
-        <h2>
-          Sources <small>· relevées le {dateFr(d.checked)}</small>
-        </h2>
-        <ol className="ac-sources">
-          {d.sources.map((s, i) => (
-            <li key={s.id} id={`source-${i + 1}`}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
-                {s.title}
-              </a>{' '}
-              — {s.publisher}
-              {s.date ? `, ${dateFr(s.date)}` : ''} · {s.official ? 'source officielle' : 'presse, à recouper avec le Journal officiel'}
-            </li>
-          ))}
-        </ol>
-        <p className="sr-note">
-          Une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.
-        </p>
-      </section>
       </div>
     </article>
   )
