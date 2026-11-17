@@ -294,20 +294,15 @@ test('démarches : catégories, démarches phares et deux options (hors producti
   await expect(page.locator('.ac-stepper output')).toHaveText('2')
 })
 
-test('démarche CCR : guide gratuit sourcé, accompagnement seulement s’il est ouvert', async ({ page }) => {
+test('démarche CCR : guide gratuit sourcé, sans les options 1 et 2', async ({ page }) => {
   const errors = watchErrors(page)
   await page.goto('/demarches/ccr')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Certificat de changement de résidence')
   await expect(page.getByText(/Dernière vérification/)).toBeVisible()
   await expect(page.getByText(/3 ans sans interruption/).first()).toBeVisible()
   await expect(page.locator('#source-1')).toBeVisible()
-  // L’offre payante est cachée en production avant le lancement ; ailleurs, elle s’affiche avec la transparence.
-  // Offre visible (hors production) : transparence et bouton payant « À venir » tant qu’elle n’est pas ouverte.
-  const offer = page.getByRole('button', { name: /Pack Accompagnement Premium/ })
-  if (await offer.count()) {
-    await expect(page.getByText(/portail d’information indépendant/)).toBeVisible()
-    await expect(offer.first()).toContainText('À venir')
-  }
+  // Rad, 2026-11-17 : les options « Guide autonome » / « Pack Sérénité » ne s’affichent plus sur les pages de contenu.
+  await expect(page.locator('.ac-choice')).toHaveCount(0)
   expect(errors).toEqual([])
 })
 

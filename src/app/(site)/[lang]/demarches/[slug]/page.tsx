@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { DEMARCHES, demarcheBySlug, procedureBySlug, type Demarche, type GuideFact } from '@/modules/contenus'
 import { OfficialProcedure } from '@/modules/contenus/ui'
 import { offerState, packForGuide } from '@/modules/accompagnement'
-import { Choice, SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
+import { SoonButton, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
 import { XpHero } from '@/platform/ui/Xp'
 
@@ -103,13 +103,6 @@ export default async function DemarchePage({ params }: Props) {
             <SoonButton label="Réserver" />
           )}
         </div>
-      )}
-
-      {pack && (
-        <>
-          <Transparency />
-          <Choice pack={pack} freeHref="#guide" outline={d.outline} open={open} />
-        </>
       )}
 
       <div id="guide" className="dm-guide">

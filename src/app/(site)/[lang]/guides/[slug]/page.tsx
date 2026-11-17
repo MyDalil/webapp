@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
 import { GUIDE_VISUALS, guideView } from '@/modules/contenus'
-import { offerState, packForGuide } from '@/modules/accompagnement'
-import { Choice, Transparency } from '@/modules/accompagnement/ui'
 import { FavoriteButton } from '@/modules/membres/ui'
 import { getPlaceCounts, searchPlaces } from '@/modules/annuaire'
 import { CategoryGrid, PlaceCards } from '@/modules/annuaire/ui'
@@ -39,8 +37,6 @@ export default async function GuidePage({ params }: Props) {
   const g = await guideView(slug)
   if (!g) notFound()
   const v = GUIDE_VISUALS[slug] ?? { icon: 'file', tone: 'vert' as const }
-  const pack = await packForGuide(`/guides/${slug}`)
-  const open = (await offerState()).mode === 'ouvert'
   const others = GUIDES.filter((x) => x.slug !== slug && x.category === GUIDES.find((y) => y.slug === slug)?.category).slice(0, 6)
   // Annuaire lié au guide (ex. « École et vie de famille » → Éducation & Formation) : catégories non vides, puis les adresses les mieux classées.
   const linked = SECTORS.filter((s) => s.guides.includes(slug))
@@ -55,7 +51,6 @@ export default async function GuidePage({ params }: Props) {
   const tabs = [
     { id: 'etapes', label: 'Étapes', n: g.steps.length },
     ...(categories.length ? [{ id: 'adresses', label: 'Adresses', n: categories.length }] : []),
-    ...(pack ? [{ id: 'accompagnement', label: 'Accompagnement' }] : []),
     ...(g.sources.length ? [{ id: 'sources', label: 'Sources', n: g.sources.length }] : []),
   ]
   return (
@@ -101,12 +96,6 @@ export default async function GuidePage({ params }: Props) {
               <PlaceCards places={top.places} />
             </>
           )}
-        </section>
-      )}
-      {pack && (
-        <section className="sr-group" id="accompagnement" aria-label="Accompagnement">
-          <Transparency />
-          <Choice pack={pack} freeHref="#etapes" outline={g.steps.slice(0, 4).map((s) => s.split(/[,:;.]/)[0])} open={open} />
         </section>
       )}
       {g.sources.length > 0 && (
