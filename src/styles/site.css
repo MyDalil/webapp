@@ -288,11 +288,11 @@ div.pl-actions > * { overflow: hidden; text-overflow: ellipsis; }
 /* Pied de page — maquette validée par Rad (2026-11-19) : six rubriques du menu, professionnels, confiance, informations légales. */
 .legacy .ft { padding-block: 48px 20px; }
 .legacy .ft-grid { display: grid; grid-template-columns: 1.35fr repeat(4, 1fr); gap: 28px; }
-.legacy .ft-logo { display: inline-flex; align-items: center; gap: 9px; color: var(--primary, #1f6b45); }
-.legacy .ft-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--primary, #1f6b45); color: #fff; font-size: 15px; font-weight: 700; }
+.legacy .ft-logo { display: inline-flex; align-items: center; gap: 9px; color: var(--green, #006b3c); }
+.legacy .ft-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--green, #006b3c); color: #fff; font-size: 15px; font-weight: 700; }
 .legacy .ft-logo strong { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
 .legacy .ft-brand p { max-width: 300px; margin: 12px 0 16px; color: #596761; font-size: 13px; line-height: 1.6; }
-.legacy .ft-telegram { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 999px; background: var(--primary, #1f6b45); color: #fff; font-size: 13px; font-weight: 600; }
+.legacy .ft-telegram { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 999px; background: var(--green, #006b3c); color: #fff; font-size: 13px; font-weight: 600; }
 .legacy .ft-telegram svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .legacy .ft-col { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
 .legacy .ft-title { margin: 0 0 4px; color: #14201b; font-size: 12px; font-weight: 700; letter-spacing: .02em; }
@@ -307,3 +307,5 @@ html[data-theme="dark"] .legacy :is(.ft-col a, .ft-brand p, .ft-bottom) { color:
 html[data-theme="dark"] .legacy .ft-bottom { border-top-color: var(--border); }
 @media (max-width: 1024px) { .legacy .ft-grid { grid-template-columns: repeat(2, 1fr); } .legacy .ft-brand { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .legacy .ft-grid { gap: 24px 16px; } .legacy .ft-bottom { flex-direction: column; } }
+html[data-theme="dark"] .legacy :is(.ft-mark, .ft-telegram) { color: #05140d; }
+.legacy .ft-telegram:hover { filter: brightness(1.08); }
