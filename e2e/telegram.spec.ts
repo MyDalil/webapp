@@ -79,27 +79,29 @@ test.describe.serial('Telegram : télécommande @ecriture', () => {
     }
   })
 
-  test('visiteur : recherche publique, aucune écriture possible', async ({ request }) => {
+  test('visiteur : /chercher ouvre le parcours guidé fermé, aucune écriture possible', async ({ request }) => {
     await ensureAdmin(request)
     const chat = 720000000 + (updateId % 100000)
+    // Bot public fermé (docs/canaux.md) : /chercher lance le parcours guidé, première étape = la wilaya.
     const found = await replyOf(await message(request, chat, '/chercher pharmacie Alger'))
-    if (found !== null) expect(found).toMatch(/mydalil\.com|Aucun résultat/)
-    // Commande d’équipe tentée par un visiteur : refusée, aucun brouillon créé.
+    if (found !== null) expect(found).toMatch(/wilaya/i)
+    // Commande d’équipe tentée par un visiteur : jamais exécutée, aucun brouillon créé.
     const nom = `Intrus Telegram ${Date.now()}`
     const refused = await replyOf(await message(request, chat, `/brouillon ${nom}`))
-    if (refused !== null) expect(refused).toMatch(/réservée à l’équipe/)
+    if (refused !== null) expect(refused).not.toMatch(/Brouillon :/)
     const drafts = await (await request.get(`/api/places?where[name][equals]=${encodeURIComponent(nom)}&draft=true&limit=1`)).json()
     expect(drafts.totalDocs).toBe(0)
   })
 
-  test('visiteur : « Ajoutez … » devient une contribution à vérifier, jamais une fiche', async ({ request }) => {
+  test('visiteur : un texte libre « Ajoutez … » ne crée ni fiche ni contribution, le menu est proposé', async ({ request }) => {
     const chat = 730000000 + (updateId % 100000)
     const text = `Ajoutez la pharmacie E2E ${Date.now()}, rue Didouche Mourad, Alger`
-    await replyOf(await message(request, chat, text))
+    const reply = await replyOf(await message(request, chat, text))
+    // Bot fermé : pas d’IA ni de saisie libre pour un visiteur ; l’ajout passe par « Inscrire mon activité ».
+    if (reply !== null) expect(reply).toMatch(/Choisissez une option|wilaya|Étape/)
     await ensureAdmin(request)
     const subs = await (await request.get(`/api/submissions?where[subject][equals]=${encodeURIComponent(text.slice(0, 120))}&limit=1&depth=0`)).json()
-    expect(subs.totalDocs, 'contribution enregistrée').toBe(1)
-    expect(subs.docs[0].kind).toBe('contribution')
+    expect(subs.totalDocs).toBe(0)
     const places = await (await request.get(`/api/places?where[name][contains]=${encodeURIComponent('pharmacie E2E')}&draft=true&limit=1`)).json()
     expect(places.totalDocs).toBe(0)
   })
