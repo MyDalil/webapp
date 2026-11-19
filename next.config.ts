@@ -9,6 +9,13 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 /** Site public (maquette DALIL + contenu du prototype) ; /admin et /api servis par Payload / Neon. */
+const OG_ASSETS = [
+  './node_modules/@fontsource/manrope/files/manrope-latin-800-normal.woff',
+  './node_modules/@fontsource/inter/files/inter-latin-500-normal.woff',
+  './node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-600-normal.woff',
+  './public/favicon.svg',
+]
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
@@ -76,9 +83,13 @@ const nextConfig: NextConfig = {
   // Le moteur d’agents lit le dossier company/ (méthode ICM) à l’exécution : seulement dans les fonctions qui l’appellent
   // (routes des agents ; bot Telegram → activateRole ; hook des tâches via l’API Payload et /admin ; vue Mémoire de /admin),
   // plus dans toutes les pages du site.
-  outputFileTracingIncludes: Object.fromEntries(
-    ['/api/agents/**', '/api/taches', '/api/telegram', '/api/\\[...slug\\]', '/admin/**'].map((route) => [route, ['./company/**/*']]),
-  ),
+  outputFileTracingIncludes: {
+    ...Object.fromEntries(
+      ['/api/agents/**', '/api/taches', '/api/telegram', '/api/\\[...slug\\]', '/admin/**'].map((route) => [route, ['./company/**/*']]),
+    ),
+    // Aperçus de liens et kit pro : polices et logo lus sur le disque à l'exécution (absents des fonctions sinon → erreur 500).
+    ...Object.fromEntries(['/**/opengraph-image*', '/api/kit/**'].map((route) => [route, OG_ASSETS])),
+  },
   // 404 du site avec son en-tête et son pied de page (le site et /admin ont chacun leur racine).
   experimental: { globalNotFound: true },
 }
