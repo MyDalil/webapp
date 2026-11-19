@@ -156,3 +156,11 @@
 - Fait : fond de carte réparé (worker MapLibre copié au build), repère = itinéraire, pages guide au standard validé, étoiles ✦ remplacées par des pictogrammes.
 - Vérifié en local : check, 229 tests unitaires, build, 224 parcours Playwright (36 ignorés).
 - Prochaine action : vérifier sur preview que le fond de carte se dessine ; questions à Rad sur Services et Santé avant toute maquette.
+
+## Mise en production — 19 nov. 2026 (soir)
+- Avis Fable avant promotion : GO sous conditions. Levées dans `agent/beta-finitions` :
+  - point de restauration `sauvegardes.places_noms_20261119` (migration 20261119_185900, avant la réécriture différée des noms) ; requête de restauration dans le fichier de migration ;
+  - sigles gardés en majuscules dans `tidyCase` (ENSV, CNFPH, INPED, C.F.P.A…). Sur la base de preview, les sigles déjà abîmés restent à corriger ; la production est réécrite avec la règle corrigée.
+- Cockpit et agents éteints en production (choix de Rad : « garder uniquement ce qui maintient le site »). Les rallumer : `DALIL_PLUGINS=cockpit,communication` (ou `agents,cockpit,communication`) dans Vercel Production.
+- Contrôle /admin/controle : plus de fausse alerte sur preview ; bouton Telegram sans JSON brut.
+- À surveiller : collection `translations` lisible par tous (traductions d'une fiche dépubliée), route /api/kit non relue, première tâche planifiée et sauvegarde en production, /api/sante.

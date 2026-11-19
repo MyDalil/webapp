@@ -53,7 +53,7 @@ const restore = (src: string, fixed: string) => {
   return fixed
 }
 
-const ACRONYMS = new Set(['CHU', 'CHR', 'EHS', 'EPH', 'EPSP', 'CEM', 'APC', 'CNAS', 'CASNOS', 'ANEM', 'ENS', 'USTHB', 'UMMTO', 'SNTF', 'ETUSA', 'CFPA', 'INSFP', 'PTT', 'BNA', 'CPA', 'BEA', 'BADR', 'CNEP', 'BDL', 'AGB', 'SGA', 'CRA', 'ONU', 'SARL', 'EURL', 'SPA', 'EPIC', 'ENP', 'ESI', 'INPS', 'DSP', 'CRAAG'])
+const ACRONYMS = new Set(['CHU', 'CHR', 'EHS', 'EPH', 'EPSP', 'CEM', 'APC', 'CNAS', 'CASNOS', 'ANEM', 'ENS', 'USTHB', 'UMMTO', 'SNTF', 'ETUSA', 'CFPA', 'INSFP', 'PTT', 'BNA', 'CPA', 'BEA', 'BADR', 'CNEP', 'BDL', 'AGB', 'SGA', 'CRA', 'ONU', 'SARL', 'EURL', 'SPA', 'EPIC', 'ENP', 'ESI', 'INPS', 'DSP', 'CRAAG', 'INPED', 'ENSV', 'CNFPH', 'INSIM', 'ENSA', 'ENSH', 'ENST', 'INFSPM', 'ENSSEA', 'ENSB', 'INATAA', 'CREDEG', 'DGSN', 'APN', 'CNRC', 'CACI', 'CAAR', 'SAA', 'CAAT', 'OPGI', 'AADL', 'CNL', 'ENPI', 'CNR', 'CAF', 'FAF'])
 const SMALL = new Set(['de', 'du', 'des', 'la', 'le', 'les', 'et', 'à', 'a', 'au', 'aux', 'en', 'pour', 'sur', 'par'])
 
 /**
@@ -64,12 +64,23 @@ export function tidyCase(name: string): string {
   const letters = name.replace(/[^A-Za-zÀ-ÿ]/g, '')
   if (letters.length < 4 || letters !== letters.toUpperCase()) return name
   let first = true
-  return name.replace(/[A-Za-zÀ-ÿ]+/g, (w) => {
+  return name.replace(/[A-Za-zÀ-ÿ]+/g, (w, at: number) => {
     const low = w.toLowerCase()
-    const out = !first && SMALL.has(low) ? low : ACRONYMS.has(w) ? w : low[0].toUpperCase() + low.slice(1)
+    const dotted = name[at - 1] === '.' || name[at + w.length] === '.'
+    const out = (w.length === 1 && dotted) || isAcronym(w) ? w : !first && SMALL.has(low) ? low : low[0].toUpperCase() + low.slice(1)
     first = false
     return out
   })
+}
+
+/**
+ * Sigle à garder en majuscules : liste connue, ou mot court (5 lettres au plus) sans voyelle ou avec 3 consonnes de suite
+ * (ENSV, CNFPH, INSFP). Évite « Ensv » ou « Cnfph » (constat Fable, 19 nov. 2026). Un mot courant (ÉCOLE, STADE) n'est pas touché.
+ */
+export function isAcronym(w: string): boolean {
+  if (ACRONYMS.has(w)) return true
+  if (w.length < 2 || w.length > 5) return false
+  return !/[AEIOUYÀ-ÿ]/i.test(w) || /[^AEIOUYÀ-ÿ]{3}/i.test(w)
 }
 
 /** Nom avec les accents français rétablis et sans majuscules partout. Un nom déjà juste ressort identique. */
