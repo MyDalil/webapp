@@ -3,7 +3,22 @@ import type { Payload, Where } from 'payload'
 import { duplicatePairs, type Known } from './csv'
 
 /** Variables indispensables (noms seulement, jamais les valeurs). */
-export const CRITICAL_ENV = ['PAYLOAD_SECRET', 'CRON_SECRET', 'DALIL_DATABASE_URL', 'BLOB_READ_WRITE_TOKEN', 'RESEND_API_KEY', 'RESEND_WEBHOOK_SECRET', 'BACKUP_SECRET', 'ANTHROPIC_API_KEY', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_WEBHOOK_SECRET'] as const
+export const CRITICAL_ENV = ['PAYLOAD_SECRET', 'CRON_SECRET', 'DALIL_DATABASE_URL', 'BLOB_READ_WRITE_TOKEN', 'RESEND_API_KEY', 'RESEND_WEBHOOK_SECRET', 'BACKUP_SECRET', 'ANTHROPIC_API_KEY', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_WEBHOOK_SECRET', 'OAUTH_SECRET', 'REMOTE_SIGNING_SECRET'] as const
+
+/** Variables utiles seulement en production (tâches planifiées, sauvegarde, webhooks Resend) : jamais signalées sur un preview. */
+const PRODUCTION_ONLY = new Set(['CRON_SECRET', 'BACKUP_SECRET', 'RESEND_WEBHOOK_SECRET'])
+
+/** Variables absentes, sans fausse alerte : le secret du webhook Telegram se dérive de REMOTE_SIGNING_SECRET. */
+export function missingEnv(env: Record<string, string | undefined> = process.env): string[] {
+  const production = env.VERCEL_ENV === 'production'
+  const has = (k: string) => Boolean(env[k]?.trim())
+  return CRITICAL_ENV.filter((k) => {
+    if (has(k)) return false
+    if (!production && PRODUCTION_ONLY.has(k)) return false
+    if (k === 'TELEGRAM_WEBHOOK_SECRET' && (env.REMOTE_SIGNING_SECRET?.trim().length ?? 0) >= 32) return false
+    return true
+  })
+}
 
 const empty = (f: string): Where => ({ or: [{ [f]: { exists: false } }, { [f]: { equals: '' } }] })
 const published: Where = { _status: { equals: 'published' } }
@@ -54,15 +69,15 @@ export async function securityReport(payload: Payload) {
       return (r.docs as unknown as { id: number; name?: string; role?: string }[]).map((u) => ({ id: u.id, nom: u.name ?? '', role: u.role ?? 'inconnu' }))
     }),
   ])
-  const env = Object.fromEntries(CRITICAL_ENV.map((k) => [k, Boolean(process.env[k])]))
   return {
     genereLe: new Date().toISOString(),
     fiches: { sansTelephone, sansAdresse, sansCoordonnees, doublons },
     medias: { photosSansTexteAlternatif: photosSansAlt, aControler: mediasAControler },
     erreursRecentes7j: erreurs,
-    sauvegarde,
+    // Les sauvegardes tournent en production seulement (tâche quotidienne) : un preview ne doit pas alerter.
+    sauvegarde: process.env.VERCEL_ENV === 'production' ? sauvegarde : { horsProduction: true },
     clesMcpDeclarees: mcpKeyCount(),
-    variablesAbsentes: Object.entries(env).filter(([, v]) => !v).map(([k]) => k),
+    variablesAbsentes: missingEnv(),
     equipe,
   }
 }

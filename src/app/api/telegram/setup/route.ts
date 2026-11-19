@@ -19,14 +19,17 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   if (!(await staff(req))) return fail('Accès refusé.', 401)
   const secret = webhookSecret()
+  const fromForm = (req.headers.get('content-type') ?? '').includes('form')
+  const back = (etat: string) => {
+    const u = new URL('/admin/controle', req.url)
+    u.searchParams.set('telegram', etat)
+    return Response.redirect(u, 303)
+  }
+  if (fromForm && (!botToken() || !secret)) return back('manque')
   if (!botToken() || !secret) return fail('TELEGRAM_BOT_TOKEN et REMOTE_SIGNING_SECRET (ou TELEGRAM_WEBHOOK_SECRET) sont nécessaires.', 422)
   const url = webhookUrl(new URL(req.url).origin, SITE)
   const r = await telegramApi('setWebhook', { url, secret_token: secret, allowed_updates: ['message', 'callback_query'], drop_pending_updates: true })
   // Depuis le bouton de /admin/controle (formulaire) : retour à la page avec le résultat lisible.
-  if ((req.headers.get('content-type') ?? '').includes('form')) {
-    const back = new URL('/admin/controle', req.url)
-    back.searchParams.set('telegram', r.ok ? 'ok' : 'echec')
-    return Response.redirect(back, 303)
-  }
+  if (fromForm) return back(r.ok ? 'ok' : 'echec')
   return json(r, r.ok ? 200 : 502)
 }

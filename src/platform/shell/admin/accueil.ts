@@ -83,8 +83,9 @@ export function controleLignes(r: Record<string, unknown>): Ligne[] {
   const er = r.erreursRecentes7j as { total?: number; dernieres?: { message: string; occurrences: number }[] } | undefined
   if (err(er)) out.push({ label: 'Erreurs du site (7 jours)', valeur: `Contrôle impossible (${err(er)})`, alerte: true })
   else out.push({ label: 'Erreurs du site (7 jours)', valeur: String(er?.total ?? 0), alerte: (er?.total ?? 0) > 0, exemples: (er?.dernieres ?? []).map((x) => `${x.message} (${x.occurrences}×)`) })
-  const s = r.sauvegarde as { ilYaHeures?: number | null; enRetard?: boolean; derniereErreur?: string | null } | undefined
-  if (err(s)) out.push({ label: 'Dernière sauvegarde', valeur: `Contrôle impossible (${err(s)})`, alerte: true })
+  const s = r.sauvegarde as { ilYaHeures?: number | null; enRetard?: boolean; derniereErreur?: string | null; horsProduction?: boolean } | undefined
+  if (s?.horsProduction) out.push({ label: 'Dernière sauvegarde', valeur: 'en production seulement', alerte: false })
+  else if (err(s)) out.push({ label: 'Dernière sauvegarde', valeur: `Contrôle impossible (${err(s)})`, alerte: true })
   else out.push({ label: 'Dernière sauvegarde', valeur: s?.ilYaHeures != null ? `il y a ${s.ilYaHeures} h` : 'aucune sauvegarde réussie', alerte: s?.enRetard !== false, exemples: s?.derniereErreur ? [`Dernière erreur : ${s.derniereErreur}`] : undefined })
   const absentes = Array.isArray(r.variablesAbsentes) ? (r.variablesAbsentes as string[]) : []
   out.push({ label: 'Réglages manquants sur Vercel', valeur: absentes.length ? absentes.join(', ') : 'aucun', alerte: absentes.length > 0 })

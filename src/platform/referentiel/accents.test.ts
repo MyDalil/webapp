@@ -24,3 +24,17 @@ describe('splitPlaceName', () => {
     expect(splitPlaceName('Ecole Ibn Badis')).toEqual({ name: 'École Ibn Badis' })
   })
 })
+
+describe('tidyCase : sigles gardés (constat du 19 nov. 2026)', async () => {
+  const { tidyCase } = await import('./accents')
+  it('garde les sigles inconnus et pointés', () => {
+    expect(tidyCase('ECOLE NATIONALE SUPERIEURE VETERINAIRE ENSV')).toMatch(/ENSV$/)
+    expect(tidyCase('CENTRE CNFPH ALGER')).toBe('Centre CNFPH Alger')
+    expect(tidyCase('C.F.P.A EL HARRACH')).toBe('C.F.P.A El Harrach')
+    expect(tidyCase('INPED BOUMERDES')).toBe('INPED Boumerdes')
+  })
+  it('met en casse normale les mots courants', () => {
+    expect(tidyCase('ECOLE PRIMAIRE EL AMIR')).toBe('Ecole Primaire El Amir')
+    expect(tidyCase('STADE DU 5 JUILLET')).toBe('Stade du 5 Juillet')
+  })
+})
