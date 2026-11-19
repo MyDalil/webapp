@@ -61,15 +61,22 @@ test.describe.serial('Telegram : télécommande @ecriture', () => {
 
   test.beforeEach(() => test.skip(apiOnly(test.info().project.name), 'une seule passe suffit'))
 
-  test('visiteur : /start donne son identifiant et l’aide, /aide l’aide publique', async ({ request }) => {
+  // Bot public fermé (docs/canaux.md) : /start et toute autre commande → menu fixe ; /id → identifiant Telegram.
+  test('visiteur : /start et /aide donnent le menu public, /id son identifiant', async ({ request }) => {
     const chat = 710000000 + (updateId % 100000)
     const start = await replyOf(await message(request, chat, '/start'))
     if (start !== null) {
-      expect(start).toContain(String(chat))
-      expect(start).not.toMatch(/\/publier/)
+      expect(start).toContain('Bienvenue sur DALIL')
+      expect(start).not.toContain(String(chat))
+      expect(start).not.toMatch(/\/publier|\/brouillon/)
     }
+    const id = await replyOf(await message(request, chat, '/id'))
+    if (id !== null) expect(id).toContain(String(chat))
     const aide = await replyOf(await message(request, chat, '/aide'))
-    if (aide !== null) expect(aide).not.toMatch(/\/publier|\/brouillon/)
+    if (aide !== null) {
+      expect(aide).toContain('Bienvenue sur DALIL')
+      expect(aide).not.toMatch(/\/publier|\/brouillon/)
+    }
   })
 
   test('visiteur : recherche publique, aucune écriture possible', async ({ request }) => {

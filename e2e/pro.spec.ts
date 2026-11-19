@@ -34,7 +34,8 @@ test.describe('Parcours professionnel', () => {
     await page.locator('input[name="name"]').fill(`Établissement e2e ${stamp}`)
     await page.locator('input[name="city"]').fill('Alger')
     await page.getByRole('button', { name: 'Enregistrer en brouillon' }).click()
-    await expect(page.getByText(/brouillon/).first()).toBeVisible()
+    // Message de réussite de la route (et non la mention « reste en brouillon » déjà affichée avant l’envoi).
+    await expect(page.locator('.auth-msg.ok')).toContainText('Fiche enregistrée en brouillon')
 
     // Jamais publié : la fiche n’est pas lisible publiquement.
     const pub = await page.request.get(`/api/places?where[name][equals]=${encodeURIComponent(`Établissement e2e ${stamp}`)}&depth=0`)
@@ -70,7 +71,8 @@ test.describe('Parcours professionnel', () => {
     await page.locator('input[name="name"]').fill(`Établissement reçu ${stamp}`)
     await page.locator('input[name="city"]').fill('Alger')
     await page.getByRole('button', { name: 'Enregistrer en brouillon' }).click()
-    await expect(page.getByText(/brouillon/).first()).toBeVisible()
+    // Message de réussite de la route (et non la mention « reste en brouillon » déjà affichée avant l’envoi).
+    await expect(page.locator('.auth-msg.ok')).toContainText('Fiche enregistrée en brouillon')
 
     await page.goto('/espace-pro/abonnement')
     await expect(page.locator('select').first()).toContainText(`Établissement reçu ${stamp}`)

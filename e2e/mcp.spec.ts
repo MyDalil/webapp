@@ -59,8 +59,10 @@ test.describe('MCP public', () => {
   test('méthode inconnue, notification, JSON illisible, GET', async ({ request }) => {
     expect((await (await rpc(request, '/api/mcp', { jsonrpc: '2.0', id: 5, method: 'resources/list' })).json()).error.code).toBe(-32601)
     expect((await rpc(request, '/api/mcp', { jsonrpc: '2.0', method: 'notifications/initialized' })).status()).toBe(202)
-    const bad = await request.post('/api/mcp', { headers: { 'content-type': 'application/json' }, data: '{pas du json' })
+    // Buffer : Playwright envoie tel quel ; une chaîne non JSON serait réencodée en chaîne JSON valide (« "{pas du json" »).
+    const bad = await request.post('/api/mcp', { headers: { 'content-type': 'application/json' }, data: Buffer.from('{pas du json', 'utf8') })
     expect(bad.status()).toBe(400)
+    expect((await bad.json()).error.code).toBe(-32700)
     expect((await request.get('/api/mcp')).status()).toBe(405)
   })
 })
@@ -120,7 +122,10 @@ test.describe('MCP admin @ecriture', () => {
     const list = await (await anon.get(`/api/places?where[name][equals]=${encodeURIComponent(nom)}&limit=1`)).json()
     expect(list.totalDocs ?? 0).toBe(0)
     const seen = await (await rpc(anon, '/api/mcp', call(6, 'rechercher', { texte: nom }))).json()
-    expect(JSON.stringify(seen.result.structuredContent)).not.toContain(nom)
+    // `requete` répète le texte cherché : seuls les résultats doivent ignorer le brouillon.
+    const resultats = seen.result.structuredContent.resultats as { titre: string }[]
+    expect(Array.isArray(resultats)).toBe(true)
+    expect(JSON.stringify(resultats)).not.toContain(nom)
     await anon.dispose()
   })
 })

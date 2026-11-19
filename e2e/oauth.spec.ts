@@ -111,15 +111,25 @@ test.describe.serial('OAuth : parcours complet @ecriture', () => {
     expect(names).toContain('creer_brouillon_lieu')
     expect(names).not.toContain('publier_fiche')
 
+    // Jeton de rafraîchissement : rotation, usage unique (avant le rejeu du code, qui révoque toute la famille).
+    const r1 = await request.post('/api/oauth/token', { form: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: client.client_id } })
+    expect(r1.status()).toBe(200)
+    const t2 = await r1.json()
+    expect(t2.refresh_token).toBeTruthy()
+    expect(t2.refresh_token).not.toBe(t.refresh_token)
+    expect((await rpc(request, '/api/mcp/admin', { jsonrpc: '2.0', id: 2, method: 'tools/list' }, t2.access_token)).status()).toBe(200)
+    // Ancien jeton rejoué : refusé, et toute la famille est révoquée (docs/mcp-oauth.md, RFC 9700) — le nouveau jeton aussi.
+    const r2 = await request.post('/api/oauth/token', { form: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: client.client_id } })
+    expect(r2.status()).toBe(400)
+    expect((await r2.json()).error).toBe('invalid_grant')
+    const revoked = await request.post('/api/oauth/token', { form: { grant_type: 'refresh_token', refresh_token: t2.refresh_token, client_id: client.client_id } })
+    expect(revoked.status()).toBe(400)
+    expect((await rpc(request, '/api/mcp/admin', { jsonrpc: '2.0', id: 3, method: 'tools/list' }, t2.access_token)).status()).toBe(401)
+
+    // Code rejoué : refusé (usage unique ; la révocation de la famille par rejeu du code est couverte par core.test.ts).
     const again = await request.post('/api/oauth/token', { form: { grant_type: 'authorization_code', code, code_verifier: verifier, redirect_uri: REDIRECT, client_id: client.client_id } })
     expect(again.status()).toBe(400)
     expect((await again.json()).error).toBe('invalid_grant')
-
-    // Jeton de rafraîchissement : usage unique.
-    const r1 = await request.post('/api/oauth/token', { form: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: client.client_id } })
-    expect(r1.status()).toBe(200)
-    const r2 = await request.post('/api/oauth/token', { form: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: client.client_id } })
-    expect(r2.status()).toBe(400)
   })
 
   test('décision POST sans origine du site : refusée (CSRF)', async ({ request }) => {

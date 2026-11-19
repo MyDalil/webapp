@@ -1,3 +1,5 @@
+import config from '@payload-config'
+import { REST_DELETE, REST_GET, REST_PATCH } from '@payloadcms/next/routes'
 import { fail, json } from '@/platform/http'
 import { guard } from '@/platform/security/rateLimit'
 import { proofError } from '@/platform/security/proof'
@@ -17,3 +19,15 @@ export async function POST(req: Request) {
   if (!r.ok) return fail(r.error, r.status)
   return json({ ok: true })
 }
+
+/**
+ * Cette route masque la racine REST de Payload (`/api/leads`) : lecture et actions groupées de /admin
+ * lui sont renvoyées, avec les droits de la collection (équipe : tout ; membre : ses demandes ; visiteur : rien).
+ */
+const root = () => ({ params: Promise.resolve({ slug: ['leads'] }) })
+const restGet = REST_GET(config)
+const restPatch = REST_PATCH(config)
+const restDelete = REST_DELETE(config)
+export const GET = (req: Request) => restGet(req, root())
+export const PATCH = (req: Request) => restPatch(req, root())
+export const DELETE = (req: Request) => restDelete(req, root())
