@@ -1,7 +1,10 @@
+import type { Lang } from '@/platform/i18n'
 import { Icon, IconLabel } from '@/platform/ui/Icon'
 import Link from '@/platform/ui/Link'
 import { CATEGORIES, DEALS, category, classifiedCounts, searchClassifieds, type ClassifiedCard, type SearchQuery } from '@/modules/annonces'
 import { WILAYAS } from '@/platform/referentiel/catalog'
+import { FaqBlock } from '@/modules/contenus/ui'
+import { SponsoredList } from '@/modules/pros/ui'
 
 const WILAYA_LIST = [...WILAYAS].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 const day = (iso: string) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Africa/Algiers' }).format(new Date(iso))
@@ -36,7 +39,7 @@ export function ClassifiedTile({ c }: { c: ClassifiedCard }) {
 }
 
 /** Liste des annonces : catégories, filtres (type, wilaya, transaction, prix, mots), résultats. */
-export async function Browse({ q, fixedCategory }: { q: SearchQuery; fixedCategory?: string }) {
+export async function Browse({ q, fixedCategory, lang }: { q: SearchQuery; fixedCategory?: string; lang?: Lang }) {
   const cat = fixedCategory ?? q.categorie
   const current = category(cat)
   const [results, counts] = await Promise.all([searchClassifieds({ ...q, categorie: cat }), classifiedCounts()])
@@ -146,6 +149,7 @@ export async function Browse({ q, fixedCategory }: { q: SearchQuery; fixedCatego
             Déposer une annonce
           </Link>
         </div>
+        <SponsoredList lang={lang} collection="classifieds" wilaya={q.wilaya} where={current ? { category: { equals: current.value } } : undefined} />
         {results.length ? (
           <ul className="classified-grid">
             {results.map((c) => (
@@ -162,6 +166,7 @@ export async function Browse({ q, fixedCategory }: { q: SearchQuery; fixedCatego
           </div>
         )}
       </section>
+      <FaqBlock lang={lang} path={action} />
     </div>
   )
 }

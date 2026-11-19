@@ -36,11 +36,21 @@ export async function aiGate(member: { id: number; _verified?: boolean | null } 
   return { ok: true, remaining: DAILY_QUOTA - today - 1 }
 }
 
-/** Enregistre un appel, puis prévient l’équipe une fois par mois quand 80 % du budget est atteint. */
-export async function recordAi(feature: 'reformulate' | 'understand', memberId: number, r: AiReply) {
+/** Appel fait par l’équipe ou par une tâche (traduction, texte alternatif, canal) : seul le plafond mensuel global s’applique. */
+export async function staffAiGate(): Promise<{ ok: true } | { ok: false; reason: 'budget' | 'off' }> {
+  if (!aiConfigured()) return { ok: false, reason: 'off' }
+  if ((await monthSpentMicros()) >= MONTHLY_BUDGET_MICROS) return { ok: false, reason: 'budget' }
+  return { ok: true }
+}
+
+export type AiFeature = 'reformulate' | 'understand' | 'translate' | 'alt-text' | 'channel'
+
+/** Enregistre un appel (memberId null : appel de l’équipe, sans compte), puis prévient l’équipe une fois par mois quand 80 % du budget est atteint. */
+export async function recordAi(feature: AiFeature, memberId: number | null, r: AiReply) {
   const p = await payload()
   const costMicros = Math.ceil(r.inputTokens * PRICE_MICROS.input + r.outputTokens * PRICE_MICROS.output)
-  await p.create({ collection: 'ai-usage', overrideAccess: true, data: { feature, member: memberId, inputTokens: r.inputTokens, outputTokens: r.outputTokens, costMicros, model: AI_MODEL } })
+  // `translate`, `alt-text`, `channel` : options ajoutées à ai-usage par le lot C1 (types générés ensuite).
+  await p.create({ collection: 'ai-usage', overrideAccess: true, data: { feature: feature as 'reformulate', ...(memberId == null ? {} : { member: memberId }), inputTokens: r.inputTokens, outputTokens: r.outputTokens, costMicros, model: AI_MODEL } })
   const spent = await monthSpentMicros()
   if (spent < MONTHLY_BUDGET_MICROS * 0.8) return
   const month = new Date().toISOString().slice(0, 7)
@@ -50,6 +60,6 @@ export async function recordAi(feature: 'reformulate' | 'understand', memberId: 
   await send(
     process.env.AI_ALERT_EMAIL || TEAM,
     `IA DALIL : 80 % du budget mensuel atteint (${usd(spent)} / ${usd(MONTHLY_BUDGET_MICROS)})`,
-    layout('Budget IA bientôt atteint.', `<p>La reformulation par l’IA a consommé ${usd(spent)} ce mois-ci, sur un plafond de ${usd(MONTHLY_BUDGET_MICROS)}.</p><p>Au plafond, DALIL passe automatiquement au nettoyage simple, sans coût. Pour relever le plafond : variable <code>AI_MONTHLY_BUDGET_USD</code> dans Vercel.</p>`),
+    layout('Budget IA bientôt atteint.', `<p>L’IA de DALIL a consommé ${usd(spent)} ce mois-ci, sur un plafond de ${usd(MONTHLY_BUDGET_MICROS)}.</p><p>Au plafond, DALIL passe automatiquement au nettoyage simple, sans coût. Pour relever le plafond : variable <code>AI_MONTHLY_BUDGET_USD</code> dans Vercel.</p>`),
   ).catch(() => {})
 }

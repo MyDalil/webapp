@@ -9,6 +9,7 @@ import { bookingCancelled, bookingConfirmed, bookingReminder, bookingToPractitio
 import { specialtyLabel } from './specialties'
 import { agendaLinks, icsCalendar, validAgendaToken, type CalEvent } from './calendar'
 import { SITE } from '@/platform/mail'
+import { localize } from '@/platform/i18n/content'
 
 export type BookingError = { error: string; status: number }
 const fail = (error: string, status = 400): BookingError => ({ error, status })
@@ -86,10 +87,10 @@ async function nextFree(practitioner: Practitioner) {
   return days.find((d) => d.slots.length)?.slots[0]?.start ?? null
 }
 
-export async function getPractitioner(slug: string): Promise<Practitioner | null> {
+export async function getPractitioner(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<Practitioner | null> {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'practitioners', where: { and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }] }, depth: 1, limit: 1, overrideAccess: true })
-  return docs[0] ?? null
+  return localize(docs[0] ?? null, 'practitioners', lang, p)
 }
 
 /** Plan du site : praticiens publiés seulement (fiches de démonstration exclues). */

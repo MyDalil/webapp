@@ -23,7 +23,7 @@ async function login(page: Page, who: { email: string; password: string }) {
   await signIn(page.request, who)
 }
 
-test.describe.serial('Cockpit — écrans des agents @ecriture', () => {
+test.describe.serial('Cockpit — écrans des agents @ecriture @extras', () => {
   test.beforeAll(async ({ browser }) => {
     const page = await browser.newPage()
     const r = page.request

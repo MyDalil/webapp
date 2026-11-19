@@ -13,7 +13,7 @@ async function login(page: Page) {
   await signIn(page.request, ADMIN)
 }
 
-test.describe.serial('Cockpit — Boîte unique @ecriture', () => {
+test.describe.serial('Cockpit — Boîte unique @ecriture @extras', () => {
   test('email reçu : lecture, réponse préparée, fil et statut', async ({ page }) => {
     await login(page)
     const subject = `Question e2e ${Date.now()}`

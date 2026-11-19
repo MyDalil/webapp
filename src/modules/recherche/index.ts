@@ -4,3 +4,4 @@ export { ROBOTS_DISALLOW, indexXml, sitemapFiles, sitemapUrls, urlsetXml } from 
 export { detectPlace } from './place'
 export { searchEverything, suggest, type SearchGroup, type SearchResults } from './results'
 export { listMisses, normalizeMiss, purgeMisses, recordMiss } from './misses'
+export { actions as rechercheActions } from './actions'

@@ -1,9 +1,10 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import { categoryBySlug, categoryPath } from '@/platform/referentiel/slug'
 import { SITE } from '@/platform/mail'
 import { CategoryPage } from './CategoryPage'
 
-type Props = { params: Promise<{ sector: string; categorie: string }> }
+type Props = { params: Promise<{ sector: string; categorie: string; lang: string }> }
 export const revalidate = 3600
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 // Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
@@ -21,6 +22,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params }: Props) {
-  const { sector, categorie } = await params
-  return <CategoryPage sector={sector} categorie={categorie} />
+  const { lang, sector, categorie } = await params
+  return <CategoryPage lang={isLang(lang) ? lang : 'fr'} sector={sector} categorie={categorie} />
 }

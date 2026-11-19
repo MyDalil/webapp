@@ -8,8 +8,11 @@ import { categoryOf, categoryPrefix, nameMatch } from './category'
 import { wilayaSlug } from '@/platform/referentiel/slug'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { localIntent, type Intent } from './intent'
+import { PARTNER_LABEL, SPONSORED_LABEL, paidPlans, sponsoredFor } from '@/modules/pros'
+import { PARTNER_TYPES, partnerFirst } from './partner'
 
-export type SearchGroup = { key: SearchType | 'pistes'; title: string; hits: SearchHit[] }
+/** Groupe « sponsorise » : au plus 2 résultats payants, à part, en tête, chacun `sponsored: true` (jamais mêlés au classement). */
+export type SearchGroup = { key: SearchType | 'pistes' | 'sponsorise'; title: string; hits: (SearchHit & { sponsored?: true; partenaire?: true; partnerLabel?: typeof PARTNER_LABEL })[] }
 /** `nearby` : le lieu est une commune ou un quartier (adresses classées par proximité). */
 /** `spread` : sans lieu précisé, adresses trouvées dans plusieurs wilayas (homonymes) — pour aider à préciser. */
 /**
@@ -90,7 +93,17 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
   }
   // Wilaya choisie par le visiteur (en-tête) : ses adresses d’abord quand la recherche ne nomme aucun lieu.
   const home = place.wilaya ?? (opts.position ? null : opts.prefer ?? null)
-  const groups = GROUPS.map((g, i) => ({ key: g.key, title: g.title, hits: lists[i].sort((a, b) => Number(b.wilaya === home) - Number(a.wilaya === home) || b.score - a.score).slice(0, cat && place.near && g.key === 'adresse' ? 100 : g.max).map(localize) })).filter((g) => g.hits.length)
+  // « Partenaire » (plan payant) : à pertinence égale seulement, la fiche payante passe devant ; jamais « Vérifié » (règle 4).
+  const partnerTargets = lists.flat().filter((h) => PARTNER_TYPES[h.type]).map((h) => ({ collection: PARTNER_TYPES[h.type]!, id: h.id }))
+  const plans = await paidPlans(partnerTargets).catch(() => new Map<string, string>())
+  const isPartner = (h: SearchHit) => Boolean(PARTNER_TYPES[h.type] && plans.has(`${PARTNER_TYPES[h.type]}:${h.id}`))
+  const mark = (h: SearchHit): SearchGroup['hits'][number] => (isPartner(h) ? { ...h, partenaire: true as const, partnerLabel: PARTNER_LABEL } : h)
+  const ranked: SearchGroup[] = GROUPS.map((g, i) => ({ key: g.key, title: g.title, hits: partnerFirst(lists[i].sort((a, b) => Number(b.wilaya === home) - Number(a.wilaya === home) || b.score - a.score), isPartner, (h) => `${Number(h.wilaya === home)}:${h.score}:${h.distanceKm ?? ''}`).slice(0, cat && place.near && g.key === 'adresse' ? 100 : g.max).map(localize).map(mark) }))
+  // Mise en avant payante (1re page) : seulement des résultats déjà trouvés, retirés de leur groupe et montrés à part.
+  const lifted = page === 1 ? await sponsoredFor(ranked.flatMap((g) => g.hits), { wilaya: place.wilaya }).catch(() => null) : null
+  const liftedKeys = new Set((lifted?.sponsored ?? []).map((h) => `${h.type}:${h.id}`))
+  const sponsoredGroup: SearchGroup[] = lifted?.sponsored.length ? [{ key: 'sponsorise', title: SPONSORED_LABEL.fr, hits: lifted.sponsored.map((h) => ({ ...h, badge: SPONSORED_LABEL.fr, sponsored: true as const })) }] : []
+  const groups = [...sponsoredGroup, ...ranked.map((g) => ({ ...g, hits: g.hits.filter((h) => !liftedKeys.has(`${h.type}:${h.id}`)) }))].filter((g) => g.hits.length)
   // Homonymes (« Mosquée Bachir El Ibrahimi » : une trentaine en Algérie) : wilayas où il y en a, pour préciser en un geste.
   let spread: SearchResults['spread'] = null
   if (!place.wilaya && !opts.position) {

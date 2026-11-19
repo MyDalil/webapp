@@ -6,6 +6,7 @@ Département responsable : **Professional Network & Revenue**. Lire aussi `AGENT
 Le parcours des professionnels : candidature, identité, justificatifs, validation, abonnement, renouvellement.
 
 ## Contenu du module
+- `Sponsorships.ts` (collection `sponsorships`, porte `collections.ts`) — mises en avant payantes (à la une, remontée, partenaire) sur une fiche (places, practitioners, providers, classifieds), par wilaya facultative ; état demande → active → terminée/refusée ; paiement noté à la main (BaridiMob, CCP, espèces). Écriture administrateur seulement ; aucun lien avec `confiance`.
 - `ui/ApplicationForm` (email obligatoire) → `/api/applications` → demande enregistrée par `messages`.
 
 ## Dépend de

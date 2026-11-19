@@ -13,7 +13,7 @@ async function login(request: APIRequestContext) {
 }
 const agentBySlug = async (request: APIRequestContext, slug: string) => (await (await request.get(`/api/agents?where[slug][equals]=${slug}&limit=1&depth=0`)).json()).docs[0]
 
-test.describe.serial('Moteur d’agents @ecriture', () => {
+test.describe.serial('Moteur d’agents @ecriture @extras', () => {
   test.skip(!process.env.DALIL_TEST_LLM, 'modèle de test requis (DALIL_TEST_LLM=1)')
 
   test('16 rôles : 6 actifs, 10 en réserve', async ({ request }) => {

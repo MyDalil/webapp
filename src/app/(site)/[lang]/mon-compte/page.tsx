@@ -31,8 +31,8 @@ export default async function Account() {
         <Link className="button primary" href="/annonces/deposer">
           Déposer une annonce
         </Link>
-        <Link className="button outline" href="/espace-pro">
-          {m.kind === 'pro' ? 'Mon espace pro' : 'Activer mon espace pro'}
+        <Link className="button outline" href={m.kind === 'pro' ? '/espace-pro' : '/inscrire'}>
+          {m.kind === 'pro' ? 'Mon espace pro' : 'Passer en compte Pro'}
         </Link>
       </div>
       <MyAppointments />

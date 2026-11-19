@@ -110,6 +110,14 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         <small>
                           {h.subtitle}
                           {h.badge && !/^(À vérifier|En vérification)$/.test(h.badge) && <em className={h.badge === 'Exemple' || h.badge === 'Démo' ? 'is-example' : ''}> · {h.badge}</em>}
+                          {h.partenaire && h.partnerLabel && (
+                            <em>
+                              {' · '}
+                              {(['fr', 'en', 'ar'] as const).map((l) => (
+                                <span key={l} lang={l} data-lang-only={l}>{h.partnerLabel![l]}</span>
+                              ))}
+                            </em>
+                          )}
                         </small>
                       </span>
                       {h.distanceKm != null && <span className="sr-dist">{distance(h.distanceKm)}</span>}

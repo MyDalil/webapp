@@ -10,7 +10,7 @@ async function login(page: Page) {
   await signIn(page.request, ADMIN)
 }
 
-test.describe('Cockpit — Système @ecriture', () => {
+test.describe('Cockpit — Système @ecriture @extras', () => {
   test('IA et coûts : dépense, plafonds, répartitions', async ({ page }) => {
     await login(page)
     await page.goto('/admin/cockpit/ia')

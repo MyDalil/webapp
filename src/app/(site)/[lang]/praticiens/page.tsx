@@ -1,5 +1,8 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
+import { FaqBlock } from '@/modules/contenus/ui'
+import { SponsoredList } from '@/modules/pros/ui'
 import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitioners, specialtyLabel } from '@/modules/sante'
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
 import { WILAYAS } from '@/platform/referentiel/catalog'
@@ -28,8 +31,10 @@ async function healthPlaces(wilaya?: string, specialty?: string): Promise<PlaceC
   return pick((await searchPlaces({ sector: 'sante-soins', category }, 120)).places)
 }
 
-export default async function Practitioners({ searchParams }: { searchParams: Promise<Q> }) {
+export default async function Practitioners({ params, searchParams }: { params: Promise<{ lang: string }>; searchParams: Promise<Q> }) {
   const q = await searchParams
+  const { lang: raw } = await params
+  const lang = isLang(raw) ? raw : 'fr'
   const results = await searchPractitioners({ specialty: q.specialite, wilaya: q.wilaya, mode: q.mode, language: q.langue, text: q.q?.slice(0, 80) })
   const wilaya = q.wilaya ? WILAYAS.find((w) => String(w.code) === q.wilaya)?.name : null
   // Une seule liste (Rad, 2026-11-15) : les praticiens réservables en ligne, puis les médecins de l’annuaire. Jamais de page vide.
@@ -93,6 +98,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
       </section>
 
       <section className="section container">
+        <SponsoredList lang={lang} collection="practitioners" wilaya={q.wilaya} where={q.specialite ? { specialties: { in: [q.specialite] } } : undefined} />
         {results.length > 0 && (
           <p className="praticiens-count">
             {results.length} praticien{results.length > 1 ? 's' : ''} avec rendez-vous en ligne
@@ -178,6 +184,7 @@ export default async function Practitioners({ searchParams }: { searchParams: Pr
           </Link>
         </div>
       </section>
+      <FaqBlock lang={lang} path="/praticiens" />
     </div>
   )
 }

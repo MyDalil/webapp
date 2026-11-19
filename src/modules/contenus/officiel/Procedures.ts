@@ -3,6 +3,7 @@ import { isStaff, isStaffUser } from '@/platform/access'
 import { THEMES } from './themes'
 import { linksField, listField, sourcesField, statusField } from './fields'
 import { indexProcedure, unindexProcedure } from './search'
+import { translateOnPublish } from '@/platform/i18n/auto'
 
 const publicOrStaff: Access = ({ req: { user } }) => (isStaffUser(user) ? true : { status: { equals: 'published' } })
 
@@ -13,7 +14,7 @@ export const Procedures: CollectionConfig = {
   admin: { group: 'Contenus', useAsTitle: 'title', defaultColumns: ['title', 'theme', 'online', 'status', 'updatedAt'], description: 'Garde-fous : src/rubriques/demarches/<thème>/AGENTS.md. Sources officielles seulement.' },
   defaultSort: 'title',
   access: { read: publicOrStaff, create: isStaff, update: isStaff, delete: isStaff },
-  hooks: { afterChange: [indexProcedure], afterDelete: [unindexProcedure] },
+  hooks: { afterChange: [indexProcedure, translateOnPublish('status')], afterDelete: [unindexProcedure] },
   fields: [
     { name: 'title', type: 'text', label: 'Titre', required: true },
     { name: 'slug', type: 'text', label: 'Adresse (/demarches/…)', required: true, unique: true, index: true },

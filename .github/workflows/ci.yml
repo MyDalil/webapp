@@ -1,6 +1,7 @@
 name: CI
 # Contrôles obligatoires avant fusion (règles de branche sur `preview` et `main`) :
-# frontières + types, tests unitaires, base neuve migrée, build complet, parcours essentiels (ordinateur + mobile).
+# frontières + types, tests unitaires, base neuve migrée, build complet, parcours essentiels (ordinateur + mobile),
+# en configuration de production puis avec les extras (DALIL_PLUGINS=agents,cockpit,communication).
 on:
   pull_request:
     branches: [preview, main]
@@ -28,9 +29,26 @@ jobs:
       - run: pnpm test
 
   parcours:
-    name: Build et parcours essentiels
+    # Deux passes, chacune sur sa base neuve : (a) configuration de production (DALIL_PLUGINS absent → communication
+    # seule), tous les parcours sauf @extras ; (b) extras branchés (agents, cockpit, communication), parcours @extras.
+    # Le nom de la passe (a) reste « Build et parcours essentiels » : c’est le statut relu avant toute fusion.
+    name: ${{ matrix.nom }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - passe: production
+            nom: Build et parcours essentiels
+            plugins: ''
+            grep: --grep-invert @extras
+            test_remote: '1'
+          - passe: extras
+            nom: Build et parcours des extras (cockpit, agents)
+            plugins: agents,cockpit,communication
+            grep: --grep @extras
+            test_remote: ''
     services:
       postgres:
         # Même moteur que Neon (Postgres + PostGIS) ; base vide : toutes les migrations sont rejouées depuis zéro.
@@ -46,17 +64,36 @@ jobs:
       DALIL_TEST_ERRORS: '1'
       # Modèle de test déterministe pour les parcours des agents (refusé en production).
       DALIL_TEST_LLM: '1'
-      # Secret de test du webhook Telegram (aucun bot réel en CI).
+      # Secrets factices (aucun bot, aucun client réel en CI) : webhook Telegram, boutons signés, OAuth.
       TELEGRAM_WEBHOOK_SECRET: ci-telegram-secret
+      # Passe production : /api/telegram renvoie le texte répondu (champ reponse), pour prouver les réponses du canal.
+      DALIL_TEST_REMOTE: ${{ matrix.test_remote }}
+      REMOTE_SIGNING_SECRET: ci-remote-signing-secret-factice-0123456789
+      OAUTH_SECRET: ci-oauth-secret-factice-0123456789abcdef0123456789
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - name: Extras débranchables de la passe
+        # Passe production : DALIL_PLUGINS reste non défini (une valeur vide couperait aussi communication).
+        if: matrix.plugins != ''
+        run: echo "DALIL_PLUGINS=${{ matrix.plugins }}" >> "$GITHUB_ENV"
+      - name: Clé MCP de test (générée comme scripts/mcp-key.mjs, jetée à la fin du job)
+        run: |
+          node -e '
+            const c = require("node:crypto")
+            const key = "dalil_" + c.randomBytes(32).toString("base64url")
+            const hash = c.createHash("sha256").update(key, "utf8").digest("hex")
+            const email = (process.env.DALIL_ADMIN_EMAIL || "salam@mydalil.com").toLowerCase()
+            console.log("::add-mask::" + key)
+            require("node:fs").appendFileSync(process.env.GITHUB_ENV, `E2E_MCP_KEY=${key}\nDALIL_MCP_KEYS=${email}:${hash}\n`)
+          '
       - name: Migrations (schéma, données différées, index de recherche)
         run: pnpm payload migrate && pnpm migrate:data && pnpm search:index
       - name: Sauvegarde puis restauration dans une base neuve
+        if: matrix.passe == 'production'
         run: |
           pnpm exec tsx scripts/backup.ts /tmp/sauvegarde
           PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE DATABASE restauration'
@@ -69,8 +106,11 @@ jobs:
       - name: Build
         run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
-      - name: Parcours essentiels
-        run: pnpm test:e2e
+      - name: Parcours (${{ matrix.passe }})
+        run: pnpm exec playwright test ${{ matrix.grep }}
       - uses: actions/upload-artifact@v4
         if: failure()
-        with: { name: rapport-playwright, path: playwright-report, retention-days: 7 }
+        with:
+          name: rapport-playwright-${{ matrix.passe }}
+          path: playwright-report
+          retention-days: 7

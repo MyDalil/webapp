@@ -20,7 +20,7 @@ const SCREENS = [
   ['/admin/cockpit/recherches', 'Recherches sans résultat'],
 ] as const
 
-test.describe('Cockpit — Business @ecriture', () => {
+test.describe('Cockpit — Business @ecriture @extras', () => {
   for (const [path, title] of SCREENS) {
     test(`${title} : s’ouvre`, async ({ page }) => {
       await login(page)

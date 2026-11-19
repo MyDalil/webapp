@@ -1,3 +1,4 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
@@ -17,21 +18,43 @@ import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
 import { SaveButton } from '@/modules/membres/ui'
-import { PlaceActions } from '@/modules/annuaire/ui'
+import { LeadFormSlot } from '@/modules/pros/ui'
+import { ClaimLink, PlaceActions } from '@/modules/annuaire/ui'
+import { JsonLd } from '@/platform/seo/JsonLd'
+import { breadcrumbJsonLd, providerJsonLd } from '@/platform/seo/jsonLd'
+import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 
-export const dynamic = 'force-dynamic'
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ activite?: string }> }
+/**
+ * ISR : la fiche ne lit ni la session ni l’adresse demandée (?activite est lu par le formulaire, côté navigateur).
+ * Rafraîchie à chaque enregistrement du prestataire (hook de la collection) et au plus tard toutes les heures.
+ */
+export const revalidate = 3600
+// Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
+export const generateStaticParams = async () => []
+type Props = { params: Promise<{ slug: string; lang: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const p = await getProvider((await params).slug)
+  const { slug, lang } = await params
+  const p = await getProvider(slug, isLang(lang) ? lang : undefined)
+  const wilaya = p ? WILAYAS.find((w) => String(w.code) === p.wilaya)?.name : null
   return p
     ? {
-        title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')}`,
-        description: `Identité et statut légal contrôlés avant publication. Demande en ligne : le prestataire accepte ou décline sous 24 h.`,
+        ...ficheMetadata({
+          lang: asLang(lang),
+          path: `/prestataires/${p.slug ?? slug}`,
+          title: `${p.displayName} — ${(p.categories ?? []).map(categoryLabel).join(', ')}`,
+          description: factualDescription([
+            `${(p.categories ?? []).map(categoryLabel).join(', ')}${wilaya ? `, wilaya de ${wilaya}` : ''}.`,
+            'Identité et statut légal contrôlés avant publication. Demande en ligne : le prestataire accepte ou décline sous 24 h.',
+          ]),
+        }),
         robots: p.demo ? { index: false } : undefined,
       }
     : {}
 }
+
+const verifiedOn = (iso: string) =>
+  new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 
 const date = (iso: string) =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -40,10 +63,10 @@ const date = (iso: string) =>
     timeZone: 'Africa/Algiers',
   }).format(new Date(iso))
 
-export default async function ProviderPage({ params, searchParams }: Props) {
-  const p = await getProvider((await params).slug)
+export default async function ProviderPage({ params }: Props) {
+  const { slug, lang } = await params
+  const p = await getProvider(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
-  const { activite } = await searchParams
   const c = toCard(p)
   // En production, une fiche de démonstration est un exemple : visible, jamais contactable.
   const example = Boolean(p.demo) && process.env.VERCEL_ENV === 'production'
@@ -77,7 +100,9 @@ export default async function ProviderPage({ params, searchParams }: Props) {
     },
   ].filter((f): f is { label: string; value: string } => Boolean(f && f.value))
   const checks = [
-    c.checks.identity ? 'Identité vérifiée' : 'Identité en cours de vérification',
+    c.checks.identity
+      ? `Identité vérifiée${p.verifiedAt ? ` le ${verifiedOn(p.verifiedAt)}` : ''}`
+      : 'Identité en cours de vérification',
     c.checks.legal &&
       (p.legalForm === 'registre-commerce'
         ? 'Registre de commerce vérifié'
@@ -86,8 +111,34 @@ export default async function ProviderPage({ params, searchParams }: Props) {
       c.checks.background &&
       'Casier judiciaire vérifié',
   ].filter(Boolean) as string[]
+  const L = asLang(lang)
+  const url = absoluteUrl(L, `/prestataires/${p.slug ?? slug}`)
+  // Fiche sans compte professionnel rattaché : le prestataire peut la revendiquer gratuitement.
+  const claimable = !p.demo && !p.owner
+  const jsonLd = [
+    providerJsonLd({
+      name: p.displayName,
+      url,
+      lang: L,
+      description: p.bio,
+      categories: cats,
+      region: wilaya,
+      areaServed: zone.map((z) => z.name),
+      image: absoluteAsset(c.photo),
+      languages: (p.languages ?? []).map(languageLabel),
+      // Agrégat des seuls avis vérifiés publiés (missions réalisées via DALIL).
+      rating: reviews.length && c.rating ? { value: c.rating, count: c.reviews } : null,
+      offers: c.offers.map((o) => ({ name: o.label, price: o.price })),
+    }),
+    breadcrumbJsonLd([
+      { name: 'Services', url: absoluteUrl(L, '/services') },
+      ...(p.categories?.[0] ? [{ name: cats[0], url: absoluteUrl(L, `/services/${p.categories[0]}`) }] : []),
+      { name: p.displayName, url },
+    ]),
+  ]
   return (
     <div className="pl">
+      <JsonLd data={jsonLd} />
       <nav className="pl-crumbs" aria-label="Fil d’Ariane">
         <Link href="/services">Services</Link>
         {p.categories?.[0] && (
@@ -227,8 +278,10 @@ export default async function ProviderPage({ params, searchParams }: Props) {
                 label={p.displayName}
                 variant="button"
               />
-              <PlaceActions name={p.displayName} />
+              <PlaceActions name={p.displayName} target={p.demo ? null : { collection: 'providers', id: p.id }} />
+              {!p.demo && <LeadFormSlot collection="providers" id={p.id} />}
             </div>
+            {claimable && <ClaimLink label="Vous êtes ce prestataire ? Gérez cette fiche gratuitement" href="/espace-pro?espace=services" />}
           </div>
           <div className="pl-book">
             <Suspense>
@@ -247,7 +300,6 @@ export default async function ProviderPage({ params, searchParams }: Props) {
                   offers={c.offers}
                   communes={zone}
                   clientele={(p.clientele ?? 'all') as 'all' | 'women' | 'men'}
-                  initialActivity={activite}
                 />
               )}
             </Suspense>

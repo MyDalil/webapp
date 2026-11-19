@@ -20,7 +20,7 @@ const photo = async (w = 1200, h = 800) => {
   return sharp({ create: { width: w, height: h, channels: 3, background: { r: c(), g: c(), b: c() } } }).jpeg().toBuffer()
 }
 
-test.describe.serial('Cockpit — Médiathèque @ecriture', () => {
+test.describe.serial('Cockpit — Médiathèque @ecriture @extras', () => {
   let buffer: Buffer
   const alt = `Photo e2e ${Date.now()}`
 
