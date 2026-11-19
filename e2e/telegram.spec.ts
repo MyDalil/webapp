@@ -118,7 +118,8 @@ test.describe.serial('Telegram : télécommande @ecriture', () => {
     const visitor = await replyOf(await message(request, chat, '/etat'))
     if (exposed) expect(visitor).not.toBeNull()
     if (visitor !== null) {
-      expect(visitor).toMatch(/réservée à l’équipe/)
+      // Bot fermé : une commande d’équipe donne le menu public, jamais l’état du site.
+      expect(visitor).toMatch(/Choisissez une option/)
       expect(visitor).not.toContain('Arrêt général')
     }
   })
