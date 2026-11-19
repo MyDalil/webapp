@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { categoryBySlug, categoryPath } from '@/platform/referentiel/slug'
 import { SITE } from '@/platform/mail'
 import { CategoryPage } from './CategoryPage'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ sector: string; categorie: string; lang: string }> }
 export const revalidate = 3600
@@ -21,7 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function Page({ params }: Props) {
+async function Page({ params }: Props) {
   const { lang, sector, categorie } = await params
   return <CategoryPage lang={isLang(lang) ? lang : 'fr'} sector={sector} categorie={categorie} />
 }
+
+export default withSectionGate(Page, (p) => `/annuaire/${p.sector}/${p.categorie}`)

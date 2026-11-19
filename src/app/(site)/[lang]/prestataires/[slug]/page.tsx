@@ -23,6 +23,7 @@ import { ClaimLink, PlaceActions } from '@/modules/annuaire/ui'
 import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, providerJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 /**
  * ISR : la fiche ne lit ni la session ni l’adresse demandée (?activite est lu par le formulaire, côté navigateur).
@@ -63,7 +64,7 @@ const date = (iso: string) =>
     timeZone: 'Africa/Algiers',
   }).format(new Date(iso))
 
-export default async function ProviderPage({ params }: Props) {
+async function ProviderPage({ params }: Props) {
   const { slug, lang } = await params
   const p = await getProvider(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
@@ -309,3 +310,5 @@ export default async function ProviderPage({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(ProviderPage, (p) => `/prestataires/${p.slug}`)

@@ -5,6 +5,7 @@ import { ActionError } from '@/platform/actions'
 import { payload } from '@/platform/http'
 import { getControls, type KillSwitch } from './Controls'
 import { killSwitchUpdate, siteState, type StateInput } from './state'
+import { isSectionKey, normalizeOff, toggleOff } from './sections'
 
 /**
  * Actions de l’arrêt général (global « Commandes et sécurité ») : état, arrêt, relance.
@@ -106,6 +107,37 @@ export const controlActions: ActionDef[] = [
         throw new ActionError('forbidden', 'Arrêt déclenché par le patron : lui seul peut le lever.')
       await p.updateGlobal({ slug: 'controls', data: { killSwitch: 'off', killSwitchReason: '' } as never, req: await staffReq(p, ctx), overrideAccess: false, depth: 0 })
       return { summary: 'Arrêt général levé : tout fonctionne.', before: before.killSwitch, after: 'off' }
+    },
+  },
+  {
+    name: 'basculer_section',
+    title: 'Couper ou rallumer une rubrique',
+    description: 'Coupe (coupe=true) ou rallume (coupe=false) une rubrique du menu (clé r:<rubrique>) ou une catégorie de l’annuaire (clé c:<secteur>/<catégorie>) ; une partie coupée affiche au public « revient sous peu ». Peut aussi changer le message public en français (message, vide = défaut). Réservé patron et admin.',
+    module: 'platform',
+    access: 'admin',
+    readOnly: false,
+    input: {
+      type: 'object',
+      properties: {
+        cle: { type: 'string', maxLength: 120, description: 'r:<rubrique> ou c:<secteur>/<catégorie>.' },
+        coupe: { type: 'boolean' },
+        message: { type: 'string', maxLength: 300, description: 'Message public en français (facultatif ; vide = défaut).' },
+      },
+    },
+    run: async (input: { cle?: string; coupe?: boolean; message?: string }, ctx) => {
+      const p = await payload()
+      const before = (await getControls(p)) as Awaited<ReturnType<typeof getControls>> & { offSections?: unknown; offMessage?: string | null }
+      const data: { offSections?: string[]; offMessage?: string } = {}
+      if (input.cle !== undefined) {
+        if (!isSectionKey(input.cle) || typeof input.coupe !== 'boolean') throw new ActionError('invalid_input', 'Rubrique ou catégorie inconnue.')
+        data.offSections = toggleOff(before.offSections, input.cle, input.coupe)
+      }
+      if (typeof input.message === 'string') data.offMessage = input.message.trim().slice(0, 300)
+      if (!Object.keys(data).length) throw new ActionError('invalid_input', 'Rien à changer.')
+      await p.updateGlobal({ slug: 'controls', data: data as never, req: await staffReq(p, ctx), overrideAccess: false, depth: 0 })
+      const after = data.offSections ?? normalizeOff(before.offSections)
+      const summary = input.cle !== undefined ? `${input.cle} ${input.coupe ? 'coupée' : 'rallumée'}.` : 'Message public enregistré.'
+      return { summary, coupees: after }
     },
   },
 ]

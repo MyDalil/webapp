@@ -8,6 +8,7 @@ import { PlaceActions } from '@/modules/annuaire/ui'
 import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, classifiedJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 /**
  * Reste dynamique : la lecture de l’annonce dépend du visiteur (l’auteur voit la sienne en attente ou refusée,
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : {}
 }
 
-export default async function AnnoncePage({ params }: Props) {
+async function AnnoncePage({ params }: Props) {
   const { categorie, slug, lang } = await params
   const a = await getClassified(slug, isLang(lang) ? lang : undefined)
   if (!a || a.category !== categorie) notFound()
@@ -148,3 +149,5 @@ export default async function AnnoncePage({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(AnnoncePage, (p) => `/annonces/${p.categorie}/${p.slug}`)

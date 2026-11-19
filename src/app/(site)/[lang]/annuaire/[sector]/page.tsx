@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { getPlaceCounts, searchPlaces } from '@/modules/annuaire'
 import { CategoryTiles, Directory } from '@/modules/annuaire/ui'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ sector: string }> }
 
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return s ? { title: `${s.title} — Annuaire`, description: s.description } : {}
 }
 
-export default async function SectorPage({ params }: Props) {
+async function SectorPage({ params }: Props) {
   const { sector } = await params
   const s = SECTORS.find((x) => x.slug === sector)
   if (!s) notFound()
@@ -37,3 +38,5 @@ export default async function SectorPage({ params }: Props) {
     </>
   )
 }
+
+export default withSectionGate(SectorPage, (p) => `/annuaire/${p.sector}`)

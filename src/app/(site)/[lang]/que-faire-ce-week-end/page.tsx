@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { getPlaces, getUpcomingEvents } from '@/modules/annuaire'
 import { WeekendExplorer } from '@/modules/annuaire/ui'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = { title: 'Que faire ce week-end ?', description: 'Événements, sorties et lieux à visiter ce week-end en Algérie, par wilaya, avec des informations datées et sourcées.' }
 export const revalidate = 3600
 
-export default async function Weekend() {
+async function Weekend() {
   const [events, places] = await Promise.all([getUpcomingEvents(), getPlaces()])
   return (
     <div className="praticiens">
@@ -22,3 +23,5 @@ export default async function Weekend() {
     </div>
   )
 }
+
+export default withSectionGate(Weekend, () => '/que-faire-ce-week-end')

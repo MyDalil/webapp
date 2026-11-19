@@ -22,6 +22,7 @@ import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, practitionerJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 import { videoEnabled } from '@/platform/video'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const revalidate = 3600
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const verifiedOn = (iso: string) =>
   new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 
-export default async function Practitioner({ params }: Props) {
+async function Practitioner({ params }: Props) {
   const { slug, lang } = await params
   const p = await getPractitioner(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
@@ -275,3 +276,5 @@ export default async function Practitioner({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(Practitioner, (p) => `/praticiens/${p.slug}`)

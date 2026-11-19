@@ -8,6 +8,8 @@ import { SITE } from '@/platform/site'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { ROBOTS_PRIVATE_PATHS } from '@/platform/siteRoutes'
+import { offSet } from '@/platform/controls/offSections'
+import { offKeyForPath, offKeyForPlace } from '@/platform/controls/sections'
 
 /**
  * Plan du site dynamique : uniquement les pages publiques et les contenus publiés (annonces : en ligne et non expirées).
@@ -38,6 +40,14 @@ export async function sitemapFiles(): Promise<string[]> {
  * (audit A09) : la route répond 503 et les moteurs gardent le dernier plan valide.
  */
 export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
+  // Rubriques et catégories coupées (/admin/rubriques) : leurs pages sortent du plan (elles répondent « revient sous peu », noindex).
+  const off = await offSet()
+  const list = await sitemapAll(file)
+  if (!list || !off.size) return list
+  return list.filter((u) => !offKeyForPath(u.loc.slice(SITE.length) || '/', off) && !(u.place && offKeyForPlace(u.place.sector, u.place.category, off))).map(({ place: _place, ...u }) => u)
+}
+
+async function sitemapAll(file: string): Promise<(SitemapUrl & { place?: { sector: string | null; category: string | null } })[] | null> {
   if (file === 'pages') {
     const counts = await getPlaceCounts()
     const content = ROUTES.filter((r) => !EXCLUDED.has(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/'))
@@ -70,7 +80,7 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
   const m = /^adresses-(\d+)$/.exec(file)
   if (m) {
     const list = await getPlaceSitemap(Number(m[1]) * PLACES_PER_FILE, PLACES_PER_FILE)
-    return list.map((p) => url(`/adresses/${p.slug}`, p.updatedAt))
+    return list.map((p) => ({ ...url(`/adresses/${p.slug}`, p.updatedAt), place: { sector: p.sector, category: p.category } }))
   }
   return null
 }

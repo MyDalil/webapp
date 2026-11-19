@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { Icon } from '@/platform/ui/Icon'
 import { Legacy } from '@/modules/contenus/ui'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
   title: 'S’installer & Vivre en Algérie',
@@ -24,7 +25,7 @@ const STEPS: [string, string, string, string][] = [
   ['04', 'Installer son quotidien', 'École, santé, banque et transport.', '/guides/preparer-son-installation'],
 ]
 
-export default function InstallationPage() {
+function InstallationPage() {
   return (
     <>
       <section className="split-hero container">
@@ -98,3 +99,5 @@ export default function InstallationPage() {
     </>
   )
 }
+
+export default withSectionGate(InstallationPage, () => '/installation')

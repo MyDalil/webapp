@@ -6,6 +6,7 @@ import { NearMe } from '@/modules/recherche/ui'
 import { RUBRICS } from '@/platform/shell/nav'
 import { HubHero } from '@/platform/ui/HubHero'
 import { PHOTOS } from '@/platform/referentiel/photos'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
   title: 'Vie musulmane en Algérie',
@@ -21,7 +22,7 @@ export const revalidate = 3600
 // Photos choisies (Rad, 2026-10-30 : des images, pas des pictogrammes) ; prioritaires sur la photo d’une fiche au hasard.
 const FALLBACK: Record<string, string> = { 'Hajj & Omra': PHOTOS.kaaba.src, 'Écoles coraniques': PHOTOS.coran.src, 'Librairies islamiques': PHOTOS['librairie-islamique'].src, 'Associations caritatives et entraide': PHOTOS.iftar.src, 'Pompes funèbres musulmanes et toilette mortuaire': PHOTOS.cimetiere.src }
 
-export default async function VieMusulmane() {
+async function VieMusulmane() {
   const rubric = RUBRICS.find((r) => r.key === 'musulmane')
   const entries = rubric?.entries ?? []
   const tiles = await Promise.all(
@@ -77,3 +78,5 @@ export default async function VieMusulmane() {
     </div>
   )
 }
+
+export default withSectionGate(VieMusulmane, () => '/vie-musulmane')

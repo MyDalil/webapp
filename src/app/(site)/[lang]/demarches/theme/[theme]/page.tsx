@@ -6,6 +6,7 @@ import { ThemeBrowser, type BrowserItem } from '@/modules/contenus/ui'
 import { XpHero } from '@/platform/ui/Xp'
 import { Icon } from '@/platform/ui/Icon'
 import { PHOTOS } from '@/platform/referentiel/photos'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ theme: string }> }
 export const revalidate = 3600
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** Toutes les démarches d’un thème : en ligne d’abord, chacune avec son lien direct vers le site officiel. */
-export default async function ThemePage({ params }: Props) {
+async function ThemePage({ params }: Props) {
   const t = themeByKey((await params).theme)
   if (!t) notFound()
   const items = (await listProcedures(t.key)).sort((a, b) => Number(Boolean(b.online)) - Number(Boolean(a.online)) || a.title.localeCompare(b.title, 'fr'))
@@ -75,3 +76,5 @@ export default async function ThemePage({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(ThemePage, (p) => `/demarches/theme/${p.theme}`)

@@ -12,6 +12,7 @@ import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, procedureJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 import type { Lang } from '@/platform/i18n'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ slug: string; lang: string }> }
 export const revalidate = 3600
@@ -73,7 +74,7 @@ function Facts({ d, items, ordered = false }: { d: Demarche; items: GuideFact[];
 }
 
 /** Fiche d’une démarche (maquette validée par Rad) : visuel, points clés, deux options, guide gratuit sourcé. */
-export default async function DemarchePage({ params }: Props) {
+async function DemarchePage({ params }: Props) {
   const { slug, lang } = await params
   const L = asLang(lang)
   const d = demarcheBySlug(slug)
@@ -196,3 +197,5 @@ export default async function DemarchePage({ params }: Props) {
     </article>
   )
 }
+
+export default withSectionGate(DemarchePage, (p) => `/demarches/${p.slug}`)

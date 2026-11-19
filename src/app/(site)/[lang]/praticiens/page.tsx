@@ -6,6 +6,7 @@ import { SponsoredList } from '@/modules/pros/ui'
 import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitioners, specialtyLabel } from '@/modules/sante'
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
 import { WILAYAS } from '@/platform/referentiel/catalog'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = { title: 'Trouver un praticien', description: 'Trouvez un professionnel de santé près de vous : coordonnées, et rendez-vous en ligne chez les praticiens qui le proposent.' }
 export const dynamic = 'force-dynamic'
@@ -31,7 +32,7 @@ async function healthPlaces(wilaya?: string, specialty?: string): Promise<PlaceC
   return pick((await searchPlaces({ sector: 'sante-soins', category }, 120)).places)
 }
 
-export default async function Practitioners({ params, searchParams }: { params: Promise<{ lang: string }>; searchParams: Promise<Q> }) {
+async function Practitioners({ params, searchParams }: { params: Promise<{ lang: string }>; searchParams: Promise<Q> }) {
   const q = await searchParams
   const { lang: raw } = await params
   const lang = isLang(raw) ? raw : 'fr'
@@ -188,3 +189,5 @@ export default async function Practitioners({ params, searchParams }: { params: 
     </div>
   )
 }
+
+export default withSectionGate(Practitioners, () => '/praticiens')

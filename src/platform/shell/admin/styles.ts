@@ -50,5 +50,23 @@ a.ae-card:focus-visible, .ae-rows a:focus-visible { outline: 2px solid var(--the
 .vl-msg { font-size: .82rem; color: var(--theme-success-600, var(--theme-text)); }
 .vl-msg.is-error { color: var(--theme-error-500, #b91c1c); }
 @media (max-width: 600px) { .vl-note { width: 100%; } }
+.rb-row { align-items: center; padding: 6px 0; }
+.rb-row b { font-weight: 600; }
+.rb-sub { margin-inline-start: 8px; color: var(--theme-elevation-500); font-size: .8rem; }
+.rb-cats { display: grid; padding-inline-start: 18px; }
+.rb-switch { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 6px; border: 0; background: none; color: var(--theme-text); font-size: .85rem; cursor: pointer; }
+.rb-switch:disabled { cursor: not-allowed; opacity: .7; }
+.rb-switch:focus-visible { outline: 2px solid var(--theme-success-500); outline-offset: 2px; border-radius: var(--style-radius-s, 4px); }
+.rb-knob { position: relative; width: 34px; height: 20px; flex: none; border-radius: 10px; background: var(--theme-elevation-300); transition: background .15s; }
+.rb-knob::after { content: ''; position: absolute; top: 2px; inset-inline-start: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.rb-switch.is-on .rb-knob { background: var(--theme-success-500); }
+.rb-switch.is-on .rb-knob::after { transform: translateX(14px); }
+[dir='rtl'] .rb-switch.is-on .rb-knob::after { transform: translateX(-14px); }
+.rb-state { min-width: 6.5em; text-align: start; font-variant-numeric: tabular-nums; }
+.rb-message { display: grid; gap: 6px; margin-bottom: 8px; }
+.rb-message label { font-weight: 600; }
+.rb-message small { color: var(--theme-elevation-600); font-size: .84rem; }
+.rb-input { width: min(420px, 100%); }
+@media (prefers-reduced-motion: reduce) { .rb-knob, .rb-knob::after { transition: none; } }
 @media (max-width: 600px) { .ae-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .ae-card { padding: 12px; } .ae-num { font-size: 1.35rem; } .ae-wide { grid-column: 1 / -1; } }
 `

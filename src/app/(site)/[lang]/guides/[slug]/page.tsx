@@ -15,6 +15,7 @@ import { Icon, IconLabel } from '@/platform/ui/Icon'
 const TONES = ['#16a34a', '#2563eb', '#ea580c', '#7c3aed', '#db2777', '#0891b2', '#ca8a04', '#dc2626']
 import { Visual } from '@/platform/ui/Visual'
 import { XpHero } from '@/platform/ui/Xp'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ slug: string }> }
 export const revalidate = 3600
@@ -32,7 +33,7 @@ const NO_COUNT = new Set(['administrations-services-publics'])
 const dateFr = (d: string) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 
 /** Guide pratique au format « application » (même modèle que les fiches de démarche). Contenu : prototype validé. */
-export default async function GuidePage({ params }: Props) {
+async function GuidePage({ params }: Props) {
   const { slug } = await params
   const g = await guideView(slug)
   if (!g) notFound()
@@ -138,3 +139,5 @@ export default async function GuidePage({ params }: Props) {
     </article>
   )
 }
+
+export default withSectionGate(GuidePage, (p) => `/guides/${p.slug}`)
