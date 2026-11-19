@@ -1,6 +1,7 @@
 import { runQueue } from '@/modules/agents'
 import { publishDue } from '@/modules/communication'
 import { fail, json, payload } from '@/platform/http'
+import { pluginEnabled } from '@/platform/plugins'
 
 export const maxDuration = 300
 
@@ -9,6 +10,7 @@ export const maxDuration = 300
  * et à la main depuis le cockpit. Accès : `Authorization: Bearer <CRON_SECRET>` ou un compte de l’équipe (admin, patron).
  */
 async function handle(req: Request) {
+  if (!pluginEnabled('agents')) return fail('Introuvable.', 404)
   const p = await payload()
   const secret = process.env.CRON_SECRET
   const byCron = Boolean(secret) && req.headers.get('authorization') === `Bearer ${secret}`
@@ -23,6 +25,7 @@ async function handle(req: Request) {
 
 /** GET : tâche planifiée seulement (Vercel envoie le secret). Depuis un navigateur, un lien ne doit jamais lancer les agents. */
 export async function GET(req: Request) {
+  if (!pluginEnabled('agents')) return fail('Introuvable.', 404)
   const secret = process.env.CRON_SECRET
   if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) return fail('Accès refusé : GET réservé à la tâche planifiée.', 401)
   return handle(req)

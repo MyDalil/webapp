@@ -1,7 +1,7 @@
 import 'server-only'
 import { countPublishedPlaces, getCategoryWilayaCounts, getPlaceCounts, getPlaceSitemap, wilayaSlug } from '@/modules/annuaire'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, getClassifiedSitemap } from '@/modules/annonces'
-import { ROUTES } from '@/modules/contenus'
+import { ROUTES, currentMoments } from '@/modules/contenus'
 import { getPractitionerSitemap } from '@/modules/sante'
 import { CATEGORIES as SERVICE_CATEGORIES, getProviderSitemap } from '@/modules/services'
 import { SITE } from '@/platform/site'
@@ -47,7 +47,10 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
       .map((name) => `/villes/${wilayaSlug(name)}`)
     const services = SERVICE_CATEGORIES.map((c) => `/services/${c.value}`)
     const classifieds = CLASSIFIED_CATEGORIES.map((c) => `/annonces/${c.value}`)
-    return [...new Set([...content, ...DEDICATED, ...sectors, ...cities, ...services, ...classifieds])].map((p) => url(p))
+    // Pages saisonnières : seulement les moments publiés et en cours, en français comme le reste du plan (aucun → aucune ligne).
+    const moments = (await currentMoments()).filter((m) => !m.lang || m.lang === 'fr')
+    const momentUrls = [...new Map(moments.map((m) => [m.slug, url(`/moments/${m.slug}`, m.updatedAt)])).values()]
+    return [...[...new Set([...content, ...DEDICATED, ...sectors, ...cities, ...services, ...classifieds])].map((p) => url(p)), ...momentUrls]
   }
   // Pages « catégorie » (toutes : jamais vides) et « catégorie × wilaya » (seulement avec au moins une adresse).
   if (file === 'categories') {
@@ -89,6 +92,7 @@ export const indexXml = (files: string[]) =>
 export const ROBOTS_DISALLOW = [
   '/admin',
   '/api/',
+  '/oauth/',
   ...ROBOTS_PRIVATE_PATHS,
   ...ROBOTS_PRIVATE_PATHS.map((path) => `/en${path}`),
   ...ROBOTS_PRIVATE_PATHS.map((path) => `/ar${path}`),

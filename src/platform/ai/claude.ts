@@ -14,11 +14,14 @@ export const aiConfigured = () => Boolean(process.env.ANTHROPIC_API_KEY)
 
 export type AiReply = { text: string; inputTokens: number; outputTokens: number }
 
-export async function callClaude(system: string, user: string, maxTokens: number): Promise<AiReply | null> {
+/** Contenu d’un message : texte seul, ou blocs (texte + image en base64). */
+export type ClaudeContent = string | Array<{ type: 'text'; text: string } | { type: 'image'; source: { type: 'base64'; media_type: string; data: string } }>
+
+export async function callClaude(system: string, user: ClaudeContent, maxTokens: number, timeoutMs = 9000): Promise<AiReply | null> {
   const key = process.env.ANTHROPIC_API_KEY
   if (!key) return null
   const ctrl = new AbortController()
-  const timer = setTimeout(() => ctrl.abort(), 9000)
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs)
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

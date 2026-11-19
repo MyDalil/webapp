@@ -1,8 +1,11 @@
+import type { Lang } from '@/platform/i18n'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import Link from '@/platform/ui/Link'
 import { CATEGORIES, categoryCounts, categoryLabel, searchProviders, type ProviderCard } from '@/modules/services'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
+import { FaqBlock } from '@/modules/contenus/ui'
+import { SponsoredList } from '@/modules/pros/ui'
 import { PlacePanel } from '@/modules/annuaire/ui'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel, LANGUAGES } from '@/platform/referentiel/languages'
@@ -77,7 +80,7 @@ function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
 }
 
 /** Recherche de prestataires : catégories, filtres (activité, wilaya, commune, genre, langue), résultats. */
-export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCategory?: string }) {
+export async function Browse({ q, fixedCategory, lang }: { q: BrowseQuery; fixedCategory?: string; lang?: Lang }) {
   const cat = fixedCategory ?? q.categorie
   const [results, counts] = await Promise.all([searchProviders({ category: cat, activity: q.activite, wilaya: q.wilaya, commune: q.commune, gender: q.genre, language: q.langue }), categoryCounts()])
   const current = CATEGORIES.find((c) => c.value === cat)
@@ -207,6 +210,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
           {cat ? ` · ${categoryLabel(cat)}` : ''}
           {q.commune ? ` · ${communeName(q.commune)}` : q.wilaya ? ` · ${WILAYAS.find((w) => String(w.code) === q.wilaya)?.name}` : ''}
         </p>
+        <SponsoredList lang={lang} collection="providers" wilaya={q.wilaya} where={cat ? { categories: { in: [cat] } } : undefined} />
         {results.length ? (
           <ul className="praticien-list">
             {results.map((p) => (
@@ -225,6 +229,7 @@ export async function Browse({ q, fixedCategory }: { q: BrowseQuery; fixedCatego
           </div>
         )}
       </section>
+      <FaqBlock lang={lang} path={action} />
     </div>
   )
 }

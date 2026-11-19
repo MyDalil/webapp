@@ -255,3 +255,32 @@ body:has(.xp-community) .site-footer-wrap, body:has(.xp-community) .site-footer 
 .visio-room { height: min(78vh, 760px); border-radius: 16px; overflow: hidden; --lk-accent-bg: var(--green); --lk-bg: #0f1a14; }
 @media (max-width: 640px) { .visio-room { height: calc(100dvh - 140px); border-radius: 12px; } }
 .visio-end { display: grid; gap: 12px; padding: 32px 0; } .visio-end-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Libellés à trois langues rendus sans script (FAQ, « Sponsorisé ») : seule la langue de <html lang> est visible. */
+html[lang="fr"] [data-lang-only]:not([data-lang-only~="fr"]),
+html[lang="en"] [data-lang-only]:not([data-lang-only~="en"]),
+html[lang="ar"] [data-lang-only]:not([data-lang-only~="ar"]) { display: none; }
+
+/* FAQ : accordéon natif, sans marqueur du navigateur, chevron qui pivote ; retrait logique (LTR et RTL). */
+.faq-block summary { list-style: none; cursor: pointer; }
+.faq-block summary::-webkit-details-marker { display: none; }
+.faq-block .sr-text b { white-space: normal; }
+.faq-block .sr-chev { transition: transform .2s ease; }
+.faq-block details[open] .sr-chev { transform: rotate(90deg); }
+/* « › » est un caractère miroir : en arabe il s’affiche déjà « ‹ » ; ouvert, il pointe vers le bas dans les deux sens. */
+[dir="rtl"] .faq-block details[open] .sr-chev { transform: rotate(-90deg); }
+.faq-block summary:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; border-radius: 12px; }
+.faq-answer { margin: 0; padding: 0 16px 16px; padding-inline-start: 68px; white-space: pre-line; }
+@media (max-width: 760px) { .faq-answer { padding-inline-start: 60px; } }
+@media (prefers-reduced-motion: reduce) { .faq-block .sr-chev { transition: none; } }
+
+/* Barre d’actions des fiches (3 à 6 boutons) : grille régulière de 3 colonnes ; sur mobile, une ligne défilante.
+   Couleurs et formes des boutons inchangées (fiche.css). Le repère vide (pas d’itinéraire) ne crée plus de trou. */
+div.pl-actions > span:empty { display: none; }
+div.pl-actions > * { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 640px) {
+  div.pl-actions { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: -4px; padding: 2px 4px 4px; }
+  div.pl-actions::-webkit-scrollbar { display: none; }
+  div.pl-actions > * { flex: 1 0 auto; width: auto; min-width: calc((100% - 16px) / 3.25); overflow: visible; scroll-snap-align: start; font-size: .88rem; padding-inline: 12px; }
+  div.pl-actions > .button:hover { transform: none; }
+}

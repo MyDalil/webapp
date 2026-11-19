@@ -1,5 +1,7 @@
 import { createHash } from 'crypto'
-import type { CollectionBeforeChangeHook, CollectionBeforeOperationHook, CollectionConfig } from 'payload'
+import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionBeforeOperationHook, CollectionConfig } from 'payload'
+import { after } from 'next/server'
+import { needsAlt } from './altRules'
 import { anyone, isAdmin, isStaff, isStaffUser } from '@/platform/access'
 
 /** Empreinte SHA-256 du fichier reçu, avant tout traitement : repère les doublons. */
@@ -15,6 +17,25 @@ const setHash: CollectionBeforeChangeHook = ({ data, req }) => {
   return data
 }
 
+/** Texte alternatif vide (ou simple nom de fichier) à l’envoi : généré par l’IA après la réponse, si elle est configurée et sous plafond. */
+const autoAlt: CollectionAfterChangeHook = ({ doc, operation, req }) => {
+  if (operation !== 'create' || req.context?.altGenerated || !process.env.ANTHROPIC_API_KEY || !needsAlt(doc)) return doc
+  const run = async () => {
+    try {
+      const { generateAlt } = await import('./alt')
+      await generateAlt(req.payload, doc.id)
+    } catch (e) {
+      req.payload.logger?.warn?.(`Texte alternatif automatique non fait (photo ${doc.id}) : ${(e as Error).message.slice(0, 160)}`)
+    }
+  }
+  try {
+    after(run)
+  } catch {
+    void run()
+  }
+  return doc
+}
+
 /** Formats produits en WebP (sharp branché dans payload.config). Les anciens noms `thumb` et `cover` sont gardés. */
 const webp = (quality: number) => ({ format: 'webp' as const, options: { quality } })
 
@@ -26,7 +47,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   labels: { singular: 'Photo', plural: 'Photos' },
   admin: { group: 'Annuaire', useAsTitle: 'alt', defaultColumns: ['filename', 'alt', 'moderation', 'uploadedBy', 'updatedAt'] },
-  hooks: { beforeOperation: [hashIncoming], beforeChange: [setHash] },
+  hooks: { beforeOperation: [hashIncoming], beforeChange: [setHash], afterChange: [autoAlt] },
   access: { read: anyone, create: isStaff, update: isStaff, delete: isAdmin },
   upload: {
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],

@@ -20,6 +20,6 @@ export async function POST(req: Request) {
   if (!(await staff(req))) return fail('Accès refusé.', 401)
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET
   if (!botToken() || !secret) return fail('TELEGRAM_BOT_TOKEN et TELEGRAM_WEBHOOK_SECRET sont nécessaires.', 422)
-  const r = await telegramApi('setWebhook', { url: `${SITE}/api/telegram`, secret_token: secret, allowed_updates: ['message'], drop_pending_updates: true })
+  const r = await telegramApi('setWebhook', { url: `${SITE}/api/telegram`, secret_token: secret, allowed_updates: ['message', 'callback_query'], drop_pending_updates: true })
   return json(r, r.ok ? 200 : 502)
 }

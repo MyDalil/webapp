@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { SITE_REDIRECTS } from './src/platform/routes'
+import { SITE_REWRITES } from './src/platform/rewrites'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
@@ -28,6 +29,21 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Service worker : portée = tout le site ; relu à chaque visite pour qu’une nouvelle version s’installe vite.
+        source: '/sw.js',
+        headers: [
+          { key: 'Service-Worker-Allowed', value: '/' },
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+        ],
+      },
+      // Visiteur connecté (cookie de session) : le service worker ne garde jamais la page en cache hors ligne.
+      ...['payload-token', 'dalil_sid'].map((key) => ({
+        source: '/((?!api|_next).*)',
+        has: [{ type: 'cookie' as const, key }],
+        headers: [{ key: 'X-Dalil-Session', value: '1' }],
+      })),
+      {
         // Partout, /admin et /api compris : HTTPS imposé, pas d’intégration dans un autre site, pas de plugin.
         source: '/:path*',
         headers: [
@@ -42,15 +58,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return SITE_REDIRECTS
   },
+  // Chemins techniques exclus (PWA, llms.txt, OAuth…) et domaine mcp.mydalil.com : src/platform/rewrites.ts (testé).
   async rewrites() {
-    return {
-      beforeFiles: [],
-      afterFiles: [
-        { source: '/', destination: '/fr' },
-        { source: '/:path((?!(?:fr|en|ar|api|admin|_next|sitemaps)(?:/|$)).*)', destination: '/fr/:path' },
-      ],
-      fallback: [],
-    }
+    return SITE_REWRITES
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
@@ -63,8 +73,12 @@ const nextConfig: NextConfig = {
   turbopack: { root: path.resolve(dirname) },
   // Jeux d’import (osm-selected.json : 12 Mo) lus seulement par les migrations au build : hors des fonctions serveur.
   outputFileTracingExcludes: { '*': ['./src/modules/annuaire/data/**/*'] },
-  // Le moteur d’agents lit le dossier company/ (méthode ICM) à l’exécution.
-  outputFileTracingIncludes: { '*': ['./company/**/*'] },
+  // Le moteur d’agents lit le dossier company/ (méthode ICM) à l’exécution : seulement dans les fonctions qui l’appellent
+  // (routes des agents ; bot Telegram → activateRole ; hook des tâches via l’API Payload et /admin ; vue Mémoire de /admin),
+  // plus dans toutes les pages du site.
+  outputFileTracingIncludes: Object.fromEntries(
+    ['/api/agents/**', '/api/taches', '/api/telegram', '/api/\\[...slug\\]', '/admin/**'].map((route) => [route, ['./company/**/*']]),
+  ),
   // 404 du site avec son en-tête et son pied de page (le site et /admin ont chacun leur racine).
   experimental: { globalNotFound: true },
 }

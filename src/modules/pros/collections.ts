@@ -1,0 +1,6 @@
+export { Sponsorships } from './Sponsorships'
+export { Payments } from './Payments'
+export { Subscriptions } from './subscriptionsCollection'
+export { Claims, ClaimDocuments } from './claimsCollection'
+export { Leads } from './leadsCollection'
+export { Pricing } from './pricingGlobal'

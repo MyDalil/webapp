@@ -4,6 +4,9 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { writeFileSync } from 'node:fs'
 import { flushDeferredData, needsReindex } from '@/platform/deferredData'
+// Charge les migrations : chacune enregistre ses données différées (deferred). Avant, payload.config les importait
+// par `prodMigrations` ; depuis son retrait (19 nov. 2026), ce script doit les charger lui-même.
+import '@/migrations'
 
 const payload = await getPayload({ config })
 const done = await flushDeferredData(payload)

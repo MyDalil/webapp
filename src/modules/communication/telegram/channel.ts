@@ -18,6 +18,12 @@ async function channelId(payload: Payload) {
   return c.telegramChannelId ? { id: c.telegramChannelId } : { error: 'canal non réglé (Commandes)' }
 }
 
+/** Bouton « Discuter avec DALIL » ajouté à chaque publication du canal (si TELEGRAM_BOT_USERNAME est réglé). */
+export function chatRow(env: Record<string, string | undefined> = process.env): { text: string; url: string }[][] {
+  const bot = env.TELEGRAM_BOT_USERNAME?.trim().replace(/^@/, '')
+  return bot && /^\w{5,32}$/.test(bot) ? [[{ text: 'Discuter avec DALIL', url: `https://t.me/${bot}?start=chercher` }]] : []
+}
+
 export async function publishPost(payload: Payload, id: number) {
   const post = (await payload.findByID({ collection: 'telegram-posts', id, depth: 1, overrideAccess: true })) as unknown as Post
   if (post.status !== 'scheduled') return { ok: false, detail: `statut ${post.status}` }
@@ -30,7 +36,8 @@ export async function publishPost(payload: Payload, id: number) {
   const claimed = await db.drizzle.execute(sql`UPDATE telegram_posts SET status = 'publishing', updated_at = now() WHERE id = ${id} AND status = 'scheduled' RETURNING id`)
   if (!claimed.rows.length) return { ok: false, detail: 'déjà pris par un autre envoi' }
   const text = [post.text, post.textAr].filter(Boolean).join('\n\n').slice(0, 4096)
-  const keyboard = post.buttons?.length ? { inline_keyboard: post.buttons.map((b) => [{ text: b.label, url: b.url }]) } : undefined
+  const rows = [...(post.buttons ?? []).map((b) => [{ text: b.label, url: b.url }]), ...chatRow()]
+  const keyboard = rows.length ? { inline_keyboard: rows } : undefined
   const photoUrl = (post.photo as { url?: string } | null)?.url
   const r = photoUrl
     ? await telegramApi<{ message_id: number }>('sendPhoto', { chat_id: ch.id, photo: photoUrl.startsWith('http') ? photoUrl : `${SITE}${photoUrl}`, caption: text.slice(0, 1024), reply_markup: keyboard, disable_notification: !!post.silent })

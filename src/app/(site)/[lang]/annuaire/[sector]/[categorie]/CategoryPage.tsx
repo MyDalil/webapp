@@ -1,14 +1,17 @@
+import type { Lang } from '@/platform/i18n'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
 import { getPlaceCounts, searchPlaces } from '@/modules/annuaire'
 import { CategoryTiles, Directory } from '@/modules/annuaire/ui'
+import { FaqBlock } from '@/modules/contenus/ui'
+import { SponsoredList } from '@/modules/pros/ui'
 import { categoryBySlug, categoryPath, wilayaBySlug } from '@/platform/referentiel/slug'
 
 /**
  * Page d’une catégorie de l’annuaire, nationale ou dans une wilaya (référencement : « Hôpitaux à Oran »).
  * Jamais vide (décision de Rad, 2026-10-26) : sans adresse ici, la catégorie dans tout le pays, puis la rubrique.
  */
-export async function CategoryPage({ sector, categorie, wilaya }: { sector: string; categorie: string; wilaya?: string }) {
+export async function CategoryPage({ sector, categorie, wilaya, lang }: { sector: string; categorie: string; wilaya?: string; lang?: Lang }) {
   const found = categoryBySlug(sector, categorie)
   const w = wilaya ? wilayaBySlug(wilaya) : null
   if (!found || (wilaya && !w)) notFound()
@@ -39,6 +42,7 @@ export async function CategoryPage({ sector, categorie, wilaya }: { sector: stri
               : `Pas encore d’adresse « ${category} ». Voici les autres adresses de la rubrique ${s.title}.`}
         </p>
         <CategoryTiles counts={counts.category} sector={s.slug} categories={s.categories} active={category} wilaya={w ? Number(w.code) : null} />
+        <SponsoredList lang={lang} collection="places" wilaya={w ? w.code : null} where={{ category: { equals: category } }} />
       </section>
       <Directory
         places={shown.places}
@@ -49,6 +53,7 @@ export async function CategoryPage({ sector, categorie, wilaya }: { sector: stri
         initialCategory={here.total || national?.total ? category : ''}
         initialWilaya={here.total && w ? w.name : ''}
       />
+      <FaqBlock lang={lang} path={categoryPath(s.slug, category, w ? w.code : undefined)} />
     </>
   )
 }

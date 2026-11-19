@@ -13,7 +13,7 @@ async function login(page: Page) {
   await signIn(page.request, ADMIN)
 }
 
-test.describe.serial('Cockpit — Communauté @ecriture', () => {
+test.describe.serial('Cockpit — Communauté @ecriture @extras', () => {
   for (const [path, title] of [['/admin/cockpit/moderation', 'Modération'], ['/admin/cockpit/annonces', 'Annonces'], ['/admin/cockpit/pros', 'Professionnels'], ['/admin/cockpit/membres', 'Membres']] as const) {
     test(`${title} : s’ouvre`, async ({ page }) => {
       await login(page)

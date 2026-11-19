@@ -4,6 +4,7 @@ import { getAccount } from '@/platform/ui/memberHint'
 import Link from '@/platform/ui/Link'
 import { useLangRouter } from '@/platform/ui/lang'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { SmartText } from '@/platform/ui/SmartText'
 
 type Offer = { activity: string; label: string; pricing: 'hour' | 'flat'; price: number | null; hours: number; priceLabel: string }
@@ -24,7 +25,10 @@ const DAYS = 14
 /** Demande de mission : prestation, durée, jour et heure, adresse, description. Le prestataire répond sous 24 h. */
 export function RequestForm({ slug, name, offers, communes, clientele, initialActivity }: { slug: string; name: string; offers: Offer[]; communes: { id: string; name: string }[]; clientele: 'all' | 'women' | 'men'; initialActivity?: string }) {
   const router = useLangRouter()
-  const [activity, setActivity] = useState(offers.find((o) => o.activity === initialActivity)?.activity ?? offers[0]?.activity)
+  // Prestation demandée par le lien (?activite=…) : lue dans le navigateur, la fiche reste en cache (ISR).
+  const search = useSearchParams()
+  const wanted = initialActivity ?? search.get('activite') ?? undefined
+  const [activity, setActivity] = useState(offers.find((o) => o.activity === wanted)?.activity ?? offers[0]?.activity)
   const offer = offers.find((o) => o.activity === activity)
   const [hours, setHours] = useState(offer?.pricing === 'hour' ? Math.max(1, Math.round(offer.hours)) : 2)
   const [from, setFrom] = useState(today())

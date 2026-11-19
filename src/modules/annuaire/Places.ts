@@ -1,12 +1,13 @@
 import type { CollectionAfterChangeHook, CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { revalidateLangs } from '@/platform/revalidate'
-import { contactField, guardPublication, keepPublishedBase, markTechnicalUpdate, isAdmin, isStaff, isStaffField, publishedOrStaff } from '@/platform/access'
+import { contactField, guardPublication, keepPublishedBase, markTechnicalUpdate, isAdmin, isAdminField, isStaff, isStaffField, publishedOrStaff } from '@/platform/access'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { criteriaFor, requireProof, verificationTab } from '@/modules/confiance'
 import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { slugify } from '@/platform/referentiel/slug'
+import { translateOnPublish } from '@/platform/i18n/auto'
 
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
@@ -47,7 +48,7 @@ export const Places: CollectionConfig = {
   trash: true,
   defaultSort: 'name',
   access: { read: publishedOrStaff, create: isStaff, update: isStaff, delete: isAdmin },
-  hooks: { beforeOperation: [markTechnicalUpdate], beforeValidate: [prepare], beforeChange: [guardPublication('_status'), keepPublishedBase, requireProof], afterChange: [refresh, indexPlace], afterDelete: [unindexPlace] },
+  hooks: { beforeOperation: [markTechnicalUpdate], beforeValidate: [prepare], beforeChange: [guardPublication('_status'), keepPublishedBase, requireProof], afterChange: [refresh, indexPlace, translateOnPublish('_status')], afterDelete: [unindexPlace] },
   fields: [
     {
       type: 'tabs',
@@ -226,5 +227,7 @@ export const Places: CollectionConfig = {
       ],
     },
     { name: 'slug', type: 'text', label: 'Adresse de la page', unique: true, index: true, admin: { position: 'sidebar', description: 'Généré depuis le nom. /adresses/…' } },
+    // Compte professionnel rattaché après une revendication acceptée (module pros). Jamais public ; administrateur seulement.
+    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', index: true, access: { read: isStaffField, create: isAdminField, update: isAdminField }, admin: { position: 'sidebar', description: 'Rattaché par une revendication acceptée. Sans effet sur la vérification.' } },
   ],
 }

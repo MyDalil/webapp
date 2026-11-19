@@ -8,6 +8,7 @@ import type { Media, Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { RESULT_LABEL, STATUS_LABEL } from '@/modules/confiance'
 import { categoryPhoto, cityPhoto } from './listings'
+import { localize } from '@/platform/i18n/content'
 
 /** Centre des principales villes : position approximative tant que la fiche n’a pas de coordonnées exactes. */
 const CITY_CENTER: Record<string, [number, number]> = {
@@ -186,9 +187,10 @@ export const getPlaceCounts = cache(async (): Promise<{ total: number; favorite:
   return out
 })
 
-/** Une fiche ; en mode aperçu depuis /admin, la dernière version enregistrée (brouillon compris). */
-export async function getPlace(slug: string): Promise<Place | null> {
+/** Une fiche ; en mode aperçu depuis /admin, la dernière version enregistrée (brouillon compris). `lang` : textes traduits superposés (noms, adresses, horaires jamais traduits). */
+export async function getPlace(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<Place | null> {
   const preview = (await draftMode()).isEnabled
+  if (!preview) return getPublishedPlace(slug, lang, 1)
   const payload = await client()
   const { docs } = await payload.find({
     collection: 'places',
@@ -198,7 +200,14 @@ export async function getPlace(slug: string): Promise<Place | null> {
     draft: preview,
     overrideAccess: preview,
   })
-  return docs[0] ?? null
+  return localize(docs[0] ?? null, 'places', lang, payload)
+}
+
+/** Fiche publiée seulement (jamais de brouillon, sans dépendre de la requête) : actions, MCP, Telegram. `lang` : textes traduits superposés. */
+export async function getPublishedPlace(slug: string, lang?: 'fr' | 'en' | 'ar', depth: 0 | 1 = 1): Promise<Place | null> {
+  const payload = await client()
+  const { docs } = await payload.find({ collection: 'places', where: { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] }, depth, limit: 1, overrideAccess: false })
+  return localize(docs[0] ?? null, 'places', lang, payload)
 }
 
 /** Fiches générées au build : les 400 plus consultées ; les autres sont générées à la première visite (dynamicParams). */

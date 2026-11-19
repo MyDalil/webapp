@@ -5,6 +5,8 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { ACTIVITIES, CATEGORIES, CLIENTELE, DAYS, GENDERS, isSensitive } from './activities'
 import { indexProvider, unindexProvider } from './search'
+import { revalidateLangs } from '@/platform/revalidate'
+import { translateOnPublish } from '@/platform/i18n/auto'
 
 /** Public : prestataires publiés. Équipe : tous. Les pros passent par /api/pro/prestataire (champs autorisés uniquement). */
 const readPublished: Access = (args) => (isStaff(args) ? true : { status: { equals: 'published' } })
@@ -51,12 +53,30 @@ const purgeCheckedDocuments: CollectionAfterChangeHook = async ({ doc, previousD
   return doc
 }
 
+/** Fiche en cache (ISR) : rafraîchie à chaque enregistrement (publication, modification, note des avis) et à la suppression. */
+const refreshPage: CollectionAfterChangeHook = ({ doc, previousDoc }) => {
+  try {
+    if (doc.slug) revalidateLangs(`/prestataires/${doc.slug}`)
+    if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidateLangs(`/prestataires/${previousDoc.slug}`)
+  } catch {
+    // hors contexte Next (migrations, scripts, tâche planifiée) : rien à rafraîchir
+  }
+  return doc
+}
+const refreshDeleted = ({ doc }: { doc: { slug?: string | null } }) => {
+  try {
+    if (doc?.slug) revalidateLangs(`/prestataires/${doc.slug}`)
+  } catch {
+    /* hors contexte Next */
+  }
+}
+
 export const Providers: CollectionConfig = {
   slug: 'providers',
   labels: { singular: 'Prestataire', plural: 'Prestataires' },
   admin: { group: 'Services', useAsTitle: 'displayName', defaultColumns: ['displayName', 'categories', 'wilaya', 'status', 'identityVerified', 'legalVerified'] },
   access: { read: readPublished, create: isStaff, update: isStaff, delete: isAdmin },
-  hooks: { beforeValidate: [prepare], beforeChange: [onlyAdminPublishes('status'), guardPublication], afterChange: [purgeCheckedDocuments, indexProvider], afterDelete: [unindexProvider] },
+  hooks: { beforeValidate: [prepare], beforeChange: [onlyAdminPublishes('status'), guardPublication], afterChange: [purgeCheckedDocuments, indexProvider, refreshPage, translateOnPublish('status')], afterDelete: [unindexProvider, refreshDeleted] },
   fields: [
     {
       type: 'tabs',
@@ -158,7 +178,7 @@ export const Providers: CollectionConfig = {
     },
     { name: 'status', type: 'select', required: true, defaultValue: 'pending', label: 'Statut', options: [{ label: 'En attente de vérification', value: 'pending' }, { label: 'Publié', value: 'published' }, { label: 'Suspendu', value: 'suspended' }], admin: { position: 'sidebar', description: 'Publication uniquement après les vérifications exigées (contrôlées automatiquement).' } },
     { name: 'demo', type: 'checkbox', label: 'Fiche de démonstration', defaultValue: false, admin: { position: 'sidebar' } },
-    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', access: { read: isStaffField }, admin: { position: 'sidebar' } },
+    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', index: true, access: { read: isStaffField, create: isAdminField, update: isAdminField }, admin: { position: 'sidebar' } },
     { name: 'slug', type: 'text', unique: true, index: true, label: 'Adresse de la page', admin: { position: 'sidebar', description: '/prestataires/…' } },
     { type: 'row', admin: { position: 'sidebar' }, fields: [{ name: 'ratingAvg', type: 'number', label: 'Note moyenne', admin: { readOnly: true } }, { name: 'ratingCount', type: 'number', label: 'Avis', defaultValue: 0, admin: { readOnly: true } }, { name: 'missionsDone', type: 'number', label: 'Missions réalisées', defaultValue: 0, admin: { readOnly: true } }] },
   ],

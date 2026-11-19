@@ -6,6 +6,7 @@ import { payload as getPayload } from '@/platform/http'
 import { commune as communeOf, communeName } from '@/platform/referentiel/communes'
 import { cleanDocument, cleanImage } from '@/platform/storage/images'
 import { savePublicPhoto } from '@/platform/storage/upload'
+import { localize } from '@/platform/i18n/content'
 import { activity as activityOf, activityLabel, categoryLabel, priceLabel } from './activities'
 import { missionCancelled, missionReminder, newMessage, requestAccepted, requestDeclined, requestSent, requestToProvider, reviewInvite, type MissionMail } from './emails'
 import { algiersDate, isRequestable, openDays, type Busy } from './planning'
@@ -101,10 +102,10 @@ export async function categoryCounts() {
   return counts
 }
 
-export async function getProvider(slug: string): Promise<Provider | null> {
+export async function getProvider(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<Provider | null> {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'providers', where: { and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }] }, depth: 1, limit: 1, overrideAccess: true })
-  return docs[0] ?? null
+  return localize(docs[0] ?? null, 'providers', lang, p)
 }
 
 /** Plan du site : prestataires publiés seulement (fiches de démonstration exclues). */

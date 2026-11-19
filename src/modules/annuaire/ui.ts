@@ -2,6 +2,7 @@
 export { Directory } from './ui/Directory'
 export { PlaceMap } from './ui/PlaceMap'
 export { PlaceActions } from './ui/PlaceActions'
+export { ClaimLink } from './ui/ClaimLink'
 export { PlaceRow, PlacePanel, PlaceCards, PLACE_STATUS, type PlaceRowData } from './ui/PlaceRow'
 export { HomeEntries, type EntryPhotos, type EntryStat } from './ui/HomeEntries'
 export { WeekendExplorer } from './ui/WeekendExplorer'

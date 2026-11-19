@@ -85,12 +85,23 @@ export interface Config {
     procedures: Procedure;
     platforms: Platform;
     representations: Representation;
+    faqs: Faq;
+    moments: Moment;
+    translations: Translation;
+    sponsorships: Sponsorship;
+    payments: Payment;
+    subscriptions: Subscription;
+    claims: Claim;
+    'claim-documents': ClaimDocument;
+    leads: Lead;
+    'metrics-daily': MetricsDaily;
     media: Media;
     submissions: Submission;
     'contribution-photos': ContributionPhoto;
     subscribers: Subscriber;
     campaigns: Campaign;
     'telegram-posts': TelegramPost;
+    'bot-sessions': BotSession;
     members: Member;
     'visitor-sessions': VisitorSession;
     users: User;
@@ -108,7 +119,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    sponsorships: {
+      payments: 'payments';
+    };
+  };
   collectionsSelect: {
     places: PlacesSelect<false> | PlacesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
@@ -126,12 +141,23 @@ export interface Config {
     procedures: ProceduresSelect<false> | ProceduresSelect<true>;
     platforms: PlatformsSelect<false> | PlatformsSelect<true>;
     representations: RepresentationsSelect<false> | RepresentationsSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    moments: MomentsSelect<false> | MomentsSelect<true>;
+    translations: TranslationsSelect<false> | TranslationsSelect<true>;
+    sponsorships: SponsorshipsSelect<false> | SponsorshipsSelect<true>;
+    payments: PaymentsSelect<false> | PaymentsSelect<true>;
+    subscriptions: SubscriptionsSelect<false> | SubscriptionsSelect<true>;
+    claims: ClaimsSelect<false> | ClaimsSelect<true>;
+    'claim-documents': ClaimDocumentsSelect<false> | ClaimDocumentsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    'metrics-daily': MetricsDailySelect<false> | MetricsDailySelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'contribution-photos': ContributionPhotosSelect<false> | ContributionPhotosSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
     'telegram-posts': TelegramPostsSelect<false> | TelegramPostsSelect<true>;
+    'bot-sessions': BotSessionsSelect<false> | BotSessionsSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     'visitor-sessions': VisitorSessionsSelect<false> | VisitorSessionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -157,11 +183,13 @@ export interface Config {
     'featured-destination': FeaturedDestination;
     controls: Control;
     accompagnement: Accompagnement;
+    pricing: Pricing;
   };
   globalsSelect: {
     'featured-destination': FeaturedDestinationSelect<false> | FeaturedDestinationSelect<true>;
     controls: ControlsSelect<false> | ControlsSelect<true>;
     accompagnement: AccompagnementSelect<false> | AccompagnementSelect<true>;
+    pricing: PricingSelect<false> | PricingSelect<true>;
   };
   locale: null;
   widgets: {
@@ -469,6 +497,10 @@ export interface Place {
    * Généré depuis le nom. /adresses/…
    */
   slug?: string | null;
+  /**
+   * Rattaché par une revendication acceptée. Sans effet sur la vérification.
+   */
+  owner?: (number | null) | Member;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -1622,6 +1654,10 @@ export interface User {
    * Nombre fourni par Telegram (pas le nom d’utilisateur). Autorise ce compte à parler à l’agent CEO.
    */
   telegramId?: string | null;
+  /**
+   * Format international E.164, ex. +213551234567. Autorise ce compte à écrire au bot WhatsApp.
+   */
+  whatsappPhone?: string | null;
   role: 'patron' | 'admin' | 'editor' | 'conseiller';
   updatedAt: string;
   createdAt: string;
@@ -1785,6 +1821,244 @@ export interface Representation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  /**
+   * Chemin de la page, ex. /annuaire/sante/pediatres
+   */
+  scope: string;
+  lang: 'fr' | 'en' | 'ar';
+  question: string;
+  answer: string;
+  order?: number | null;
+  published?: boolean | null;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "moments".
+ */
+export interface Moment {
+  id: number;
+  title: string;
+  slug: string;
+  lang: 'fr' | 'en' | 'ar';
+  summary?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  startsAt?: string | null;
+  endsAt?: string | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  published?: boolean | null;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "translations".
+ */
+export interface Translation {
+  id: number;
+  collection: string;
+  docId: string;
+  field: string;
+  lang: 'fr' | 'en' | 'ar';
+  text?: string | null;
+  sourceHash?: string | null;
+  status: 'auto' | 'relue';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsorships".
+ */
+export interface Sponsorship {
+  id: number;
+  targetCollection: 'places' | 'practitioners' | 'providers' | 'classifieds';
+  targetId: string;
+  kind: 'a-la-une' | 'remontee' | 'partenaire';
+  wilaya?: string | null;
+  startsAt?: string | null;
+  endsAt?: string | null;
+  status: 'demande' | 'active' | 'terminee' | 'refusee';
+  /**
+   * BaridiMob, CCP, espèces… et référence éventuelle. Pour activer : un paiement « Reçu » lié ou cette note.
+   */
+  paymentNote?: string | null;
+  requestedBy?: (number | null) | Member;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  payments?: {
+    docs?: (number | Payment)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: number;
+  provider:
+    'cib' | 'edahabia' | 'baridimob' | 'ccp' | 'especes' | 'virement' | 'stripe' | 'chargily' | 'slickpay' | 'autre';
+  /**
+   * Numéro de transaction, de reçu ou de virement.
+   */
+  reference?: string | null;
+  purpose?: ('abonnement' | 'boost' | 'projecteur' | 'leads' | 'autre') | null;
+  externalId?: string | null;
+  /**
+   * 1 500 DA = 150000.
+   */
+  amount: number;
+  currency: 'DZD' | 'EUR' | 'USD';
+  status: 'en_attente' | 'recu' | 'rembourse' | 'annule';
+  paidAt?: string | null;
+  member?: (number | null) | Member;
+  sponsorship?: (number | null) | Sponsorship;
+  subscription?: (number | null) | Subscription;
+  /**
+   * Reçu téléversé par le professionnel (document privé, lecture administrateur seulement).
+   */
+  proofFile?: (number | null) | ClaimDocument;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscriptions".
+ */
+export interface Subscription {
+  id: number;
+  member: number | Member;
+  targetCollection: 'places' | 'practitioners' | 'providers';
+  targetId: string;
+  plan: 'pro_mensuel' | 'pro_annuel' | 'premium_mensuel' | 'premium_annuel';
+  status: 'en_attente' | 'active' | 'expiree' | 'annulee';
+  startsAt?: string | null;
+  /**
+   * Calculée à l’activation si vide (annuel : 12 mois + mois offerts).
+   */
+  endsAt?: string | null;
+  payment?: (number | null) | Payment;
+  remindedAt?: string | null;
+  note?: string | null;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claim-documents".
+ */
+export interface ClaimDocument {
+  id: number;
+  member?: (number | null) | Member;
+  filename: string;
+  mimetype: 'application/pdf' | 'image/jpeg' | 'image/png';
+  size: number;
+  data: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims".
+ */
+export interface Claim {
+  id: number;
+  member: number | Member;
+  targetCollection: 'places' | 'practitioners' | 'providers';
+  targetId: string;
+  proofType: 'telephone' | 'registre_commerce' | 'carte_pro' | 'autre';
+  proofText?: string | null;
+  proofFile?: (number | null) | ClaimDocument;
+  /**
+   * Décidez avec les boutons de la vue Validation : la fiche est alors rattachée au compte et le membre prévenu.
+   */
+  status: 'en_attente' | 'acceptee' | 'refusee';
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  targetCollection: 'places' | 'practitioners' | 'providers';
+  targetId: string;
+  kind: 'devis' | 'preinscription' | 'rappel' | 'rdv';
+  name: string;
+  phone: string;
+  email?: string | null;
+  message?: string | null;
+  consent: boolean;
+  status: 'nouveau' | 'transmis' | 'traite' | 'spam';
+  /**
+   * Visiteur connecté qui envoie la demande (facultatif). Le destinataire est le propriétaire de la fiche (champ owner), jamais ce champ.
+   */
+  member?: (number | null) | Member;
+  country:
+    'DZ' | 'FR' | 'BE' | 'CA' | 'CH' | 'ES' | 'IT' | 'DE' | 'GB' | 'US' | 'TN' | 'MA' | 'AE' | 'QA' | 'SA' | 'TR';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "metrics-daily".
+ */
+export interface MetricsDaily {
+  id: number;
+  day: string;
+  targetCollection: string;
+  targetId: string;
+  views: number;
+  calls: number;
+  whatsapp: number;
+  directions: number;
+  shares: number;
+  leads: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
 export interface Submission {
@@ -1920,6 +2194,28 @@ export interface TelegramPost {
   publishedAt?: string | null;
   views?: number | null;
   error?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bot-sessions".
+ */
+export interface BotSession {
+  id: number;
+  channel: 'telegram' | 'whatsapp';
+  chatId: string;
+  step?: string | null;
+  data?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  expiresAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2185,7 +2481,7 @@ export interface AgentNotification {
  */
 export interface AiUsage {
   id: number;
-  feature: 'reformulate' | 'understand' | 'agent';
+  feature: 'reformulate' | 'understand' | 'agent' | 'translate' | 'alt-text' | 'channel';
   member?: (number | null) | Member;
   agent?: (number | null) | Agent;
   inputTokens?: number | null;
@@ -2394,6 +2690,46 @@ export interface PayloadLockedDocument {
         value: number | Representation;
       } | null)
     | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'moments';
+        value: number | Moment;
+      } | null)
+    | ({
+        relationTo: 'translations';
+        value: number | Translation;
+      } | null)
+    | ({
+        relationTo: 'sponsorships';
+        value: number | Sponsorship;
+      } | null)
+    | ({
+        relationTo: 'payments';
+        value: number | Payment;
+      } | null)
+    | ({
+        relationTo: 'subscriptions';
+        value: number | Subscription;
+      } | null)
+    | ({
+        relationTo: 'claims';
+        value: number | Claim;
+      } | null)
+    | ({
+        relationTo: 'claim-documents';
+        value: number | ClaimDocument;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'metrics-daily';
+        value: number | MetricsDaily;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -2416,6 +2752,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'telegram-posts';
         value: number | TelegramPost;
+      } | null)
+    | ({
+        relationTo: 'bot-sessions';
+        value: number | BotSession;
       } | null)
     | ({
         relationTo: 'members';
@@ -2629,6 +2969,7 @@ export interface PlacesSelect<T extends boolean = true> {
         notes?: T;
       };
   slug?: T;
+  owner?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -3115,6 +3456,185 @@ export interface RepresentationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  scope?: T;
+  lang?: T;
+  question?: T;
+  answer?: T;
+  order?: T;
+  published?: T;
+  country?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "moments_select".
+ */
+export interface MomentsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  lang?: T;
+  summary?: T;
+  body?: T;
+  startsAt?: T;
+  endsAt?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  published?: T;
+  country?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "translations_select".
+ */
+export interface TranslationsSelect<T extends boolean = true> {
+  collection?: T;
+  docId?: T;
+  field?: T;
+  lang?: T;
+  text?: T;
+  sourceHash?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsorships_select".
+ */
+export interface SponsorshipsSelect<T extends boolean = true> {
+  targetCollection?: T;
+  targetId?: T;
+  kind?: T;
+  wilaya?: T;
+  startsAt?: T;
+  endsAt?: T;
+  status?: T;
+  paymentNote?: T;
+  requestedBy?: T;
+  country?: T;
+  payments?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments_select".
+ */
+export interface PaymentsSelect<T extends boolean = true> {
+  provider?: T;
+  reference?: T;
+  purpose?: T;
+  externalId?: T;
+  amount?: T;
+  currency?: T;
+  status?: T;
+  paidAt?: T;
+  member?: T;
+  sponsorship?: T;
+  subscription?: T;
+  proofFile?: T;
+  country?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscriptions_select".
+ */
+export interface SubscriptionsSelect<T extends boolean = true> {
+  member?: T;
+  targetCollection?: T;
+  targetId?: T;
+  plan?: T;
+  status?: T;
+  startsAt?: T;
+  endsAt?: T;
+  payment?: T;
+  remindedAt?: T;
+  note?: T;
+  country?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims_select".
+ */
+export interface ClaimsSelect<T extends boolean = true> {
+  member?: T;
+  targetCollection?: T;
+  targetId?: T;
+  proofType?: T;
+  proofText?: T;
+  proofFile?: T;
+  status?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claim-documents_select".
+ */
+export interface ClaimDocumentsSelect<T extends boolean = true> {
+  member?: T;
+  filename?: T;
+  mimetype?: T;
+  size?: T;
+  data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  targetCollection?: T;
+  targetId?: T;
+  kind?: T;
+  name?: T;
+  phone?: T;
+  email?: T;
+  message?: T;
+  consent?: T;
+  status?: T;
+  member?: T;
+  country?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "metrics-daily_select".
+ */
+export interface MetricsDailySelect<T extends boolean = true> {
+  day?: T;
+  targetCollection?: T;
+  targetId?: T;
+  views?: T;
+  calls?: T;
+  whatsapp?: T;
+  directions?: T;
+  shares?: T;
+  leads?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -3289,6 +3809,19 @@ export interface TelegramPostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bot-sessions_select".
+ */
+export interface BotSessionsSelect<T extends boolean = true> {
+  channel?: T;
+  chatId?: T;
+  step?: T;
+  data?: T;
+  expiresAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members_select".
  */
 export interface MembersSelect<T extends boolean = true> {
@@ -3338,6 +3871,7 @@ export interface VisitorSessionsSelect<T extends boolean = true> {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   telegramId?: T;
+  whatsappPhone?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -3672,6 +4206,62 @@ export interface Accompagnement {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pricing".
+ */
+export interface Pricing {
+  id: number;
+  /**
+   * Annuel = 12 mois payés + ces mois offerts.
+   */
+  annualFreeMonths?: number | null;
+  plans?:
+    | {
+        code: 'pro' | 'premium';
+        label?: string | null;
+        /**
+         * Vide = « Tarif sur demande » sur le site.
+         */
+        monthlyDZD?: number | null;
+        /**
+         * Vide = « Tarif sur demande » sur le site.
+         */
+        monthlyEUR?: number | null;
+        /**
+         * Une ligne par avantage.
+         */
+        features?: string[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  boost7DZD?: number | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  boost7EUR?: number | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  projecteurDZD?: number | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  projecteurEUR?: number | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  leadPack20DZD?: number | null;
+  /**
+   * Vide = « Tarif sur demande » sur le site.
+   */
+  leadPack20EUR?: number | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "featured-destination_select".
  */
 export interface FeaturedDestinationSelect<T extends boolean = true> {
@@ -3719,6 +4309,32 @@ export interface AccompagnementSelect<T extends boolean = true> {
   paymentEnabled?: T;
   whatsapp?: T;
   notifyEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pricing_select".
+ */
+export interface PricingSelect<T extends boolean = true> {
+  annualFreeMonths?: T;
+  plans?:
+    | T
+    | {
+        code?: T;
+        label?: T;
+        monthlyDZD?: T;
+        monthlyEUR?: T;
+        features?: T;
+        id?: T;
+      };
+  boost7DZD?: T;
+  boost7EUR?: T;
+  projecteurDZD?: T;
+  projecteurEUR?: T;
+  leadPack20DZD?: T;
+  leadPack20EUR?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

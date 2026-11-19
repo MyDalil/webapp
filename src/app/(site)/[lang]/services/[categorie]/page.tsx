@@ -1,10 +1,11 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { category } from '@/modules/services'
 import { Browse, type BrowseQuery } from '../Browse'
 
 export const dynamic = 'force-dynamic'
-type Props = { params: Promise<{ categorie: string }>; searchParams: Promise<BrowseQuery> }
+type Props = { params: Promise<{ categorie: string; lang: string }>; searchParams: Promise<BrowseQuery> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = category((await params).categorie)
@@ -12,7 +13,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ServiceCategory({ params, searchParams }: Props) {
-  const c = category((await params).categorie)
+  const { categorie, lang } = await params
+  const c = category(categorie)
   if (!c) notFound()
-  return <Browse q={await searchParams} fixedCategory={c.value} />
+  return <Browse q={await searchParams} fixedCategory={c.value} lang={isLang(lang) ? lang : 'fr'} />
 }

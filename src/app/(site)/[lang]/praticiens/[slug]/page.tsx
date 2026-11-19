@@ -1,3 +1,5 @@
+import { isLang } from '@/platform/i18n'
+import { ACTION_LABELS } from '@/platform/seo/share'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
@@ -14,21 +16,30 @@ import { SlotPicker } from '@/modules/sante/ui'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
 import { SaveButton } from '@/modules/membres/ui'
-import { PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
+import { LeadFormSlot } from '@/modules/pros/ui'
+import { ClaimLink, PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
+import { JsonLd } from '@/platform/seo/JsonLd'
+import { breadcrumbJsonLd, practitionerJsonLd } from '@/platform/seo/jsonLd'
+import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 import { videoEnabled } from '@/platform/video'
 
 export const revalidate = 3600
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 // Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
 export const generateStaticParams = async () => []
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string; lang: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const p = await getPractitioner((await params).slug)
+  const { slug, lang } = await params
+  const p = await getPractitioner(slug, isLang(lang) ? lang : undefined)
   return p
     ? {
-        title: `${p.name} — prendre rendez-vous`,
-        description: `${(p.specialties ?? []).map(specialtyLabel).join(', ')} à ${p.city}. Réservation en ligne.`,
+        ...ficheMetadata({
+          lang: asLang(lang),
+          path: `/praticiens/${p.slug ?? slug}`,
+          title: `${p.name} — prendre rendez-vous`,
+          description: factualDescription([`${(p.specialties ?? []).map(specialtyLabel).join(', ')} à ${p.city}.`, (p.modes ?? []).length ? 'Réservation en ligne.' : null, p.bio]),
+        }),
         // Praticien d’exemple : visible sur DALIL, jamais proposé à Google.
         ...(p.demo ? { robots: { index: false, follow: true } } : {}),
       }
@@ -36,8 +47,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** Fiche praticien : modèle unique des fiches DALIL (galerie, colonne d’identité à droite), avec la prise de rendez-vous en plus. */
+const verifiedOn = (iso: string) =>
+  new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
+
 export default async function Practitioner({ params }: Props) {
-  const p = await getPractitioner((await params).slug)
+  const { slug, lang } = await params
+  const p = await getPractitioner(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
   const c = toCard(p)
   const wilaya = p.wilaya ? WILAYAS.find((w) => String(w.code) === p.wilaya)?.name : null
@@ -62,8 +77,32 @@ export default async function Practitioner({ params }: Props) {
     p.payment && { label: 'Paiement', value: p.payment },
     p.languages?.length && { label: 'Langues', value: p.languages.map(languageLabel).join(', ') },
   ].filter(Boolean) as { label: string; value: string }[]
+  const L = asLang(lang)
+  const url = absoluteUrl(L, `/praticiens/${p.slug ?? slug}`)
+  // Fiche sans compte professionnel rattaché (importée) : le praticien peut la revendiquer gratuitement.
+  const claimable = !p.demo && !p.owner
+  const jsonLd = [
+    practitionerJsonLd({
+      name: p.name,
+      url,
+      lang: L,
+      specialties: p.specialties,
+      description: p.bio,
+      address: { street: [p.cabinetName, p.address].filter(Boolean).join(', '), locality: p.city, region: wilaya },
+      pos,
+      phone: p.demo ? null : p.phone,
+      image: absoluteAsset(c.photo),
+      languages: (p.languages ?? []).map(languageLabel),
+    }),
+    breadcrumbJsonLd([
+      { name: 'Praticiens', url: absoluteUrl(L, '/praticiens') },
+      ...(first ? [{ name: specialtyLabel(first), url: absoluteUrl(L, `/praticiens?specialite=${first}`) }] : []),
+      { name: p.name, url },
+    ]),
+  ]
   return (
     <div className="pl">
+      <JsonLd data={jsonLd} />
       <nav className="pl-crumbs" aria-label="Fil d’Ariane">
         <Link href="/praticiens">Praticiens</Link>
         {first && (
@@ -158,13 +197,13 @@ export default async function Practitioner({ params }: Props) {
             {p.title && <p className="pl-alt">{p.title}</p>}
             <p className={`pl-status is-${c.verified ? 'verified' : 'checking'}`}>
               {c.verified
-                ? 'Identité et diplôme vérifiés par DALIL'
+                ? `Identité et diplôme vérifiés par DALIL${p.verifiedAt ? ` le ${verifiedOn(p.verifiedAt)}` : ''}`
                 : 'Vérification DALIL en cours'}
             </p>
             <div className="pl-actions">
               {directions ? (
                 <a className="button primary" href={directions} target="_blank" rel="noreferrer">
-                  Itinéraire
+                  {ACTION_LABELS.directions[L]}
                 </a>
               ) : (
                 <span />
@@ -175,8 +214,10 @@ export default async function Practitioner({ params }: Props) {
                 label={p.name}
                 variant="button"
               />
-              <PlaceActions name={p.name} />
+              <PlaceActions name={p.name} phone={p.demo ? null : p.phone} target={p.demo ? null : { collection: 'practitioners', id: p.id }} />
+              {!p.demo && <LeadFormSlot collection="practitioners" id={p.id} />}
             </div>
+            {claimable && <ClaimLink label="Vous êtes ce praticien ? Gérez cette fiche gratuitement" />}
           </div>
 
           <div className="pl-book">

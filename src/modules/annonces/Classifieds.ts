@@ -6,6 +6,7 @@ import { AGENT_VERDICTS, ALL_SUBS, CATEGORIES, CONDITIONS, CONTRACTS, DEALS, FUE
 import { classifiedPublished, classifiedRejected } from './emails'
 import { refreshPages } from './refresh'
 import { indexClassified, unindexClassified } from './search'
+import { translateOnPublish } from '@/platform/i18n/auto'
 
 /**
  * Lecture : public = annonces publiées ; auteur = les siennes ; équipe et agents = toutes (contrôle).
@@ -93,7 +94,7 @@ export const Classifieds: CollectionConfig = {
     description: 'Annonces des membres. « À contrôler » : vérifier puis publier ou refuser (motif obligatoire, envoyé à l’auteur).',
   },
   access: { read, create: staffOnly, update: write, delete: staffOnly },
-  hooks: { beforeValidate: [prepare], beforeChange: [guard], afterChange: [notify, indexClassified], afterDelete: [unindexClassified] },
+  hooks: { beforeValidate: [prepare], beforeChange: [guard], afterChange: [notify, indexClassified, translateOnPublish('status')], afterDelete: [unindexClassified] },
   fields: [
     {
       type: 'tabs',

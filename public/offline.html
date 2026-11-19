@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#fbfaf7">
+<title>Hors ligne · DALIL</title>
+<link rel="icon" href="/favicon.svg">
+<style>
+/* Page hors ligne servie par le service worker : jetons et bouton repris de src/styles/mockup.css, sans police à télécharger. */
+:root { color-scheme: light; --bg: #fbfaf7; --surface: #ffffff; --text: #14201b; --muted: #69746f; --line: #dce3de; --green: #006b3c; --on-green: #fff; }
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark; --bg: #07140f; --surface: #0d1c16; --text: #f2f7f4; --muted: #a8b7af; --line: #284137; --green: #38d181; --on-green: #05140d; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); color: var(--text); font: 400 16px/1.55 Inter, system-ui, sans-serif; }
+main { width: 100%; max-width: 440px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); padding: 28px 24px; }
+.logo { width: 44px; height: 44px; display: block; margin-bottom: 20px; }
+section + section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+h1 { margin: 0 0 6px; font: 700 1.25rem/1.2 Manrope, Inter, system-ui, sans-serif; letter-spacing: -.02em; }
+p { margin: 0; color: var(--muted); }
+[lang="ar"] { font-family: "IBM Plex Sans Arabic", system-ui, sans-serif; }
+.button { margin-top: 24px; width: 100%; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 10px; padding: 12px 18px; background: var(--green); color: var(--on-green); font: inherit; font-weight: 700; cursor: pointer; }
+.button:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 35%, transparent); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#123c33"/><circle cx="32" cy="32" r="21" fill="none" stroke="#c69b55" stroke-width="2"/><path d="M24 18h8c10 0 16 5.6 16 14s-6 14-16 14h-8V18Zm8 22c6 0 9.5-2.7 9.5-8S38 24 32 24h-1.5v16H32Z" fill="#f5f1e8"/></svg>
+  <section lang="fr">
+    <h1>Vous êtes hors ligne</h1>
+    <p>Cette page n’est pas encore enregistrée sur votre téléphone. Les pages déjà consultées restent lisibles sans connexion.</p>
+  </section>
+  <section lang="en">
+    <h1>You are offline</h1>
+    <p>This page is not saved on your phone yet. Pages you have already viewed remain readable without a connection.</p>
+  </section>
+  <section lang="ar" dir="rtl">
+    <h1>أنت غير متصل بالإنترنت</h1>
+    <p>هذه الصفحة غير محفوظة على هاتفك بعد. الصفحات التي اطّلعت عليها سابقًا تبقى متاحة دون اتصال.</p>
+  </section>
+  <button class="button" type="button" onclick="location.reload()">Réessayer · Retry · إعادة المحاولة</button>
+</main>
+</body>
+</html>
