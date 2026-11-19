@@ -155,7 +155,7 @@ test.describe.serial('Telegram : télécommande @ecriture', () => {
     test.skip(!draftId, 'brouillon du test précédent requis')
     const forged = `p.places-${draftId}.AAAAAAAAAAAAAAAA`
     const res = await replyOf(await click(request, ADMIN_CHAT, forged))
-    if (res !== null) expect(res).toMatch(/expiré ou invalide/)
+    if (res !== null) expect(res).toMatch(/Bouton (invalide|expiré)/)
     await ensureAdmin(request)
     expect(await placeStatus(request, draftId)).toBe('draft')
   })
