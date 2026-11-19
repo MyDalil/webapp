@@ -9,3 +9,6 @@ export { THEMES, themeByKey, type Theme, type ThemeKey } from './officiel/themes
 export { listPlatforms, listProcedures, listRepresentations, procedureBySlug, themesWithContent } from './officiel/queries'
 export { reindexProcedures, reindexRepresentations } from './officiel/search'
 export { topicsOf } from './officiel/topics'
+export { actions as contenusActions } from './actions'
+export { currentMoments, isCurrentMoment, momentBySlug, type Moment } from './moments'
+export { faqJsonLd, faqScope, faqsFor, type Faq } from './faqs'

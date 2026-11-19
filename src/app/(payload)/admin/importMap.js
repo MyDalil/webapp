@@ -1,10 +1,39 @@
 import { CoordsHelp as CoordsHelp_4dccec6a5c781bc61bd0b5317332fb3a } from '@/modules/annuaire/admin/CoordsHelp'
 import { DocumentLink as DocumentLink_042494107c5e3c978f53c7e6410c4744 } from '@/modules/services/admin/DocumentLink'
+import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
+import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
+import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
+import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { BlockquoteFeatureClient as BlockquoteFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { RelationshipFeatureClient as RelationshipFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { LinkFeatureClient as LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { ChecklistFeatureClient as ChecklistFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { OrderedListFeatureClient as OrderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { UnorderedListFeatureClient as UnorderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { IndentFeatureClient as IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { AlignFeatureClient as AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { HeadingFeatureClient as HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { ParagraphFeatureClient as ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { InlineCodeFeatureClient as InlineCodeFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { SuperscriptFeatureClient as SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { SubscriptFeatureClient as SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { PhotoLink as PhotoLink_c31206f89c664c17d402871bde3eba21 } from '@/modules/messages/admin/PhotoLink'
 import { CockpitNav as CockpitNav_0f49aed66a6a52ff3aa38c05a5c2ecf6 } from '@/modules/pilotage/admin/CockpitNav'
 import { DalilIcon as DalilIcon_296a9f87303335129f9a1af330d2c444 } from '@/modules/pilotage/admin/Brand'
 import { DalilLogo as DalilLogo_296a9f87303335129f9a1af330d2c444 } from '@/modules/pilotage/admin/Brand'
 import { CockpitBar as CockpitBar_f3e89cc19c8dd6be944e4cb933801b87 } from '@/modules/pilotage/admin/CockpitBar'
+import { LiensEquipe as LiensEquipe_d6aee83c5567d85414dedc16ab8dafca } from '@/platform/shell/admin/LiensEquipe'
+import { AccueilEquipe as AccueilEquipe_52275f51d2d8204f0adb2e0ef5455742 } from '@/platform/shell/admin/AccueilEquipe'
+import { ImportCsv as ImportCsv_4cb515b768f9feed76c5f7321463e5c2 } from '@/platform/ops/admin/ImportCsv'
+import { ControleView as ControleView_e064f3c0e82f8f081fe69b39de3341af } from '@/platform/shell/admin/ControleView'
+import { RubriquesView as RubriquesView_7d66502ebee2b3272e32221326b7e7a8 } from '@/platform/shell/admin/RubriquesView'
+import { ValidationView as ValidationView_67ab8b124b1ec08531ee995b2b4227c5 } from '@/platform/shell/admin/ValidationView'
 import { PilotageView as PilotageView_715d1ccb627d6eb99988fb20a385d2bd } from '@/modules/pilotage/admin/PilotageView'
 import { AgentsView as AgentsView_cc9fd0b58149438651d0b2a4db049dd9 } from '@/modules/pilotage/admin/views/AgentsView'
 import { TachesView as TachesView_3df55ad521157184bd297b1e700292a4 } from '@/modules/pilotage/admin/views/TachesView'
@@ -37,11 +66,40 @@ import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e
 export const importMap = {
   "@/modules/annuaire/admin/CoordsHelp#CoordsHelp": CoordsHelp_4dccec6a5c781bc61bd0b5317332fb3a,
   "@/modules/services/admin/DocumentLink#DocumentLink": DocumentLink_042494107c5e3c978f53c7e6410c4744,
+  "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#BlockquoteFeatureClient": BlockquoteFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#RelationshipFeatureClient": RelationshipFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#LinkFeatureClient": LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#ChecklistFeatureClient": ChecklistFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#OrderedListFeatureClient": OrderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#UnorderedListFeatureClient": UnorderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#IndentFeatureClient": IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#AlignFeatureClient": AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#HeadingFeatureClient": HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#ParagraphFeatureClient": ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#InlineCodeFeatureClient": InlineCodeFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#SuperscriptFeatureClient": SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#SubscriptFeatureClient": SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#StrikethroughFeatureClient": StrikethroughFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/modules/messages/admin/PhotoLink#PhotoLink": PhotoLink_c31206f89c664c17d402871bde3eba21,
   "@/modules/pilotage/admin/CockpitNav#CockpitNav": CockpitNav_0f49aed66a6a52ff3aa38c05a5c2ecf6,
   "@/modules/pilotage/admin/Brand#DalilIcon": DalilIcon_296a9f87303335129f9a1af330d2c444,
   "@/modules/pilotage/admin/Brand#DalilLogo": DalilLogo_296a9f87303335129f9a1af330d2c444,
   "@/modules/pilotage/admin/CockpitBar#CockpitBar": CockpitBar_f3e89cc19c8dd6be944e4cb933801b87,
+  "@/platform/shell/admin/LiensEquipe#LiensEquipe": LiensEquipe_d6aee83c5567d85414dedc16ab8dafca,
+  "@/platform/shell/admin/AccueilEquipe#AccueilEquipe": AccueilEquipe_52275f51d2d8204f0adb2e0ef5455742,
+  "@/platform/ops/admin/ImportCsv#ImportCsv": ImportCsv_4cb515b768f9feed76c5f7321463e5c2,
+  "@/platform/shell/admin/ControleView#ControleView": ControleView_e064f3c0e82f8f081fe69b39de3341af,
+  "@/platform/shell/admin/RubriquesView#RubriquesView": RubriquesView_7d66502ebee2b3272e32221326b7e7a8,
+  "@/platform/shell/admin/ValidationView#ValidationView": ValidationView_67ab8b124b1ec08531ee995b2b4227c5,
   "@/modules/pilotage/admin/PilotageView#PilotageView": PilotageView_715d1ccb627d6eb99988fb20a385d2bd,
   "@/modules/pilotage/admin/views/AgentsView#AgentsView": AgentsView_cc9fd0b58149438651d0b2a4db049dd9,
   "@/modules/pilotage/admin/views/TachesView#TachesView": TachesView_3df55ad521157184bd297b1e700292a4,

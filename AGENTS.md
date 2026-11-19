@@ -79,7 +79,7 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 ## Contrôles avant fusion (CI)
 - `.github/workflows/ci.yml`, à chaque PR vers `preview` ou `main` et à chaque push sur `preview` : frontières + types, tests unitaires, **base neuve** (Postgres + PostGIS) migrée depuis zéro, build complet, parcours essentiels Playwright (`e2e/`, ordinateur + mobile).
 - `.github/workflows/deploiement.yml`, après chaque déploiement Vercel réussi : parcours en lecture seule (`--grep-invert @ecriture`) sur l’adresse déployée.
-- Discipline GitHub Free : avant toute fusion, relire manuellement les statuts « Frontières, types et tests unitaires » et « Build et parcours essentiels » ; la promotion vers `main` exige aussi « Vercel », « Parcours sur le déploiement » et le feu vert de Rad. Les agents ouvrent une pull request et ne fusionnent pas leur propre travail sans validation explicite.
+- Discipline GitHub Free : avant toute fusion, relire manuellement les statuts « Frontières, types et tests unitaires », « Build et parcours essentiels » (configuration de production, `DALIL_PLUGINS` absent) et « Build et parcours des extras (cockpit, agents) » (`DALIL_PLUGINS=agents,cockpit,communication`) ; la promotion vers `main` exige aussi « Vercel », « Parcours sur le déploiement » et le feu vert de Rad. Les agents ouvrent une pull request et ne fusionnent pas leur propre travail sans validation explicite.
 - Un parcours essentiel nouveau (page, formulaire, paiement…) = un test dans `e2e/`. Un test qui écrit en base porte `@ecriture` dans son titre.
 
 ## Surveillance
@@ -105,7 +105,9 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 ## Commandes
 - `pnpm dev` / `pnpm build` (Postgres dans `.env`), `pnpm check` (frontières + types), `pnpm test` (Vitest), `pnpm test:e2e` (Playwright, après `pnpm build`).
 - Base neuve : `pnpm payload migrate && pnpm migrate:data`.
-- Schéma modifié → `pnpm payload migrate:create <nom>` puis commit ; migrations appliquées au build Vercel (`vercel-build`) et au démarrage (`prodMigrations`).
+- Schéma modifié → `pnpm payload migrate:create <nom>` puis commit ; migrations appliquées au build Vercel (`vercel-build`) seulement.
+- Extras débranchables : `DALIL_PLUGINS` (agents, cockpit, communication ; défaut `communication`), lu par `src/platform/plugins.ts`. `generate:importmap` se lance avec `DALIL_PLUGINS=agents,cockpit,communication` pour que la carte des composants couvre tous les cas.
+- Variables obligatoires en production : `OAUTH_SECRET` et `REMOTE_SIGNING_SECRET` (32 caractères au moins chacune ; sans elles, OAuth et les boutons signés de Telegram et WhatsApp sont coupés). Facultative : `TRANSLATE_DAILY_MAX` (fiches traduites par passe quotidienne, 50 par défaut).
 
 <!-- BEGIN:nextjs-agent-rules -->
 

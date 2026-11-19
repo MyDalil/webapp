@@ -3,6 +3,12 @@ import { actorOf } from '@/platform/access'
 import { actionId as newActionId } from './uuidv7'
 
 type Channel = 'admin' | 'telegram' | 'api' | 'agent' | 'cron'
+/** Canaux des actions (src/platform/actions/types.ts) → canaux du journal (sans migration : mcp, whatsapp et site passent par « api »). */
+const ACTION_CHANNEL: Record<string, Channel> = { admin: 'admin', telegram: 'telegram', cron: 'cron', mcp: 'api', whatsapp: 'api', site: 'api', api: 'api', agent: 'agent' }
+export const auditChannel = (c: unknown): Channel | undefined => (typeof c === 'string' ? ACTION_CHANNEL[c] : undefined)
+/** Outil noté pour une action : « mcp · publier_fiche » (garde le canal exact, même quand le journal le range sous « api »). */
+export const actionTool = (context: Record<string, unknown> | undefined): string | undefined =>
+  context && typeof context.actionName === 'string' && context.actionName ? `${String(context.channel ?? '?')} · ${context.actionName}` : undefined
 export type AuditEntry = { action: string; summary: string; target?: string; targetId?: string | number; changes?: Record<string, unknown>; channel?: Channel; actionId?: string }
 
 /** Contexte d’un agent au travail (posé par le moteur sur `req.context.agentRun`). */
@@ -42,7 +48,7 @@ export function diff(before: Record<string, unknown> | undefined, after: Record<
 }
 
 const channelOf = (req: PayloadRequest): Channel => {
-  const c = (req.context?.channel as Channel | undefined) ?? undefined
+  const c = auditChannel(req.context?.channel)
   if (c) return c
   if ((req.user as { collection?: string } | null)?.collection === 'agents') return 'agent'
   return req.user ? 'admin' : 'api'
@@ -76,7 +82,7 @@ export async function audit(payload: Payload, req: PayloadRequest | undefined, e
         department: run?.department,
         taskId: run?.taskId === undefined ? undefined : String(run.taskId),
         step: run?.step,
-        tool: run?.tool,
+        tool: run?.tool ?? actionTool(req?.context),
         costMicros: run?.costMicros,
         environment: environment(),
       },

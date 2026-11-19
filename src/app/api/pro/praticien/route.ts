@@ -1,10 +1,11 @@
-import { currentMember, myPractitioner, practitionerAgenda, saveMyPractitioner } from '@/modules/sante'
+import { currentMember, myAgendaLinks, myPractitioner, practitionerAgenda, saveMyPractitioner } from '@/modules/sante'
 import { fail, json } from '@/platform/http'
 
 export async function GET() {
   const member = await currentMember()
   if (!member) return fail('Non connecté.', 401)
-  return json({ practitioner: await myPractitioner(member), agenda: await practitionerAgenda(member) })
+  const practitioner = await myPractitioner(member)
+  return json({ practitioner, agenda: await practitionerAgenda(member), calendar: practitioner ? myAgendaLinks(practitioner) : null })
 }
 
 export async function PUT(req: Request) {

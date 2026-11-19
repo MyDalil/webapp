@@ -12,6 +12,7 @@ import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { ParallaxBand, SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
 import { MicButton } from '@/platform/ui/MicButton'
 import { ThemeRails } from '@/modules/contenus/ui'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
   title: 'Démarches en Algérie',
@@ -38,7 +39,7 @@ const HELP = [
 const photo = (k?: PhotoKey) => (k ? PHOTOS[k] : null)
 
 /** Rubrique Démarches au format de l’accueil : diaporama, grandes tuiles photo en carrousel, bande parallaxe. */
-export default async function Demarches() {
+async function Demarches() {
   const entries = await Promise.all(
     DEMARCHES_ENTRIES.map(async ([href, icon, title, sub]) => {
       const u = new URL(href, 'https://www.mydalil.com')
@@ -184,3 +185,5 @@ export default async function Demarches() {
     </div>
   )
 }
+
+export default withSectionGate(Demarches, () => '/demarches')

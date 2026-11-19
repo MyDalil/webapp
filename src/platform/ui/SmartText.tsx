@@ -2,6 +2,7 @@
 
 import { getAccount } from './memberHint'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type KeyboardEvent } from 'react'
+import { Icon } from './Icon'
 import { DICTATION_LANGS, dictationSupported, preferredLang, rememberLang, startDictation, type Dictation, type DictationLang } from './speech'
 
 type Props = {
@@ -171,7 +172,7 @@ export const SmartText = forwardRef<SmartTextHandle, Props>(function SmartText(p
         )}
         {member && p.improve !== false && (
           <button type="button" className="smart-btn smart-improve" aria-label="Améliorer le texte" title="Améliorer le texte" onClick={improve} disabled={busy || listening || !val.trim()}>
-            ✦
+            <Icon name="pen" />
           </button>
         )}
       </div>

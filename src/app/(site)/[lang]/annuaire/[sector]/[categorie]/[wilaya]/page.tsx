@@ -1,10 +1,12 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import { searchPlaces } from '@/modules/annuaire'
 import { SITE } from '@/platform/mail'
 import { categoryBySlug, categoryPath, wilayaBySlug } from '@/platform/referentiel/slug'
 import { CategoryPage } from '../CategoryPage'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
-type Props = { params: Promise<{ sector: string; categorie: string; wilaya: string }> }
+type Props = { params: Promise<{ sector: string; categorie: string; wilaya: string; lang: string }> }
 export const revalidate = 3600
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 // Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
@@ -25,7 +27,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function Page({ params }: Props) {
-  const { sector, categorie, wilaya } = await params
-  return <CategoryPage sector={sector} categorie={categorie} wilaya={wilaya} />
+async function Page({ params }: Props) {
+  const { lang, sector, categorie, wilaya } = await params
+  return <CategoryPage lang={isLang(lang) ? lang : 'fr'} sector={sector} categorie={categorie} wilaya={wilaya} />
 }
+
+export default withSectionGate(Page, (p) => `/annuaire/${p.sector}/${p.categorie}/${p.wilaya}`)

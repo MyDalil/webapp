@@ -3,7 +3,7 @@ import { runQueue } from '@/modules/agents'
 import { publishDue } from '@/modules/communication'
 import { annoncesTaxonomyRows, dailyClassifiedTasks, reindexClassifieds } from '@/modules/annonces'
 import { annuaireTaxonomyRows, reindexPlaces } from '@/modules/annuaire'
-import { reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
+import { purgeDemoAppointments, reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
 import { dailyServicesTasks, reindexProviders, servicesTaxonomyRows } from '@/modules/services'
 import { fail, json, payload } from '@/platform/http'
 import { rebuildIndex } from '@/platform/search/rebuild'
@@ -12,11 +12,16 @@ import { purgeRateLimits } from '@/platform/security/rateLimit'
 import { dailyBackup } from '@/platform/backup/run'
 import { purgeTrash } from '@/platform/trash'
 import { purgeMisses } from '@/modules/recherche'
+import { pluginEnabled } from '@/platform/plugins'
+import { expireSponsorships, expireSubscriptions } from '@/modules/pros'
+import { aiConfigured } from '@/platform/ai/claude'
+import { translateMissing, type BackfillReport } from '@/platform/i18n/backfill'
 
 import { runTask, type TaskOutcome } from '@/platform/tasks/run'
 import { recordError } from '@/platform/monitoring/errors'
 
 export const maxDuration = 300
+
 
 /**
  * Tâche planifiée Vercel quotidienne (vercel.json) : rappels, expirations, clôtures, index de recherche, sauvegarde.
@@ -34,15 +39,20 @@ export async function GET(req: Request) {
   if (req.headers.get('authorization') !== `Bearer ${secret}`) return fail('Accès refusé.', 401)
   const out: Record<string, TaskOutcome> = {}
   out.rendezVous = await runTask('rappels-rendez-vous', sendReminders, { failed: (r) => ((r as { failed?: number }).failed ? `${(r as { failed: number }).failed} rappel(s) non acceptés par le fournisseur` : null) })
+  out.rendezVousDemo = await runTask('rendez-vous-demo', purgeDemoAppointments)
   out.services = await runTask('services', dailyServicesTasks)
+  out.sponsorisations = await runTask('sponsorisations-expirees', () => expireSponsorships())
+  // Abonnements : expiration, puis rappel unique 7 jours avant la fin (remindedAt).
+  out.abonnements = await runTask('abonnements', () => expireSubscriptions())
   out.photosProposees = await runTask('photos-proposees', purgeContributionPhotos)
   out.annonces = await runTask('annonces', dailyClassifiedTasks)
   out.limitesDeDebit = await runTask('limites-de-debit', purgeRateLimits)
   out.corbeille = await runTask('corbeille', async () => purgeTrash(await payload()))
   out.recherchesSansResultat = await runTask('recherches-sans-resultat', async () => purgeMisses(await payload()))
-  // Filet quotidien : file des agents (si une passe a été interrompue) et publications du canal à échéance.
-  out.agents = await runTask('agents', async () => runQueue(await payload(), { budgetMs: 60_000 }))
-  out.canalTelegram = await runTask('canal-telegram', async () => publishDue(await payload()))
+  // Filet quotidien, selon les extras branchés (DALIL_PLUGINS) : file des agents (si une passe a été interrompue)
+  // et publications du canal à échéance.
+  if (pluginEnabled('agents')) out.agents = await runTask('agents', async () => runQueue(await payload(), { budgetMs: 60_000 }))
+  if (pluginEnabled('communication')) out.canalTelegram = await runTask('canal-telegram', async () => publishDue(await payload()))
   // Index de recherche : tenu à jour à chaque enregistrement (crochets des métiers). Reconstruction complète une fois
   // par semaine (vendredi, heure d’Alger), filet de sécurité qui économise le calcul de la base.
   const friday = new Date().toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'Africa/Algiers' }) === 'Friday'
@@ -51,6 +61,12 @@ export async function GET(req: Request) {
       rebuildIndex(await payload(), [...annuaireTaxonomyRows(), ...santeTaxonomyRows(), ...servicesTaxonomyRows(), ...annoncesTaxonomyRows()], { adresses: reindexPlaces, praticiens: reindexPractitioners, prestataires: reindexProviders, annonces: reindexClassifieds, demarches: reindexProcedures, consulats: reindexRepresentations }),
     )
   out.sauvegarde = await runTask('sauvegarde', dailyBackup, { failed: (r) => ((r as { ignoree?: string }).ignoree ? `sauvegarde non faite : ${(r as { ignoree: string }).ignoree}` : null) })
+  // Rattrapage des traductions (après la sauvegarde : jamais au détriment d’elle) : au plus TRANSLATE_DAILY_MAX fiches,
+  // budget de 90 s, arrêt propre au plafond mensuel de l’IA (pas un échec). Seul un échec de l’IA est signalé.
+  if (aiConfigured())
+    out.traductions = await runTask('traductions-manquantes', async () => translateMissing(await payload(), { budgetMs: 90_000 }), {
+      failed: (r) => ((r as BackfillReport).arret === 'echec-ia' ? 'traduction interrompue : échec de l’IA' : null),
+    })
   const failed = Object.entries(out).filter(([, o]) => o.status === 'failed').map(([k]) => k)
   return json({ ok: failed.length === 0, echecs: failed, taches: out }, failed.length ? 500 : 200)
 }

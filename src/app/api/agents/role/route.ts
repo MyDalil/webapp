@@ -1,10 +1,12 @@
 import { activateRole, reserveRole } from '@/modules/agents'
 import { clean, fail, json, payload } from '@/platform/http'
+import { pluginEnabled } from '@/platform/plugins'
 
 export const maxDuration = 60
 
 /** Activer un rôle en réserve (test à froid) ou le remettre en réserve. Administrateur ou patron seulement. */
 export async function POST(req: Request) {
+  if (!pluginEnabled('agents')) return fail('Introuvable.', 404)
   const p = await payload()
   const { user } = await p.auth({ headers: req.headers })
   const u = user as { collection?: string; role?: string; id?: number; name?: string } | null

@@ -1,28 +1,70 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
 import { categoryLabel, currentMember, getClassified } from '@/modules/annonces'
 import { ClassifiedChat, Gallery, ReportForm } from '@/modules/annonces/ui'
+import { PlaceActions } from '@/modules/annuaire/ui'
+import { JsonLd } from '@/platform/seo/JsonLd'
+import { breadcrumbJsonLd, classifiedJsonLd } from '@/platform/seo/jsonLd'
+import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
+/**
+ * Reste dynamique : la lecture de l’annonce dépend du visiteur (l’auteur voit la sienne en attente ou refusée,
+ * avec son bandeau et son bloc « C’est votre annonce »). Passer en ISR demande une lecture publique sans session
+ * et un îlot client pour l’auteur — voir le rapport du lot A2. Les pages sont déjà rafraîchies à la publication (refresh.ts).
+ */
 export const dynamic = 'force-dynamic'
-type Props = { params: Promise<{ categorie: string; slug: string }> }
+type Props = { params: Promise<{ categorie: string; slug: string; lang: string }> }
 
 const day = (iso: string) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 const since = (iso: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric', timeZone: 'Africa/Algiers' }).format(new Date(iso))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const a = await getClassified((await params).slug)
-  return a ? { title: `${a.title} — ${a.price} · ${a.place}`, description: a.description.slice(0, 160), robots: a.status === 'published' && !a.example ? undefined : { index: false } } : {}
+  const { slug, lang } = await params
+  const a = await getClassified(slug, isLang(lang) ? lang : undefined)
+  return a
+    ? {
+        ...ficheMetadata({ lang: asLang(lang), path: `/annonces/${a.category}/${a.slug}`, title: `${a.title} — ${a.price} · ${a.place}`, description: factualDescription([a.description]) }),
+        robots: a.status === 'published' && !a.example ? undefined : { index: false },
+      }
+    : {}
 }
 
-export default async function AnnoncePage({ params }: Props) {
-  const { categorie, slug } = await params
-  const a = await getClassified(slug)
+async function AnnoncePage({ params }: Props) {
+  const { categorie, slug, lang } = await params
+  const a = await getClassified(slug, isLang(lang) ? lang : undefined)
   if (!a || a.category !== categorie) notFound()
   const me = await currentMember()
   const back = `/annonces/${a.category}`
+  const L = asLang(lang)
+  const url = absoluteUrl(L, `/annonces/${a.category}/${a.slug}`)
+  // Données structurées pour une annonce publique seulement (jamais une annonce d’exemple ou en attente).
+  const jsonLd =
+    a.status === 'published' && !a.example
+      ? [
+          classifiedJsonLd({
+            title: a.title,
+            url,
+            lang: L,
+            category: a.category,
+            subLabel: a.subLabel,
+            description: a.description,
+            images: a.gallery.map((g) => absoluteAsset(g.cover || g.thumb)),
+            place: a.place,
+            publishedAt: a.publishedAt,
+          }),
+          breadcrumbJsonLd([
+            { name: 'Annonces', url: absoluteUrl(L, '/annonces') },
+            { name: categoryLabel(a.category), url: absoluteUrl(L, back) },
+            { name: a.title, url },
+          ]),
+        ]
+      : null
   return (
     <div className="praticien-page container classified-page">
+      {jsonLd && <JsonLd data={jsonLd} />}
       <Link className="back-link" href={back}>
         ← {categoryLabel(a.category)}
       </Link>
@@ -76,6 +118,12 @@ export default async function AnnoncePage({ params }: Props) {
             <p className="muted-line">
               {a.author.kind === 'pro' ? 'Professionnel' : 'Particulier'} · membre depuis {since(a.author.since)}
             </p>
+            {/* Pas de téléphone public : les échanges passent par la messagerie DALIL (règle du module annonces). */}
+            {a.status === 'published' && !a.example && (
+              <div className="pl-actions">
+                <PlaceActions name={a.title} />
+              </div>
+            )}
           </section>
           {a.example ? (
             <section className="account-block classified-example">
@@ -101,3 +149,5 @@ export default async function AnnoncePage({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(AnnoncePage, (p) => `/annonces/${p.categorie}/${p.slug}`)

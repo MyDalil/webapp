@@ -7,3 +7,7 @@
 - 2026-10-27 — Toutes les démarches (Rad) : 11 packs initiaux (CCR + 10 guides). Seul le CCR a un prix fixé par Rad (89 €) ; les autres affichent « Tarif annoncé au lancement ». Contenu des packs non-CCR = modèle du pack CCR, à ajuster dans /admin.
 - 2026-10-27 — Rôle `conseiller` ajouté aux comptes de l’équipe : jamais staff, voit seulement les demandes d’accompagnement et les réglages en lecture.
 - 2026-10-27 — Maquettes de Rad appliquées au style DALIL : options 1/2 côte à côte, page « Votre accompagnement » (nombre de personnes, tarification, mode de paiement). Modes de paiement affichés « Bientôt » : aucun compte marchand. Pas de note ni d’avis affichés tant qu’aucun avis réel n’existe (règle : rien d’inventé). Packs Passeport (prix par personne) et Auto-entrepreneur sans prix.
+
+## 2026-11-17 — Options 1 et 2 retirées des pages de contenu (Rad)
+- Décision : le bloc « Option 1 : Guide autonome / Option 2 : Pack Sérénité » et sa note Transparence ne s'affichent plus sur les guides, les démarches et les anciennes pages. Les pages /accompagnement restent inchangées.
+- Garde-fou : le parcours « démarche CCR » vérifie l'absence de `.ac-choice`.

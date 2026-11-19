@@ -1,5 +1,20 @@
 /** Icônes de la maquette DALIL (traits 1,8 px, currentColor). */
 const P: Record<string, React.ReactNode> = {
+  stethoscope: (
+    <>
+      <path d="M6 4H5a2 2 0 0 0-2 2v3.5a5.5 5.5 0 0 0 11 0V6a2 2 0 0 0-2-2h-1M8 15a6 6 0 1 0 12 0v-3M11 3v2M6 3v2" />
+      <circle cx="20" cy="10" r="2" />
+    </>
+  ),
+  hospital: <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M10 9h4M12 7v4" />,
+  pill: <path d="m4.5 12.5 8-8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1-7-7M8.5 8.5l7 7" />,
+  stroller: (
+    <>
+      <path d="M2 5h2.5l1.6 4.9A6 6 0 0 0 11.8 14h2.7a5.5 5.5 0 0 0 0-11H14v6M6 9h14M9 17l1-3M16 14l1 3" />
+      <circle cx="9" cy="19" r="2" />
+      <circle cx="17" cy="19" r="2" />
+    </>
+  ),
   search: (
     <>
       <circle cx="11" cy="11" r="7" />
@@ -139,7 +154,19 @@ const P: Record<string, React.ReactNode> = {
       <path d="m11 12 9-9M17 6l3 3M14 9l2 2" />
     </>
   ),
-  sparkle: <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3ZM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z" />,
+  // Plus d’étoile décorative sur le site (Rad, 2026-11-16) : un pictogramme qui dit ce qu’il montre.
+  spray: <path d="M8 11a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v9a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-9ZM10 9V6h4l3 2M14 6V4h-3M19.5 5h1.5M19.5 8h1.5" />,
+  tooth: <path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.6 4.8.7 1.3.9 3 1.2 4.8.4 2.6 1 4.2 2 4.2 1.3 0 1.4-2.6 2-4.6.4-1.2 1.2-1.4 2.2-1.4s1.8.2 2.2 1.4c.6 2 .7 4.6 2 4.6 1 0 1.6-1.6 2-4.2.3-1.8.5-3.5 1.2-4.8.8-1.4 1.6-2.8 1.6-4.8C21 4.8 19.2 3 17 3c-1.8 0-2.8 1-5 1S8.8 3 7 3Z" />,
+  iron: <path d="M3 18h16a2 2 0 0 0 2-2v-3a6 6 0 0 0-6-6H8M3 18l2.5-7H21M7 7h9" />,
+  window: (
+    <>
+      <rect x="4" y="3" width="16" height="18" rx="1.5" />
+      <path d="M12 3v18M4 12h16" />
+    </>
+  ),
+  sofa: <path d="M4 11V8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3M2 13a2 2 0 0 1 4 0v2h12v-2a2 2 0 0 1 4 0v5H2v-5ZM5 18v2M19 18v2" />,
+  chat: <path d="M4 5h16v11H9l-5 4V5ZM8 9h8M8 12h5" />,
+  pen: <path d="m4 20 4-1 11-11-3-3L5 16l-1 4ZM14 7l3 3" />,
   box: <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9ZM3 7.5l9 4.5 9-4.5M12 12v9" />,
   phone: <path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" />,
   mail: (
@@ -207,7 +234,13 @@ export function iconFor(label: string, fallback = 'arrow'): string {
     [/peinture|carrelage/, 'brush'],
     [/serrurerie/, 'key'],
     [/électroménager|objet|accessoire/, 'tag'],
-    [/ménage|nettoyage|repassage|lavage|vitres/, 'sparkle'],
+    [/repassage/, 'iron'],
+    [/vitre/, 'window'],
+    [/tapis|canapé/, 'sofa'],
+    [/voiture/, 'car'],
+    [/fin de chantier/, 'wrench'],
+    [/grand ménage/, 'home'],
+    [/ménage|nettoyage|lavage/, 'spray'],
     [/déménagement|débarras|fourgon|transport|encombrant/, 'box'],
     [/meuble|travaux|fixation|climatisation|dépannage|bricol/, 'wrench'],
     [/pelouse|haie|arbre|jardin|promenade|nature|randonn/, 'leaf'],
@@ -271,7 +304,7 @@ export function Icon({ name }: { name: keyof typeof P | string }) {
 }
 
 /** Couleur fixe d’un pictogramme (palette --p1…--p8 de v1.css) : un même sujet garde la même couleur partout. */
-const TONE: Record<string, number> = { pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, sparkle: 6, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 3, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
+const TONE: Record<string, number> = { stethoscope: 8, hospital: 2, pill: 1, stroller: 5, pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, spray: 6, iron: 5, window: 2, sofa: 8, chat: 1, pen: 4, tooth: 2, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 3, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
 export function iconTone(name: string): string {
   const n = TONE[name] ?? ([...name].reduce((a, c) => a + c.charCodeAt(0), 0) % 8) + 1
   return `var(--p${n})`

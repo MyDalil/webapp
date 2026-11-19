@@ -16,7 +16,7 @@ async function login(page: Page) {
 }
 
 for (const theme of ['light', 'dark'] as const) {
-  test(`accessibilité WCAG AA — mode ${theme === 'light' ? 'clair' : 'sombre'} @ecriture`, async ({ page, baseURL }) => {
+  test(`accessibilité WCAG AA — mode ${theme === 'light' ? 'clair' : 'sombre'} @ecriture @extras`, async ({ page, baseURL }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'un passage par thème suffit')
     test.setTimeout(240_000)
     await login(page)

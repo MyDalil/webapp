@@ -33,6 +33,8 @@ for (const path of ['/', '/annuaire/sante-soins/hopitaux']) {
     expect(seen.compte, 'une vérification de compte au plus').toBeLessThanOrEqual(1)
     // Seuils : mesure du 16/11/2026 (accueil 39, liste 33 vers DALIL) + 15 % environ ; total inchangé.
     expect(seen.ours, 'requêtes vers DALIL').toBeLessThan(path === '/' ? 46 : 39)
-    expect(seen.total, 'requêtes de la page, services tiers compris').toBeLessThan(path === '/' ? 120 : 60)
+    // Liste : 64 depuis que la carte se dessine (2026-11-16). Le worker MapLibre réparé charge aussi
+    // les polices des noms de lieux (3 requêtes OpenFreeMap) : mesuré 61 en CI, dont 32 vers DALIL.
+    expect(seen.total, 'requêtes de la page, services tiers compris').toBeLessThan(path === '/' ? 120 : 64)
   })
 }

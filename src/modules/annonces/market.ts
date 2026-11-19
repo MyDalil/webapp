@@ -4,6 +4,7 @@ import type { Classified, Media, Member } from '@/payload-types'
 import { currentMember } from '@/modules/membres'
 import { record } from '@/modules/messages'
 import { payload as getPayload } from '@/platform/http'
+import { localize } from '@/platform/i18n/content'
 import { SITE, TEAM, esc, layout, send } from '@/platform/mail'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { commune as communeOf, communeName } from '@/platform/referentiel/communes'
@@ -128,10 +129,28 @@ export async function getClassifiedSitemap(): Promise<{ category: string; slug: 
   return docs.flatMap((d) => (d.slug && d.category ? [{ category: d.category, slug: d.slug, updatedAt: d.updatedAt }] : []))
 }
 
-export async function getClassified(slug: string): Promise<ClassifiedView | null> {
+/** Champs jamais publics d’une annonce (auteur, modération, signalements, notes internes). */
+const PRIVATE_CLASSIFIED_FIELDS = ['author', 'authorName', 'reports', 'rejectionReason', 'moderatedAt', 'expiryWarnedAt', 'agentReviewedAt', 'agentNote'] as const
+export type PublicClassified = Omit<Classified, (typeof PRIVATE_CLASSIFIED_FIELDS)[number]>
+
+/**
+ * Lecture publique d’une annonce, sans session (actions, MCP, Telegram) : en ligne seulement (publiée et non expirée),
+ * traduite si `lang`, champs privés retirés, coordonnées masquées dans la description.
+ */
+export async function getPublicClassified(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<PublicClassified | null> {
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'classifieds', where: { and: [live(), { slug: { equals: slug } }] }, depth: 0, limit: 1, overrideAccess: true })
+  const c = await localize(docs[0] ?? null, 'classifieds', lang, p)
+  if (!c) return null
+  const out: Record<string, unknown> = { ...c, description: maskContacts(c.description ?? '') }
+  for (const k of PRIVATE_CLASSIFIED_FIELDS) delete out[k]
+  return out as PublicClassified
+}
+
+export async function getClassified(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<ClassifiedView | null> {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'classifieds', where: { slug: { equals: slug } }, depth: 1, limit: 1, overrideAccess: true })
-  const c = docs[0]
+  const c = await localize(docs[0] ?? null, 'classifieds', lang, p)
   if (!c) return null
   const me = await currentMember()
   const mine = !!me && idOf(c.author) === me.id

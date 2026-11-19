@@ -61,6 +61,14 @@ import * as migration_20261115_120000_ecoles_par_niveau from './20261115_120000_
 import * as migration_20261115_150000_fourre_tout_ranges from './20261115_150000_fourre_tout_ranges';
 import * as migration_20261116_085202_place_logo from './20261116_085202_place_logo';
 import * as migration_20261116_090342_media_logo_size from './20261116_090342_media_logo_size';
+import * as migration_20261116_150000_demo_praticien_production from './20261116_150000_demo_praticien_production';
+import * as migration_20261119_095728_allegement_traductions_mises_en_avant from './20261119_095728_allegement_traductions_mises_en_avant';
+import * as migration_20261119_110529_paiements_pays_sponsorisation from './20261119_110529_paiements_pays_sponsorisation';
+import * as migration_20261119_112942_abonnements_revendications_demandes from './20261119_112942_abonnements_revendications_demandes';
+import * as migration_20261119_113904_paiements_justificatif from './20261119_113904_paiements_justificatif';
+import * as migration_20261119_185900_sauvegarde_noms_adresses from './20261119_185900_sauvegarde_noms_adresses';
+import * as migration_20261119_190000_noms_accents from './20261119_190000_noms_accents';
+import * as migration_20261119_200525_offsections_rubriques from './20261119_200525_offsections_rubriques';
 
 export const migrations = [
   {
@@ -376,6 +384,46 @@ export const migrations = [
   {
     up: migration_20261116_090342_media_logo_size.up,
     down: migration_20261116_090342_media_logo_size.down,
-    name: '20261116_090342_media_logo_size'
+    name: '20261116_090342_media_logo_size',
+  },
+  {
+    up: migration_20261116_150000_demo_praticien_production.up,
+    down: migration_20261116_150000_demo_praticien_production.down,
+    name: '20261116_150000_demo_praticien_production',
+  },
+  {
+    up: migration_20261119_095728_allegement_traductions_mises_en_avant.up,
+    down: migration_20261119_095728_allegement_traductions_mises_en_avant.down,
+    name: '20261119_095728_allegement_traductions_mises_en_avant',
+  },
+  {
+    up: migration_20261119_110529_paiements_pays_sponsorisation.up,
+    down: migration_20261119_110529_paiements_pays_sponsorisation.down,
+    name: '20261119_110529_paiements_pays_sponsorisation',
+  },
+  {
+    up: migration_20261119_112942_abonnements_revendications_demandes.up,
+    down: migration_20261119_112942_abonnements_revendications_demandes.down,
+    name: '20261119_112942_abonnements_revendications_demandes',
+  },
+  {
+    up: migration_20261119_113904_paiements_justificatif.up,
+    down: migration_20261119_113904_paiements_justificatif.down,
+    name: '20261119_113904_paiements_justificatif',
+  },
+  {
+    up: migration_20261119_185900_sauvegarde_noms_adresses.up,
+    down: migration_20261119_185900_sauvegarde_noms_adresses.down,
+    name: '20261119_185900_sauvegarde_noms_adresses',
+  },
+  {
+    up: migration_20261119_190000_noms_accents.up,
+    down: migration_20261119_190000_noms_accents.down,
+    name: '20261119_190000_noms_accents',
+  },
+  {
+    up: migration_20261119_200525_offsections_rubriques.up,
+    down: migration_20261119_200525_offsections_rubriques.down,
+    name: '20261119_200525_offsections_rubriques'
   },
 ];

@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto'
 import type { Payload } from 'payload'
 
 /**
@@ -9,6 +10,27 @@ export type TelegramPerson = 'said' | 'rad'
 export type SendResult = 'envoyé' | 'non configuré' | 'échec'
 
 export const botToken = () => process.env.TELEGRAM_BOT_TOKEN?.trim() || null
+
+/**
+ * Secret du webhook (en-tête X-Telegram-Bot-Api-Secret-Token) : TELEGRAM_WEBHOOK_SECRET si défini,
+ * sinon dérivé de REMOTE_SIGNING_SECRET (une variable de moins à saisir pour Saïd et Rad). Vide = webhook refusé.
+ */
+export function webhookSecret(): string {
+  const own = process.env.TELEGRAM_WEBHOOK_SECRET?.trim()
+  if (own) return own
+  const base = process.env.REMOTE_SIGNING_SECRET?.trim()
+  return base && base.length >= 32 ? createHmac('sha256', base).update('dalil-telegram-webhook').digest('hex') : ''
+}
+
+/**
+ * Adresse du webhook : la production pointe vers le site public ; un preview pointe vers sa propre adresse,
+ * avec le contournement de la protection Vercel si VERCEL_AUTOMATION_BYPASS_SECRET est exposé au déploiement.
+ */
+export function webhookUrl(origin: string, site: string, env = process.env): string {
+  if (env.VERCEL_ENV === 'production') return `${site}/api/telegram`
+  const bypass = env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim()
+  return `${origin}/api/telegram${bypass ? `?x-vercel-protection-bypass=${encodeURIComponent(bypass)}` : ''}`
+}
 
 export async function telegramApi<T = unknown>(method: string, body: Record<string, unknown>): Promise<{ ok: true; result: T } | { ok: false; error: string }> {
   const token = botToken()

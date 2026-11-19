@@ -54,3 +54,6 @@ node_modules/
 /src/modules/annuaire/data/osm-places.json
 /src/modules/annuaire/data/open-places.json
 .reindex-needed
+
+# worker MapLibre copié au build
+/public/maplibre-gl-worker.mjs

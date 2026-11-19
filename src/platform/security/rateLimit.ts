@@ -34,6 +34,21 @@ export async function hit(bucket: string, who: string, max: number, windowSec: n
   return Number(row.count) > max ? Number(row.retry) || windowSec : 0
 }
 
+/** Lit un compteur sans l’incrémenter (0 si absent ou expiré). Aucun effet de bord. */
+export async function peek(bucket: string, who: string): Promise<number> {
+  const p = await payload()
+  const key = `${bucket}:${who.startsWith('ip:') ? who : fingerprint(who)}`
+  const { rows } = await (p.db as unknown as Db).drizzle.execute(sql`SELECT count FROM rate_limits WHERE key = ${key} AND reset_at >= now()`)
+  return Number(rows[0]?.count ?? 0)
+}
+
+/** Efface un compteur (ex. anti-doublon libéré quand le traitement a échoué, pour qu’un nouvel essai passe). */
+export async function release(bucket: string, who: string): Promise<void> {
+  const p = await payload()
+  const key = `${bucket}:${who.startsWith('ip:') ? who : fingerprint(who)}`
+  await (p.db as unknown as Db).drizzle.execute(sql`DELETE FROM rate_limits WHERE key = ${key}`)
+}
+
 export const tooMany = (retryAfter: number) =>
   NextResponse.json(
     { error: `Trop de tentatives. Réessayez dans ${retryAfter < 120 ? `${retryAfter} secondes` : `${Math.ceil(retryAfter / 60)} minutes`}.` },

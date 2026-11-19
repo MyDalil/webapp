@@ -5,6 +5,7 @@ import { guardPublication, isAdmin, isAdminField, isStaff, isStaffField } from '
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { DAYS, LANGUAGES, SPECIALTIES } from './specialties'
 import { indexPractitioner, unindexPractitioner } from './search'
+import { translateOnPublish } from '@/platform/i18n/auto'
 
 /** Public : praticiens publiés. Équipe : tous. Les pros passent par /api/pro/* (champs autorisés uniquement). */
 const readPublished: Access = (args) => (isStaff(args) ? true : { status: { equals: 'published' } })
@@ -32,7 +33,7 @@ export const Practitioners: CollectionConfig = {
   labels: { singular: 'Praticien', plural: 'Praticiens' },
   admin: { group: 'Santé', useAsTitle: 'name', defaultColumns: ['name', 'specialties', 'city', 'status', 'identityVerified'] },
   access: { read: readPublished, create: isStaff, update: isStaff, delete: isAdmin },
-  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication('status')], afterChange: [indexPractitioner, refreshPage], afterDelete: [unindexPractitioner] },
+  hooks: { beforeValidate: [prepare], beforeChange: [guardPublication('status')], afterChange: [indexPractitioner, refreshPage, translateOnPublish('status')], afterDelete: [unindexPractitioner] },
   fields: [
     {
       type: 'tabs',
@@ -116,7 +117,7 @@ export const Practitioners: CollectionConfig = {
     },
     { name: 'status', type: 'select', required: true, defaultValue: 'pending', label: 'Statut', options: [{ label: 'En attente de vérification', value: 'pending' }, { label: 'Publié', value: 'published' }, { label: 'Suspendu', value: 'suspended' }], admin: { position: 'sidebar', description: 'Publication uniquement après vérification de l’identité et du droit d’exercer.' } },
     { name: 'demo', type: 'checkbox', label: 'Fiche de démonstration', defaultValue: false, admin: { position: 'sidebar', description: 'Affiche un bandeau « Démo » : aucun vrai praticien derrière.' } },
-    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', access: { read: isStaffField }, admin: { position: 'sidebar' } },
+    { name: 'owner', type: 'relationship', relationTo: 'members', label: 'Compte professionnel', index: true, access: { read: isStaffField, create: isAdminField, update: isAdminField }, admin: { position: 'sidebar' } },
     { name: 'slug', type: 'text', unique: true, index: true, label: 'Adresse de la page', admin: { position: 'sidebar', description: '/praticiens/…' } },
   ],
 }

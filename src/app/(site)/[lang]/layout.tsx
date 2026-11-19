@@ -28,6 +28,7 @@ import '@/styles/v1.css'
 import { Header } from '@/platform/shell/Header'
 import { Assistant } from '@/modules/recherche/ui'
 import { LoginDialog } from '@/platform/shell/LoginDialog'
+import { ServiceWorker } from '@/platform/shell/ServiceWorker'
 import { Toast } from '@/platform/shell/ToastView'
 import { Motion } from '@/platform/ui/Motion'
 import { JoinCircle } from '@/platform/shell/JoinCircle'
@@ -44,7 +45,10 @@ const metadata: Metadata = {
   title: { default: 'DALIL — Guide de l’Algérie', template: '%s · DALIL' },
   description: 'DALIL, le guide de confiance pour explorer, vivre et avancer en Algérie.',
   applicationName: 'DALIL',
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/favicon.svg', apple: '/icons/apple-touch-icon.png' },
+  // Application installable : manifeste (src/app/manifest.ts), plein écran sur l’écran d’accueil iOS.
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, title: 'DALIL', statusBarStyle: 'default' },
   openGraph: { type: 'website', siteName: 'DALIL', locale: 'fr_FR', images: ['/og.png'] },
   twitter: { card: 'summary_large_image', images: ['/og.png'] },
 }
@@ -100,6 +104,7 @@ export default async function SiteLayout({ children, params }: { children: React
           <Motion />
           <JoinCircle />
           <LoginDialog />
+          <ServiceWorker />
         </LangProvider>
       </body>
     </html>

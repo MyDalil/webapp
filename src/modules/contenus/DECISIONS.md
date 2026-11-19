@@ -27,3 +27,10 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 ## 2026-11-15 — Accueil court (demande de Rad, à valider sur preview)
 - Décision : l’accueil garde six blocs — recherche, rubriques, annonces, découvrir, professionnels, newsletter. Les blocs par rubrique (Santé, À domicile, Vie musulmane, destination, Papiers, Repères, Installation) sont retirés : ils répétaient le menu et les six portes.
 - Diaporama : mosquée, monument, site naturel, puis incontournables. Plus de lieu de santé ni de bureau officiel (photos libres non relues).
+
+## 2026-11-16 — Standard des pages guide (maquette validée par Rad)
+- Décision : onglets fixes, frise des étapes, catégories en puces (modèle de l'accueil), cartes photo en bande, sources en grille 2 × 2, bandeau d'action vert ; grille de 8 px ; boutons de 40 px ; sur mobile, carrousels, rien d'empilé.
+- Portée (Rad) : norme de toutes les pages similaires (guides, démarches, rubriques d'information). Hors norme : Services, Santé et pages d'usage comparable, qui demandent une présentation propre à leur usage — à définir avec Rad avant tout code.
+- Maquette : https://claude.ai/artifact/WydWifCueg4g656ZNRsh9r
+- 2026-11-19 — pied de page refait sur la maquette validée par Rad : marque + phrase d’accueil + canal Telegram (affiché seulement si `NEXT_PUBLIC_TELEGRAM_CHANNEL_URL` est renseignée), colonnes Rubriques (six univers du menu, pictogrammes en couleur), Professionnels, Confiance, Informations légales ; langues (même page) en bas. Newsletter retirée du pied de page (bloc de l’accueil conservé). « Revendiquer ma fiche » absent : pas de page générale, la revendication se fait depuis chaque fiche.
+- 2026-11-19 — mentions légales réécrites selon la loi 18-07 modifiée par la loi 25-11 : champs société laissés en blanc (« — ») jusqu’à réception des informations (raison sociale, RC, NIF, NIS, directeur de la publication, DPD, déclaration et autorisation de transfert ANPDP) ; hébergeurs réels (Vercel, Neon Francfort, Vercel Blob, Resend, Gandi) — l’ancienne mention « Cloudflare via ChatGPT Sites » était fausse. Nouvelle page /securite et `/.well-known/security.txt` (contact salam@mydalil.com).

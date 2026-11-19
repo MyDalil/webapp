@@ -1,5 +1,35 @@
 # Reprise — 12 novembre 2026
 
+## Mise à jour — 19 novembre 2026 : noyau léger + actions + MCP + télécommandes
+
+- Branche `agent/noyau-mcp-complet`, créée depuis `preview` (a2ba53d). Code écrit par 8 lots en parallèle, fusionné à la main. **Non commité, non poussé** au moment de cette note : feu vert de Rad attendu.
+- Diagnostic et liste complète des exigences : projet claude.ai MyDALIL, `claude/audit-2026-11-19-architecture-modulaire.md`.
+- Décisions : pas de table `fiches` unique (les collections restent) ; une couche d'actions commune (`src/platform/actions/`, `src/registry.ts`) appelée par le site (`callAsSite`), le MCP (`/api/mcp` public lecture seule, `/api/mcp/admin` clé API ou OAuth), Telegram et WhatsApp (`src/modules/communication/remote/`) ; toute écriture hors admin = brouillon ; publication = clic patron/admin.
+- Extras débranchés par `DALIL_PLUGINS` (défaut `communication`) : cockpit et agents éteints, tables conservées. `prodMigrations` retiré.
+- Ajouts : PWA (manifest, `public/sw.js`, page hors-ligne), robots des IA, `llms.txt`, schema.org et aperçus de liens sur 5 fiches, barre Appeler/WhatsApp/Itinéraire/Partager, OAuth 2.1 sans base, import CSV avec doublons, contrôle de sécurité, restauration, traduction FR/EN/AR stockée dans `translations`, alt automatique, newsletter en une commande, sponsorisation marquée « Sponsorisé » (indépendante de la vérification), kit QR « Vérifié sur DALIL », variantes des 69 wilayas, pages `moments`, FAQ.
+- Migration : `20261119_095728_allegement_traductions_mises_en_avant` (testée en local sans PostGIS ; la CI la prouvera depuis zéro).
+- Vérifié localement : `pnpm check` OK (599 fichiers) ; `pnpm test` 68 fichiers, 491 tests OK (après corrections de la relecture de sécurité : publication à distance seulement après clic signé, lots MCP bornés à 10, erreurs internes masquées, secret Telegram en temps constant, clé API refusée si compte verrouillé, « À vérifier » jamais public, import CSV via le registre et borné à 1 Mo ; reste ouvert : révocation d’une famille de jetons OAuth réutilisée, valeurs mcp/whatsapp/site du champ canal de l’audit) ; `pnpm lint` 0 erreur ; `next build` : compilation réussie, arrêt ensuite à la collecte des pages faute de base locale (comme avant). **Non vérifié** : build complet avec base, e2e, rendu visuel à 375/1440 px, appels réels à Telegram, Meta, OpenAI, Anthropic.
+- Second tour (même branche, toujours **non commité**) — lots F, G, H1, H2, I :
+  - F (CI et e2e) : CI en deux passes sur base neuve — « Build et parcours essentiels » (configuration de production) et « Build et parcours des extras (cockpit, agents) » ; nouveaux parcours e2e (télécommande, MCP, import, contrôle…). En passe production, `DALIL_TEST_REMOTE=1` : `/api/telegram` renvoie le texte répondu (champ `reponse`, jamais si `VERCEL_ENV=production`) ; test `/etat` ajouté (admin : état du site ; visiteur : refus).
+  - G (sécurité des canaux) : arrêt général par Telegram (`/finir`, `/relancer`, bouton Confirmer) ; boutons signés à usage unique avec expiration ; limites par compte ; secrets dédiés `OAUTH_SECRET` et `REMOTE_SIGNING_SECRET` (32 caractères au moins, obligatoires en production) ; révocation de toute la famille d’un jeton OAuth réutilisé. WhatsApp : un message en erreur est journalisé (`recordError`) et reçoit « Erreur, réessayez. » sans bloquer les suivants.
+  - H1 (traductions et import) : traductions rafraîchies à la modification + rattrapage quotidien (`TRANSLATE_DAILY_MAX`, 50 par défaut) ; import CSV par lots de 150 lignes (`depuis`/`suite`) ; `/csv` simule un lot (avec le total), `/csv confirmer` enchaîne les lots (15 au plus, reprise `/csv confirmer depuis N`) ; limite unique `MAX_CSV_BYTES`/`MAX_CSV_LABEL`.
+  - H2 (données) : cache FAQ/moments ; table `payments` ; champ `country` (liste unique `src/platform/referentiel/countries.ts`) ; expiration des sponsorisations.
+  - I (admin et site) : accueil de l’équipe dans /admin, vue Contrôle (`/admin/controle`, enregistrée dans `payload.config.ts`, carte des composants régénérée), liens équipe vers `/admin/import` et `/admin/controle` ; libellés trilingues (FAQ, « Sponsorisé », « Itinéraire » via `lang`) ; barre d’actions responsive vérifiée en capture sur une page de démonstration (pas sur une vraie fiche).
+  - 2 migrations : `20261119_095728` et `20261119_110529`. **À passer d’abord sur une branche Neon copiée de la production**, avant toute fusion vers `main`.
+  - Vérifié localement (intégration finale) : `pnpm check` OK (627 fichiers) ; `pnpm test` 78 fichiers, 550 tests OK ; `pnpm lint` 0 erreur (1284 avertissements) ; `pnpm build` : compilation et TypeScript réussis, arrêt à la collecte des pages faute de base (attendu) ; `playwright test --list` : 326 tests, 23 fichiers. **Non vérifié** : e2e exécutés, build avec base, migrations sur copie de production, appels réels Telegram/Meta.
+- Troisième tour (même branche, toujours **non commité**) — lots J, K, L1, L2, M, puis intégration finale :
+  - J (bot public guidé) : sessions `bot-sessions`, brouillon d’établissement par Telegram/WhatsApp, lien signé `/finaliser` (`finalizeLink`/`verifyFinalizeToken`, 7 jours).
+  - K (schéma) : `subscriptions`, `claims`, `claim-documents`, `leads`, `metrics-daily`, `bot-sessions`, global `pricing`, `Places.owner`, champs de `payments` ; vue `/admin/validation` ; actions `activer_abonnement`, `refuser_abonnement`, `decider_revendication`.
+  - L1 (parcours pro) : `/inscrire`, `/revendiquer`, `/finaliser`, `/espace-pro/abonnement`, `/pro/<slug>`.
+  - L2 (paiements) : Chargily (DZD), Stripe (EUR), webhooks, `valider_paiement`, `paiements_en_attente` (voir `docs/paiements.md`).
+  - M : demandes `leads` (`/api/leads`), compteurs `metrics-daily` (`/api/m`), classement « Partenaire », assistant Premium, transcription configurable.
+  - Intégration : bouchons L1 et M remplacés (getPricing, planOf, createCheckout, verifyFinalizeToken ; `contrats.ts` supprimé) ; règle unique du prix annuel (12 − `annualFreeMonths` mois payés pour 12 mois) ; `confirmer_paiement` supprimée au profit de `valider_paiement` ; table CONFIRM déplacée dans `src/platform/telegram/callback.ts` (codes `a`, `u`, `d-ok|no`, `v`) et boutons signés émis par L1/L2 ; une seule voie de reçu (`/api/pro/abonnement` → `submitPaymentReceipt`, `/api/paiement/recu` supprimée) ; registre : `paymentActions`, `metricsActions` ; e2e `validation.spec.ts`, `leads.spec.ts`.
+  - Migrations : `20261119_112942_abonnements_revendications_demandes` et `20261119_113904_paiements_justificatif` (additive : `payments.proof_file_id`). Appliquées sur la base locale de test seulement. **À passer d’abord sur une branche Neon copiée de la production.**
+  - Variables Vercel à créer : `CHARGILY_SECRET_KEY`, `CHARGILY_MODE` (test|live), `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TELEGRAM_BOT_USERNAME`, `TRANSCRIBE_PROVIDER` (openai|groq), `GROQ_API_KEY` (si groq).
+  - Vérifications de l’intégration : voir le rapport de fin de tour (check, test, lint, build sans base). **Non vérifié** : e2e exécutés, build avec base, paiements réels, rendu 375/1440 px des nouvelles pages.
+- Prochaine action : feu vert de Rad → commit, push, PR vers `preview` → CI → test sur preview.mydalil.com.
+- À faire hors code : variables Vercel (`DALIL_MCP_KEYS`, `OAUTH_SECRET`, `REMOTE_SIGNING_SECRET`, `TELEGRAM_GROUP_ID`, `OPENAI_API_KEY`, WhatsApp), rebrancher le webhook Telegram (`/api/telegram/setup`) pour les boutons, lier un groupe au canal, domaine `mcp.mydalil.com`, compte WhatsApp Business vérifié par Meta, soumission aux répertoires ChatGPT et Claude.
+
 ## Mise à jour — 15 novembre 2026 : domaines et arborescence
 
 - Branche `agent/domaines-arborescence`, créée depuis `preview`.
@@ -121,3 +151,24 @@
 - Relu par Fable (advisor) ; ses 7 remarques traitées.
 - Local : check, 201 tests, build, 88 parcours dont le repère de carte ; 375 px et 1440 px sans débordement. Le parcours « service » d’un membre échoue en local seulement (créneaux déjà pris par des essais précédents sur la même base) ; il passe sur base neuve en CI.
 - Méthode de travail (Rad, 2026-11-16) : Opus exécute ; Fable donne son avis quand le lot le justifie, puis Opus applique.
+
+## 2026-11-16 — Branche agent/fiches-et-carte
+- Fait : fond de carte réparé (worker MapLibre copié au build), repère = itinéraire, pages guide au standard validé, étoiles ✦ remplacées par des pictogrammes.
+- Vérifié en local : check, 229 tests unitaires, build, 224 parcours Playwright (36 ignorés).
+- Prochaine action : vérifier sur preview que le fond de carte se dessine ; questions à Rad sur Services et Santé avant toute maquette.
+
+## Mise en production — 19 nov. 2026 (soir)
+- Avis Fable avant promotion : GO sous conditions. Levées dans `agent/beta-finitions` :
+  - point de restauration `sauvegardes.places_noms_20261119` (migration 20261119_185900, avant la réécriture différée des noms) ; requête de restauration dans le fichier de migration ;
+  - sigles gardés en majuscules dans `tidyCase` (ENSV, CNFPH, INPED, C.F.P.A…). Sur la base de preview, les sigles déjà abîmés restent à corriger ; la production est réécrite avec la règle corrigée.
+- Cockpit et agents éteints en production (choix de Rad : « garder uniquement ce qui maintient le site »). Les rallumer : `DALIL_PLUGINS=cockpit,communication` (ou `agents,cockpit,communication`) dans Vercel Production.
+- Contrôle /admin/controle : plus de fausse alerte sur preview ; bouton Telegram sans JSON brut.
+- À surveiller : collection `translations` lisible par tous (traductions d'une fiche dépubliée), route /api/kit non relue, première tâche planifiée et sauvegarde en production, /api/sante.
+
+## 2026-11-19 (soir) — Interrupteurs de rubriques (branche `agent/interrupteurs`, non commité)
+- Demande de Rad : couper ou rallumer chaque rubrique et chaque catégorie en un clic dans /admin ; une partie coupée affiche « revient sous peu ».
+- Code : `src/platform/controls/sections.ts` (clés, arbre, filtres, testé), `offSections.ts` (lecture en cache `controls`), champs `offSections`/`offMessage` du global `controls`, action `basculer_section`, route `/api/rubriques`, vue `/admin/rubriques` (`RubriquesView` + `RubriquesSwitches`), lien équipe et case « Rubriques coupées » ; pages publiques enveloppées par `withSectionGate` (`src/platform/ui/SectionGate.tsx`, bloc `ComingSoon`) ; fiches (`placeGate`) ; filtres recherche (`searchEverything`, `suggest`), actions annuaire, plan du site.
+- Migration additive `20261119_200525_offsections_rubriques` (2 colonnes sur `controls`), générée par `payload migrate:create` à partir de l’instantané de la migration précédente (aucune base locale démarrée : `initdb` refusé en root) ; non appliquée en local, la CI la prouvera sur base neuve.
+- Vérifié en local : `pnpm check` OK, `pnpm test` 100 fichiers / 668 tests OK, `pnpm lint` 0 erreur, `playwright test --list` OK (338 tests, dont `e2e/rubriques.spec.ts`). **Non vérifié** : build complet, e2e exécutés, rendu 375/1440 px.
+- Limites : liste `/annuaire/<secteur>?category=…` (liens du menu) non coupée côté serveur pour une catégorie seule (page ISR qui ne lit pas la requête) ; la catégorie dédiée `/annuaire/<secteur>/<catégorie>` l’est. Total d’adresses de la recherche et réponses CDN de `/api/recherche` (5 min) peuvent garder un court décalage.
+- Prochaine action : relecture, commit, PR vers `preview`, e2e en CI, essai sur preview.mydalil.com.

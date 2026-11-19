@@ -1,23 +1,42 @@
+import { isLang } from '@/platform/i18n'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
 import { DEMARCHES, demarcheBySlug, procedureBySlug, type Demarche, type GuideFact } from '@/modules/contenus'
 import { OfficialProcedure } from '@/modules/contenus/ui'
 import { offerState, packForGuide } from '@/modules/accompagnement'
-import { Choice, SoonButton, Transparency, Why } from '@/modules/accompagnement/ui'
+import { SoonButton, Why } from '@/modules/accompagnement/ui'
 import { Icon } from '@/platform/ui/Icon'
 import { XpHero } from '@/platform/ui/Xp'
+import { JsonLd } from '@/platform/seo/JsonLd'
+import { breadcrumbJsonLd, procedureJsonLd } from '@/platform/seo/jsonLd'
+import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
+import type { Lang } from '@/platform/i18n'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string; lang: string }> }
 export const revalidate = 3600
 export const generateStaticParams = () => DEMARCHES.map((d) => ({ slug: d.slug }))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = (await params).slug
+  const { slug, lang } = await params
+  const L = asLang(lang)
   const d = demarcheBySlug(slug)
-  if (d) return { title: `${d.title}`, description: `${d.lead} Étapes, pièces, liens officiels et sources datées.` }
-  const p = await procedureBySlug(slug)
-  return p ? { title: `${p.title}`, description: `${p.summary} Lien direct vers le site officiel, pièces et sources datées.` } : {}
+  if (d) return ficheMetadata({ lang: L, path: `/demarches/${d.slug}`, type: 'article', title: `${d.title}`, description: factualDescription([d.lead, 'Étapes, pièces, liens officiels et sources datées.']) })
+  const p = await procedureBySlug(slug, isLang(lang) ? lang : undefined)
+  return p ? ficheMetadata({ lang: L, path: `/demarches/${p.slug}`, type: 'article', title: `${p.title}`, description: factualDescription([p.summary, 'Lien direct vers le site officiel, pièces et sources datées.']) }) : {}
+}
+
+/** Données structurées d’une démarche : service public, étapes (HowTo) et fil d’Ariane. */
+function demarcheLd(L: Lang, slug: string, o: { title: string; description: string; steps: string[]; officialUrl?: string | null; image?: string | null; checked?: string | null }) {
+  const url = absoluteUrl(L, `/demarches/${slug}`)
+  return [
+    ...procedureJsonLd({ title: o.title, url, lang: L, description: o.description, steps: o.steps, officialUrl: o.officialUrl, image: absoluteAsset(o.image), dateModified: o.checked }),
+    breadcrumbJsonLd([
+      { name: 'Démarches', url: absoluteUrl(L, '/demarches') },
+      { name: o.title, url },
+    ]),
+  ]
 }
 
 /** Couleurs des pictogrammes des points clés (même palette que les catégories). */
@@ -55,19 +74,35 @@ function Facts({ d, items, ordered = false }: { d: Demarche; items: GuideFact[];
 }
 
 /** Fiche d’une démarche (maquette validée par Rad) : visuel, points clés, deux options, guide gratuit sourcé. */
-export default async function DemarchePage({ params }: Props) {
-  const slug = (await params).slug
+async function DemarchePage({ params }: Props) {
+  const { slug, lang } = await params
+  const L = asLang(lang)
   const d = demarcheBySlug(slug)
   if (!d) {
     // Démarche officielle de la base (Neon) : fiche au même format, lien direct vers le site de l’État.
-    const p = await procedureBySlug(slug)
+    const p = await procedureBySlug(slug, isLang(lang) ? lang : undefined)
     if (!p) notFound()
-    return <OfficialProcedure p={p} />
+    return (
+      <>
+        <JsonLd data={demarcheLd(L, p.slug, { title: p.title, description: p.summary, steps: (p.steps ?? []).map((s) => s.text), officialUrl: p.onlineUrl })} />
+        <OfficialProcedure p={p} />
+      </>
+    )
   }
   const pack = await packForGuide(`/demarches/${d.slug}`)
   const open = (await offerState()).mode === 'ouvert'
   return (
     <article className="xp">
+      <JsonLd
+        data={demarcheLd(L, d.slug, {
+          title: d.title,
+          description: d.lead,
+          steps: d.steps.map((s) => s.text),
+          officialUrl: d.sources.find((s) => s.official)?.url,
+          image: d.image,
+          checked: d.checked,
+        })}
+      />
       <XpHero compact photo={d.image} credit={d.credit} eyebrow={`Démarche · ${d.where}`} title={d.title} lead={d.lead} back={{ href: '/demarches', label: 'Toutes les démarches' }}>
         <p className="ac-badge is-light">Dernière vérification : {dateFr(d.checked)}</p>
       </XpHero>
@@ -103,13 +138,6 @@ export default async function DemarchePage({ params }: Props) {
             <SoonButton label="Réserver" />
           )}
         </div>
-      )}
-
-      {pack && (
-        <>
-          <Transparency />
-          <Choice pack={pack} freeHref="#guide" outline={d.outline} open={open} />
-        </>
       )}
 
       <div id="guide" className="dm-guide">
@@ -165,26 +193,9 @@ export default async function DemarchePage({ params }: Props) {
 
       {pack && <Why />}
 
-      <section className="sr-group" aria-label="Sources">
-        <h2>
-          Sources <small>· relevées le {dateFr(d.checked)}</small>
-        </h2>
-        <ol className="ac-sources">
-          {d.sources.map((s, i) => (
-            <li key={s.id} id={`source-${i + 1}`}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
-                {s.title}
-              </a>{' '}
-              — {s.publisher}
-              {s.date ? `, ${dateFr(s.date)}` : ''} · {s.official ? 'source officielle' : 'presse, à recouper avec le Journal officiel'}
-            </li>
-          ))}
-        </ol>
-        <p className="sr-note">
-          Une information a changé ? <Link href="/feedback">Dites-le-nous</Link>.
-        </p>
-      </section>
       </div>
     </article>
   )
 }
+
+export default withSectionGate(DemarchePage, (p) => `/demarches/${p.slug}`)

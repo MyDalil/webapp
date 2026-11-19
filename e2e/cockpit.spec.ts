@@ -26,7 +26,7 @@ async function loginAs(page: Page, who: { email: string; password: string }) {
   await signIn(page.request, who)
 }
 
-test.describe.serial('Cockpit admin @ecriture', () => {
+test.describe.serial('Cockpit admin @ecriture @extras', () => {
   test.beforeAll(async ({ browser }) => {
     const page = await browser.newPage()
     await ensureUsers(page)

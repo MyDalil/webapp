@@ -1,17 +1,25 @@
+import { isLang } from '@/platform/i18n'
+import { ACTION_LABELS } from '@/platform/seo/share'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
-import { categoryPhoto, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
+import { placeGate } from '@/platform/ui/SectionGate'
+import { categoryPhoto, directionsUrl, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
 import { SaveButton } from '@/modules/membres/ui'
-import { PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
-import { coverOf, galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
+import { LeadFormSlot } from '@/modules/pros/ui'
+import { ClaimLink, PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
+import { JsonLd } from '@/platform/seo/JsonLd'
+import { breadcrumbJsonLd, placeJsonLd } from '@/platform/seo/jsonLd'
+import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
+import { placeClaimLabel } from '@/platform/seo/claim'
+import { galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string; lang: string }> }
 
 /** Pages générées au build puis rafraîchies à chaque enregistrement dans /admin ; nouvelles fiches servies à la demande. */
 export const revalidate = 86400
@@ -19,10 +27,21 @@ export const dynamicParams = true
 export const generateStaticParams = async () => (await getPlaceSlugs()).map((slug) => ({ slug }))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const p = await getPlace((await params).slug)
+  const { slug, lang } = await params
+  const p = await getPlace(slug, isLang(lang) ? lang : undefined)
   // Fiche sans nom connu (« Mosquée · nom à compléter ») : utile sur place, pas dans les moteurs de recherche.
   const unnamed = p ? /nom à compléter/.test(p.name) : false
-  return p ? { title: `${p.name} — ${p.category}, ${p.city}`, description: presentIntro(p.intro) ?? undefined, openGraph: { images: [coverOf(p)] }, ...(unnamed ? { robots: { index: false } } : {}) } : {}
+  if (!p) return {}
+  const where = [latinCity(p.city), p.wilaya ? `wilaya de ${wilayaName(p.wilaya)}` : null].filter(Boolean).join(', ')
+  return {
+    ...ficheMetadata({
+      lang: asLang(lang),
+      path: `/adresses/${p.slug ?? slug}`,
+      title: `${p.name} — ${p.category}, ${p.city}`,
+      description: factualDescription([`${p.category} à ${where}.`, presentIntro(p.intro)]),
+    }),
+    ...(unnamed ? { robots: { index: false } } : {}),
+  }
 }
 
 const link = (url: string) => (/^https?:\/\//.test(url) ? url : `https://${url}`)
@@ -34,9 +53,11 @@ const meters = (m: number) => (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m
  * présentation professionnelle, faits connus en pastilles, contribution, à proximité ; provenance discrète en bas.
  */
 export default async function PlacePage({ params }: Props) {
-  const { slug } = await params
-  const p = await getPlace(slug)
+  const { slug, lang } = await params
+  const p = await getPlace(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
+  const off = await placeGate(`/adresses/${slug}`, lang, { sector: p.sector, category: p.category })
+  if (off) return off
   const status = p.verification ?? 'spotted'
   const updated = formatDate(p.verifiedAt ?? null)
   const { pos, exact } = position(p)
@@ -68,10 +89,38 @@ export default async function PlacePage({ params }: Props) {
   // Logo officiel (entreprises, organismes) : à côté du nom, jamais à la place d’une photo.
   const logo = p.logo && typeof p.logo === 'object' ? p.logo : null
   const logoUrl = logo?.sizes?.logo?.url ?? logo?.url ?? null
-  const directions = pos ? `https://www.google.com/maps/dir/?api=1&destination=${pos[0]},${pos[1]}` : null
+  const directions = pos ? directionsUrl(pos) : null
+  const claim = placeClaimLabel(p.sector, p.category)
+  const L = asLang(lang)
+  const url = absoluteUrl(L, `/adresses/${p.slug ?? slug}`)
+  const inCategory = sector?.categories.includes(p.category)
+  const jsonLd = [
+    placeJsonLd({
+      name: p.name,
+      url,
+      lang: L,
+      category: p.category,
+      description: intro,
+      alternateNames: [p.nameEn, p.nameAr],
+      address: { street: p.address || p.place, locality: latinCity(p.city), region: wilaya },
+      pos: exact ? pos : null,
+      phone: p.showContacts ? p.phone : null,
+      website: p.showContacts ? p.website : null,
+      images: photos.map((ph) => absoluteAsset(ph.url)),
+      hours: (p.hours ?? []).map((h) => `${h.days} ${h.time}`),
+    }),
+    breadcrumbJsonLd([
+      { name: 'Annuaire', url: absoluteUrl(L, '/annuaire') },
+      { name: sectorTitle(p.sector), url: absoluteUrl(L, `/annuaire/${p.sector}`) },
+      ...(inCategory ? [{ name: p.category, url: absoluteUrl(L, categoryPath(p.sector, p.category)) }] : []),
+      ...(inCategory && p.wilaya && wilaya ? [{ name: wilaya, url: absoluteUrl(L, categoryPath(p.sector, p.category, p.wilaya)) }] : []),
+      { name: p.name, url },
+    ]),
+  ]
 
   return (
     <div className="pl">
+      <JsonLd data={jsonLd} />
       <nav className="pl-crumbs" aria-label="Fil d’Ariane">
         <Link href="/annuaire">Annuaire</Link> › <Link href={`/annuaire/${p.sector}`}>{sectorTitle(p.sector)}</Link>
         {sector?.categories.includes(p.category) && (
@@ -187,19 +236,16 @@ export default async function PlacePage({ params }: Props) {
             <div className="pl-actions">
               {directions ? (
                 <a className="button primary" href={directions} target="_blank" rel="noreferrer">
-                  Itinéraire
+                  {ACTION_LABELS.directions[L]}
                 </a>
               ) : (
                 <span />
               )}
               <SaveButton itemType="listing" itemKey={p.slug ?? slug} label={p.name} variant="button" />
-              <PlaceActions name={p.name} />
+              <PlaceActions name={p.name} phone={p.showContacts ? p.phone : null} whatsapp={p.showContacts ? p.whatsapp : null} target={{ collection: 'places', id: p.id }} />
+              <LeadFormSlot collection="places" id={p.id} category={p.category} />
             </div>
-            {p.sector === 'sante-soins' && ['Médecins', 'Dentistes'].includes(p.category) && (
-              <p className="pl-claim">
-                <Link href="/connexion/professionnel">Vous êtes ce praticien ? Activez la prise de rendez-vous ›</Link>
-              </p>
-            )}
+            {claim && <ClaimLink label={claim} href={`/revendiquer/places/${slug}`} />}
           </div>
 
           <div className="pl-card">

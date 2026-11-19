@@ -3,12 +3,13 @@ import { listRepresentations } from '@/modules/contenus'
 import { ConsulatFinder, type Rep } from '@/modules/contenus/ui'
 import { XpHero } from '@/platform/ui/Xp'
 import { PHOTOS } from '@/platform/referentiel/photos'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = { title: 'Ambassades et consulats d’Algérie dans le monde', description: 'Adresse, téléphone, email, site officiel, territoire couvert et services en ligne de chaque ambassade et consulat d’Algérie.' }
 export const revalidate = 3600
 
 /** Tous les postes diplomatiques et consulaires d’Algérie, groupés par pays, avec recherche. */
-export default async function Consulats() {
+async function Consulats() {
   const reps = (await listRepresentations()).map(
     (r): Rep => ({ slug: r.slug, name: r.name, country: r.country, city: r.city, kind: r.kind, continent: r.continent, address: r.address, phone: r.phone, email: r.email, website: r.website, jurisdiction: r.jurisdiction, onlineServices: r.onlineServices?.map((s) => ({ title: s.title, url: s.url })) ?? [] }),
   )
@@ -23,3 +24,5 @@ export default async function Consulats() {
     </div>
   )
 }
+
+export default withSectionGate(Consulats, () => '/demarches/consulats')

@@ -5,7 +5,7 @@ import { categoryPath } from '@/platform/referentiel/slug'
 /** Pictogramme d’une sous-catégorie ; sans entrée ici, celui de la rubrique. */
 const ICON: Record<string, string> = {
   Crèches: 'baby', 'Écoles primaires': 'book', Collèges: 'books', Lycées: 'school', Universités: 'building', 'Formation professionnelle': 'wrench',
-  'Écoles de langues': 'globe', Dentistes: 'sparkle', 'Stations-service': 'drop', 'Lavage auto': 'brush', 'Pièces et accessoires auto': 'box', Tribunaux: 'shield',
+  'Écoles de langues': 'globe', Dentistes: 'tooth', 'Stations-service': 'drop', 'Lavage auto': 'brush', 'Pièces et accessoires auto': 'box', Tribunaux: 'shield',
   'Sécurité sociale': 'heart', 'Impôts et douanes': 'cash', 'Wilayas et daïras': 'building', 'Services municipaux': 'users', Ministères: 'globe', 'Auto-écoles': 'car', 'Écoles coraniques': 'mosque', Médecins: 'health', Pharmacies: 'box', Hôpitaux: 'building',
   Vétérinaires: 'paw', Restaurants: 'utensils', Cafés: 'cup', 'Salons de thé': 'cup', Hôtels: 'home', 'Salles de sport': 'dumbbell', Mosquées: 'mosque',
   'Bureaux de poste': 'mail', Ambassades: 'globe', Consulats: 'passport', Banques: 'cash', Librairies: 'books', Habillement: 'shirt', Plages: 'sun',
@@ -56,5 +56,37 @@ export function CategoryTiles({ sector, categories, active, wilaya, counts }: { 
         ))}
       </nav>
     </div>
+  )
+}
+
+/**
+ * Catégories hors annuaire (guides, rubriques) : puces du modèle de l’accueil — pastille ronde en couleur,
+ * contour fin, aucun fond derrière le mot (maquette validée par Rad, 2026-11-16). Sur mobile, trois rangées qui défilent.
+ */
+/** 1 564 : espace fine insécable, sans dépendre des données de langue du serveur. */
+const thousands = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202f')
+
+export function CategoryGrid({ items, all }: { items: { sector: string; category: string; n?: number }[]; all?: { href: string; n?: number } }) {
+  return (
+    <nav className="cat-chips" aria-label="Catégories">
+      {items.map(({ sector, category, n }, i) => (
+        <Link key={`${sector}-${category}`} className="cat-chip" href={categoryPath(sector, category)} style={{ ['--rc' as string]: TONES[i % TONES.length] }}>
+          <span className="cat-chip-ico" aria-hidden="true">
+            <Icon name={ICON[category] ?? SECTOR_ICON[sector] ?? 'pin'} />
+          </span>
+          {LABEL[category] ?? category}
+          {n != null && <small>{thousands(n)}</small>}
+        </Link>
+      ))}
+      {all && (
+        <Link className="cat-chip is-all" href={all.href} style={{ ['--rc' as string]: '#006b3c' }}>
+          <span className="cat-chip-ico" aria-hidden="true">
+            <Icon name="arrow" />
+          </span>
+          Tout voir
+          {all.n != null && <small>{thousands(all.n)}</small>}
+        </Link>
+      )}
+    </nav>
   )
 }

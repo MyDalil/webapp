@@ -1,5 +1,8 @@
 import { payload } from '@/platform/http'
 import type { Platform, Procedure, Representation } from '@/payload-types'
+import { localize, localizeMany } from '@/platform/i18n/content'
+
+type Lang = 'fr' | 'en' | 'ar'
 
 /**
  * Lecture publique des démarches officielles, des services en ligne et des postes consulaires (Neon).
@@ -14,11 +17,11 @@ const safe = async <T>(fn: () => Promise<T>, empty: T): Promise<T> => {
 }
 const published = { status: { equals: 'published' } } as const
 
-export const listProcedures = (theme?: string) =>
-  safe(async () => (await (await payload()).find({ collection: 'procedures', where: theme ? { and: [published, { theme: { equals: theme } }] } : published, sort: 'title', limit: 2000, depth: 0, overrideAccess: false })).docs as Procedure[], [] as Procedure[])
+export const listProcedures = (theme?: string, lang?: Lang) =>
+  safe(async () => localizeMany((await (await payload()).find({ collection: 'procedures', where: theme ? { and: [published, { theme: { equals: theme } }] } : published, sort: 'title', limit: 2000, depth: 0, overrideAccess: false })).docs as Procedure[], 'procedures', lang), [] as Procedure[])
 
-export const procedureBySlug = (slug: string) =>
-  safe(async () => ((await (await payload()).find({ collection: 'procedures', where: { and: [published, { slug: { equals: slug } }] }, limit: 1, depth: 0, overrideAccess: false })).docs[0] as Procedure | undefined) ?? null, null as Procedure | null)
+export const procedureBySlug = (slug: string, lang?: Lang) =>
+  safe(async () => localize(((await (await payload()).find({ collection: 'procedures', where: { and: [published, { slug: { equals: slug } }] }, limit: 1, depth: 0, overrideAccess: false })).docs[0] as Procedure | undefined) ?? null, 'procedures', lang), null as Procedure | null)
 
 export const listPlatforms = () =>
   safe(async () => (await (await payload()).find({ collection: 'platforms', where: published, sort: 'order', limit: 500, depth: 0, overrideAccess: false })).docs as Platform[], [] as Platform[])

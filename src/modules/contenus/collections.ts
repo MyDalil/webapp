@@ -1,3 +1,5 @@
 export { Procedures } from './officiel/Procedures'
 export { Platforms } from './officiel/Platforms'
 export { Representations } from './officiel/Representations'
+export { Faqs } from './editorial/Faqs'
+export { Moments } from './editorial/Moments'

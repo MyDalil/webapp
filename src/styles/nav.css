@@ -310,12 +310,16 @@ html[data-theme="dark"] .header-search-panel { background: #08110d; border-botto
 html[data-theme="dark"] .header-search-veil { background: rgba(0, 0, 0, .72); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
 /* Propositions pendant la frappe : lisibles en mode clair et en mode sombre. */
 html[data-theme="dark"] .search-suggest { background: #14201b; border-color: rgba(255, 255, 255, .12); color: #e7efe9; }
-html[data-theme="dark"] .search-suggest a small { color: #a7b8ae; }
-html[data-theme="dark"] .search-suggest a:hover, html[data-theme="dark"] .search-suggest a.is-active { background: rgba(62, 207, 127, .14); }
-html[data-theme="dark"] .search-suggest a.search-suggest-all { color: #6fe0a2; border-top-color: rgba(255, 255, 255, .12); }
+html[data-theme="dark"] :is(.ss-text small, .ss-group) { color: #a7b8ae; }
+html[data-theme="dark"] :is(.ss-chips, .search-suggest .ss-all) { border-color: rgba(255, 255, 255, .12); }
+html[data-theme="dark"] .search-suggest .ss-chip { border-color: rgba(255, 255, 255, .16); }
+html[data-theme="dark"] .ss-badge { background: rgba(62, 207, 127, .16); color: #6fe0a2; }
+html[data-theme="dark"] .ss-badge.is-neutral { background: rgba(255, 255, 255, .08); color: #c9d4ce; }
+html[data-theme="dark"] :is(.ss-thumb, .ss-chip-ico) { background: color-mix(in srgb, var(--ic) 18%, transparent); color: var(--ic); }
+html[data-theme="dark"] .search-suggest :is(.ss-row, .ss-chip):is(:hover, .is-active) { background: rgba(62, 207, 127, .14); }
+html[data-theme="dark"] .search-suggest .ss-all { color: #6fe0a2; }
 @keyframes hs-fade { from { opacity: 0 } }
 @keyframes hs-drop { from { opacity: 0; transform: translateY(-8px) } }
 @media (prefers-reduced-motion: reduce) { .header-search-veil, .header-search-panel { animation: none; } }
 /* Téléphone et tablette : la recherche reste dans le menu ☰ (rien ne change). */
 @media (max-width: 1023px) { .header-search-button, .header-search-panel, .header-search-veil { display: none !important; } }
-html[data-theme="dark"] .search-suggest-kind { color: #6fe0a2; }

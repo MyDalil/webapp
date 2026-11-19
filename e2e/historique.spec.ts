@@ -13,7 +13,7 @@ async function login(page: Page) {
   await signIn(page.request, ADMIN)
 }
 
-test.describe.serial('Cockpit — Historique et corbeille @ecriture', () => {
+test.describe.serial('Cockpit — Historique et corbeille @ecriture @extras', () => {
   test('fiche : recherche, aperçu, journal, corbeille puis restauration', async ({ page }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule fiche modifiée par passage')
     await login(page)

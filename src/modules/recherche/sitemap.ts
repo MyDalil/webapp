@@ -1,13 +1,15 @@
 import 'server-only'
 import { countPublishedPlaces, getCategoryWilayaCounts, getPlaceCounts, getPlaceSitemap, wilayaSlug } from '@/modules/annuaire'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, getClassifiedSitemap } from '@/modules/annonces'
-import { ROUTES } from '@/modules/contenus'
+import { ROUTES, currentMoments } from '@/modules/contenus'
 import { getPractitionerSitemap } from '@/modules/sante'
 import { CATEGORIES as SERVICE_CATEGORIES, getProviderSitemap } from '@/modules/services'
 import { SITE } from '@/platform/site'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { ROBOTS_PRIVATE_PATHS } from '@/platform/siteRoutes'
+import { offSet } from '@/platform/controls/offSections'
+import { offKeyForPath, offKeyForPlace } from '@/platform/controls/sections'
 
 /**
  * Plan du site dynamique : uniquement les pages publiques et les contenus publiés (annonces : en ligne et non expirées).
@@ -38,6 +40,14 @@ export async function sitemapFiles(): Promise<string[]> {
  * (audit A09) : la route répond 503 et les moteurs gardent le dernier plan valide.
  */
 export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
+  // Rubriques et catégories coupées (/admin/rubriques) : leurs pages sortent du plan (elles répondent « revient sous peu », noindex).
+  const off = await offSet()
+  const list = await sitemapAll(file)
+  if (!list || !off.size) return list
+  return list.filter((u) => !offKeyForPath(u.loc.slice(SITE.length) || '/', off) && !(u.place && offKeyForPlace(u.place.sector, u.place.category, off))).map(({ place: _place, ...u }) => u)
+}
+
+async function sitemapAll(file: string): Promise<(SitemapUrl & { place?: { sector: string | null; category: string | null } })[] | null> {
   if (file === 'pages') {
     const counts = await getPlaceCounts()
     const content = ROUTES.filter((r) => !EXCLUDED.has(r) && !r.startsWith('/adresses/') && !r.startsWith('/annuaire/'))
@@ -47,7 +57,10 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
       .map((name) => `/villes/${wilayaSlug(name)}`)
     const services = SERVICE_CATEGORIES.map((c) => `/services/${c.value}`)
     const classifieds = CLASSIFIED_CATEGORIES.map((c) => `/annonces/${c.value}`)
-    return [...new Set([...content, ...DEDICATED, ...sectors, ...cities, ...services, ...classifieds])].map((p) => url(p))
+    // Pages saisonnières : seulement les moments publiés et en cours, en français comme le reste du plan (aucun → aucune ligne).
+    const moments = (await currentMoments()).filter((m) => !m.lang || m.lang === 'fr')
+    const momentUrls = [...new Map(moments.map((m) => [m.slug, url(`/moments/${m.slug}`, m.updatedAt)])).values()]
+    return [...[...new Set([...content, ...DEDICATED, ...sectors, ...cities, ...services, ...classifieds])].map((p) => url(p)), ...momentUrls]
   }
   // Pages « catégorie » (toutes : jamais vides) et « catégorie × wilaya » (seulement avec au moins une adresse).
   if (file === 'categories') {
@@ -67,7 +80,7 @@ export async function sitemapUrls(file: string): Promise<SitemapUrl[] | null> {
   const m = /^adresses-(\d+)$/.exec(file)
   if (m) {
     const list = await getPlaceSitemap(Number(m[1]) * PLACES_PER_FILE, PLACES_PER_FILE)
-    return list.map((p) => url(`/adresses/${p.slug}`, p.updatedAt))
+    return list.map((p) => ({ ...url(`/adresses/${p.slug}`, p.updatedAt), place: { sector: p.sector, category: p.category } }))
   }
   return null
 }
@@ -89,6 +102,7 @@ export const indexXml = (files: string[]) =>
 export const ROBOTS_DISALLOW = [
   '/admin',
   '/api/',
+  '/oauth/',
   ...ROBOTS_PRIVATE_PATHS,
   ...ROBOTS_PRIVATE_PATHS.map((path) => `/en${path}`),
   ...ROBOTS_PRIVATE_PATHS.map((path) => `/ar${path}`),

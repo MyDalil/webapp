@@ -8,7 +8,7 @@ import { signIn } from './session'
 const ADMIN = { email: process.env.DALIL_ADMIN_EMAIL || 'salam@mydalil.com', password: 'Cockpit-test-2026!', name: 'Saïd Test' }
 const ACT = /^act_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
 
-test.describe('Traçabilité des agents @ecriture', () => {
+test.describe('Traçabilité des agents @ecriture @extras', () => {
   test('avant, après et ordre : notifiés avec un action_id partagé avec l’audit', async ({ request }) => {
     test.skip(test.info().project.name !== 'ordinateur', 'une seule passe suffit')
     await request.post('/api/users/first-register', { data: ADMIN })

@@ -5,6 +5,7 @@ import { GUIDES } from '@/platform/referentiel/catalog'
 import { PHOTOS, type PhotoKey } from '@/platform/referentiel/photos'
 import { Icon, IconLabel } from '@/platform/ui/Icon'
 import { SectionHead, TileCarousel, XpHero, type Tile } from '@/platform/ui/Xp'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
   title: 'Guides pratiques',
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 /** Index des guides au format de l’accueil : diaporama, puis une rangée de grandes tuiles photo par rubrique. */
-export default function Guides() {
+function Guides() {
   // Rubriques du prototype regroupées en grands thèmes : chaque rangée compte plusieurs guides (pas de rangée à une tuile).
   const THEMES: [string, string[]][] = [
     ['S’installer et faire ses démarches', ['Installation', 'Territoires', 'Démarches', 'Travail']],
@@ -55,3 +56,5 @@ export default function Guides() {
     </div>
   )
 }
+
+export default withSectionGate(Guides, () => '/guides')
