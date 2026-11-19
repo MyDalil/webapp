@@ -3,7 +3,7 @@ import type { Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { categoryPath, slugify } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
-import { accentFr } from '@/platform/referentiel/accents'
+import { splitPlaceName } from '@/platform/referentiel/accents'
 import { indexRows, removeRow, replaceType, type SearchRow } from '@/platform/search/store'
 
 const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée', labelled: 'Label Excellence' }
@@ -19,7 +19,7 @@ export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow
     type: 'adresse',
     id: String(p.id),
     url: `/adresses/${p.slug}`,
-    title: accentFr(p.name),
+    title: splitPlaceName(p.name).name,
     subtitle: [p.category, latinCity(p.city)].filter(Boolean).join(' · '),
     wilaya: p.wilaya ?? null,
     badge: p.verification === 'verified' || p.verification === 'labelled' ? STATUS[p.verification] : null,
