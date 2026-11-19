@@ -25,6 +25,11 @@ export async function ControleView({ initPageResult, params, searchParams }: Adm
           <p>Accès réservé à l’équipe.</p>
         ) : (
           <>
+            <form method="post" action="/api/telegram/setup" style={{ marginBottom: 'var(--base)' }}>
+              <button type="submit" className="btn btn--style-secondary btn--size-small">Brancher le bot Telegram sur ce site</button>
+              {(searchParams as Record<string, unknown> | undefined)?.telegram === 'ok' ? <span style={{ marginLeft: 12 }}>Bot branché.</span> : null}
+              {(searchParams as Record<string, unknown> | undefined)?.telegram === 'echec' ? <span style={{ marginLeft: 12 }}>Échec : vérifiez TELEGRAM_BOT_TOKEN.</span> : null}
+            </form>
             <p style={{ color: 'var(--theme-elevation-600)', marginBottom: 'var(--base)' }}>
               {alertes ? `${alertes} point(s) à regarder.` : 'Tout est en ordre.'} Lecture seule : ce rapport ne modifie rien. Rechargez la page pour le refaire.
             </p>
