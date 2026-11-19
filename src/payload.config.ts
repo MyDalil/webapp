@@ -105,6 +105,7 @@ export default buildConfig({
         // Import CSV (module plateforme ops, vue du lot C2).
         importCsv: { Component: '@/platform/ops/admin/ImportCsv#ImportCsv', path: '/import' },
         controle: { Component: '@/platform/shell/admin/ControleView#ControleView', path: '/controle' },
+        rubriques: { Component: '@/platform/shell/admin/RubriquesView#RubriquesView', path: '/rubriques' },
         // File unique de validation (lot K) : brouillons, revendications, abonnements, paiements, contributions.
         validation: { Component: '@/platform/shell/admin/ValidationView#ValidationView', path: '/validation' },
         ...(cockpit ? cockpitViews : {}),

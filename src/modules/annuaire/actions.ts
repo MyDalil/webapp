@@ -4,7 +4,17 @@ import type { ActionDef } from '@/platform/actions/types'
 import { S, absoluteUrl, limitOf, slugFrom, wilayaCode, wilayaLabel } from '@/platform/actions'
 import { payloadFor } from '@/platform/actions/payload'
 import { SECTORS } from '@/platform/referentiel/catalog'
-import { getPublishedPlace, searchPlaces, type PlaceCard } from './queries'
+import { offSet } from '@/platform/controls/offSections'
+import { offKeyForPlace } from '@/platform/controls/sections'
+import { getPublishedPlace, searchPlaces as searchAll, type PlaceCard } from './queries'
+
+/** Recherche des actions : sans les fiches d’une rubrique ou catégorie coupée (/admin/rubriques). */
+async function searchPlaces(...a: Parameters<typeof searchAll>) {
+  const [res, off] = await Promise.all([searchAll(...a), offSet()])
+  if (!off.size) return res
+  const places = res.places.filter((p) => !offKeyForPlace(p.sector, p.category, off))
+  return { places, total: res.total - (res.places.length - places.length) }
+}
 
 /** Seuls les statuts positifs sortent : « À vérifier » est réservé à l’équipe (règle 3, décision de Rad). */
 const STATUS: Record<string, string> = { verified: 'Vérifiée', labelled: 'Label Excellence' }
@@ -122,7 +132,7 @@ const voirFiche: ActionDef<{ slug: string }> = {
   input: { type: 'object', properties: { slug: S.slug }, required: ['slug'] },
   async run(input, ctx) {
     const place = await getPublishedPlace(slugFrom(input.slug), ctx.lang, 0)
-    if (!place) return { trouve: false, message: 'Aucune adresse publiée à ce nom.' }
+    if (!place || offKeyForPlace(place.sector, place.category, await offSet())) return { trouve: false, message: 'Aucune adresse publiée à ce nom.' }
     return { trouve: true, fiche: fiche(place, ctx.lang) }
   },
 }

@@ -164,3 +164,11 @@
 - Cockpit et agents éteints en production (choix de Rad : « garder uniquement ce qui maintient le site »). Les rallumer : `DALIL_PLUGINS=cockpit,communication` (ou `agents,cockpit,communication`) dans Vercel Production.
 - Contrôle /admin/controle : plus de fausse alerte sur preview ; bouton Telegram sans JSON brut.
 - À surveiller : collection `translations` lisible par tous (traductions d'une fiche dépubliée), route /api/kit non relue, première tâche planifiée et sauvegarde en production, /api/sante.
+
+## 2026-11-19 (soir) — Interrupteurs de rubriques (branche `agent/interrupteurs`, non commité)
+- Demande de Rad : couper ou rallumer chaque rubrique et chaque catégorie en un clic dans /admin ; une partie coupée affiche « revient sous peu ».
+- Code : `src/platform/controls/sections.ts` (clés, arbre, filtres, testé), `offSections.ts` (lecture en cache `controls`), champs `offSections`/`offMessage` du global `controls`, action `basculer_section`, route `/api/rubriques`, vue `/admin/rubriques` (`RubriquesView` + `RubriquesSwitches`), lien équipe et case « Rubriques coupées » ; pages publiques enveloppées par `withSectionGate` (`src/platform/ui/SectionGate.tsx`, bloc `ComingSoon`) ; fiches (`placeGate`) ; filtres recherche (`searchEverything`, `suggest`), actions annuaire, plan du site.
+- Migration additive `20261119_200525_offsections_rubriques` (2 colonnes sur `controls`), générée par `payload migrate:create` à partir de l’instantané de la migration précédente (aucune base locale démarrée : `initdb` refusé en root) ; non appliquée en local, la CI la prouvera sur base neuve.
+- Vérifié en local : `pnpm check` OK, `pnpm test` 100 fichiers / 668 tests OK, `pnpm lint` 0 erreur, `playwright test --list` OK (338 tests, dont `e2e/rubriques.spec.ts`). **Non vérifié** : build complet, e2e exécutés, rendu 375/1440 px.
+- Limites : liste `/annuaire/<secteur>?category=…` (liens du menu) non coupée côté serveur pour une catégorie seule (page ISR qui ne lit pas la requête) ; la catégorie dédiée `/annuaire/<secteur>/<catégorie>` l’est. Total d’adresses de la recherche et réponses CDN de `/api/recherche` (5 min) peuvent garder un court décalage.
+- Prochaine action : relecture, commit, PR vers `preview`, e2e en CI, essai sur preview.mydalil.com.

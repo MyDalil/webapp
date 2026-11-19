@@ -12,6 +12,8 @@ import { PARTNER_LABEL, SPONSORED_LABEL, paidPlans, sponsoredFor } from '@/modul
 import { PARTNER_TYPES, partnerFirst } from './partner'
 import { nextFreeSlots, santeTaxonomyRows } from '@/modules/sante'
 import { annuaireTaxonomyRows } from '@/modules/annuaire'
+import { offSet } from '@/platform/controls/offSections'
+import { hitOff } from '@/platform/controls/sections'
 
 /** Groupe « sponsorise » : au plus 2 résultats payants, à part, en tête, chacun `sponsored: true` (jamais mêlés au classement). */
 export type SearchGroup = { key: SearchType | 'pistes' | 'sponsorise'; title: string; hits: (SearchHit & { sponsored?: true; partenaire?: true; partnerLabel?: typeof PARTNER_LABEL })[] }
@@ -67,11 +69,17 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
   const query = place.rest || text
   // Une requête par groupe : les catégories ne sont jamais noyées sous des milliers d’adresses du même nom.
   const CONTENT: SearchType[] = ['adresse', 'praticien', 'prestataire', 'annonce']
-  const lists = await Promise.all(
+  const [found0, off] = await Promise.all([
+    Promise.all(
     GROUPS.map((g) =>
       safe(querySearch(p, query, { types: g.types, wilaya: g.types.some((t) => CONTENT.includes(t)) ? place.wilaya : null, near: g.types.includes('adresse') ? place.near : null, limit: g.key === 'adresse' ? PAGE_SIZE : g.max * 3, offset: g.key === 'adresse' ? (page - 1) * PAGE_SIZE : 0 })),
     ),
-  )
+    ),
+    offSet(),
+  ])
+  // Rubriques et catégories coupées (/admin/rubriques) : aucun résultat ne mène vers elles.
+  const keep = (h: SearchHit) => !hitOff(h, off)
+  const lists = found0.map((l) => l.filter(keep))
   // Une catégorie trouvée avec un lieu ouvre directement « catégorie × wilaya ».
   const localize = (h: SearchHit): SearchHit => {
     if (!place.wilaya || (h.type !== 'categorie' && h.type !== 'rubrique')) return h
@@ -91,6 +99,7 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
       const score = new Map(near.map((h) => [h.id, nameMatch(wanted, h.title)]))
       near = [...near].sort((a, b) => Number((score.get(b.id) ?? 0) >= 0.3) - Number((score.get(a.id) ?? 0) >= 0.3) || (a.distanceKm ?? 99) - (b.distanceKm ?? 99))
     }
+    near = near.filter(keep)
     if (near.length) lists[i] = near.map((h) => ({ ...h, wilaya: place.wilaya ?? h.wilaya }))
   }
   // Wilaya choisie par le visiteur (en-tête) : ses adresses d’abord quand la recherche ne nomme aucun lieu.
@@ -153,10 +162,13 @@ export async function suggest(q: string, prefer: string | null = null): Promise<
   const head = categoryPrefix(query)
   const contentQuery = head && isGenericRest(head.name) ? searchWords(query).slice(0, searchWords(query).length - searchWords(head.name).length).join(' ') : query
   const fail = async (e: unknown) => (await recordError(e, { route: '/api/recherche', routeType: 'recherche' }), [] as SearchHit[])
-  const [cats, content] = await Promise.all([
+  const [cats0, content0, off] = await Promise.all([
     querySearch(p, query, { types: ['categorie', 'rubrique'], limit: 4 }).catch(fail),
     querySearch(p, contentQuery, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 16 }).catch(fail),
+    offSet(),
   ])
+  const cats = cats0.filter((h) => !hitOff(h, off))
+  const content = content0.filter((h) => !hitOff(h, off))
   const home = place.wilaya ?? prefer
   const ranked = home ? [...content].sort((a, b) => Number(b.wilaya === home) - Number(a.wilaya === home) || b.score - a.score) : content
   // Groupes dans l’ordre de la maquette validée (Rad, 2026-11-19) : rendez-vous en ligne, adresses, puis le reste. 6 lignes au plus.
@@ -165,7 +177,7 @@ export async function suggest(q: string, prefer: string | null = null): Promise<
   // Praticiens : premier créneau libre (au plus 4 lectures d’agenda ; réponse gardée 5 min par le CDN).
   const slots = await nextFreeSlots(rows.filter((h) => h.type === 'praticien').map((h) => h.id)).catch(() => ({}) as Record<string, string>)
   const withSlots = rows.map((h) => (h.type === 'praticien' && slots[h.id] ? { ...h, slot: slots[h.id] } : h))
-  const chips = withRelated(dedupeCategories(cats)).slice(0, 4).map((h) => localizeHit(h, place.wilaya, place.label))
+  const chips = withRelated(dedupeCategories(cats)).filter((h) => !hitOff(h, off)).slice(0, 4).map((h) => localizeHit(h, place.wilaya, place.label))
   return { items: [...chips, ...withSlots], place: place.wilaya ? place.label : null }
 }
 

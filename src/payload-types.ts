@@ -4176,6 +4176,22 @@ export interface Control {
     order?: ('admin' | 'telegram_said' | 'telegram_rad' | 'email')[] | null;
   };
   /**
+   * Se règle dans /admin/rubriques (un interrupteur par ligne). Clés : r:<rubrique>, c:<secteur>/<catégorie>.
+   */
+  offSections?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Vide = « Cette rubrique revient sous peu. » (anglais et arabe : message par défaut).
+   */
+  offMessage?: string | null;
+  /**
    * Modifiable par le patron seulement. Le bot doit être administrateur du canal.
    */
   telegramChannelId?: string | null;
@@ -4295,6 +4311,8 @@ export interface ControlsSelect<T extends boolean = true> {
         after?: T;
         order?: T;
       };
+  offSections?: T;
+  offMessage?: T;
   telegramChannelId?: T;
   updatedAt?: T;
   createdAt?: T;

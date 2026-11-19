@@ -5,6 +5,7 @@ import { getShowcase, getWilayaPlaces, wilayaBySlug, type PlaceCard } from '@/mo
 import { PlacePanel } from '@/modules/annuaire/ui'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { SECTORS } from '@/platform/referentiel/catalog'
+import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const revalidate = 3600
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return w ? { title: `${w.name} — que voir, que faire`, description: `Les lieux à découvrir dans la wilaya de ${w.name}, avec leurs sources et leur statut de vérification.` } : {}
 }
 
-export default async function City({ params }: Props) {
+async function City({ params }: Props) {
   const w = wilayaBySlug((await params).slug)
   if (!w) notFound()
   const places = await getWilayaPlaces(w.name)
@@ -63,3 +64,5 @@ export default async function City({ params }: Props) {
     </div>
   )
 }
+
+export default withSectionGate(City, (p) => `/villes/${p.slug}`)

@@ -3,6 +3,8 @@ import type { Payload } from 'payload'
 import { A_RELIRE, CASES, isTeam, listHref, shown, type Tache } from './accueil'
 import { IconCheck, IconHelp, IconImport, IconShield } from './icons'
 import { ADMIN_CSS } from './styles'
+import { getControls } from '@/platform/controls/Controls'
+import { normalizeOff } from '@/platform/controls/sections'
 
 type Props = { payload: Payload; user?: unknown }
 
@@ -23,7 +25,10 @@ async function compter(payload: Payload, t: Tache): Promise<number | null> {
 export async function AccueilEquipe({ payload, user }: Props) {
   if (!isTeam(user)) return null
   const all = [...A_RELIRE, ...CASES]
-  const counts = await Promise.all(all.map((t) => compter(payload, t)))
+  const [counts, coupees] = await Promise.all([
+    Promise.all(all.map((t) => compter(payload, t))),
+    getControls(payload).then((c) => normalizeOff(c.offSections).length, () => null),
+  ])
   const n = Object.fromEntries(all.map((t, i) => [t.key, counts[i]]))
   const totalRelire = A_RELIRE.reduce<number | null>((s, t) => (s == null || n[t.key] == null ? null : s + (n[t.key] as number)), 0)
   return (
@@ -57,6 +62,10 @@ export async function AccueilEquipe({ payload, user }: Props) {
             <span className={`ae-num${n[t.key] === 0 ? ' is-zero' : ''}`}>{shown(n[t.key])}</span>
           </a>
         ))}
+        <Link prefetch={false} className="ae-card" href="/admin/rubriques">
+          <h3>Rubriques coupées</h3>
+          <span className={`ae-num${coupees === 0 ? ' is-zero' : ''}`}>{shown(coupees)}</span>
+        </Link>
         <Link prefetch={false} className="ae-card" href="/admin/validation">
           <span className="ae-act"><IconCheck />Validation</span>
           <small>Tout ce qui attend un clic, en une liste : publier, rejeter, activer.</small>

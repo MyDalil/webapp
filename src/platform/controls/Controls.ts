@@ -1,5 +1,8 @@
-import type { GlobalBeforeChangeHook, GlobalConfig, Payload } from 'payload'
+import { revalidateTag } from 'next/cache'
+import type { GlobalAfterChangeHook, GlobalBeforeChangeHook, GlobalConfig, Payload } from 'payload'
 import { isAdmin, isPatronField, isStaff } from '@/platform/access'
+import { revalidateLangs } from '@/platform/revalidate'
+import { DEFAULT_OFF_MESSAGE, normalizeOff, pathsForKeys } from './sections'
 
 export type KillSwitch = 'off' | 'drain' | 'stop' | 'cut'
 
@@ -12,13 +15,28 @@ const stamp: GlobalBeforeChangeHook = ({ data, originalDoc, req }) => {
   return data
 }
 
+/** Rubriques ou catégories basculées : cache `controls` vidé et pages concernées rafraîchies (trois langues). */
+const refreshSections: GlobalAfterChangeHook = ({ doc, previousDoc }) => {
+  const before = new Set(normalizeOff((previousDoc as { offSections?: unknown } | undefined)?.offSections))
+  const after = new Set(normalizeOff((doc as { offSections?: unknown }).offSections))
+  const changed = [...before, ...after].filter((k) => before.has(k) !== after.has(k))
+  const messageChanged = (previousDoc as { offMessage?: string } | undefined)?.offMessage !== (doc as { offMessage?: string }).offMessage
+  try {
+    revalidateTag('controls', { expire: 0 })
+    for (const path of pathsForKeys(messageChanged ? [...after] : changed)) revalidateLangs(path)
+  } catch {
+    /* hors contexte Next (CLI, tâches) */
+  }
+  return doc
+}
+
 /** Commandes de sécurité de DALIL : arrêt général, IA des agents, Telegram, maintenance, budgets. */
 export const Controls: GlobalConfig = {
   slug: 'controls',
   label: 'Commandes et sécurité',
   admin: { group: 'Système' },
   access: { read: isStaff, update: isAdmin },
-  hooks: { beforeChange: [stamp] },
+  hooks: { beforeChange: [stamp], afterChange: [refreshSections] },
   fields: [
     {
       name: 'killSwitch',
@@ -76,6 +94,20 @@ export const Controls: GlobalConfig = {
       })),
     },
     {
+      name: 'offSections',
+      type: 'json',
+      label: 'Rubriques et catégories coupées',
+      defaultValue: [],
+      admin: { description: 'Se règle dans /admin/rubriques (un interrupteur par ligne). Clés : r:<rubrique>, c:<secteur>/<catégorie>.' },
+    },
+    {
+      name: 'offMessage',
+      type: 'text',
+      label: 'Message public d’une partie coupée (français)',
+      maxLength: 300,
+      admin: { description: `Vide = « ${DEFAULT_OFF_MESSAGE.fr} » (anglais et arabe : message par défaut).` },
+    },
+    {
       name: 'telegramChannelId',
       type: 'text',
       label: 'Canal Telegram (identifiant ou @nom)',
@@ -85,7 +117,7 @@ export const Controls: GlobalConfig = {
   ],
 }
 
-export type ControlsDoc = { killSwitch: KillSwitch; agentsEnabled?: boolean | null; telegramEnabled?: boolean | null; maintenance?: boolean | null; agentsMonthlyBudgetUsd?: number | null; telegramChannelId?: string | null }
+export type ControlsDoc = { killSwitch: KillSwitch; agentsEnabled?: boolean | null; telegramEnabled?: boolean | null; maintenance?: boolean | null; agentsMonthlyBudgetUsd?: number | null; telegramChannelId?: string | null; offSections?: unknown; offMessage?: string | null }
 
 /** Lecture serveur des commandes (sans contrôle d’accès). */
 export async function getControls(payload: Payload): Promise<ControlsDoc> {

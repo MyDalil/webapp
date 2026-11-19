@@ -339,14 +339,14 @@ export async function countPublishedPlaces(): Promise<number> {
   }
 }
 
-export async function getPlaceSitemap(offset: number, limit: number): Promise<{ slug: string; updatedAt: string }[]> {
+export async function getPlaceSitemap(offset: number, limit: number): Promise<{ slug: string; updatedAt: string; sector: string | null; category: string | null }[]> {
   try {
     const payload = await client()
     const db = (payload.db as unknown as { drizzle: { execute: (q: unknown) => Promise<{ rows: Record<string, unknown>[] }> } }).drizzle
     const { rows } = await db.execute(
-      sql`SELECT slug, updated_at FROM places WHERE _status = 'published' AND deleted_at IS NULL AND slug IS NOT NULL AND name NOT LIKE '%nom à compléter%' ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+      sql`SELECT slug, updated_at, sector, category FROM places WHERE _status = 'published' AND deleted_at IS NULL AND slug IS NOT NULL AND name NOT LIKE '%nom à compléter%' ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
     )
-    return rows.map((r) => ({ slug: String(r.slug), updatedAt: new Date(String(r.updated_at)).toISOString() }))
+    return rows.map((r) => ({ slug: String(r.slug), updatedAt: new Date(String(r.updated_at)).toISOString(), sector: r.sector == null ? null : String(r.sector), category: r.category == null ? null : String(r.category) }))
   } catch {
     return []
   }

@@ -3,6 +3,7 @@ import { ACTION_LABELS } from '@/platform/seo/share'
 import type { Metadata } from 'next'
 import Link from '@/platform/ui/Link'
 import { notFound } from 'next/navigation'
+import { placeGate } from '@/platform/ui/SectionGate'
 import { categoryPhoto, directionsUrl, factsOf, formatDate, knownCityPhoto, nearbyCards, presentIntro } from '@/modules/annuaire'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { SECTORS } from '@/platform/referentiel/catalog'
@@ -55,6 +56,8 @@ export default async function PlacePage({ params }: Props) {
   const { slug, lang } = await params
   const p = await getPlace(slug, isLang(lang) ? lang : undefined)
   if (!p) notFound()
+  const off = await placeGate(`/adresses/${slug}`, lang, { sector: p.sector, category: p.category })
+  if (off) return off
   const status = p.verification ?? 'spotted'
   const updated = formatDate(p.verifiedAt ?? null)
   const { pos, exact } = position(p)

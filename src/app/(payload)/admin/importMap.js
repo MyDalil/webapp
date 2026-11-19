@@ -32,6 +32,7 @@ import { LiensEquipe as LiensEquipe_d6aee83c5567d85414dedc16ab8dafca } from '@/p
 import { AccueilEquipe as AccueilEquipe_52275f51d2d8204f0adb2e0ef5455742 } from '@/platform/shell/admin/AccueilEquipe'
 import { ImportCsv as ImportCsv_4cb515b768f9feed76c5f7321463e5c2 } from '@/platform/ops/admin/ImportCsv'
 import { ControleView as ControleView_e064f3c0e82f8f081fe69b39de3341af } from '@/platform/shell/admin/ControleView'
+import { RubriquesView as RubriquesView_7d66502ebee2b3272e32221326b7e7a8 } from '@/platform/shell/admin/RubriquesView'
 import { ValidationView as ValidationView_67ab8b124b1ec08531ee995b2b4227c5 } from '@/platform/shell/admin/ValidationView'
 import { PilotageView as PilotageView_715d1ccb627d6eb99988fb20a385d2bd } from '@/modules/pilotage/admin/PilotageView'
 import { AgentsView as AgentsView_cc9fd0b58149438651d0b2a4db049dd9 } from '@/modules/pilotage/admin/views/AgentsView'
@@ -97,6 +98,7 @@ export const importMap = {
   "@/platform/shell/admin/AccueilEquipe#AccueilEquipe": AccueilEquipe_52275f51d2d8204f0adb2e0ef5455742,
   "@/platform/ops/admin/ImportCsv#ImportCsv": ImportCsv_4cb515b768f9feed76c5f7321463e5c2,
   "@/platform/shell/admin/ControleView#ControleView": ControleView_e064f3c0e82f8f081fe69b39de3341af,
+  "@/platform/shell/admin/RubriquesView#RubriquesView": RubriquesView_7d66502ebee2b3272e32221326b7e7a8,
   "@/platform/shell/admin/ValidationView#ValidationView": ValidationView_67ab8b124b1ec08531ee995b2b4227c5,
   "@/modules/pilotage/admin/PilotageView#PilotageView": PilotageView_715d1ccb627d6eb99988fb20a385d2bd,
   "@/modules/pilotage/admin/views/AgentsView#AgentsView": AgentsView_cc9fd0b58149438651d0b2a4db049dd9,
