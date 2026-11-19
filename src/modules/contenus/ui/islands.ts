@@ -6,6 +6,7 @@ import { ApplicationForm } from '@/modules/pros/ui'
 import { ContributionForm } from '@/modules/communaute/ui'
 import { DiagnosticWizard } from './DiagnosticWizard'
 import { ParallaxPhoto } from './ParallaxPhoto'
+import { FooterLanguages, TelegramChannel } from './FooterExtras'
 
 /** Composants interactifs du prototype, par nom d’origine. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,4 +18,6 @@ export const ISLANDS: Record<string, ComponentType<any>> = {
   ContributionForm,
   DiagnosticWizard,
   ParallaxPhoto,
+  FooterLanguages,
+  TelegramChannel,
 }
