@@ -1,4 +1,5 @@
 import { timingSafeEqual } from 'crypto'
+import { webhookSecret } from '@/platform/telegram/send'
 import { handleUpdate } from '@/modules/communication'
 import { json, payload } from '@/platform/http'
 import { recordError } from '@/platform/monitoring/errors'
@@ -16,8 +17,8 @@ const testRemote = () => process.env.DALIL_TEST_REMOTE === '1' && process.env.VE
  * Le registre des actions est injecté ici : le module communication ne l’importe jamais.
  */
 export async function POST(req: Request) {
-  const secret = process.env.TELEGRAM_WEBHOOK_SECRET
-  if (!secret) return json({ error: 'Webhook désactivé : TELEGRAM_WEBHOOK_SECRET absent.' }, 503)
+  const secret = webhookSecret()
+  if (!secret) return json({ error: 'Webhook désactivé : TELEGRAM_WEBHOOK_SECRET ou REMOTE_SIGNING_SECRET absent.' }, 503)
   const got = Buffer.from(req.headers.get('x-telegram-bot-api-secret-token') ?? '')
   const want = Buffer.from(secret)
   if (got.length !== want.length || !timingSafeEqual(got, want)) return json({ error: 'Accès refusé.' }, 401)
