@@ -87,6 +87,19 @@ async function nextFree(practitioner: Practitioner) {
   return days.find((d) => d.slots.length)?.slots[0]?.start ?? null
 }
 
+/** Premier créneau libre de quelques praticiens (liste de propositions de la recherche) : id → date ISO, ou rien. */
+export async function nextFreeSlots(ids: string[]): Promise<Record<string, string>> {
+  if (!ids.length) return {}
+  const p = await getPayload()
+  const { docs } = await p.find({ collection: 'practitioners', where: { and: [{ id: { in: ids.slice(0, 4) } }, { status: { equals: 'published' } }] }, depth: 0, limit: 4, overrideAccess: true })
+  const out: Record<string, string> = {}
+  await Promise.all(docs.map(async (d) => {
+    const start = await nextFree(d as Practitioner).catch(() => null)
+    if (start) out[String(d.id)] = start
+  }))
+  return out
+}
+
 export async function getPractitioner(slug: string, lang?: 'fr' | 'en' | 'ar'): Promise<Practitioner | null> {
   const p = await getPayload()
   const { docs } = await p.find({ collection: 'practitioners', where: { and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }] }, depth: 1, limit: 1, overrideAccess: true })

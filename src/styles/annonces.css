@@ -51,9 +51,29 @@
 .search-wrap { position: relative; width: min(850px, 100%); }
 .search-wrap .search-bar { width: 100%; }
 .search-suggest { position: absolute; z-index: 30; top: calc(100% + 8px); left: 0; right: 0; margin: 0; padding: 8px; list-style: none; border-radius: 16px; background: #fff; color: #14201b; box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .45); text-align: left; max-height: min(70vh, 520px); overflow: auto; }
-.search-suggest a { display: grid; grid-template-columns: 96px 1fr; column-gap: 12px; align-items: baseline; padding: 10px 12px; border-radius: 10px; color: inherit; text-decoration: none; }
-.search-suggest a small { grid-column: 2; color: #5b6b63; font-size: .85rem; }
-.search-suggest a:hover, .search-suggest a.is-active { background: #e5f4ec; }
-.search-suggest-kind { grid-row: span 2; color: #006b3c; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.search-suggest a.search-suggest-all { display: block; margin-top: 4px; border-top: 1px solid #e2e8e4; border-radius: 0; color: #006b3c; font-weight: 700; text-align: center; }
-@media (max-width: 640px) { .search-suggest a { grid-template-columns: 1fr; } .search-suggest-kind { grid-row: auto; } .search-suggest a small { grid-column: 1; } }
+/* Liste de propositions — maquette validée par Rad (2026-11-19) : pastilles de catégories, groupes, vignettes en couleur. */
+.search-suggest { padding: 14px 8px 8px; text-align: start; }
+.ss-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 10px 12px; border-bottom: 1px solid #edf0ee; }
+.search-suggest .ss-chip { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 12px 0 5px; border: 1px solid #e3e8e5; border-radius: 999px; color: inherit; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.search-suggest .ss-chip:hover, .search-suggest .ss-chip.is-active { border-color: #3ecf7f; background: #eefaf3; }
+.ss-chip-ico { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: color-mix(in srgb, var(--ic) 12%, #fff); color: color-mix(in srgb, var(--ic) 82%, #000); }
+.ss-chip-ico svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ss-group { margin: 0; padding: 12px 12px 4px; color: #5d6b63; font-size: 12px; font-weight: 500; }
+.search-suggest .ss-row { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 12px; color: inherit; text-decoration: none; }
+.search-suggest .ss-row:hover, .search-suggest .ss-row.is-active { background: #eefaf3; }
+.ss-thumb { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: color-mix(in srgb, var(--ic) 12%, #fff); color: color-mix(in srgb, var(--ic) 82%, #000); }
+.ss-thumb svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ss-avatar { border-radius: 50%; font-size: 14px; font-weight: 500; }
+.ss-text { min-width: 0; display: grid; }
+.ss-text b { overflow: hidden; font-size: 15px; font-weight: 500; line-height: 1.3; white-space: nowrap; text-overflow: ellipsis; }
+.ss-text small { overflow: hidden; color: #5d6b63; font-size: 13px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+.ss-badge { flex: none; margin-inline-start: auto; padding: 3px 9px; border-radius: 999px; background: #e8f7ee; color: #1f7a4a; font-size: 12px; white-space: nowrap; }
+.ss-badge.is-neutral { background: #eef1ef; color: #3e4a43; }
+.search-suggest .ss-all { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding: 12px; border-top: 1px solid #edf0ee; color: #1f7a4a; font-size: 14px; font-weight: 500; text-decoration: none; }
+.ss-all svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+[dir="rtl"] .ss-all svg { transform: scaleX(-1); }
+.search-wrap .search-bar { scroll-margin-top: calc(var(--header, 75px) + 12px); }
+@media (max-width: 600px) {
+  .search-suggest { max-height: calc(100svh - var(--header, 75px) - 90px); }
+  .ss-badge { display: none; }
+}

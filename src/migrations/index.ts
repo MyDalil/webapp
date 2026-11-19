@@ -66,6 +66,7 @@ import * as migration_20261119_095728_allegement_traductions_mises_en_avant from
 import * as migration_20261119_110529_paiements_pays_sponsorisation from './20261119_110529_paiements_pays_sponsorisation';
 import * as migration_20261119_112942_abonnements_revendications_demandes from './20261119_112942_abonnements_revendications_demandes';
 import * as migration_20261119_113904_paiements_justificatif from './20261119_113904_paiements_justificatif';
+import * as migration_20261119_190000_noms_accents from './20261119_190000_noms_accents';
 
 export const migrations = [
   {
@@ -407,5 +408,10 @@ export const migrations = [
     up: migration_20261119_113904_paiements_justificatif.up,
     down: migration_20261119_113904_paiements_justificatif.down,
     name: '20261119_113904_paiements_justificatif',
+  },
+  {
+    up: migration_20261119_190000_noms_accents.up,
+    down: migration_20261119_190000_noms_accents.down,
+    name: '20261119_190000_noms_accents',
   },
 ];

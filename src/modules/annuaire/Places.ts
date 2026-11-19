@@ -7,12 +7,15 @@ import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { slugify } from '@/platform/referentiel/slug'
+import { accentFr } from '@/platform/referentiel/accents'
 import { translateOnPublish } from '@/platform/i18n/auto'
 
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
 const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
   if (!data) return data
+  // Accents français manquants dans les noms importés (« Ecole » → « École »).
+  if (typeof data.name === 'string') data.name = accentFr(data.name)
   if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`) || `lieu-${Date.now().toString(36)}`
   data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)

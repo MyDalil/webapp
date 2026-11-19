@@ -5,6 +5,9 @@
 
 /* ——— Héros ——— */
 .xp-hero { position: relative; isolation: isolate; min-height: min(92vh, 860px); display: flex; align-items: flex-end; overflow: hidden; background: #0b1410; color: #fff; }
+/* Propositions ouvertes : la liste dépasse du hero au lieu d’être coupée ; le diaporama reste rogné. */
+.xp-hero:has(.search-suggest) { overflow: visible; z-index: 5; }
+.slideshow { overflow: hidden; }
 .xp-hero-city { min-height: min(78vh, 720px); }
 .slideshow, .xp-hero-img { position: absolute; inset: 0; z-index: -2; }
 .xp-hero-img { inset: -8% 0; background-size: cover; background-position: center; will-change: transform; }
