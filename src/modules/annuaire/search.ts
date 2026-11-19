@@ -3,6 +3,7 @@ import type { Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { categoryPath, slugify } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
+import { splitPlaceName } from '@/platform/referentiel/accents'
 import { indexRows, removeRow, replaceType, type SearchRow } from '@/platform/search/store'
 
 const STATUS: Record<string, string> = { spotted: 'À vérifier', checking: 'En vérification', verified: 'Vérifiée', labelled: 'Label Excellence' }
@@ -18,7 +19,7 @@ export function placeRow(p: Partial<Place> & { id: number | string }): SearchRow
     type: 'adresse',
     id: String(p.id),
     url: `/adresses/${p.slug}`,
-    title: p.name,
+    title: splitPlaceName(p.name).name,
     subtitle: [p.category, latinCity(p.city)].filter(Boolean).join(' · '),
     wilaya: p.wilaya ?? null,
     badge: p.verification === 'verified' || p.verification === 'labelled' ? STATUS[p.verification] : null,
@@ -70,9 +71,9 @@ const SYNONYMS: Record<string, string> = {
   Laboratoires: 'laboratoire analyses prise de sang',
   Mosquées: 'mosquee masjid jamaa priere',
   'Salles de prière': 'priere moussala',
-  Écoles: 'ecole primaire cem lycee',
+  Écoles: 'ecole primaire cem lycee college maternelle privee enfant enfants eleve scolarite inscription',
   Universités: 'universite faculte fac',
-  Crèches: 'creche garderie',
+  Crèches: 'creche garderie bebe enfant',
   Banques: 'banque agence bancaire',
   'Gares et stations': 'gare train bus station',
   Administrations: 'mairie apc daira administration',

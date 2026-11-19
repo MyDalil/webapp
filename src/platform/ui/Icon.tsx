@@ -1,5 +1,20 @@
 /** Icônes de la maquette DALIL (traits 1,8 px, currentColor). */
 const P: Record<string, React.ReactNode> = {
+  stethoscope: (
+    <>
+      <path d="M6 4H5a2 2 0 0 0-2 2v3.5a5.5 5.5 0 0 0 11 0V6a2 2 0 0 0-2-2h-1M8 15a6 6 0 1 0 12 0v-3M11 3v2M6 3v2" />
+      <circle cx="20" cy="10" r="2" />
+    </>
+  ),
+  hospital: <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M10 9h4M12 7v4" />,
+  pill: <path d="m4.5 12.5 8-8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1-7-7M8.5 8.5l7 7" />,
+  stroller: (
+    <>
+      <path d="M2 5h2.5l1.6 4.9A6 6 0 0 0 11.8 14h2.7a5.5 5.5 0 0 0 0-11H14v6M6 9h14M9 17l1-3M16 14l1 3" />
+      <circle cx="9" cy="19" r="2" />
+      <circle cx="17" cy="19" r="2" />
+    </>
+  ),
   search: (
     <>
       <circle cx="11" cy="11" r="7" />
@@ -289,7 +304,7 @@ export function Icon({ name }: { name: keyof typeof P | string }) {
 }
 
 /** Couleur fixe d’un pictogramme (palette --p1…--p8 de v1.css) : un même sujet garde la même couleur partout. */
-const TONE: Record<string, number> = { pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, spray: 6, iron: 5, window: 2, sofa: 8, chat: 1, pen: 4, tooth: 2, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 3, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
+const TONE: Record<string, number> = { stethoscope: 8, hospital: 2, pill: 1, stroller: 5, pin: 1, calendar: 4, building: 7, sun: 3, leaf: 1, ticket: 5, cup: 7, utensils: 8, briefcase: 2, book: 4, health: 8, home: 3, school: 2, car: 6, cash: 1, users: 5, mosque: 1, passport: 2, globe: 6, file: 4, shield: 1, heart: 5, list: 6, grid: 3, clock: 4, wrench: 7, bolt: 3, drop: 2, brush: 5, key: 7, spray: 6, iron: 5, window: 2, sofa: 8, chat: 1, pen: 4, tooth: 2, box: 3, phone: 1, mail: 2, laptop: 2, camera: 8, baby: 5, paw: 7, dumbbell: 8, music: 4, shirt: 3, bike: 3, tag: 6, books: 4, truck: 3, star: 3 }
 export function iconTone(name: string): string {
   const n = TONE[name] ?? ([...name].reduce((a, c) => a + c.charCodeAt(0), 0) % 8) + 1
   return `var(--p${n})`

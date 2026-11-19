@@ -7,12 +7,20 @@ import { scorePlace } from './ranking'
 import { indexPlace, unindexPlace } from './search'
 import { LANGUAGES } from '@/platform/referentiel/languages'
 import { slugify } from '@/platform/referentiel/slug'
+import { splitPlaceName } from '@/platform/referentiel/accents'
 import { translateOnPublish } from '@/platform/i18n/auto'
 
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
 const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
   if (!data) return data
+  // Noms importés : accents français rétablis, nom en plusieurs langues réparti dans ses champs.
+  if (typeof data.name === 'string') {
+    const n = splitPlaceName(data.name)
+    data.name = n.name
+    if (n.nameEn && !data.nameEn && !originalDoc?.nameEn) data.nameEn = n.nameEn
+    if (n.nameAr && !data.nameAr && !originalDoc?.nameAr) data.nameAr = n.nameAr
+  }
   if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`) || `lieu-${Date.now().toString(36)}`
   data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)

@@ -10,6 +10,8 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { localIntent, type Intent } from './intent'
 import { PARTNER_LABEL, SPONSORED_LABEL, paidPlans, sponsoredFor } from '@/modules/pros'
 import { PARTNER_TYPES, partnerFirst } from './partner'
+import { nextFreeSlots, santeTaxonomyRows } from '@/modules/sante'
+import { annuaireTaxonomyRows } from '@/modules/annuaire'
 
 /** Groupe « sponsorise » : au plus 2 résultats payants, à part, en tête, chacun `sponsored: true` (jamais mêlés au classement). */
 export type SearchGroup = { key: SearchType | 'pistes' | 'sponsorise'; title: string; hits: (SearchHit & { sponsored?: true; partenaire?: true; partnerLabel?: typeof PARTNER_LABEL })[] }
@@ -131,16 +133,76 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
   return { intent, place: opts.position ? 'vous' : place.label, nearby: Boolean(place.near), total, groups, spread, unavailable, addresses, professional: isProfessionalProject(text) }
 }
 
-/** Propositions pendant la frappe : catégories d’abord, puis contenus. 8 au plus. */
-export async function suggest(q: string): Promise<SearchHit[]> {
+/** Mots qui précisent pour qui ou comment, sans nommer un lieu précis (« école pour les enfants »). */
+const GENERIC = new Set(['pour', 'le', 'de', 'du', 'la', 'un', 'une', 'mon', 'ma', 'me', 'no', 'enfant', 'fille', 'fil', 'bebe', 'famille', 'bon', 'bonne', 'meilleur', 'meilleure', 'pa', 'cher', 'proche', 'pre', 'moi', 'ici', 'trouver', 'cherche', 'inscrire', 'inscription'])
+
+/** Reste de phrase sans nom propre : la demande vise la catégorie, pas un lieu dont le nom contient ces mots. */
+export const isGenericRest = (rest: string) => searchWords(rest).every((w) => GENERIC.has(w.replace(/[sx]$/, '')))
+
+/**
+ * Propositions pendant la frappe : catégories d’abord, puis contenus. 10 au plus.
+ * « École pour les enfants » vise la catégorie : les adresses de la catégorie passent avant un nom qui contient « enfants ».
+ * `prefer` : wilaya choisie dans l’en-tête ; ses contenus passent devant, sans écarter les autres.
+ */
+export async function suggest(q: string, prefer: string | null = null): Promise<{ items: SearchHit[]; place: string | null }> {
   const text = q.trim().slice(0, 80)
-  if (searchWords(text).join('').length < 2) return []
+  if (searchWords(text).join('').length < 2) return { items: [], place: null }
   const place = detectPlace(text)
   const p = await payload()
   const query = place.rest || text
+  const head = categoryPrefix(query)
+  const contentQuery = head && isGenericRest(head.name) ? searchWords(query).slice(0, searchWords(query).length - searchWords(head.name).length).join(' ') : query
+  const fail = async (e: unknown) => (await recordError(e, { route: '/api/recherche', routeType: 'recherche' }), [] as SearchHit[])
   const [cats, content] = await Promise.all([
-    querySearch(p, query, { types: ['categorie', 'rubrique'], limit: 4 }).catch(async (e) => (await recordError(e, { route: '/api/recherche', routeType: 'recherche' }), [] as SearchHit[])),
-    querySearch(p, query, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 8 }).catch(async (e) => (await recordError(e, { route: '/api/recherche', routeType: 'recherche' }), [] as SearchHit[])),
+    querySearch(p, query, { types: ['categorie', 'rubrique'], limit: 4 }).catch(fail),
+    querySearch(p, contentQuery, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 16 }).catch(fail),
   ])
-  return [...cats, ...content].slice(0, 10)
+  const home = place.wilaya ?? prefer
+  const ranked = home ? [...content].sort((a, b) => Number(b.wilaya === home) - Number(a.wilaya === home) || b.score - a.score) : content
+  // Groupes dans l’ordre de la maquette validée (Rad, 2026-11-19) : rendez-vous en ligne, adresses, puis le reste. 6 lignes au plus.
+  const order = SUGGEST_ORDER
+  const rows = ranked.slice(0, 6).sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type))
+  // Praticiens : premier créneau libre (au plus 4 lectures d’agenda ; réponse gardée 5 min par le CDN).
+  const slots = await nextFreeSlots(rows.filter((h) => h.type === 'praticien').map((h) => h.id)).catch(() => ({}) as Record<string, string>)
+  const withSlots = rows.map((h) => (h.type === 'praticien' && slots[h.id] ? { ...h, slot: slots[h.id] } : h))
+  const chips = withRelated(dedupeCategories(cats)).slice(0, 4).map((h) => localizeHit(h, place.wilaya, place.label))
+  return { items: [...chips, ...withSlots], place: place.wilaya ? place.label : null }
+}
+
+/** Pastilles voisines (maquette validée : « Médecins » → Pédiatres, Pharmacies, Hôpitaux). Sans voisins connus : autres catégories du même secteur. */
+const RELATED: Record<string, string[]> = {
+  'annuaire:sante-soins:medecins': ['sante:pediatrie', 'annuaire:sante-soins:pharmacies', 'annuaire:sante-soins:hopitaux'],
+}
+let TAXONOMY: SearchHit[] | null = null
+const taxonomy = () => (TAXONOMY ??= [...annuaireTaxonomyRows(), ...santeTaxonomyRows()].map((r) => ({ ...r, score: 0 })))
+export function withRelated(chips: SearchHit[]): SearchHit[] {
+  const first = chips[0]
+  if (!first || chips.length >= 4) return chips
+  const all = taxonomy()
+  const sector = first.id.startsWith('annuaire:') ? first.id.split(':').slice(0, 2).join(':') + ':' : null
+  const ids = RELATED[first.id] ?? (sector ? all.filter((r) => r.type === 'categorie' && r.id.startsWith(sector)).map((r) => r.id) : [])
+  const have = new Set(chips.map((c) => c.id))
+  const extra = ids.filter((id) => !have.has(id)).map((id) => all.find((r) => r.id === id)).filter((r): r is SearchHit => Boolean(r))
+  return dedupeCategories([...chips, ...extra])
+}
+
+const SUGGEST_ORDER: SearchType[] = ['praticien', 'adresse', 'prestataire', 'annonce', 'demarche', 'consulat', 'guide']
+
+/** Une seule pastille par sujet : « Médecins » et « Médecin généraliste » ne s’affichent pas ensemble. */
+export function dedupeCategories(hits: SearchHit[]): SearchHit[] {
+  const seen = new Set<string>()
+  return hits.filter((h) => {
+    const k = (searchWords(h.title)[0] ?? h.title).replace(/aux$/, 'al').replace(/[sx]$/, '')
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+}
+
+/** Catégorie trouvée avec un lieu : le lien ouvre directement la catégorie dans cette wilaya. */
+export function localizeHit(h: SearchHit, wilaya: string | null, label: string | null): SearchHit {
+  if (!wilaya || (h.type !== 'categorie' && h.type !== 'rubrique')) return h
+  if (h.id.startsWith('annuaire:') && h.type === 'categorie') return { ...h, url: `${h.url}/${wilayaSlug(wilaya)}` }
+  if (/^\/(praticiens|services|annonces)/.test(h.url)) return { ...h, url: `${h.url}${h.url.includes('?') ? '&' : '?'}wilaya=${wilaya}` }
+  return h
 }
