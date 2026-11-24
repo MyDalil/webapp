@@ -5,7 +5,8 @@ import { searchPlaces } from '@/modules/annuaire'
 import { NearMe } from '@/modules/recherche/ui'
 import { RUBRICS } from '@/platform/shell/nav'
 import { HubHero } from '@/platform/ui/HubHero'
-import { PHOTOS } from '@/platform/referentiel/photos'
+import { PHOTOS, wikiPhoto } from '@/platform/referentiel/photos'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
@@ -59,7 +60,7 @@ async function VieMusulmane() {
             {tiles.map((t) => (
               <li key={t.href}>
                 <Link href={t.href} className="vm-tile">
-                  <span className={`vm-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${t.photo})` } : undefined}>
+                  <span className={`vm-img${t.photo ? '' : ' is-icon'}`} {...lazyBg(wikiPhoto(t.photo))}>
                     {!t.photo && <Icon name={t.icon} />}
                   </span>
                   <span className="vm-body">

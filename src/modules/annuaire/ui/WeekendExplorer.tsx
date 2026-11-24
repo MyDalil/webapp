@@ -3,6 +3,8 @@
 import Link from '@/platform/ui/Link'
 import { useEffect, useMemo, useState } from 'react'
 import { WILAYAS } from '@/platform/referentiel/catalog'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 import { useWilaya } from '@/platform/shell/wilaya'
 import { EVENT_TYPES, selectWeekend, type WeekendFilters, type When } from '../weekend'
 import type { EventCard, PlaceCard } from '../queries'
@@ -157,7 +159,7 @@ export function WeekendExplorer({ events, places }: { events: EventCard[]; place
                 {r.places.map((p) => (
                   <li key={p.slug}>
                     <Link href={`/adresses/${p.slug}`} className="entry-link">
-                      <span className="entry-img" style={{ backgroundImage: `url(${p.photo})` }} aria-hidden="true" />
+                      <span className="entry-img" {...lazyBg(tilePhoto(p.photo))} aria-hidden="true" />
                       <strong>{p.name}</strong>
                       <span className="entry-sub">
                         {p.category} · {p.city}
@@ -180,7 +182,7 @@ export function WeekendExplorer({ events, places }: { events: EventCard[]; place
 function EventItem({ e }: { e: EventCard }) {
   return (
     <li className={`we-event ${e.status === 'confirmed' ? '' : 'is-incomplete'}`}>
-      <span className="we-event-img" style={e.photo ? { backgroundImage: `url(${e.photo})` } : undefined} aria-hidden="true" />
+      <span className="we-event-img" {...lazyBg(tilePhoto(e.photo))} aria-hidden="true" />
       <div className="we-event-body">
         <p className="we-event-when">{dates(e)}</p>
         <h3>{e.title}</h3>

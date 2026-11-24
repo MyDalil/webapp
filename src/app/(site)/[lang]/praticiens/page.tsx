@@ -7,6 +7,8 @@ import { LANGUAGES, SPECIALTIES, isComplementary, languageLabel, searchPractitio
 import { searchPlaces, type PlaceCard } from '@/modules/annuaire'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { withSectionGate } from '@/platform/ui/SectionGate'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 
 export const metadata: Metadata = { title: 'Trouver un praticien', description: 'Trouvez un professionnel de santé près de vous : coordonnées, et rendez-vous en ligne chez les praticiens qui le proposent.' }
 export const dynamic = 'force-dynamic'
@@ -111,7 +113,7 @@ async function Practitioners({ params, searchParams }: { params: Promise<{ lang:
           <ul className="praticien-list">
             {results.map((p) => (
               <li key={p.slug} className="praticien-card">
-                <div className="praticien-photo" style={p.photo ? { backgroundImage: `url(${p.photo})` } : undefined} aria-hidden="true">
+                <div className="praticien-photo" {...lazyBg(tilePhoto(p.photo))} aria-hidden="true">
                   {!p.photo && p.name.replace(/^Dr\.?\s*/i, '').charAt(0)}
                 </div>
                 <div className="praticien-body">
@@ -152,7 +154,7 @@ async function Practitioners({ params, searchParams }: { params: Promise<{ lang:
             <ul className="praticien-list">
               {nearby.map((p) => (
                 <li key={p.slug} className="praticien-card">
-                  <div className="praticien-photo" style={p.photo && !p.photo.includes('/images/lieu') ? { backgroundImage: `url(${p.photo})` } : undefined} aria-hidden="true">
+                  <div className="praticien-photo" {...lazyBg(p.photo && !p.photo.includes('/images/lieu') ? tilePhoto(p.photo) : null)} aria-hidden="true">
                     {(!p.photo || p.photo.includes('/images/lieu')) && p.name.replace(/^(Dr\.?|Docteur|Cabinet|Clinique)\s*/i, '').charAt(0).toUpperCase()}
                   </div>
                   <div className="praticien-body">

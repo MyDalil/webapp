@@ -17,6 +17,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { SaveButton } from '@/modules/membres/ui'
 import { LeadFormSlot } from '@/modules/pros/ui'
 import { ClaimLink, PlaceActions } from '@/modules/annuaire/ui'
@@ -228,7 +229,7 @@ async function ProviderPage({ params }: Props) {
                             href={ph.full ?? '#'}
                             target="_blank"
                             rel="noopener"
-                            style={{ backgroundImage: `url(${ph.thumb ?? ph.full})` }}
+                            {...lazyBg(ph.thumb ?? ph.full)}
                             aria-label="Voir la photo en grand"
                           />
                         ))}

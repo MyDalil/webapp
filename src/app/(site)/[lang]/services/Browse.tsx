@@ -10,6 +10,7 @@ import { PlacePanel } from '@/modules/annuaire/ui'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel, LANGUAGES } from '@/platform/referentiel/languages'
 import { IconLabel } from '@/platform/ui/Icon'
+import { lazyBg } from '@/platform/ui/lazyBg'
 
 /** Photo de chaque métier (Wikimedia Commons, crédits sur /credits-photos). */
 const SERVICE_PHOTO: Record<string, PhotoKey | undefined> = {
@@ -35,7 +36,7 @@ function Card({ p, activity }: { p: ProviderCard; activity?: string }) {
   const href = `/prestataires/${p.slug}${activity ? `?activite=${activity}` : ''}`
   return (
     <li className="praticien-card provider-card">
-      <div className="praticien-photo" style={p.photo ? { backgroundImage: `url(${p.photo})` } : undefined} aria-hidden="true">
+      <div className="praticien-photo" {...lazyBg(p.photo)} aria-hidden="true">
         {!p.photo && p.name.charAt(0)}
       </div>
       <div className="praticien-body">
@@ -181,7 +182,7 @@ export async function Browse({ q, fixedCategory, lang }: { q: BrowseQuery; fixed
             {CATEGORIES.map((c) => (
               <li key={c.value}>
                 <Link href={`/services/${c.value}`} className="service-tile has-photo">
-                  {SERVICE_PHOTO[c.value] && <i className="service-tile-img" style={{ backgroundImage: `url(${PHOTOS[SERVICE_PHOTO[c.value]!].src})` }} aria-hidden="true" />}
+                  {SERVICE_PHOTO[c.value] && <i className="service-tile-img" {...lazyBg(PHOTOS[SERVICE_PHOTO[c.value]!].src)} aria-hidden="true" />}
                   <b>{c.label}</b>
                   <span>{c.activities.slice(0, 3).map(([, l]) => l).join(' · ')}</span>
                   <small>{counts[c.value] ? `${counts[c.value]} prestataire${counts[c.value] > 1 ? 's' : ''}` : 'Voir un exemple'}</small>
