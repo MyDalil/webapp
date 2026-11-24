@@ -10,6 +10,8 @@ import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 import { SaveButton } from '@/modules/membres/ui'
 import { LeadFormSlot } from '@/modules/pros/ui'
 import { ClaimLink, PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
@@ -179,7 +181,7 @@ export default async function PlacePage({ params }: Props) {
                 {nearby.map((n) => (
                   <li key={n.slug}>
                     <Link href={`/adresses/${n.slug}`}>
-                      <i style={{ backgroundImage: `url(${n.photo})` }} />
+                      <i {...lazyBg(tilePhoto(n.photo))} />
                       <b>{n.name}</b>
                       <small>
                         {n.category} · {meters(n.distanceM)}

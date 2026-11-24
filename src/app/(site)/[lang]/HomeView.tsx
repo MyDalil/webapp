@@ -14,7 +14,8 @@ import { NewsletterForm } from '@/modules/communication/ui'
 import { CATEGORIES as CLASSIFIED_CATEGORIES, classifiedCounts, searchClassifieds } from '@/modules/annonces'
 import { Carousel } from '@/platform/ui/Carousel'
 import { ParallaxBand, SectionHead, TileCarousel, type Tile } from '@/platform/ui/Xp'
-import { PHOTOS, smallPhoto, type PhotoKey } from '@/platform/referentiel/photos'
+import { PHOTOS, tilePhoto, type PhotoKey } from '@/platform/referentiel/photos'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { Slideshow } from '@/platform/ui/Slideshow'
 import { Icon, iconFor, iconTone } from '@/platform/ui/Icon'
 import { GUIDES } from '@/platform/referentiel/catalog'
@@ -209,7 +210,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               {latest.map((c, i) => (
                 <Link key={c.id} href={c.href} className="city-tile top-tile" data-reveal style={{ ['--i' as string]: i % 6, ['--ic' as string]: iconTone(adIcon(c)) }}>
                   {c.photo ? (
-                    <div className="city-tile-img" style={{ backgroundImage: `url(${smallPhoto(c.photo)})` }} />
+                    <div className="city-tile-img" {...lazyBg(tilePhoto(c.photo))} />
                   ) : (
                     <div className="city-tile-img is-icon is-annonce">
                       <span className="xp-tile-icon" aria-hidden="true">
@@ -254,7 +255,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               >
                 <div
                   className="city-tile-img"
-                  style={p ? { backgroundImage: `url(${p.photo})` } : undefined}
+                  {...lazyBg(tilePhoto(p?.photo))}
                 />
                 <div className="city-tile-body">
                   <h3>{T.envies[i]}</h3>
@@ -281,7 +282,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
               data-reveal
               style={{ ['--i' as string]: i % 6 }}
             >
-              <div className="city-tile-img" style={{ backgroundImage: `url(${c.cover})` }} />
+              <div className="city-tile-img" {...lazyBg(tilePhoto(c.cover))} />
               <div className="city-tile-body">
                 <h3>{c.name}</h3>
                 <p>
@@ -298,7 +299,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
           <div
             className="xp-parallax-img"
             data-parallax="0.18"
-            style={{ backgroundImage: `url(${destination.place.cover})` }}
+            {...lazyBg(destination.place.cover)}
           />
           <div className="xp-parallax-shade" />
           <div className="container xp-parallax-content" data-reveal>

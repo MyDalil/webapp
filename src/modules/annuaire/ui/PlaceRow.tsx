@@ -3,6 +3,8 @@ import { Visual } from '@/platform/ui/Visual'
 import { categoryPhoto } from '../listings'
 import { SaveButton } from '@/modules/membres/ui'
 import { Icon } from '@/platform/ui/Icon'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 
 export type PlaceRowData = { slug: string; name: string; photo: string; category: string; city: string; status: string; sectorTitle?: string | null; sector?: string | null }
 
@@ -35,7 +37,7 @@ export function PlaceRow({ p, distance }: { p: PlaceRowData; distance?: string |
           <Icon name={(SECTOR_VISUAL[p.sector ?? ''] ?? ['pin'])[0]} />
         </div>
       ) : (
-        <div className="place-thumb" style={{ backgroundImage: `url(${p.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <div className="place-thumb" {...lazyBg(tilePhoto(p.photo))} style={{ backgroundSize: 'cover', backgroundPosition: 'center' }} />
       )}
       <Link className="place-main" href={`/adresses/${p.slug}`}>
         <span className="place-type">
