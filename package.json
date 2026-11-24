@@ -50,7 +50,8 @@
     "react-dom": "19.3.1",
     "resend": "^6.37.0",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "thumbhash": "^0.1.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

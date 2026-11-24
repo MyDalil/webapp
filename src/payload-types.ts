@@ -520,6 +520,14 @@ export interface Media {
    */
   credit?: string | null;
   /**
+   * Photo sous licence libre (ex. CC BY-SA 4.0) : affichée avec le crédit, obligatoire par la licence.
+   */
+  license?: string | null;
+  /**
+   * Page d’origine de la photo (Wikimedia Commons…) : lien posé sur le crédit.
+   */
+  sourceUrl?: string | null;
+  /**
    * Photo envoyée par un compte : déjà en ligne. Supprimez-la si elle pose problème.
    */
   moderation?: ('ok' | 'to-check') | null;
@@ -527,6 +535,10 @@ export interface Media {
    * SHA-256 du fichier reçu : sert à repérer les doublons.
    */
   hash?: string | null;
+  /**
+   * ThumbHash calculé à l’envoi : fond provisoire pendant le chargement de la photo.
+   */
+  thumbhash?: string | null;
   uploadedBy?: (number | null) | Member;
   updatedAt: string;
   createdAt: string;
@@ -3642,8 +3654,11 @@ export interface MediaSelect<T extends boolean = true> {
   altAr?: T;
   altEn?: T;
   credit?: T;
+  license?: T;
+  sourceUrl?: T;
   moderation?: T;
   hash?: T;
+  thumbhash?: T;
   uploadedBy?: T;
   updatedAt?: T;
   createdAt?: T;

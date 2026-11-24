@@ -7,7 +7,8 @@ import { draftMode } from 'next/headers'
 import type { Media, Place } from '@/payload-types'
 import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { RESULT_LABEL, STATUS_LABEL } from '@/modules/confiance'
-import { categoryPhoto, cityPhoto } from './listings'
+import { categoryPhoto } from './listings'
+import { coverCredit, coverOf, external, mediaUrl, sized } from './photos'
 import { localize } from '@/platform/i18n/content'
 
 /** Centre des principales villes : position approximative tant que la fiche n’a pas de coordonnées exactes. */
@@ -34,6 +35,7 @@ const CITY_CENTER: Record<string, [number, number]> = {
 }
 
 export { RESULT_LABEL, STATUS_LABEL }
+export { coverCredit, coverOf, galleryOf } from './photos'
 
 export type PlaceCard = {
   slug: string
@@ -58,9 +60,6 @@ export type PlaceCard = {
   /** Critères vérifiés « conforme » par DALIL. */
   verified: string[]
 }
-
-const mediaUrl = (m: number | Media | undefined, size: 'thumb' | 'cover') =>
-  m && typeof m === 'object' ? (m.sizes?.[size]?.url ?? m.url ?? null) : null
 
 export const sectorTitle = (slug: string) => SECTORS.find((s) => s.slug === slug)?.title ?? slug
 export const wilayaName = (code?: string | null) => (code ? (WILAYAS.find((w) => String(w.code) === code)?.name ?? null) : null)
@@ -96,30 +95,6 @@ export function toCard(p: Place): PlaceCard {
     verified: (p.criteria ?? []).filter((c) => c.result === 'ok').map((c) => c.criterion),
   }
 }
-
-/** Photo sous licence libre (Commons) : vignette plus légère pour les cartes. */
-// Wikimedia ne sert que des largeurs standard (960, 1280, 1920…) et jamais plus large que l’original.
-const STEPS = [960, 1280, 1920]
-const sized = (url: string, w: number, original?: number | null) => {
-  const fit = STEPS.filter((x) => x <= w && (!original || x <= original)).pop() ?? 960
-  return url.split('?')[0].replace(/\/(\d+)px-/, `/${fit}px-`)
-}
-/** Photos d’événements ou de personnes (réunions, visites officielles, période Covid) : jamais en couverture d’un lieu. */
-const PEOPLE_PHOTO = /secretary|meet_and_greet|employees|families|covid|mask|delegation|ceremony|minister|ministre|president|ambassador|meeting|visit_of|_visits_|conference/i
-const external = (p: Place) => (p.externalPhotos ?? []).filter((x) => x?.url && !PEOPLE_PHOTO.test(x.url))
-export const coverOf = (p: Place) => mediaUrl(p.photos?.[0], 'cover') ?? (external(p)[0] ? sized(external(p)[0].url, 1920, external(p)[0].width) : (categoryPhoto(p.category)?.src ?? cityPhoto(p.city)))
-/** Crédit de la couverture quand elle vient d’une source libre (obligatoire par la licence). */
-export const coverCredit = (p: Place) => {
-  if (mediaUrl(p.photos?.[0], 'cover')) return null
-  const x = external(p)[0]
-  if (x) return { text: `Photo : ${x.author} · ${x.license}`, href: x.page }
-  const c = categoryPhoto(p.category)
-  return c ? { text: `Photo d’illustration : ${c.credit}`, href: null } : null
-}
-export const galleryOf = (p: Place) => [
-  ...(p.photos ?? []).flatMap((m) => (m && typeof m === 'object' && m.url ? [{ url: m.sizes?.cover?.url ?? m.url, alt: m.alt, credit: m.credit ?? null, href: null as string | null }] : [])),
-  ...external(p).map((x) => ({ url: sized(x.url, 1280, x.width), alt: p.name, credit: `${x.author} · ${x.license}`, href: x.page as string | null })),
-]
 
 async function client() {
   return getPayload({ config })

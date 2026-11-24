@@ -60,3 +60,7 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 - Une rubrique coupée coupe aussi les catégories des secteurs qu’elle couvre (`/annuaire/<secteur>` dans son `match`). Chemin couvert par plusieurs rubriques : la correspondance la plus précise l’emporte (à égalité, une seule coupée suffit).
 - Public : bloc « revient sous peu » au gabarit de la page introuvable, statut 200 + `noindex` (pas de 404, pour garder le référencement), retiré du plan du site, de la recherche, des actions MCP et du bot. Le menu garde l’entrée (aucune mention « bientôt » : l’en-tête est client et la navigation est validée).
 - Lecture : `unstable_cache` étiquette `controls`, vidée par le hook du global (`revalidateTag('controls', { expire: 0 })` + `revalidateLangs` des pages concernées). Panne de lecture → rien n’est coupé.
+
+## 2026-11-24 — Médiathèque : licence, page source, aperçu flou
+- Champs ajoutés à Media : `license` et `sourceUrl` (photos sous licence libre copiées par l’annuaire ; le crédit reste dans `credit`), `thumbhash` (aperçu flou ThumbHash, calculé à l’envoi par un hook `beforeChange` sur une copie de 100 px au plus, jamais bloquant). Migration additive `20261124_202518_photos_libres_thumbhash`.
+- `storage/thumbhash.ts` : `thumbHashDataUrl(hash)` donne l’image `data:` à poser en fond ; `PhotoGallery` accepte `placeholder` (fond provisoire recouvert par la photo, rendu final inchangé). Les photos envoyées avant cette date n’ont pas d’aperçu : rien ne s’affiche en fond, comme avant.
