@@ -2,7 +2,8 @@
 
 import { useRef, useState } from 'react'
 
-export type GalleryPhoto = { url: string; alt: string; credit?: string | null; href?: string | null }
+/** `placeholder` : image `data:` floue posée en fond, recouverte par la photo une fois chargée. */
+export type GalleryPhoto = { url: string; alt: string; credit?: string | null; href?: string | null; placeholder?: string | null }
 
 /**
  * Galerie de fiche (modèle commun, validé par Rad le 2026-10-26) : grande photo 4:3, flèches, compteur,
@@ -24,6 +25,7 @@ export function PhotoGallery({ photos, title }: { photos: GalleryPhoto[]; title:
     <figure className="pg">
       <div
         className="pg-main"
+        style={p.placeholder ? { backgroundImage: `url(${p.placeholder})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
         onTouchStart={(e) => (start.current = e.touches[0].clientX)}
         onTouchEnd={(e) => {
           if (start.current == null) return

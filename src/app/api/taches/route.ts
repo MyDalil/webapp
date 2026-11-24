@@ -2,7 +2,7 @@ import { purgeContributionPhotos } from '@/modules/messages'
 import { runQueue } from '@/modules/agents'
 import { publishDue } from '@/modules/communication'
 import { annoncesTaxonomyRows, dailyClassifiedTasks, reindexClassifieds } from '@/modules/annonces'
-import { annuaireTaxonomyRows, reindexPlaces } from '@/modules/annuaire'
+import { annuaireTaxonomyRows, importFreePhotos, reindexPlaces } from '@/modules/annuaire'
 import { purgeDemoAppointments, reindexPractitioners, santeTaxonomyRows, sendReminders } from '@/modules/sante'
 import { dailyServicesTasks, reindexProviders, servicesTaxonomyRows } from '@/modules/services'
 import { fail, json, payload } from '@/platform/http'
@@ -67,6 +67,9 @@ export async function GET(req: Request) {
     out.traductions = await runTask('traductions-manquantes', async () => translateMissing(await payload(), { budgetMs: 90_000 }), {
       failed: (r) => ((r as BackfillReport).arret === 'echec-ia' ? 'traduction interrompue : échec de l’IA' : null),
     })
+  // Photos libres copiées dans la médiathèque (en dernier : jamais au détriment des autres tâches) : au plus
+  // PHOTOS_IMPORT_DAILY_MAX adresses, budget de 60 s, arrêt propre si la source demande de ralentir (429, 503).
+  out.photosLibres = await runTask('photos-libres', async () => importFreePhotos(await payload(), { budgetMs: 60_000 }))
   const failed = Object.entries(out).filter(([, o]) => o.status === 'failed').map(([k]) => k)
   return json({ ok: failed.length === 0, echecs: failed, taches: out }, failed.length ? 500 : 200)
 }

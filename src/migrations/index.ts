@@ -69,6 +69,7 @@ import * as migration_20261119_113904_paiements_justificatif from './20261119_11
 import * as migration_20261119_185900_sauvegarde_noms_adresses from './20261119_185900_sauvegarde_noms_adresses';
 import * as migration_20261119_190000_noms_accents from './20261119_190000_noms_accents';
 import * as migration_20261119_200525_offsections_rubriques from './20261119_200525_offsections_rubriques';
+import * as migration_20261124_202518_photos_libres_thumbhash from './20261124_202518_photos_libres_thumbhash';
 
 export const migrations = [
   {
@@ -424,6 +425,11 @@ export const migrations = [
   {
     up: migration_20261119_200525_offsections_rubriques.up,
     down: migration_20261119_200525_offsections_rubriques.down,
-    name: '20261119_200525_offsections_rubriques'
+    name: '20261119_200525_offsections_rubriques',
+  },
+  {
+    up: migration_20261124_202518_photos_libres_thumbhash.up,
+    down: migration_20261124_202518_photos_libres_thumbhash.down,
+    name: '20261124_202518_photos_libres_thumbhash'
   },
 ];

@@ -1,6 +1,8 @@
 import { createHash } from 'crypto'
 import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionBeforeOperationHook, CollectionConfig } from 'payload'
 import { after } from 'next/server'
+import sharp from 'sharp'
+import { thumbHashOf } from './thumbhash'
 import { needsAlt } from './altRules'
 import { anyone, isAdmin, isStaff, isStaffUser } from '@/platform/access'
 
@@ -14,6 +16,19 @@ const hashIncoming: CollectionBeforeOperationHook = ({ args, req }) => {
 }
 const setHash: CollectionBeforeChangeHook = ({ data, req }) => {
   if (typeof req.context.mediaHash === 'string') data.hash = req.context.mediaHash
+  return data
+}
+
+/** Aperçu flou (ThumbHash) calculé à l’envoi du fichier, sur une copie réduite à 100 px au plus. Jamais bloquant. */
+const setThumbHash: CollectionBeforeChangeHook = async ({ data, req }) => {
+  const file = req.file?.data
+  if (!file?.length) return data
+  try {
+    const { data: rgba, info } = await sharp(file).rotate().resize(100, 100, { fit: 'inside' }).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+    data.thumbhash = thumbHashOf(info.width, info.height, rgba)
+  } catch {
+    // image illisible par sharp : pas d’aperçu, l’envoi continue
+  }
   return data
 }
 
@@ -47,7 +62,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   labels: { singular: 'Photo', plural: 'Photos' },
   admin: { group: 'Annuaire', useAsTitle: 'alt', defaultColumns: ['filename', 'alt', 'moderation', 'uploadedBy', 'updatedAt'] },
-  hooks: { beforeOperation: [hashIncoming], beforeChange: [setHash], afterChange: [autoAlt] },
+  hooks: { beforeOperation: [hashIncoming], beforeChange: [setHash, setThumbHash], afterChange: [autoAlt] },
   access: { read: anyone, create: isStaff, update: isStaff, delete: isAdmin },
   upload: {
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
@@ -75,6 +90,13 @@ export const Media: CollectionConfig = {
     },
     { name: 'credit', type: 'text', label: 'Crédit photo', admin: { description: 'Auteur ou source, affiché sous la photo.' } },
     {
+      type: 'row',
+      fields: [
+        { name: 'license', type: 'text', label: 'Licence', admin: { description: 'Photo sous licence libre (ex. CC BY-SA 4.0) : affichée avec le crédit, obligatoire par la licence.' } },
+        { name: 'sourceUrl', type: 'text', label: 'Page source', admin: { description: 'Page d’origine de la photo (Wikimedia Commons…) : lien posé sur le crédit.' } },
+      ],
+    },
+    {
       name: 'moderation',
       type: 'select',
       label: 'Contrôle',
@@ -87,6 +109,7 @@ export const Media: CollectionConfig = {
       admin: { position: 'sidebar', description: 'Photo envoyée par un compte : déjà en ligne. Supprimez-la si elle pose problème.' },
     },
     { name: 'hash', type: 'text', label: 'Empreinte du fichier', index: true, admin: { position: 'sidebar', readOnly: true, description: 'SHA-256 du fichier reçu : sert à repérer les doublons.' } },
+    { name: 'thumbhash', type: 'text', label: 'Aperçu flou', admin: { position: 'sidebar', readOnly: true, description: 'ThumbHash calculé à l’envoi : fond provisoire pendant le chargement de la photo.' } },
     { name: 'uploadedBy', type: 'relationship', relationTo: 'members', label: 'Envoyée par', index: true, access: { read: ({ req }) => isStaffUser(req.user) }, admin: { position: 'sidebar', readOnly: true } },
   ],
 }
