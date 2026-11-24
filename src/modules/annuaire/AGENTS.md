@@ -9,6 +9,7 @@ Les adresses de DALIL : fiches, secteurs, carte, pages /annuaire, /annuaire/[sec
 - Collection `places` (Adresses) — `Places.ts`, champs Fiche / Localisation / Contacts & horaires ; l’onglet Vérification vient de `confiance`.
 - `queries.ts` : lecture des fiches publiées (brouillons via Aperçu), position exacte ou approximative (centre-ville).
 - `listings.ts/json` : 10 adresses reprises du prototype (seed initial).
+- `photos.ts` : règles d’affichage des photos d’une fiche (couverture, galerie, crédit) ; `photosLibres.ts` : tâche quotidienne qui copie les photos libres dans la médiathèque, crédit et licence conservés (testée, `photosLibres.test.ts`).
 - `ranking.ts` : règle de classement écrite (vérification > complétude > patrimoine > notoriété), calculée à chaque enregistrement, jamais liée à un paiement.
 - `data/` : import des lieux depuis des sources ouvertes —
   - `open-places.json` : jeu brut (Wikidata CC0 + photos Commons + notes Wikipédia internes), produit par `scripts/import/fetch-places.mjs` via l’action GitHub « Import des lieux » — **hors du code du site** : branche `import-data` + archive Vercel Blob `imports/wikidata/` ;

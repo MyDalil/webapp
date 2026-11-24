@@ -1,4 +1,18 @@
-# Reprise — 12 novembre 2026
+# Reprise — 24 novembre 2026
+
+## Mise à jour — 24 novembre 2026 : chantier performance (build, images, recherche)
+
+- Branche `agent/performance-socle`, créée depuis `preview` (a815a1a) ; deux lots codés en parallèle (`agent/perf-images`, `agent/perf-photos`) puis fusionnés. Demande de Rad : appliquer le plan et livrer sur preview pour les tests clients.
+- Build : 50 adresses pré-construites (au lieu de 400). Mesuré en local sur base complète (48 169 adresses) : 1 720 → 670 pages, `pnpm build` 271 s → 175 s.
+- Accueil : fonds photo chargés à l’approche de l’écran (`LazyBackgrounds`, `lazyBg`), diaporama limité à la diapo active + suivante, tuiles Wikimedia en 960 px. Mesuré sur le HTML de l’accueil : 2 photos chargées d’emblée (diaporama) au lieu d’environ 70 (37 Mo mesurés en production avant), 82 fonds différés.
+- Recherche : flou dans le corps seulement en repli (< 40 correspondances exactes). Mesuré : « restaurant oran » 462 + 283 ms → 114 + 13 ms (liste + total).
+- Photos libres : tâche quotidienne `photos-libres` (60 par passe, `PHOTOS_IMPORT_DAILY_MAX`) qui copie la première photo Wikimedia de chaque adresse dans Media (Blob), crédit, licence et source conservés ; ThumbHash calculé à l’envoi ; migration additive `20261124_202518_photos_libres_thumbhash`.
+- Décisions sans code : pas de Cache Components, pas d’outbox emails, porte MCP unique confirmée (voir src/platform/DECISIONS.md).
+- Vérifié localement : `pnpm check` OK (731 fichiers), `pnpm test` 103 fichiers / 687 tests OK, `pnpm lint` 0 erreur, `pnpm build` OK avec base. **Non vérifié en local** : e2e (Chromium non téléchargeable dans le bac à sable) → CI ; appels réels à Wikimedia et Vercel Blob (première passe de la tâche quotidienne à surveiller dans /admin › Pilotage › Tâches planifiées).
+- Relecture Fable (lecture seule) : rien de bloquant ; corrigé ensuite — échecs mémorisés 30 jours (table `photos_libres_echecs`, migration `20261124_230000`), arrêt sur 401/403 et après 3 erreurs de suite, lecture bornée à 4 Mo sans `content-length`, redirection hors Wikimedia refusée, tâche notée en échec si rien n’est copié, marge de 20 s sur le budget, crédit posé si licence absente, préchargement du diaporama au survol d’un point, taille Media `large` non recadrée pour la galerie (migration `20261124_204729`), helpers de taille sortis dans `photoSizes.ts` (en-tête plus léger). Reste connu : une adresse copiée gagne jusqu’à 8 points de score à son prochain enregistrement ordinaire (photo comptée deux fois).
+- Après corrections : `pnpm check` OK (732 fichiers), `pnpm test` 103 fichiers / 691 tests OK, `pnpm lint` 0 erreur, `pnpm build` OK (160 s).
+- Prochaine action : CI verte → fusion dans `preview` → test client sur preview.mydalil.com ; migration à appliquer par le build preview (base Neon de preview).
+
 
 ## Mise à jour — 19 novembre 2026 : noyau léger + actions + MCP + télécommandes
 

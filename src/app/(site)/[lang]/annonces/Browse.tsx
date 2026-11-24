@@ -1,6 +1,7 @@
 import type { Lang } from '@/platform/i18n'
 import { Icon, IconLabel } from '@/platform/ui/Icon'
 import Link from '@/platform/ui/Link'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { CATEGORIES, DEALS, category, classifiedCounts, searchClassifieds, type ClassifiedCard, type SearchQuery } from '@/modules/annonces'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { FaqBlock } from '@/modules/contenus/ui'
@@ -15,7 +16,7 @@ export function ClassifiedTile({ c }: { c: ClassifiedCard }) {
   return (
     <li>
       <Link href={c.href} className="classified-card">
-        <div className={`classified-card-img${c.photo ? '' : ' is-empty'}`} style={c.photo ? { backgroundImage: `url(${c.photo})` } : undefined}>
+        <div className={`classified-card-img${c.photo ? '' : ' is-empty'}`} {...lazyBg(c.photo)}>
           {!c.photo && (
             <span className="classified-card-icon" aria-hidden="true">
               <Icon name={CLASSIFIED_ICON[c.category] ?? 'grid'} />

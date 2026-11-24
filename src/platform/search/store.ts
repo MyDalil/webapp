@@ -81,6 +81,20 @@ export async function replaceType(payload: Payload, type: SearchType, rows: Sear
  * Recherche : plein texte français par préfixes (« hopit » trouve « Hôpitaux »), sinon trigrammes (« plombier » trouve « Plomberie »).
  * `wilaya` : contenus de cette wilaya et contenus nationaux.
  */
+/**
+ * Recherche floue dans le corps du texte (`q.p <% norm`) : chère (≈ 300 ms sur 48 000 lignes, contrôle trigramme sur
+ * des textes longs). Elle ne sert qu’aux fautes de frappe : on ne l’ajoute que si les correspondances exactes (mots
+ * ou titre proche) sont moins de FUZZY_MIN. Mêmes règles pour la liste et pour le total (audit A10).
+ */
+const FUZZY_MIN = 40
+async function matchOf(payload: Payload, tsq: string, phrase: string, filters: ReturnType<typeof sql>) {
+  const exact = sql`(tsv @@ q.tq OR title_norm % q.p)`
+  const r = await dbOf(payload).execute(sql`
+    WITH q AS (SELECT to_tsquery('french', ${tsq}) AS tq, ${phrase}::text AS p)
+    SELECT count(*)::int AS n FROM (SELECT 1 FROM search_index, q WHERE ${exact} ${filters} LIMIT ${FUZZY_MIN}) x`)
+  return Number(r.rows[0]?.n ?? 0) >= FUZZY_MIN ? exact : sql`(tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)`
+}
+
 export async function querySearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[]; limit?: number; offset?: number; near?: { lat: number; lng: number } | null } = {}): Promise<SearchHit[]> {
   const words = searchWords(q)
   if (!words.length) return []
@@ -95,19 +109,21 @@ export async function querySearch(payload: Payload, q: string, opts: { wilaya?: 
   const km = sql`(111.32 * sqrt(power(lat - ${lat0}::double precision, 2) + power(cos(radians(${lat0}::double precision)) * (lng - ${lng0}::double precision), 2)))`
   const near = lat0 == null ? sql`0` : sql`CASE WHEN lat IS NULL THEN 0 ELSE 3 * exp(-${km} / 2.5) END`
   const types = opts.types?.length ? sql`AND type IN (${sql.join(opts.types.map((t) => sql`${t}`), sql`, `)})` : sql``
-  const run = async (tsq: string) =>
-    (
+  const filters = sql`AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}`
+  const run = async (tsq: string) => {
+    const match = await matchOf(payload, tsq, phrase, filters)
+    return (
       await dbOf(payload).execute(sql`
         WITH q AS (SELECT to_tsquery('french', ${tsq}) AS tq, ${phrase}::text AS p)
         SELECT type, id, url, title, subtitle, wilaya, boost, badge, lat, lng,
           (ts_rank(tsv, q.tq) * 4 + similarity(title_norm, q.p) * 2 + word_similarity(q.p, norm) + boost
             + CASE WHEN ${wilaya}::text IS NOT NULL AND wilaya = ${wilaya}::text THEN 0.5 ELSE 0 END + ${near}) AS score
         FROM search_index, q
-        WHERE (tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)
-          AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}
+        WHERE ${match} ${filters}
         ORDER BY score DESC
         LIMIT ${limit} OFFSET ${Math.max(0, opts.offset ?? 0)}`)
     ).rows
+  }
   let rows = await run(all)
   if (!rows.length && words.length > 1) rows = await run(some)
   return rows.map((r) => ({
@@ -136,16 +152,18 @@ export async function countSearch(payload: Payload, q: string, opts: { wilaya?: 
   const phrase = words.join(' ')
   const wilaya = opts.wilaya ?? null
   const types = opts.types?.length ? sql`AND type IN (${sql.join(opts.types.map((t) => sql`${t}`), sql`, `)})` : sql``
-  const run = async (tsq: string) =>
-    Number(
+  const filters = sql`AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}`
+  const run = async (tsq: string) => {
+    const match = await matchOf(payload, tsq, phrase, filters)
+    return Number(
       (
         await dbOf(payload).execute(sql`
           WITH q AS (SELECT to_tsquery('french', ${tsq}) AS tq, ${phrase}::text AS p)
           SELECT count(*)::int AS n FROM search_index, q
-          WHERE (tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)
-            AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}`)
+          WHERE ${match} ${filters}`)
       ).rows[0]?.n ?? 0,
     )
+  }
   const n = await run(words.map((w) => `${w}:*`).join(' & '))
   return n || words.length < 2 ? n : run(words.map((w) => `${w}:*`).join(' | '))
 }

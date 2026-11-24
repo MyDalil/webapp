@@ -31,6 +31,7 @@ import { LoginDialog } from '@/platform/shell/LoginDialog'
 import { ServiceWorker } from '@/platform/shell/ServiceWorker'
 import { Toast } from '@/platform/shell/ToastView'
 import { Motion } from '@/platform/ui/Motion'
+import { LazyBackgrounds } from '@/platform/ui/LazyBackgrounds'
 import { JoinCircle } from '@/platform/shell/JoinCircle'
 import { Tree } from '@/modules/contenus/ui'
 import { footerFor } from '@/modules/contenus'
@@ -102,6 +103,7 @@ export default async function SiteLayout({ children, params }: { children: React
           <Assistant />
           <Toast />
           <Motion />
+          <LazyBackgrounds />
           <JoinCircle />
           <LoginDialog />
           <ServiceWorker />

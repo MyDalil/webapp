@@ -10,6 +10,8 @@ import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 import { SaveButton } from '@/modules/membres/ui'
 import { LeadFormSlot } from '@/modules/pros/ui'
 import { ClaimLink, PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
@@ -17,6 +19,7 @@ import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, placeJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 import { placeClaimLabel } from '@/platform/seo/claim'
+import { thumbHashDataUrl } from '@/platform/storage/thumbhash'
 import { galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
 
 type Props = { params: Promise<{ slug: string; lang: string }> }
@@ -66,7 +69,8 @@ export default async function PlacePage({ params }: Props) {
   const intro = presentIntro(p.intro)
   const facts = factsOf(p as never).filter((f) => f.label !== 'Catégorie')
   const nearby = await nearbyCards(p, 6)
-  const photos = galleryOf(p)
+  // Fond provisoire de la couverture (aperçu flou ThumbHash) : visible le temps du chargement, recouvert par la photo.
+  const photos = galleryOf(p).map((ph, k) => (k === 0 ? { ...ph, placeholder: thumbHashDataUrl(ph.thumbhash) } : ph))
   // Sans photo du lieu : photo d’illustration de la catégorie, sinon de la ville (créditées comme illustration), sinon visuel neutre.
   const catPic = categoryPhoto(p.category)
   const cityPic = knownCityPhoto(p.city)
@@ -179,7 +183,7 @@ export default async function PlacePage({ params }: Props) {
                 {nearby.map((n) => (
                   <li key={n.slug}>
                     <Link href={`/adresses/${n.slug}`}>
-                      <i style={{ backgroundImage: `url(${n.photo})` }} />
+                      <i {...lazyBg(tilePhoto(n.photo))} />
                       <b>{n.name}</b>
                       <small>
                         {n.category} · {meters(n.distanceM)}
