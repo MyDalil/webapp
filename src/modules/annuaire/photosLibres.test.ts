@@ -58,7 +58,7 @@ describe('tâche photos-libres', () => {
     expect(dailyPhotosMax('0')).toBe(0)
   })
 
-  it('sélection : ordre du classement, photo de personnes et fiche déjà illustrée écartées, 1280 px demandés avec le User-Agent', async () => {
+  it('sélection : ordre du classement, photo de personnes et fiche déjà illustrée écartées, 1920 px demandés avec le User-Agent', async () => {
     const f = fakePayload([
       { id: 1, name: 'Timgad', slug: 'timgad-batna', externalPhotos: [free('Timgad.jpg')] },
       { id: 2, name: 'Ambassade', slug: 'ambassade', externalPhotos: [{ ...free('Visit_of_minister.jpg') }] },
@@ -69,8 +69,8 @@ describe('tâche photos-libres', () => {
     const r = await importFreePhotos(f.payload, { ...quick, fetch })
     expect(r).toEqual({ importees: 2, reutilisees: 0, ignorees: 2, erreurs: 0 })
     expect(fetch.mock.calls.map((c) => c[0])).toEqual([
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Timgad.jpg/1280px-Timgad.jpg',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Djemila.jpg/1280px-Djemila.jpg',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Timgad.jpg/1920px-Timgad.jpg',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Djemila.jpg/1920px-Djemila.jpg',
     ])
     expect((fetch.mock.calls[0][1]!.headers as Record<string, string>)['User-Agent']).toBe(PHOTOS_USER_AGENT)
     expect(PHOTOS_USER_AGENT).toBe('DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)')

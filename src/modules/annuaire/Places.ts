@@ -12,7 +12,7 @@ import { translateOnPublish } from '@/platform/i18n/auto'
 
 
 /** Slug automatique + critères du secteur pré-remplis à la première saisie. */
-const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
+const prepare: CollectionBeforeValidateHook = ({ data, originalDoc, req }) => {
   if (!data) return data
   // Noms importés : accents français rétablis, nom en plusieurs langues réparti dans ses champs.
   if (typeof data.name === 'string') {
@@ -22,7 +22,8 @@ const prepare: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
     if (n.nameAr && !data.nameAr && !originalDoc?.nameAr) data.nameAr = n.nameAr
   }
   if (!data.slug && data.name) data.slug = slugify(`${data.name} ${data.city ?? ''}`) || `lieu-${Date.now().toString(36)}`
-  data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
+  // Copie technique d’une photo libre déjà comptée dans externalPhotos : le classement ne change pas (keepScore).
+  if (!req?.context?.keepScore) data.score = scorePlace({ ...(originalDoc ?? {}), ...data })
   if (data.sector && (!data.criteria || data.criteria.length === 0)) data.criteria = criteriaFor(data.sector)
   return data
 }

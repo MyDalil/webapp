@@ -22,7 +22,8 @@ export const dailyPhotosMax = (env: string | undefined = process.env.PHOTOS_IMPO
 /** Politique User-Agent de Wikimedia : application identifiée, avec un contact. */
 export const PHOTOS_USER_AGENT = 'DALIL/1.0 (https://www.mydalil.com; salam@mydalil.com)'
 /** Largeur demandée : standard chez Wikimedia (les tailles libres sont limitées depuis 2026), suffisante pour nos formats. */
-const WIDTH = 1280
+// 1920 px (largeur standard Wikimedia) : assez large pour que la médiathèque produise aussi la couverture WebP 1600.
+const WIDTH = 1920
 /** Plafond de poids d’une image téléchargée (celui des photos envoyées par les comptes). */
 const MAX_BYTES = 4 * 1024 * 1024
 /** Seules les sources prévues sont appelées : jamais une adresse quelconque saisie dans une fiche. */
@@ -152,7 +153,7 @@ export async function importFreePhotos(payload: Payload, opts: Opts = {}): Promi
         collection: 'places',
         id,
         overrideAccess: true,
-        context: { skipAudit: true, skipTranslate: true },
+        context: { skipAudit: true, skipTranslate: true, keepScore: true },
         data: { photos: [media.id, ...(place.photos ?? []).map((m) => (typeof m === 'object' ? m.id : m))] },
       })
       if (media.reused) out.reutilisees++
