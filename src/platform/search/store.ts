@@ -95,7 +95,7 @@ async function matchOf(payload: Payload, tsq: string, phrase: string, filters: R
   return Number(r.rows[0]?.n ?? 0) >= FUZZY_MIN ? exact : sql`(tsv @@ q.tq OR title_norm % q.p OR q.p <% norm)`
 }
 
-export async function querySearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[]; limit?: number; offset?: number; near?: { lat: number; lng: number } | null } = {}): Promise<SearchHit[]> {
+export async function querySearch(payload: Payload, q: string, opts: { wilaya?: string | null; types?: SearchType[]; limit?: number; offset?: number; near?: { lat: number; lng: number } | null; city?: string | null } = {}): Promise<SearchHit[]> {
   const words = searchWords(q)
   if (!words.length) return []
   const phrase = words.join(' ')
@@ -108,6 +108,10 @@ export async function querySearch(payload: Payload, q: string, opts: { wilaya?: 
   const lng0 = opts.near?.lng ?? null
   const km = sql`(111.32 * sqrt(power(lat - ${lat0}::double precision, 2) + power(cos(radians(${lat0}::double precision)) * (lng - ${lng0}::double precision), 2)))`
   const near = lat0 == null ? sql`0` : sql`CASE WHEN lat IS NULL THEN 0 ELSE 3 * exp(-${km} / 2.5) END`
+  // Commune nommée (« médecin aït chafâa ») : une adresse de cette commune (sous-titre « Catégorie · Commune ») passe devant
+  // les adresses voisines dont le nom ressemble davantage à la demande (Rad, 2026-11-24).
+  const city = opts.city ? opts.city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : null
+  const inCity = city == null ? sql`0` : sql`CASE WHEN lower(dalil_unaccent(coalesce(subtitle, ''))) LIKE ${'%· ' + city} THEN 4 ELSE 0 END`
   const types = opts.types?.length ? sql`AND type IN (${sql.join(opts.types.map((t) => sql`${t}`), sql`, `)})` : sql``
   const filters = sql`AND (${wilaya}::text IS NULL OR wilaya IS NULL OR wilaya = ${wilaya}::text) ${types}`
   const run = async (tsq: string) => {
@@ -117,7 +121,7 @@ export async function querySearch(payload: Payload, q: string, opts: { wilaya?: 
         WITH q AS (SELECT to_tsquery('french', ${tsq}) AS tq, ${phrase}::text AS p)
         SELECT type, id, url, title, subtitle, wilaya, boost, badge, lat, lng,
           (ts_rank(tsv, q.tq) * 4 + similarity(title_norm, q.p) * 2 + word_similarity(q.p, norm) + boost
-            + CASE WHEN ${wilaya}::text IS NOT NULL AND wilaya = ${wilaya}::text THEN 0.5 ELSE 0 END + ${near}) AS score
+            + CASE WHEN ${wilaya}::text IS NOT NULL AND wilaya = ${wilaya}::text THEN 0.5 ELSE 0 END + ${near} + ${inCity}) AS score
         FROM search_index, q
         WHERE ${match} ${filters}
         ORDER BY score DESC
