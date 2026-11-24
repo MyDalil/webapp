@@ -117,7 +117,7 @@ describe('tâche photos-libres', () => {
     expect(f.updated.filter((u) => u.collection === 'places').map((u) => u.data)).toEqual([{ photos: [55] }, { photos: [55] }])
   })
 
-  it.each([429, 503])('réponse %i : arrêt propre de la passe, rien d’autre n’est appelé', async (status) => {
+  it.each([401, 403, 429, 503])('réponse %i : arrêt propre de la passe, rien d’autre n’est appelé', async (status) => {
     const f = fakePayload([1, 2, 3].map((id) => ({ id, name: `Lieu ${id}`, slug: `lieu-${id}`, externalPhotos: [free(`L${id}.jpg`)] })))
     const fetch = vi.fn(async () => (fetch.mock.calls.length === 2 ? new Response('', { status }) : ok(fetch.mock.calls.length)))
     const r = await importFreePhotos(f.payload, { ...quick, fetch })
@@ -145,6 +145,23 @@ describe('tâche photos-libres', () => {
     expect((f.payload.logger.warn as unknown as ReturnType<typeof vi.fn>).mock.calls.length).toBe(4)
   })
 
+  it('trois erreurs de suite : arrêt de la passe (cause générale)', async () => {
+    const f = fakePayload([1, 2, 3, 4, 5].map((id) => ({ id, name: `Lieu ${id}`, slug: `lieu-${id}`, externalPhotos: [free(`L${id}.jpg`)] })))
+    const fetch = vi.fn(async () => {
+      throw new Error('réseau indisponible')
+    })
+    const r = await importFreePhotos(f.payload, { ...quick, fetch })
+    expect(r).toEqual({ importees: 0, reutilisees: 0, ignorees: 0, erreurs: 3, arret: 'erreurs-repetees' })
+    expect(fetch).toHaveBeenCalledTimes(3)
+  })
+
+  it('photo sans content-length plus lourde que le plafond : coupée à la lecture, ignorée', async () => {
+    const f = fakePayload([{ id: 1, name: 'Lourde', slug: 'lourde', externalPhotos: [free('Lourde.jpg')] }])
+    const big = new ReadableStream({ start(c) { for (let k = 0; k < 5; k++) c.enqueue(new Uint8Array(1024 * 1024)); c.close() } })
+    const r = await importFreePhotos(f.payload, { ...quick, fetch: async () => new Response(big, { status: 200 }) })
+    expect(r).toEqual({ importees: 0, reutilisees: 0, ignorees: 1, erreurs: 0 })
+  })
+
   it('plafond de la passe et budget de temps', async () => {
     const places = Array.from({ length: 10 }, (_, k) => ({ id: k + 1, name: `Lieu ${k + 1}`, slug: `lieu-${k + 1}`, externalPhotos: [free(`L${k + 1}.jpg`)] }))
     const f = fakePayload(places)
@@ -159,7 +176,7 @@ describe('tâche photos-libres', () => {
     // Budget de temps : l’horloge avance de 25 s par lecture, la passe s’arrête après 60 s.
     let t = 0
     const slow = fakePayload(places)
-    const r = await importFreePhotos(slow.payload, { ...quick, fetch: async () => ok(++t), budgetMs: 60_000, now: () => (t += 25_000) })
+    const r = await importFreePhotos(slow.payload, { ...quick, fetch: async () => ok(++t), budgetMs: 60_000, now: () => (t += 15_000) })
     expect(r.arret).toBe('temps-ecoule')
     expect(r.importees).toBeLessThan(10)
   })

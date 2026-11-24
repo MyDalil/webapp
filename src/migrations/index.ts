@@ -70,6 +70,8 @@ import * as migration_20261119_185900_sauvegarde_noms_adresses from './20261119_
 import * as migration_20261119_190000_noms_accents from './20261119_190000_noms_accents';
 import * as migration_20261119_200525_offsections_rubriques from './20261119_200525_offsections_rubriques';
 import * as migration_20261124_202518_photos_libres_thumbhash from './20261124_202518_photos_libres_thumbhash';
+import * as migration_20261124_204729_media_taille_large from './20261124_204729_media_taille_large';
+import * as migration_20261124_230000_photos_libres_echecs from './20261124_230000_photos_libres_echecs';
 
 export const migrations = [
   {
@@ -430,6 +432,16 @@ export const migrations = [
   {
     up: migration_20261124_202518_photos_libres_thumbhash.up,
     down: migration_20261124_202518_photos_libres_thumbhash.down,
-    name: '20261124_202518_photos_libres_thumbhash'
+    name: '20261124_202518_photos_libres_thumbhash',
+  },
+  {
+    up: migration_20261124_204729_media_taille_large.up,
+    down: migration_20261124_204729_media_taille_large.down,
+    name: '20261124_204729_media_taille_large',
+  },
+  {
+    up: migration_20261124_230000_photos_libres_echecs.up,
+    down: migration_20261124_230000_photos_libres_echecs.down,
+    name: '20261124_230000_photos_libres_echecs'
   },
 ];

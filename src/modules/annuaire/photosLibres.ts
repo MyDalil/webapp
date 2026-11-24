@@ -34,7 +34,7 @@ export type PhotosReport = {
   reutilisees: number
   ignorees: number
   erreurs: number
-  arret?: 'plafond-de-la-passe' | 'temps-ecoule' | 'limite-de-la-source'
+  arret?: 'plafond-de-la-passe' | 'temps-ecoule' | 'limite-de-la-source' | 'erreurs-repetees'
 }
 
 type Fetch = (url: string, init?: RequestInit) => Promise<Response>
@@ -53,9 +53,36 @@ async function candidates(payload: Payload, limit: number): Promise<number[]> {
     WHERE p._status = 'published' AND p.deleted_at IS NULL
       AND EXISTS (SELECT 1 FROM places_external_photos e WHERE e._parent_id = p.id AND e.url IS NOT NULL AND e.url <> '' AND e.url !~* ${PEOPLE_PHOTO.source})
       AND NOT EXISTS (SELECT 1 FROM places_rels r WHERE r.parent_id = p.id AND r.path = 'photos')
+      AND NOT EXISTS (SELECT 1 FROM photos_libres_echecs f WHERE f.place_id = p.id AND f.at > now() - interval '30 days')
     ORDER BY p.score DESC NULLS LAST, p.id
     LIMIT ${limit}`)
   return rows.map((r) => Number(r.id))
+}
+
+/** Échec durable (introuvable, trop lourde, erreur) : l’adresse n’est pas retentée pendant 30 jours. */
+async function remember(payload: Payload, id: number, raison: string) {
+  await (payload.db as unknown as Db).drizzle.execute(sql`
+    INSERT INTO photos_libres_echecs (place_id, at, raison) VALUES (${id}, now(), ${raison.slice(0, 200)})
+    ON CONFLICT (place_id) DO UPDATE SET at = now(), raison = excluded.raison`)
+}
+
+/** Lecture bornée : coupe dès MAX_BYTES, même sans en-tête content-length. */
+async function readCapped(res: Response): Promise<Buffer | null> {
+  if (!res.body) return Buffer.from(await res.arrayBuffer())
+  const reader = res.body.getReader()
+  const parts: Uint8Array[] = []
+  let size = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    size += value.byteLength
+    if (size > MAX_BYTES) {
+      await reader.cancel().catch(() => {})
+      return null
+    }
+    parts.push(value)
+  }
+  return Buffer.concat(parts)
 }
 
 type Download = { data: Buffer; mimetype: string; ext: string } | { stop: number } | { skip: string }
@@ -69,12 +96,17 @@ async function download(x: Free, opts: { fetch: Fetch; timeoutMs: number }): Pro
   }
   if (url.protocol !== 'https:' || !HOSTS.test(url.hostname)) return { skip: `source non prévue (${url.hostname})` }
   const res = await opts.fetch(url.href, { headers: { 'User-Agent': PHOTOS_USER_AGENT, Accept: 'image/jpeg,image/png,image/webp' }, signal: AbortSignal.timeout(opts.timeoutMs) })
-  if (res.status === 429 || res.status === 503) return { stop: res.status }
+  // Redirection vers un autre hôte : refusée (le serveur n’appelle que Wikimedia).
+  if (res.url && !HOSTS.test(new URL(res.url).hostname)) return { skip: 'redirection hors Wikimedia' }
+  // 429/503 : ralentir ; 401/403 : accès refusé (politique de la source) — dans les deux cas, arrêt de la passe.
+  if ([401, 403, 429, 503].includes(res.status)) return { stop: res.status }
   if (res.status === 404 || res.status === 410) return { skip: `photo introuvable (${res.status})` }
   if (!res.ok) throw new Error(`réponse ${res.status}`)
   if (Number(res.headers.get('content-length') ?? 0) > MAX_BYTES) return { skip: 'photo trop lourde' }
   // Type réel vérifié par la signature, métadonnées (EXIF, GPS) retirées, poids plafonné.
-  const clean = cleanImage(Buffer.from(await res.arrayBuffer()))
+  const data = await readCapped(res)
+  if (!data) return { skip: 'photo trop lourde' }
+  const clean = cleanImage(data)
   return 'error' in clean ? { skip: clean.error } : clean
 }
 
@@ -82,12 +114,12 @@ async function download(x: Free, opts: { fetch: Fetch; timeoutMs: number }): Pro
 async function mediaFor(payload: Payload, place: Candidate, x: Free, file: { data: Buffer; mimetype: string; ext: string }): Promise<{ id: number; reused: boolean }> {
   const hash = sha256(file.data)
   const license = { credit: x.author, license: x.license, sourceUrl: x.page }
-  const { docs } = await payload.find({ collection: 'media', where: { hash: { equals: hash } }, limit: 1, depth: 0, overrideAccess: true, select: { credit: true } })
+  const { docs } = await payload.find({ collection: 'media', where: { hash: { equals: hash } }, limit: 1, depth: 0, overrideAccess: true, select: { credit: true, license: true, sourceUrl: true } })
   // `altGenerated` : le nom de l’adresse suffit, pas de texte alternatif demandé à l’IA.
   const context = { altGenerated: true, skipAudit: true }
   if (docs[0]) {
     // Photo déjà présente sans crédit : on le pose, l’attribution est due par la licence.
-    if (!docs[0].credit) await payload.update({ collection: 'media', id: docs[0].id, data: license, overrideAccess: true, context })
+    if (!docs[0].license && !docs[0].sourceUrl) await payload.update({ collection: 'media', id: docs[0].id, data: license, overrideAccess: true, context })
     return { id: docs[0].id, reused: true }
   }
   const m = await payload.create({
@@ -116,6 +148,7 @@ export async function importFreePhotos(payload: Payload, opts: Opts = {}): Promi
   const { docs } = await payload.find({ collection: 'places', where: { id: { in: ids } }, limit: ids.length, pagination: false, depth: 0, overrideAccess: true, select: { name: true, slug: true, photos: true, externalPhotos: true } })
   const byId = new Map((docs as Candidate[]).map((d) => [d.id, d]))
   let called = false
+  let streak = 0
   for (const id of ids) {
     const place = byId.get(id)
     if (!place) continue
@@ -123,7 +156,8 @@ export async function importFreePhotos(payload: Payload, opts: Opts = {}): Promi
       out.arret = 'plafond-de-la-passe'
       break
     }
-    if (now() >= deadline) {
+    // Marge de 20 s : une photo (téléchargement, tailles WebP, envoi Blob) ne dépasse jamais le budget.
+    if (now() + 20_000 >= deadline) {
       out.arret = 'temps-ecoule'
       break
     }
@@ -144,6 +178,7 @@ export async function importFreePhotos(payload: Payload, opts: Opts = {}): Promi
       }
       if ('skip' in file) {
         payload.logger?.warn?.(`Photos libres : adresse ${id} ignorée — ${file.skip}`)
+        await remember(payload, id, file.skip).catch(() => {})
         out.ignorees++
         continue
       }
@@ -158,9 +193,16 @@ export async function importFreePhotos(payload: Payload, opts: Opts = {}): Promi
       })
       if (media.reused) out.reutilisees++
       else out.importees++
+      streak = 0
     } catch (e) {
       out.erreurs++
       payload.logger?.warn?.(`Photos libres : adresse ${id} en erreur — ${(e as Error).message.slice(0, 160)}`)
+      await remember(payload, id, (e as Error).message).catch(() => {})
+      // Trois erreurs de suite (réseau, stockage) : la cause est générale, inutile d’insister.
+      if (++streak >= 3) {
+        out.arret = 'erreurs-repetees'
+        break
+      }
     }
   }
   return out

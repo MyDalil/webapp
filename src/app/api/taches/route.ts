@@ -69,7 +69,13 @@ export async function GET(req: Request) {
     })
   // Photos libres copiées dans la médiathèque (en dernier : jamais au détriment des autres tâches) : au plus
   // PHOTOS_IMPORT_DAILY_MAX adresses, budget de 60 s, arrêt propre si la source demande de ralentir (429, 503).
-  out.photosLibres = await runTask('photos-libres', async () => importFreePhotos(await payload(), { budgetMs: 60_000 }))
+  out.photosLibres = await runTask('photos-libres', async () => importFreePhotos(await payload(), { budgetMs: 60_000 }), {
+    failed: (r) => {
+      const x = r as { importees: number; reutilisees: number; erreurs: number; arret?: string }
+      if (x.arret === 'limite-de-la-source' && x.importees + x.reutilisees === 0) return 'source Wikimedia indisponible ou accès refusé'
+      return x.erreurs > 0 && x.importees + x.reutilisees === 0 ? 'aucune photo copiée (erreurs)' : null
+    },
+  })
   const failed = Object.entries(out).filter(([, o]) => o.status === 'failed').map(([k]) => k)
   return json({ ok: failed.length === 0, echecs: failed, taches: out }, failed.length ? 500 : 200)
 }

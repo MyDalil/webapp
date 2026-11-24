@@ -52,7 +52,8 @@ export const galleryOf = (p: WithPhotos & Pick<Place, 'name'>): GalleryItem[] =>
   return [
     ...media.map((m) => {
       const c = freeCredit(m)
-      return { url: m.sizes?.cover?.url ?? m.url!, alt: m.alt, credit: c?.text ?? m.credit ?? null, href: c?.href ?? null, thumbhash: m.thumbhash ?? null }
+      // Photo libre copiée : taille non recadrée (`large`), comme la source ; envoi de l’équipe : `cover`, comme avant.
+      return { url: (m.sourceUrl ? m.sizes?.large?.url : m.sizes?.cover?.url) ?? m.url!, alt: m.alt, credit: c?.text ?? m.credit ?? null, href: c?.href ?? null, thumbhash: m.thumbhash ?? null }
     }),
     ...external(p)
       .filter((x) => !copied.has(x.page))

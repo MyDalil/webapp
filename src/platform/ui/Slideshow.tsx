@@ -13,6 +13,8 @@ export function Slideshow({ slides, interval = 6500 }: { slides: Slide[]; interv
   // Diapositives dont le fond est demandé : l’active et la suivante ; une photo déjà chargée le reste (fondu de sortie intact).
   const [{ i, seen }, setShow] = useState<Shown>({ i: 0, seen: [0, 1] })
   const setI = (k: number) => setShow((s) => goTo(s, k, slides.length))
+  // Point survolé ou atteint au clavier : sa photo est demandée avant le clic (pas de fondu sur un fond vide).
+  const want = (k: number) => setShow((s) => (s.seen.includes(k) ? s : { ...s, seen: [...s.seen, k] }))
   const [paused, setPaused] = useState(false)
   useEffect(() => {
     if (paused || slides.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -40,7 +42,7 @@ export function Slideshow({ slides, interval = 6500 }: { slides: Slide[]; interv
           </a>
           <div className="slideshow-dots" role="tablist" aria-label="Photos">
             {slides.map((x, k) => (
-              <button key={x.src} type="button" role="tab" aria-selected={k === i} aria-label={x.title} onClick={() => setI(k)} />
+              <button key={x.src} type="button" role="tab" aria-selected={k === i} aria-label={x.title} onClick={() => setI(k)} onPointerEnter={() => want(k)} onFocus={() => want(k)} />
             ))}
             <button type="button" className="slideshow-pause" aria-label={paused ? 'Reprendre le diaporama' : 'Mettre en pause le diaporama'} onClick={() => setPaused(!paused)}>
               {paused ? '▶' : '❚❚'}

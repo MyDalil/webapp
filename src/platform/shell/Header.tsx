@@ -14,7 +14,7 @@ import { WilayaPicker } from './WilayaPicker'
 import { readWilaya, setWilaya, wilayaByCode } from './wilaya'
 import { MicButton } from '../ui/MicButton'
 import { lazyBg } from '../ui/lazyBg'
-import { wikiPhoto } from '../referentiel/photos'
+import { wikiPhoto } from '../referentiel/photoSizes'
 
 type Slide = { photo: string; place: string; href: string; credit: string | null }
 type Menu = null | Rubric['key'] | 'language' | 'wilaya'
