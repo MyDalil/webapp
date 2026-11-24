@@ -211,10 +211,16 @@ export async function getPublishedPlace(slug: string, lang?: 'fr' | 'en' | 'ar',
 }
 
 /** Fiches générées au build : les 400 plus consultées ; les autres sont générées à la première visite (dynamicParams). */
-export async function getPlaceSlugs(): Promise<string[]> {
+/**
+ * Adresses pré-construites au build : les mieux classées seulement (50 × 3 langues). Les autres pages sont créées à
+ * leur première visite puis gardées en cache (ISR) : le build ne grossit pas avec l’annuaire (48 000+ fiches).
+ */
+export const PREBUILT_PLACES = 50
+
+export async function getPlaceSlugs(limit = PREBUILT_PLACES): Promise<string[]> {
   try {
     const payload = await client()
-    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, limit: 400, sort: '-score', depth: 0, select: { slug: true }, overrideAccess: false })
+    const { docs } = await payload.find({ collection: 'places', where: { _status: { equals: 'published' } }, limit, sort: '-score', depth: 0, select: { slug: true }, overrideAccess: false })
     return docs.flatMap((d) => (d.slug ? [d.slug] : []))
   } catch {
     return []

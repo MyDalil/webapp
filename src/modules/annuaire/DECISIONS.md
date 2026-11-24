@@ -106,3 +106,5 @@ Format : `- AAAA-MM-JJ — décision — raison`. Ne jamais réécrire une entr�
 - Garde-fou : le test « la carte porte le repère » exige le worker en 200, type JavaScript, sans erreur console.
 - À ne pas refaire : un repère visible ne prouve pas que la carte se dessine. Vérifier aussi le fond.
 - 2026-11-16 (Rad) : un clic sur le repère d'une fiche ouvre l'itinéraire, comme le bouton « Itinéraire ». Une seule fonction `directionsUrl` pour les deux. Testé dans le même parcours.
+- 2026-11-24 — 50 adresses pré-construites au build (au lieu de 400), les autres en ISR à la première visite — le build générait 1 200 pages d’adresses sur 1 720 ; l’annuaire compte 48 000+ fiches et ne doit pas alourdir chaque déploiement (Rad, chantier performance).
+- 2026-11-24 — remplace l’entrée du 2026-10-08 sur les photos Commons : les photos libres sont copiées dans Vercel Blob (tailles WebP de la médiathèque, crédit et licence conservés) par une tâche quotidienne bornée — depuis début 2026 Wikimedia limite fortement les tailles non standard et le lien direct alourdissait l’accueil (37 Mo mesurés) ; décision de Rad du 24 novembre.
