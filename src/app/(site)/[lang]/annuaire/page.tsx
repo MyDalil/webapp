@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 /** Rafraîchi à chaque enregistrement dans /admin ; filet de sécurité toutes les 5 minutes. */
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 export default async function AnnuairePage() {
   const { places, total } = await searchPlaces({})

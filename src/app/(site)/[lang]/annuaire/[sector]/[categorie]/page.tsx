@@ -6,7 +6,7 @@ import { CategoryPage } from './CategoryPage'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ sector: string; categorie: string; lang: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 // Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
 export const generateStaticParams = async () => []

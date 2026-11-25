@@ -9,7 +9,7 @@ const routeOf = (slug: string[]) => '/' + slug.map(decodeURIComponent).join('/')
 
 export const dynamicParams = false
 // Le bloc d’accompagnement suit les réglages de /admin : page recalculée au plus toutes les heures.
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 /** Routes ayant une page dédiée au format de la maquette. */
 const DEDICATED = ['/', '/en', '/ar', '/recherche', '/annuaire', '/label', '/proposer', '/installation', '/explorer', '/vie-pratique', '/business-emploi', '/demarches']

@@ -31,6 +31,21 @@ jobs:
           for ep in $(curl -sf "${h[@]}" "$API/projects/$PROJECT/endpoints" | jq -r '.endpoints[].id'); do
             curl -sf -X PATCH "${h[@]}" "$API/projects/$PROJECT/endpoints/$ep" -d '{"endpoint":{"suspend_timeout_seconds":300}}' > /dev/null && echo "Calcul $ep : veille à 5 min"
           done
+      - name: Calcul plafonné (offre gratuite Neon)
+        if: steps.acces.outputs.skip != '1'
+        # Offre gratuite : 100 CU-heures par mois. Calcul de 0,25 à 0,5 CU : assez pour le site (pages en cache), jamais plus.
+        run: |
+          h=(-H "Authorization: Bearer $KEY" -H "Content-Type: application/json")
+          for ep in $(curl -sf "${h[@]}" "$API/projects/$PROJECT/endpoints" | jq -r '.endpoints[].id'); do
+            curl -sf -X PATCH "${h[@]}" "$API/projects/$PROJECT/endpoints/$ep" -d '{"endpoint":{"autoscaling_limit_min_cu":0.25,"autoscaling_limit_max_cu":0.5}}' > /dev/null && echo "Calcul $ep : 0,25 à 0,5 CU"
+          done
+      - name: État de la base (lecture seule)
+        if: steps.acces.outputs.skip != '1'
+        run: |
+          h=(-H "Authorization: Bearer $KEY")
+          curl -sf "${h[@]}" "$API/projects/$PROJECT" | jq '.project | {offre: .owner.subscription_type, stockage_Mo: ((.synthetic_storage_size // 0) / 1048576 | floor), calcul_heures_CU_periode: ((.cpu_used_sec // .compute_time_seconds // 0) / 3600 | floor), heures_actives_periode: ((.active_time_seconds // 0) / 3600 | floor), debut_periode: .consumption_period_start}'
+          curl -sf "${h[@]}" "$API/projects/$PROJECT/endpoints" | jq '[.endpoints[] | {id, branche: .branch_id, min_cu: .autoscaling_limit_min_cu, max_cu: .autoscaling_limit_max_cu, veille_s: .suspend_timeout_seconds, etat: .current_state}]'
+          curl -sf "${h[@]}" "$API/projects/$PROJECT/branches" | jq '[.branches[] | {name, defaut: .default, stockage_Mo: ((.logical_size // 0) / 1048576 | floor), maj: .updated_at}]'
       - name: Copies d’aperçu inutilisées supprimées
         if: steps.acces.outputs.skip != '1'
         run: |

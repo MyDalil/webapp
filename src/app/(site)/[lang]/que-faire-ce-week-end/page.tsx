@@ -4,7 +4,7 @@ import { WeekendExplorer } from '@/modules/annuaire/ui'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = { title: 'Que faire ce week-end ?', description: 'Événements, sorties et lieux à visiter ce week-end en Algérie, par wilaya, avec des informations datées et sourcées.' }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 async function Weekend() {
   const [events, places] = await Promise.all([getUpcomingEvents(), getPlaces()])

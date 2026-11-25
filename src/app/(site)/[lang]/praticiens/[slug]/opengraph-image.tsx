@@ -8,7 +8,7 @@ export const size = OG_SIZE
 export const contentType = OG_CONTENT_TYPE
 // Aucune image au build (des centaines de fiches) : chacune est calculée à la première demande puis mise en cache.
 export const generateStaticParams = async () => []
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 /** Aperçu de lien d’un praticien : photo, nom, spécialité, ville et wilaya. */
 export default async function Image({ params }: { params: Promise<{ slug: string; lang: string }> }) {

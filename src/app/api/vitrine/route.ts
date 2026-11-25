@@ -1,6 +1,6 @@
 import { getFeaturedDestination, getPlaces, getShowcase } from '@/modules/annuaire'
 
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 type Slide = { photo: string; place: string; href: string; credit: string | null }
 

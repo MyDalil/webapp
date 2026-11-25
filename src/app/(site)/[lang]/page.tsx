@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { isLang, langPath, type Lang } from '@/platform/i18n'
 import { HomeView } from './HomeView'
 
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 type Props = { params: Promise<{ lang: string }> }
 

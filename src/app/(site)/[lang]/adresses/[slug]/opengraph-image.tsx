@@ -8,7 +8,7 @@ export const size = OG_SIZE
 export const contentType = OG_CONTENT_TYPE
 // Aucune image au build (des centaines de fiches) : chacune est calculée à la première demande puis mise en cache.
 export const generateStaticParams = async () => []
-export const revalidate = 86400
+export const revalidate = 2592000 // 30 jours : une fiche modifiée est rafraîchie à la demande (offre gratuite Vercel)
 
 /** Aperçu de lien d’une adresse : photo du lieu (sinon aucune), nom, catégorie, commune et wilaya. */
 export default async function Image({ params }: { params: Promise<{ slug: string; lang: string }> }) {

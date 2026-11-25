@@ -13,10 +13,10 @@ import { PEOPLE_PHOTO, external, sized } from './photos'
  * servie a une photo et n’est plus sélectionnée.
  */
 
-/** Plafond par passe (PHOTOS_IMPORT_DAILY_MAX, défaut 60). */
+/** Plafond par passe (PHOTOS_IMPORT_DAILY_MAX, défaut 6 : offre gratuite Vercel Blob, 2 000 écritures par mois, 5 par photo). */
 export const dailyPhotosMax = (env: string | undefined = process.env.PHOTOS_IMPORT_DAILY_MAX) => {
   const n = Number(env)
-  return env !== undefined && env !== '' && Number.isInteger(n) && n >= 0 ? n : 60
+  return env !== undefined && env !== '' && Number.isInteger(n) && n >= 0 ? n : 6
 }
 
 /** Politique User-Agent de Wikimedia : application identifiée, avec un contact. */

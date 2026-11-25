@@ -15,7 +15,7 @@ import type { Lang } from '@/platform/i18n'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ slug: string; lang: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 export const generateStaticParams = () => DEMARCHES.map((d) => ({ slug: d.slug }))
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

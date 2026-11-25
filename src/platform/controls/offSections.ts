@@ -13,7 +13,7 @@ const fetchOff = async (): Promise<Off> => {
   return { keys: normalizeOff(c.offSections), message: c.offMessage ?? null }
 }
 // Une lecture de base au plus par période de cache, quel que soit le nombre de visites.
-const cached = unstable_cache(fetchOff, ['controls-off-sections'], { tags: [CONTROLS_TAG], revalidate: 3600 })
+const cached = unstable_cache(fetchOff, ['controls-off-sections'], { tags: [CONTROLS_TAG], revalidate: 86400 })
 
 /** Clés coupées (rubriques `r:…`, catégories `c:…`). Panne de lecture : rien n’est coupé (le site reste servi). */
 export async function offState(): Promise<Off> {

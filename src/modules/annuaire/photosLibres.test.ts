@@ -51,9 +51,9 @@ const quick = { pauseMs: 0 }
 
 describe('tâche photos-libres', () => {
   it('plafond par passe : PHOTOS_IMPORT_DAILY_MAX, 60 par défaut', () => {
-    expect(dailyPhotosMax(undefined)).toBe(60)
-    expect(dailyPhotosMax('')).toBe(60)
-    expect(dailyPhotosMax('abc')).toBe(60)
+    expect(dailyPhotosMax(undefined)).toBe(6)
+    expect(dailyPhotosMax('')).toBe(6)
+    expect(dailyPhotosMax('abc')).toBe(6)
     expect(dailyPhotosMax('15')).toBe(15)
     expect(dailyPhotosMax('0')).toBe(0)
   })

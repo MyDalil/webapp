@@ -25,7 +25,7 @@ import { galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName }
 type Props = { params: Promise<{ slug: string; lang: string }> }
 
 /** Pages générées au build puis rafraîchies à chaque enregistrement dans /admin ; nouvelles fiches servies à la demande. */
-export const revalidate = 86400
+export const revalidate = 2592000 // 30 jours : une fiche modifiée est rafraîchie à la demande (offre gratuite Vercel)
 export const dynamicParams = true
 export const generateStaticParams = async () => (await getPlaceSlugs()).map((slug) => ({ slug }))
 

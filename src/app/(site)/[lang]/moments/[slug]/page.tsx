@@ -7,7 +7,7 @@ import { momentBySlug } from '@/modules/contenus'
 import { XpHero } from '@/platform/ui/Xp'
 
 type Props = { params: Promise<{ lang: string; slug: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 // Aucune page au build : chacune existe seulement quand l’équipe publie un moment en cours (sinon 404).
 export const generateStaticParams = async () => []
 
