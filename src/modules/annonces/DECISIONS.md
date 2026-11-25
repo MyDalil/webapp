@@ -26,3 +26,4 @@
 
 ## 2026-11-15 (soir) — Les fiches d’exemple reviennent en production (décision de Rad)
 - **Décision** : le masquage des exemples en production, décidé le matin, est annulé. Rad veut les fiches d’exemple complètes : une page reste belle et donne envie de s’inscrire même sans inscrit. Les règles du 2026-10-26 s’appliquent de nouveau (badge « Exemple », demandes refusées en production, hors compteurs).
+- 2026-11-25 — filtres d’adresse des annonces (catégorie, type, wilaya, transaction) : seules les valeurs connues sont appliquées, les autres ignorées — une valeur inconnue d’un champ « select » faisait échouer la requête Postgres (erreur 500 sur /annonces/vehicules?type=412578441, vue par /etat le 25 nov.).

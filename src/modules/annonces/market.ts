@@ -11,7 +11,7 @@ import { commune as communeOf, communeName } from '@/platform/referentiel/commun
 import { cleanImage } from '@/platform/storage/images'
 import { savePublicPhoto } from '@/platform/storage/upload'
 import { classifiedExpired, classifiedExpiring, classifiedMessage, classifiedSubmitted, type ClassifiedMail } from './emails'
-import { RULES, canRenew, categoryLabel, expiryFrom, facts, maskContacts, priceLabel, statusLabel, subLabel } from './referentiel'
+import { ALL_SUBS, CATEGORIES, DEALS, RULES, canRenew, categoryLabel, expiryFrom, facts, maskContacts, priceLabel, statusLabel, subLabel } from './referentiel'
 import { refreshPages } from './refresh'
 import { parseClassified } from './validate'
 
@@ -73,10 +73,14 @@ export type SearchQuery = { categorie?: string; type?: string; wilaya?: string; 
 export async function searchClassifieds(q: SearchQuery, limit = 60): Promise<ClassifiedCard[]> {
   const p = await getPayload()
   const and: Where[] = [live()]
-  if (q.categorie) and.push({ category: { equals: q.categorie } })
-  if (q.categorie && q.type) and.push({ subcategory: { equals: `${q.categorie}:${q.type}` } })
-  if (q.wilaya) and.push({ wilaya: { equals: q.wilaya } })
-  if (q.transaction) and.push({ deal: { equals: q.transaction } })
+  // Filtres de l’adresse : seules les valeurs connues passent (une valeur inconnue d’un champ « select »
+  // faisait échouer la requête Postgres — erreur 500 sur /annonces/vehicules?type=412578441, 24 nov.).
+  const categorie = q.categorie && CATEGORIES.some((c) => c.value === q.categorie) ? q.categorie : null
+  const sub = categorie && q.type ? `${categorie}:${q.type}` : null
+  if (categorie) and.push({ category: { equals: categorie } })
+  if (sub && ALL_SUBS.some((x) => x.value === sub)) and.push({ subcategory: { equals: sub } })
+  if (q.wilaya && WILAYAS.some((w) => String(w.code) === q.wilaya)) and.push({ wilaya: { equals: q.wilaya } })
+  if (q.transaction && DEALS.some((d) => d.value === q.transaction)) and.push({ deal: { equals: q.transaction } })
   const min = Number(q.min)
   const max = Number(q.max)
   if (q.min && Number.isFinite(min)) and.push({ price: { greater_than_equal: min } })
