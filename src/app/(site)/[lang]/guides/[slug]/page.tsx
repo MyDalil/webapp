@@ -18,7 +18,7 @@ import { XpHero } from '@/platform/ui/Xp'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ slug: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 export const dynamicParams = false
 export const generateStaticParams = () => GUIDES.map((g) => ({ slug: g.slug }))
 

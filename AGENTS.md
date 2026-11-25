@@ -107,7 +107,7 @@ Déclarés une seule fois pour le projet : `.mcp.json` (Claude Code ; Codex/Curs
 - Base neuve : `pnpm payload migrate && pnpm migrate:data`.
 - Schéma modifié → `pnpm payload migrate:create <nom>` puis commit ; migrations appliquées au build Vercel (`vercel-build`) seulement.
 - Extras débranchables : `DALIL_PLUGINS` (agents, cockpit, communication ; défaut `communication`), lu par `src/platform/plugins.ts`. `generate:importmap` se lance avec `DALIL_PLUGINS=agents,cockpit,communication` pour que la carte des composants couvre tous les cas.
-- Variables obligatoires en production : `OAUTH_SECRET` et `REMOTE_SIGNING_SECRET` (32 caractères au moins chacune ; sans elles, OAuth et les boutons signés de Telegram et WhatsApp sont coupés). Facultatives : `TRANSLATE_DAILY_MAX` (fiches traduites par passe quotidienne, 50 par défaut), `PHOTOS_IMPORT_DAILY_MAX` (photos libres copiées dans la médiathèque par passe quotidienne, 60 par défaut).
+- Variables obligatoires en production : `OAUTH_SECRET` et `REMOTE_SIGNING_SECRET` (32 caractères au moins chacune ; sans elles, OAuth et les boutons signés de Telegram et WhatsApp sont coupés). Facultatives : `TRANSLATE_DAILY_MAX` (fiches traduites par passe quotidienne, 50 par défaut), `PHOTOS_IMPORT_DAILY_MAX` (photos libres copiées dans la médiathèque par passe quotidienne, 6 par défaut — offre gratuite Vercel Blob).
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -24,7 +24,7 @@ import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata }
 import { videoEnabled } from '@/platform/video'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 // Liste vide : aucune page au build, chacune mise en cache (ISR) à sa première visite.
 export const generateStaticParams = async () => []

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'Vie musulmane en Algérie',
   description: 'Mosquées et salles de prière, enseignement coranique, Hajj et Omra, librairies islamiques, entraide, funérailles musulmanes.',
 }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 /**
  * Porte de la rubrique Vie musulmane (même place que /services, /explorer…) : les entrées du menu, validées par Saïd,

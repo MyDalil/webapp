@@ -7,7 +7,7 @@ import { categoryPath } from '@/platform/referentiel/slug'
 import { SECTORS } from '@/platform/referentiel/catalog'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 type Props = { params: Promise<{ slug: string }> }
 

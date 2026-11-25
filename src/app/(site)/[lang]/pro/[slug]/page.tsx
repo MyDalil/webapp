@@ -10,7 +10,7 @@ import { placeJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteUrl, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 
 type Props = { params: Promise<{ lang: string; slug: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 const load = cache((slug: string) => proPage(slug))
 const langOf = (l: string): Lang => (isLang(l) ? l : 'fr')

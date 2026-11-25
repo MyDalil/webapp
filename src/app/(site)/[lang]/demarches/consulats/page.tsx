@@ -6,7 +6,7 @@ import { PHOTOS } from '@/platform/referentiel/photos'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = { title: 'Ambassades et consulats d’Algérie dans le monde', description: 'Adresse, téléphone, email, site officiel, territoire couvert et services en ligne de chaque ambassade et consulat d’Algérie.' }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 /** Tous les postes diplomatiques et consulaires d’Algérie, groupés par pays, avec recherche. */
 async function Consulats() {

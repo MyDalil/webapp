@@ -9,7 +9,7 @@ import { PHOTOS } from '@/platform/referentiel/photos'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 type Props = { params: Promise<{ theme: string }> }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 export const generateStaticParams = () => THEMES.map((t) => ({ theme: t.key }))
 
 /** Fiches phares déjà rédigées, rattachées à leur thème. */

@@ -1,11 +1,11 @@
 name: Surveillance du site
-# Toutes les heures (actif depuis `main`) : accueil, état application + base (/api/sante, JSON validé strictement), plan du site.
+# Toutes les 3 heures (actif depuis `main` ; offre gratuite : chaque contrôle réveille la base Neon) : accueil, état application + base (/api/sante, JSON validé strictement), plan du site.
 # Panne confirmée (2 essais) → issue « Site indisponible » (GitHub prévient par email) ; retour à la normale → issue commentée et fermée.
 # Une nouvelle panne après fermeture ouvre une nouvelle issue (donc un nouvel email).
 # Tâche quotidienne : sauvegarde complète vieille de plus de 36 h → issue distincte « Tâche quotidienne en retard ».
 on:
   schedule:
-    - cron: '7 * * * *'
+    - cron: '7 */3 * * *'
   workflow_dispatch:
 permissions:
   contents: read
