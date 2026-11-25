@@ -72,7 +72,7 @@ export async function searchEverything(q: string, opts: { position?: { lat: numb
   const [found0, off] = await Promise.all([
     Promise.all(
     GROUPS.map((g) =>
-      safe(querySearch(p, query, { types: g.types, wilaya: g.types.some((t) => CONTENT.includes(t)) ? place.wilaya : null, near: g.types.includes('adresse') ? place.near : null, limit: g.key === 'adresse' ? PAGE_SIZE : g.max * 3, offset: g.key === 'adresse' ? (page - 1) * PAGE_SIZE : 0 })),
+      safe(querySearch(p, query, { types: g.types, wilaya: g.types.some((t) => CONTENT.includes(t)) ? place.wilaya : null, near: g.types.includes('adresse') ? place.near : null, city: g.types.includes('adresse') && !opts.position ? place.label : null, limit: g.key === 'adresse' ? PAGE_SIZE : g.max * 3, offset: g.key === 'adresse' ? (page - 1) * PAGE_SIZE : 0 })),
     ),
     ),
     offSet(),
@@ -164,7 +164,7 @@ export async function suggest(q: string, prefer: string | null = null): Promise<
   const fail = async (e: unknown) => (await recordError(e, { route: '/api/recherche', routeType: 'recherche' }), [] as SearchHit[])
   const [cats0, content0, off] = await Promise.all([
     querySearch(p, query, { types: ['categorie', 'rubrique'], limit: 4 }).catch(fail),
-    querySearch(p, contentQuery, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, limit: 16 }).catch(fail),
+    querySearch(p, contentQuery, { types: ['demarche', 'consulat', 'adresse', 'praticien', 'prestataire', 'annonce', 'guide'], wilaya: place.wilaya, near: place.near, city: place.near ? place.label : null, limit: 16 }).catch(fail),
     offSet(),
   ])
   const cats = cats0.filter((h) => !hitOff(h, off))

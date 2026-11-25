@@ -1,5 +1,12 @@
 # Reprise — 24 novembre 2026
 
+## Mise à jour — 24 novembre 2026 (soir) : retours de Rad sur preview
+
+- Branche `agent/recherche-carte`, créée depuis `preview`.
+- Recherche : « médecin aït chafâa » mettait « Spécialiste Medecine interne · Freha » devant « salle de soins · Aït Chafâa ». Cause : bonus de distance trop faible (adresse à 4,4 km du centre de la commune). Correction : +4 aux adresses de la commune nommée (propositions et résultats). Vérifié sur la base locale : « salle de soins » passe en tête, les adresses alentour suivent.
+- Fiche sans photo ni illustration : la carte en couleur remplace le visuel neutre dans le cadre 4:3 ; la mini-carte n’est plus doublée. Vérifié en local : `pg-main pg-map` rendu sur la fiche « salle de soins ».
+- `pnpm check`, `pnpm test` (691), `pnpm lint` 0 erreur, `pnpm build` OK.
+
 ## Mise à jour — 24 novembre 2026 : chantier performance (build, images, recherche)
 
 - Branche `agent/performance-socle`, créée depuis `preview` (a815a1a) ; deux lots codés en parallèle (`agent/perf-images`, `agent/perf-photos`) puis fusionnés. Demande de Rad : appliquer le plan et livrer sur preview pour les tests clients.

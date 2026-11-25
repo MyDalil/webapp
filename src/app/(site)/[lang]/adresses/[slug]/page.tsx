@@ -143,7 +143,17 @@ export default async function PlacePage({ params }: Props) {
 
       <div className="pl-grid">
         <div className="pl-main">
-          <PhotoGallery photos={gallery} title={p.name} />
+          {gallery.length || !pos ? (
+            <PhotoGallery photos={gallery} title={p.name} />
+          ) : (
+            // Ni photo du lieu ni illustration : la carte en couleur prend la place de la photo (Rad, 2026-11-24).
+            <figure className="pg">
+              <div className="pg-main pg-map">
+                <PlaceMap places={[{ slug: p.slug ?? slug, name: p.name, category: p.category, city: p.city, pos, exact }]} />
+              </div>
+              {!exact && <figcaption className="pg-foot pg-map-note">Position approximative : centre de {p.city}.</figcaption>}
+            </figure>
+          )}
 
           {intro && (
             <section className="pl-section">
@@ -292,7 +302,7 @@ export default async function PlacePage({ params }: Props) {
                   </div>
                 ))}
             </dl>
-            {pos && (
+            {pos && gallery.length > 0 && (
               <div className="pl-map">
                 <PlaceMap places={[{ slug: p.slug ?? slug, name: p.name, category: p.category, city: p.city, pos, exact }]} />
                 {!exact && <small>Position approximative : centre de {p.city}.</small>}

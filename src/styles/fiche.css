@@ -46,6 +46,9 @@
 .pg { margin: 0; }
 .pg-main { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 22px; background: var(--surface-2); }
 .pg-main.is-empty { background: var(--surface-2) url(/images/lieu.svg) center / cover no-repeat; }
+/* Fiche sans photo : la carte occupe le cadre de la photo (mêmes proportions 4:3). */
+.pg-map .leaflet-box { position: absolute; inset: 0; }
+.pg-map-note { color: var(--muted); font-size: .9rem; }
 .pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pg-arrow { position: absolute; top: 50%; width: 44px; height: 44px; margin-top: -22px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .95); color: #14201b; box-shadow: 0 4px 14px rgba(0, 0, 0, .2); cursor: pointer; }
 .pg-arrow.is-prev { left: 14px; } .pg-arrow.is-next { right: 14px; }
