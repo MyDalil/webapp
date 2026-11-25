@@ -1,4 +1,19 @@
 {
-  "crons": [{ "path": "/api/taches", "schedule": "0 16 * * *" }],
-  "git": { "deploymentEnabled": { "import-data": false, "import-facts": false, "import-images": false, "donnees-osm-postgis": false } }
+  "crons": [
+    {
+      "path": "/api/taches",
+      "schedule": "0 16 * * *"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true,
+      "preview": true,
+      "import-data": false,
+      "import-facts": false,
+      "import-images": false,
+      "donnees-osm-postgis": false
+    }
+  }
 }

@@ -10,6 +10,8 @@ import { SECTORS } from '@/platform/referentiel/catalog'
 import { categoryPath } from '@/platform/referentiel/slug'
 import { latinCity } from '@/platform/referentiel/communes'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { lazyBg } from '@/platform/ui/lazyBg'
+import { tilePhoto } from '@/platform/referentiel/photos'
 import { SaveButton } from '@/modules/membres/ui'
 import { LeadFormSlot } from '@/modules/pros/ui'
 import { ClaimLink, PlaceActions, PlaceMap } from '@/modules/annuaire/ui'
@@ -17,12 +19,13 @@ import { JsonLd } from '@/platform/seo/JsonLd'
 import { breadcrumbJsonLd, placeJsonLd } from '@/platform/seo/jsonLd'
 import { absoluteAsset, absoluteUrl, asLang, factualDescription, ficheMetadata } from '@/platform/seo/metadata'
 import { placeClaimLabel } from '@/platform/seo/claim'
+import { thumbHashDataUrl } from '@/platform/storage/thumbhash'
 import { galleryOf, getPlace, getPlaceSlugs, position, sectorTitle, wilayaName } from '@/modules/annuaire'
 
 type Props = { params: Promise<{ slug: string; lang: string }> }
 
 /** Pages générées au build puis rafraîchies à chaque enregistrement dans /admin ; nouvelles fiches servies à la demande. */
-export const revalidate = 86400
+export const revalidate = 2592000 // 30 jours : une fiche modifiée est rafraîchie à la demande (offre gratuite Vercel)
 export const dynamicParams = true
 export const generateStaticParams = async () => (await getPlaceSlugs()).map((slug) => ({ slug }))
 
@@ -66,7 +69,8 @@ export default async function PlacePage({ params }: Props) {
   const intro = presentIntro(p.intro)
   const facts = factsOf(p as never).filter((f) => f.label !== 'Catégorie')
   const nearby = await nearbyCards(p, 6)
-  const photos = galleryOf(p)
+  // Fond provisoire de la couverture (aperçu flou ThumbHash) : visible le temps du chargement, recouvert par la photo.
+  const photos = galleryOf(p).map((ph, k) => (k === 0 ? { ...ph, placeholder: thumbHashDataUrl(ph.thumbhash) } : ph))
   // Sans photo du lieu : photo d’illustration de la catégorie, sinon de la ville (créditées comme illustration), sinon visuel neutre.
   const catPic = categoryPhoto(p.category)
   const cityPic = knownCityPhoto(p.city)
@@ -139,7 +143,17 @@ export default async function PlacePage({ params }: Props) {
 
       <div className="pl-grid">
         <div className="pl-main">
-          <PhotoGallery photos={gallery} title={p.name} />
+          {gallery.length || !pos ? (
+            <PhotoGallery photos={gallery} title={p.name} />
+          ) : (
+            // Ni photo du lieu ni illustration : la carte en couleur prend la place de la photo (Rad, 2026-11-24).
+            <figure className="pg">
+              <div className="pg-main pg-map">
+                <PlaceMap places={[{ slug: p.slug ?? slug, name: p.name, category: p.category, city: p.city, pos, exact }]} />
+              </div>
+              {!exact && <figcaption className="pg-foot pg-map-note">Position approximative : centre de {p.city}.</figcaption>}
+            </figure>
+          )}
 
           {intro && (
             <section className="pl-section">
@@ -179,7 +193,7 @@ export default async function PlacePage({ params }: Props) {
                 {nearby.map((n) => (
                   <li key={n.slug}>
                     <Link href={`/adresses/${n.slug}`}>
-                      <i style={{ backgroundImage: `url(${n.photo})` }} />
+                      <i {...lazyBg(tilePhoto(n.photo))} />
                       <b>{n.name}</b>
                       <small>
                         {n.category} · {meters(n.distanceM)}
@@ -288,7 +302,7 @@ export default async function PlacePage({ params }: Props) {
                   </div>
                 ))}
             </dl>
-            {pos && (
+            {pos && gallery.length > 0 && (
               <div className="pl-map">
                 <PlaceMap places={[{ slug: p.slug ?? slug, name: p.name, category: p.category, city: p.city, pos, exact }]} />
                 {!exact && <small>Position approximative : centre de {p.city}.</small>}

@@ -24,7 +24,14 @@ const nextConfig: NextConfig = {
         // gardées 2 minutes par le CDN de Vercel, puis rafraîchies en arrière-plan. Cent visites de la même liste
         // = un seul calcul serveur. Jamais les pages de compte, de fiche d’annonce ou de messagerie.
         source: '/:lang(en|ar)?/:list(services|praticiens|annonces)/:cat(bricolage|menage|garde-enfants|cours-particuliers|aide-domicile|demenagement|immobilier|emploi|vehicules|objets)?',
-        headers: [{ key: 'Vercel-CDN-Cache-Control', value: 'public, s-maxage=120, stale-while-revalidate=600' }],
+        // Offre gratuite Vercel : 10 min au CDN (au lieu de 2), puis rafraîchie en arrière-plan.
+        headers: [{ key: 'Vercel-CDN-Cache-Control', value: 'public, s-maxage=600, stale-while-revalidate=3600' }],
+      },
+      {
+        // Photos, polices et pictogrammes du dossier public : gardés 30 jours par le navigateur (moins de requêtes CDN,
+        // offre gratuite Vercel) ; une photo remplacée sous le même nom apparaît au plus tard en 30 jours.
+        source: '/:dir(images|fonts|icons)/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=2592000, stale-while-revalidate=604800' }],
       },
       {
         source: '/((?!admin|api).*)',

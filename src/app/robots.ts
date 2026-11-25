@@ -6,20 +6,18 @@ import { SITE } from '@/platform/site'
 export const dynamic = 'force-dynamic'
 
 // Robots d’outils SEO et aspirateurs : beaucoup de pages lues, aucun visiteur en retour (quota CPU Vercel dépassé le 2026-10-29).
-const HEAVY = ['Bytespider', 'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'PetalBot', 'DataForSeoBot', 'Amazonbot', 'BLEXBot', 'serpstatbot']
+// Offre gratuite Vercel (25 nov. 2026) : les robots d’entraînement des IA (lecture en masse, aucun visiteur) sont aussi exclus ;
+// les robots de recherche et les lectures déclenchées par un utilisateur (ChatGPT, Claude, Perplexity) restent autorisés.
+const HEAVY = ['Bytespider', 'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'PetalBot', 'DataForSeoBot', 'Amazonbot', 'BLEXBot', 'serpstatbot', 'GPTBot', 'ClaudeBot', 'CCBot', 'Google-Extended', 'Applebot-Extended', 'meta-externalagent', 'FacebookBot', 'cohere-ai', 'Diffbot', 'ImagesiftBot', 'Omgilibot', 'YouBot', 'Timpibot']
 
 // Moteurs et assistants IA autorisés nommément. Un robot nommé ne lit que son propre groupe : mêmes exclusions que « * ».
 const AI_AND_SEARCH = [
-  'GPTBot',
   'OAI-SearchBot',
   'ChatGPT-User',
-  'ClaudeBot',
   'Claude-SearchBot',
   'Claude-User',
   'PerplexityBot',
   'Perplexity-User',
-  'Google-Extended',
-  'Applebot-Extended',
   'Bingbot',
 ]
 

@@ -14,6 +14,6 @@ export async function GET() {
     return new Response('Plan du site momentanément indisponible', { status: 503, headers: { 'retry-after': '3600', 'cache-control': 'no-store' } })
   }
   return new Response(indexXml(files), {
-    headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=604800' },
+    headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800' },
   })
 }

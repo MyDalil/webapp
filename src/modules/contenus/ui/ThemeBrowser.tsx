@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from '@/platform/ui/Link'
 import { MicButton } from '@/platform/ui/MicButton'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import type { Topic } from '../officiel/topics'
 
 export type BrowserItem = { slug: string; title: string; summary: string; online: boolean; onlineUrl: string | null; platform: string | null; where: string | null; audience: string[] }
@@ -82,7 +83,7 @@ export function ThemeBrowser({ items, topics, label, fallback }: { items: Browse
           return (
             <article key={key} className="tb-card" style={{ ['--st' as string]: g.tone }}>
               <header>
-                <span className="tb-photo" style={{ backgroundImage: `url(${g.photo})` }} aria-hidden="true" />
+                <span className="tb-photo" {...lazyBg(g.photo)} aria-hidden="true" />
                 <span>
                   <h2>{g.title}</h2>
                   <p>{g.sub}</p>

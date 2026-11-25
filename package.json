@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "build": "node scripts/copy-map-worker.mjs && cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "build": "node scripts/copy-map-worker.mjs && cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=6144\" next build",
     "dev": "node scripts/copy-map-worker.mjs && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -50,7 +50,8 @@
     "react-dom": "19.3.1",
     "resend": "^6.37.0",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "thumbhash": "^0.1.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

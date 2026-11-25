@@ -13,6 +13,8 @@ import { NavIcon } from './NavIcon'
 import { WilayaPicker } from './WilayaPicker'
 import { readWilaya, setWilaya, wilayaByCode } from './wilaya'
 import { MicButton } from '../ui/MicButton'
+import { lazyBg } from '../ui/lazyBg'
+import { wikiPhoto } from '../referentiel/photoSizes'
 
 type Slide = { photo: string; place: string; href: string; credit: string | null }
 type Menu = null | Rubric['key'] | 'language' | 'wilaya'
@@ -432,7 +434,7 @@ function Feature({ rubric, slides, onGo, t }: { rubric: Rubric; slides: Slide[];
   const s = slides[i] ?? slides[0]
   const href = rubric.key === 'decouvrir' && s ? s.href : rubric.feature.href
   return (
-    <div className={`mega2-feature ${s ? '' : 'no-photo'}`} style={s ? { backgroundImage: `url(${s.photo})` } : undefined}>
+    <div className={`mega2-feature ${s ? '' : 'no-photo'}`} {...lazyBg(wikiPhoto(s?.photo))}>
       <div className="mega2-feature-copy">
         {(s?.place || rubric.feature.kicker) && (
           <span className="mega2-place">

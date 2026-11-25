@@ -17,6 +17,7 @@ import { WILAYAS } from '@/platform/referentiel/catalog'
 import { communeName, communesOf } from '@/platform/referentiel/communes'
 import { languageLabel } from '@/platform/referentiel/languages'
 import { PhotoGallery } from '@/platform/ui/PhotoGallery'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { SaveButton } from '@/modules/membres/ui'
 import { LeadFormSlot } from '@/modules/pros/ui'
 import { ClaimLink, PlaceActions } from '@/modules/annuaire/ui'
@@ -29,7 +30,7 @@ import { withSectionGate } from '@/platform/ui/SectionGate'
  * ISR : la fiche ne lit ni la session ni l’adresse demandée (?activite est lu par le formulaire, côté navigateur).
  * Rafraîchie à chaque enregistrement du prestataire (hook de la collection) et au plus tard toutes les heures.
  */
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 // Sans generateStaticParams, Next 16 recalcule la page à chaque visite malgré `revalidate`.
 export const generateStaticParams = async () => []
 type Props = { params: Promise<{ slug: string; lang: string }> }
@@ -228,7 +229,7 @@ async function ProviderPage({ params }: Props) {
                             href={ph.full ?? '#'}
                             target="_blank"
                             rel="noopener"
-                            style={{ backgroundImage: `url(${ph.thumb ?? ph.full})` }}
+                            {...lazyBg(ph.thumb ?? ph.full)}
                             aria-label="Voir la photo en grand"
                           />
                         ))}

@@ -5,14 +5,15 @@ import { searchPlaces } from '@/modules/annuaire'
 import { NearMe } from '@/modules/recherche/ui'
 import { RUBRICS } from '@/platform/shell/nav'
 import { HubHero } from '@/platform/ui/HubHero'
-import { PHOTOS } from '@/platform/referentiel/photos'
+import { PHOTOS, wikiPhoto } from '@/platform/referentiel/photos'
+import { lazyBg } from '@/platform/ui/lazyBg'
 import { withSectionGate } from '@/platform/ui/SectionGate'
 
 export const metadata: Metadata = {
   title: 'Vie musulmane en Algérie',
   description: 'Mosquées et salles de prière, enseignement coranique, Hajj et Omra, librairies islamiques, entraide, funérailles musulmanes.',
 }
-export const revalidate = 3600
+export const revalidate = 604800 // 7 jours : la publication rafraîchit déjà la page à la demande (offre gratuite Vercel)
 
 /**
  * Porte de la rubrique Vie musulmane (même place que /services, /explorer…) : les entrées du menu, validées par Saïd,
@@ -59,7 +60,7 @@ async function VieMusulmane() {
             {tiles.map((t) => (
               <li key={t.href}>
                 <Link href={t.href} className="vm-tile">
-                  <span className={`vm-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${t.photo})` } : undefined}>
+                  <span className={`vm-img${t.photo ? '' : ' is-icon'}`} {...lazyBg(wikiPhoto(t.photo))}>
                     {!t.photo && <Icon name={t.icon} />}
                   </span>
                   <span className="vm-body">

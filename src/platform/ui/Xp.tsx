@@ -1,8 +1,9 @@
 import Link from '@/platform/ui/Link'
-import { smallPhoto } from '@/platform/referentiel/photos'
+import { tilePhoto } from '@/platform/referentiel/photos'
 import type { ReactNode } from 'react'
 import { Carousel } from './Carousel'
 import { Icon } from './Icon'
+import { lazyBg } from './lazyBg'
 import { Slideshow, type Slide } from './Slideshow'
 
 /**
@@ -43,7 +44,7 @@ export function PhotoTile({ t, i = 0 }: { t: Tile; i?: number }) {
   return (
     <div className="xp-tile-wrap" data-reveal style={{ ['--i' as string]: i % 6 }}>
       <Link href={t.href} className="city-tile top-tile xp-tile">
-        <div className={`city-tile-img${t.photo ? '' : ' is-icon'}`} style={t.photo ? { backgroundImage: `url(${smallPhoto(t.photo)})` } : undefined}>
+        <div className={`city-tile-img${t.photo ? '' : ' is-icon'}`} {...lazyBg(tilePhoto(t.photo))}>
           {!t.photo && t.icon && (
             <span className="xp-tile-icon" aria-hidden="true">
               <Icon name={t.icon} />
@@ -95,7 +96,7 @@ export function SectionHead({ eyebrow, title, text, action }: { eyebrow?: string
 export function ParallaxBand({ photo, credit, eyebrow, title, text, children }: { photo: string; credit?: string | null; eyebrow?: string; title: string; text?: string; children?: ReactNode }) {
   return (
     <section className="xp-parallax" aria-label={title}>
-      <div className="xp-parallax-img" data-parallax="0.18" style={{ backgroundImage: `url(${photo})` }} />
+      <div className="xp-parallax-img" data-parallax="0.18" {...lazyBg(photo)} />
       <div className="xp-parallax-shade" />
       <div className="container xp-parallax-content" data-reveal>
         {eyebrow && <p className="eyebrow inverse">{eyebrow}</p>}

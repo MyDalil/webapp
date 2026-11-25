@@ -8,7 +8,7 @@ const fetchPricing = async (): Promise<PricingDoc> => {
   const p = await getPayload()
   return (await p.findGlobal({ slug: 'pricing', depth: 0, overrideAccess: true })) as unknown as PricingDoc
 }
-const cached = unstable_cache(fetchPricing, ['pros-pricing'], { tags: [PRICING_TAG], revalidate: 3600 })
+const cached = unstable_cache(fetchPricing, ['pros-pricing'], { tags: [PRICING_TAG], revalidate: 86400 })
 
 /**
  * Tarifs des professionnels (global `pricing`), en cache par étiquette `pricing` (vidé à chaque enregistrement).

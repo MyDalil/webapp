@@ -14,6 +14,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ file: s
   }
   if (!urls) return new Response('Not found', { status: 404 })
   return new Response(urlsetXml(urls), {
-    headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=604800' },
+    headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, s-maxage=86400, stale-while-revalidate=604800, stale-if-error=604800' },
   })
 }

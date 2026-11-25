@@ -21,8 +21,8 @@ describe('robots.txt', () => {
     const r = await load('production')
     const rules = Array.isArray(r.rules) ? r.rules : [r.rules]
     const all = rules.find((x) => x.userAgent === '*')!
-    const ai = rules.find((x) => Array.isArray(x.userAgent) && x.userAgent.includes('GPTBot'))!
-    for (const bot of ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'Bingbot']) {
+    const ai = rules.find((x) => Array.isArray(x.userAgent) && x.userAgent.includes('OAI-SearchBot'))!
+    for (const bot of ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Bingbot']) {
       expect(ai.userAgent).toContain(bot)
     }
     expect(ai.allow).toBe('/')
