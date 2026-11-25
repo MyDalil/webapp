@@ -1,4 +1,15 @@
-# Reprise — 24 novembre 2026
+# Reprise — 25 novembre 2026
+
+## Mise à jour — 25 novembre 2026 : panne Vercel, retour en Pro, pare-feu
+
+- Panne : passage de l’équipe Vercel en offre gratuite → blocage « FAIR_USE_LIMITS_EXCEEDED » (CPU 33 h 49 / 4 h, écritures ISR 3,7 M / 200 k sur 30 jours glissants), site en 402 « Deployment Paused », levée prévue le 25/12. Leçon : ne jamais rétrograder une offre sans comparer l’usage des 30 derniers jours aux limites cibles.
+- Rad a repassé l’équipe en Pro (25/11). Budget « All Metered Resources » : 50 $, alertes à 40/60/100 %, **sans pause** (`pauseUsage:false`).
+- Fusionnés vers `preview` puis `main` avec feu vert de Rad : #65, #66, #67, #69 (offre allégée), promotion #70 (bf46855). Déploiement production relancé à la main après le déblocage.
+- Pare-feu Vercel (projet mydalil) : 1) refus des robots d’aspiration et d’entraînement ; 2) passage libre pour `/api/`, plans du site, `robots.txt`, `llms.txt`, `.well-known/`, images d’aperçu et `/?veille` (surveillance GitHub) ; 3) limite 300 requêtes/min par IP hors fichiers statiques. Protection anti-robots Vercel en « challenge » ; règle IA globale désactivée (ChatGPT, Claude, Perplexity gardent l’accès).
+- Branche `agent/surveillance-cle` : la surveillance contrôle l’accueil via `/?veille` (curl est sinon refusé par la protection anti-robots).
+- Prochaine étape : migration vers le serveur Hostinger de Rad (compte en création), puis retour en offre gratuite ou résiliation Pro. Les secrets GitHub ne sont pas modifiables depuis la session Claude (proxy).
+
+## Reprise — 24 novembre 2026
 
 ## Mise à jour — 24 novembre 2026 (soir) : retours de Rad sur preview
 

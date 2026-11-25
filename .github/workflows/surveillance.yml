@@ -27,7 +27,8 @@ jobs:
         run: |
           probe() { curl -s -o /tmp/body -w '%{http_code} %{time_total}' --max-time 20 "$1"; }
           fail=""
-          for path in / /api/sante /sitemap.xml; do
+          # « /?veille » : accueil autorisé par le pare-feu Vercel (règle « Machines autorisées »).
+          for path in "/?veille" /api/sante /sitemap.xml; do
             for attempt in 1 2; do
               res=$(probe "$SITE$path"); code=${res%% *}; time=${res##* }
               if [ "$path" = /api/sante ] && [ "$code" = 200 ]; then
