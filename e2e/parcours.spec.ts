@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { loginMember } from './comptes'
 
 /** IP distincte par test d’écriture (serveur local) : les limites de débit du site ne bloquent pas les relances. */
 const freshIp = () => ({ 'x-forwarded-for': `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` })
@@ -118,7 +119,12 @@ test.describe('Annuaire', () => {
 test.describe('Formulaires @ecriture', () => {
   test.beforeEach(async ({ page }) => page.setExtraHTTPHeaders(freshIp()))
 
-  test('proposer une adresse : contribution enregistrée', async ({ page }) => {
+  test('proposer une adresse : connexion demandée, puis contribution enregistrée', async ({ page }, info) => {
+    await page.goto('/proposer')
+    // Visiteur sans compte : le premier champ ouvre la fenêtre de connexion.
+    await page.locator('form:has(input[name="title"]) input[name="title"]').focus()
+    await expect(page.locator('dialog[open]')).toBeVisible()
+    await loginMember(page.request, `proposer-${info.project.name}`)
     await page.goto('/proposer')
     const form = page.locator('form:has(input[name="title"])')
     await form.locator('select[name="contributionType"]').selectOption('adresse')

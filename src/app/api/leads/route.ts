@@ -12,6 +12,7 @@ export async function POST(req: Request) {
   if (limited) return limited
   const robot = await proofError(req)
   if (robot) return fail(robot, 403)
+  if (!(await currentMember().catch(() => null))) return fail('Connectez-vous pour continuer.', 401)
   const v = validateLead(await req.json().catch(() => null))
   if (!v.ok) return fail(v.error)
   const member = await currentMember().catch(() => null)

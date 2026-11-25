@@ -204,3 +204,11 @@
 - Vérifié en local : `pnpm check` OK, `pnpm test` 100 fichiers / 668 tests OK, `pnpm lint` 0 erreur, `playwright test --list` OK (338 tests, dont `e2e/rubriques.spec.ts`). **Non vérifié** : build complet, e2e exécutés, rendu 375/1440 px.
 - Limites : liste `/annuaire/<secteur>?category=…` (liens du menu) non coupée côté serveur pour une catégorie seule (page ISR qui ne lit pas la requête) ; la catégorie dédiée `/annuaire/<secteur>/<catégorie>` l’est. Total d’adresses de la recherche et réponses CDN de `/api/recherche` (5 min) peuvent garder un court décalage.
 - Prochaine action : relecture, commit, PR vers `preview`, e2e en CI, essai sur preview.mydalil.com.
+
+## 25/11/2026 — Connexion obligatoire pour toute action (branche agent/connexion-obligatoire)
+- Règle de Rad : tout se consulte sans compte ; toute action exige un compte connecté (modèle leboncoin, Doctolib, Yoojo).
+- `scripts/check-actions.mjs` (dans `check` et `vercel-build`) : une route /api qui écrit sans contrôle de session (401/403) bloque le déploiement, sauf les routes publiques déclarées avec leur raison.
+- `LoginDialog` : toute action refusée (401) ouvre la fenêtre de connexion, sur tous les formulaires.
+- Fermés : contributions, leads, accompagnement, candidatures, signalement d’annonce. Formulaires : `platform/ui/memberGate.ts`.
+- Services : compteur réel (« N professionnels de l’annuaire · Bricolage · Électricité ») ; liste filtrée sur le métier choisi.
+- Consigne de Rad : ne plus lancer la suite de tests en local ; les contrôles tournent dans la CI GitHub.

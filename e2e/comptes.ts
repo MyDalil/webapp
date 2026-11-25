@@ -47,3 +47,19 @@ export function signedButton(op: string, ref: string): string | null {
 
 /** Une seule passe pour les parcours d’API (pas de différence ordinateur / mobile, et limites de débit par adresse IP). */
 export const apiOnly = (projectName: string) => projectName !== 'ordinateur'
+
+/**
+ * Membre de test connecté sur `r` (session administrateur ouverte puis remplacée par celle du membre).
+ * Règle du 25/11/2026 : toute action publique (proposer, demander, candidater) exige un compte connecté.
+ */
+export async function loginMember(r: APIRequestContext, tag: string) {
+  await ensureAdmin(r)
+  const stamp = `${Date.now()}-${tag}`
+  const email = `membre-${stamp}@mydalil.test`
+  const password = `Membre-${stamp}-x9`
+  const created = await r.post('/api/members', {
+    data: { email, password, firstName: 'Membre', lastName: 'Test', phone: '+213550000002', termsAcceptedAt: new Date().toISOString(), _verified: true },
+  })
+  expect(created.ok(), 'création du membre de test').toBe(true)
+  expect((await r.post('/api/members/login', { data: { email, password } })).ok(), 'connexion du membre').toBe(true)
+}
