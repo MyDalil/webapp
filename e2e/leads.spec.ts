@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { apiOnly, ensureAdmin } from './comptes'
+import { apiOnly, ensureAdmin, loginMember } from './comptes'
 
 /**
  * Demandes des visiteurs (lot M, collection `leads`) : envoi accepté sur une fiche privée rattachée à un pro,
@@ -63,12 +63,14 @@ test.describe('Demandes des visiteurs', () => {
     const publique = await ownedPlace(page, stamp, 'sante-soins', 'Pharmacies')
     await page.goto('/')
 
+    // Visiteur sans compte : refusé (toute action exige un compte connecté).
+    await page.context().clearCookies()
+    const anonyme = await sendLead(page, lead(prive))
+    expect(anonyme.status).toBe(401)
+
+    await loginMember(page.request, `leads-${stamp}`)
     const ok = await sendLead(page, lead(prive))
     expect(ok.status, ok.error).toBe(200)
-    const stored = await page.request.get(`/api/leads?where[targetId][equals]=${prive}&depth=0`)
-    expect(stored.ok()).toBe(true)
-    const doc = ((await stored.json()) as { docs: { targetCollection: string; status: string; consent: boolean }[] }).docs[0]
-    expect(doc).toMatchObject({ targetCollection: 'places', status: 'nouveau', consent: true })
 
     const sansAccord = await sendLead(page, lead(prive, { consent: false }))
     expect(sansAccord.status).toBe(400)
@@ -76,6 +78,11 @@ test.describe('Demandes des visiteurs', () => {
 
     const lieuPublic = await sendLead(page, lead(publique))
     expect(lieuPublic.status).toBe(404)
+    await ensureAdmin(page.request)
+    const stored = await page.request.get(`/api/leads?where[targetId][equals]=${prive}&depth=0`)
+    expect(stored.ok()).toBe(true)
+    const doc = ((await stored.json()) as { docs: { targetCollection: string; status: string; consent: boolean }[] }).docs[0]
+    expect(doc).toMatchObject({ targetCollection: 'places', status: 'nouveau', consent: true })
     const none = await page.request.get(`/api/leads?where[targetId][equals]=${publique}&depth=0`)
     expect(((await none.json()) as { totalDocs: number }).totalDocs).toBe(0)
   })

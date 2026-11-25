@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { useLang } from '@/platform/ui/lang'
 import { proofHeaders } from '@/platform/security/proofClient'
+import { gateFocus, requireMember } from '@/platform/ui/memberGate'
 import type { LeadKind, LeadTarget } from '../offreRules'
 
 type L = 'fr' | 'en' | 'ar'
@@ -40,6 +41,7 @@ export function LeadForm({ target, kind }: { target: { collection: LeadTarget; i
     e.preventDefault()
     const f = new FormData(e.currentTarget)
     if (f.get('website')) return
+    if (!(await requireMember())) return
     setState('sending')
     setMsg('')
     try {
@@ -85,7 +87,7 @@ export function LeadForm({ target, kind }: { target: { collection: LeadTarget; i
             {msg}
           </p>
         ) : (
-          <form className="product-form" onSubmit={submit}>
+          <form className="product-form" onSubmit={submit} onFocusCapture={gateFocus}>
             <input className="honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
             <div className="form-grid">
               <label>

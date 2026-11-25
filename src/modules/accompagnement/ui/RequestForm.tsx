@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { proofHeaders } from '@/platform/security/proofClient'
+import { gateFocus, requireMember } from '@/platform/ui/memberGate'
 
 /** Demande d’accompagnement (liste d’attente tant que l’offre n’est pas ouverte). Aucun paiement ici. */
 export function RequestForm({ pack, waitlist, persons = 1 }: { pack: string; waitlist: boolean; persons?: number }) {
@@ -12,6 +13,7 @@ export function RequestForm({ pack, waitlist, persons = 1 }: { pack: string; wai
     e.preventDefault()
     const form = e.currentTarget
     const fd = Object.fromEntries(new FormData(form))
+    if (!(await requireMember())) return
     setState('loading')
     setMsg('Envoi en cours…')
     try {
@@ -28,7 +30,7 @@ export function RequestForm({ pack, waitlist, persons = 1 }: { pack: string; wai
   }
 
   return (
-    <form className="ac-form" onSubmit={onSubmit} aria-busy={state === 'loading'}>
+    <form className="ac-form" onSubmit={onSubmit} onFocusCapture={gateFocus} aria-busy={state === 'loading'}>
       <label>
         Nom
         <input name="name" required maxLength={120} autoComplete="name" />

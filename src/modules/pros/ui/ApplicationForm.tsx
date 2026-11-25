@@ -4,13 +4,15 @@ import { useState, type FormEvent } from 'react'
 import { WILAYAS } from '@/platform/referentiel/catalog'
 import { SmartText } from '@/platform/ui/SmartText'
 import { proofHeaders } from '@/platform/security/proofClient'
+import { gateFocus, requireMember } from '@/platform/ui/memberGate'
 
 export function ApplicationForm() {
   const [msg, setMsg] = useState('')
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setMsg('Envoi…')
     const form = e.currentTarget
+    if (!(await requireMember())) return
+    setMsg('Envoi…')
     const r = await fetch('/api/applications', { method: 'POST', headers: await proofHeaders({ 'content-type': 'application/json' }), body: JSON.stringify(Object.fromEntries(new FormData(form))) })
     const j = await r.json()
     if (!r.ok) return setMsg(j.error ?? 'Impossible d’envoyer la candidature.')
@@ -18,7 +20,7 @@ export function ApplicationForm() {
     setMsg('Candidature enregistrée. Vous pouvez suivre son statut dans votre espace.')
   }
   return (
-    <form className="product-form" onSubmit={submit}>
+    <form className="product-form" onSubmit={submit} onFocusCapture={gateFocus}>
       <input className="honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <div className="form-grid">
         <label>

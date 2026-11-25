@@ -10,6 +10,7 @@ export async function POST(req: Request) {
   if (limited) return limited
   const robot = await proofError(req)
   if (robot) return fail(robot, 403)
+  if (!(await currentMember().catch(() => null))) return fail('Connectez-vous pour continuer.', 401)
   const body = await req.json().catch(() => null)
   if (!body) return fail('Formulaire invalide.')
   // Piège invisible rempli, ou nom d’activité aléatoire : réponse normale, rien n’est enregistré ni envoyé.
