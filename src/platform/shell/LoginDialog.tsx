@@ -21,7 +21,20 @@ export function LoginDialog() {
       ref.current?.showModal()
     }
     window.addEventListener('dalil:login', open)
-    return () => window.removeEventListener('dalil:login', open)
+    // Filet central (règle du 25/11/2026) : toute action refusée faute de compte (401), sur n’importe quel formulaire
+    // présent ou futur, ouvre cette fenêtre. Les routes de connexion gardent leurs propres messages.
+    const base = window.fetch.bind(window)
+    window.fetch = async (input, init) => {
+      const res = await base(input, init)
+      const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
+      const url = new URL(input instanceof Request ? input.url : String(input), window.location.href)
+      if (res.status === 401 && method !== 'GET' && url.origin === window.location.origin && url.pathname.startsWith('/api/') && !url.pathname.startsWith('/api/members/')) open()
+      return res
+    }
+    return () => {
+      window.removeEventListener('dalil:login', open)
+      window.fetch = base
+    }
   }, [])
 
   const next = encodeURIComponent(here)

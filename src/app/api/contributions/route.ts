@@ -16,6 +16,7 @@ export async function POST(req: Request) {
   if (limited) return limited
   const robot = await proofError(req)
   if (robot) return fail(robot, 403)
+  if (!(await currentMember().catch(() => null))) return fail('Connectez-vous pour continuer.', 401)
   const fd = await req.formData().catch(() => null)
   if (!fd) return fail('Formulaire invalide.')
   if (clean(fd.get('website'))) return json({ ok: true })

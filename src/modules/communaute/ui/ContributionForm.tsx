@@ -5,6 +5,7 @@ import { SECTORS, WILAYAS } from '@/platform/referentiel/catalog'
 import { SmartText } from '@/platform/ui/SmartText'
 import { shrinkImage } from '@/platform/ui/shrink'
 import { proofHeaders } from '@/platform/security/proofClient'
+import { gateFocus, requireMember } from '@/platform/ui/memberGate'
 
 const KINDS = ['adresse', 'activite', 'evenement', 'correction', 'ferme', 'temoignage', 'media']
 const DATED = ['evenement', 'activite']
@@ -36,6 +37,7 @@ export function ContributionForm({ initialSector = '' }: { initialSector?: strin
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
+    if (!(await requireMember())) return
     setState('sending')
     setMsg('Envoi sécurisé en cours…')
     try {
@@ -60,7 +62,7 @@ export function ContributionForm({ initialSector = '' }: { initialSector?: strin
   }
 
   return (
-    <form className="data-form contribution-form" onSubmit={submit} aria-busy={state === 'sending'}>
+    <form className="data-form contribution-form" onSubmit={submit} onFocusCapture={gateFocus} aria-busy={state === 'sending'}>
       <fieldset className="contribution-profile-choice">
         <legend>Vous contribuez en tant que</legend>
         <label>

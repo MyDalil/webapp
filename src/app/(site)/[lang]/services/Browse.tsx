@@ -91,7 +91,26 @@ export async function Browse({ q, fixedCategory, lang }: { q: BrowseQuery; fixed
     demenagement: { sector: 'transports-mobilite', category: 'Transporteurs' },
     'cours-particuliers': { sector: 'education-formation', category: 'Écoles de langues' },
   }
-  const nearby: PlaceCard[] = !results.some((r) => !r.demo) && cat && fallback[cat] ? (await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places.slice(0, 12) : []
+  // Activité choisie (ex. Électricité) : seulement les professionnels dont le nom correspond au métier — jamais une liste hors sujet.
+  const stems: Record<string, string[]> = {
+    electricite: ['électri', 'electri'],
+    plomberie: ['plomb', 'sanitaire'],
+    peinture: ['peint'],
+    serrurerie: ['serrur'],
+    climatisation: ['clim', 'froid'],
+    carrelage: ['carrel'],
+    'montage-meubles': ['menuis', 'meuble'],
+  }
+  const nearby: PlaceCard[] = []
+  if (!results.some((r) => !r.demo) && cat && fallback[cat]) {
+    if (!q.activite) nearby.push(...(await searchPlaces({ ...fallback[cat], wilaya: q.wilaya }, 12)).places)
+    else if (stems[q.activite]) {
+      const found = await Promise.all(stems[q.activite].map((stem) => searchPlaces({ ...fallback[cat], wilaya: q.wilaya, q: stem }, 12)))
+      for (const pl of found.flatMap((f) => f.places)) if (!nearby.some((x) => x.slug === pl.slug)) nearby.push(pl)
+    }
+    nearby.splice(12)
+  }
+  const activityName = cat && q.activite ? current?.activities.find(([v]) => v === q.activite)?.[1] : undefined
   const communes = q.wilaya ? communesOf(q.wilaya) : []
   const action = fixedCategory ? `/services/${fixedCategory}` : '/services'
   return (
@@ -207,8 +226,9 @@ export async function Browse({ q, fixedCategory, lang }: { q: BrowseQuery; fixed
 
       <section className="section container">
         <p className="praticiens-count">
-          {results.length} prestataire{results.length > 1 ? 's' : ''}
+          {!results.length && nearby.length ? `${nearby.length} professionnel${nearby.length > 1 ? 's' : ''} de l’annuaire` : `${results.length} prestataire${results.length > 1 ? 's' : ''}`}
           {cat ? ` · ${categoryLabel(cat)}` : ''}
+          {activityName ? ` · ${activityName}` : ''}
           {q.commune ? ` · ${communeName(q.commune)}` : q.wilaya ? ` · ${WILAYAS.find((w) => String(w.code) === q.wilaya)?.name}` : ''}
         </p>
         <SponsoredList lang={lang} collection="providers" wilaya={q.wilaya} where={cat ? { categories: { in: [cat] } } : undefined} />

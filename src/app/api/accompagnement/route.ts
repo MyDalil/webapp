@@ -1,3 +1,4 @@
+import { currentMember } from '@/modules/membres'
 import { clean, fail, isEmail, json } from '@/platform/http'
 import { guard } from '@/platform/security/rateLimit'
 import { proofError } from '@/platform/security/proof'
@@ -8,6 +9,7 @@ export async function POST(req: Request) {
   if (limited) return limited
   const robot = await proofError(req)
   if (robot) return fail(robot, 403)
+  if (!(await currentMember().catch(() => null))) return fail('Connectez-vous pour continuer.', 401)
   const body = await req.json().catch(() => null)
   if (clean(body?.website)) return json({ ok: true, waitlist: true })
   const name = clean(body?.name, 120)
