@@ -72,6 +72,7 @@ import * as migration_20261119_200525_offsections_rubriques from './20261119_200
 import * as migration_20261124_202518_photos_libres_thumbhash from './20261124_202518_photos_libres_thumbhash';
 import * as migration_20261124_204729_media_taille_large from './20261124_204729_media_taille_large';
 import * as migration_20261124_230000_photos_libres_echecs from './20261124_230000_photos_libres_echecs';
+import * as migration_20261125_090000_premier_patron from './20261125_090000_premier_patron';
 
 export const migrations = [
   {
@@ -443,5 +444,10 @@ export const migrations = [
     up: migration_20261124_230000_photos_libres_echecs.up,
     down: migration_20261124_230000_photos_libres_echecs.down,
     name: '20261124_230000_photos_libres_echecs'
+  },
+  {
+    up: migration_20261125_090000_premier_patron.up,
+    down: migration_20261125_090000_premier_patron.down,
+    name: '20261125_090000_premier_patron',
   },
 ];
