@@ -29,3 +29,4 @@ Format : `- AAAA-MM-JJ — décision — raison`.
 
 ## 2026-11-15 (soir) — Les fiches d’exemple reviennent en production (décision de Rad)
 - **Décision** : le masquage des exemples en production, décidé le matin, est annulé. Rad veut les fiches d’exemple complètes : une page reste belle et donne envie de s’inscrire même sans inscrit. Les règles du 2026-10-26 s’appliquent de nouveau (badge « Exemple », demandes refusées en production, hors compteurs).
+- 2026-11-26 — `searchProviders` vérifie catégorie, activité, wilaya et langue avant la requête — une valeur hors liste dans l’adresse (robot, saisie) faisait échouer la base (« invalid input value for enum ») ; valeur inconnue = aucun résultat, langue inconnue ignorée.

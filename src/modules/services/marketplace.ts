@@ -7,7 +7,9 @@ import { commune as communeOf, communeName } from '@/platform/referentiel/commun
 import { cleanDocument, cleanImage } from '@/platform/storage/images'
 import { savePublicPhoto } from '@/platform/storage/upload'
 import { localize } from '@/platform/i18n/content'
-import { activity as activityOf, activityLabel, categoryLabel, priceLabel } from './activities'
+import { ACTIVITIES, CATEGORIES, activity as activityOf, activityLabel, categoryLabel, priceLabel } from './activities'
+import { WILAYAS } from '@/platform/referentiel/catalog'
+import { LANGUAGES } from '@/platform/referentiel/languages'
 import { missionCancelled, missionReminder, newMessage, requestAccepted, requestDeclined, requestSent, requestToProvider, reviewInvite, type MissionMail } from './emails'
 import { algiersDate, isRequestable, openDays, type Busy } from './planning'
 
@@ -76,14 +78,19 @@ export function covers(p: Pick<Provider, 'wilaya' | 'wholeWilaya' | 'communes' |
 }
 
 export async function searchProviders(q: { category?: string; activity?: string; wilaya?: string; commune?: string; gender?: string; language?: string; text?: string }): Promise<ProviderCard[]> {
+  // Valeurs hors liste (adresse modifiée à la main, robot) : la base refuse une valeur inconnue d’une liste fermée
+  // (« Failed query »). Une catégorie, une activité ou une wilaya inconnue ne donne aucun résultat ; une langue inconnue est ignorée.
+  if (q.category && !CATEGORIES.some((c) => c.value === q.category)) return []
+  if (q.activity && !ACTIVITIES.some((a) => a.value === q.activity)) return []
+  const wilaya = q.commune ? String(communeOf(q.commune)?.wilaya ?? q.wilaya ?? '') : q.wilaya
+  if (wilaya && !WILAYAS.some((w) => String(w.code) === wilaya)) return []
   const p = await getPayload()
   const and: Where[] = [{ status: { equals: 'published' } }]
   if (q.category) and.push({ categories: { in: [q.category] } })
   if (q.activity) and.push({ activities: { in: [q.activity] } })
-  const wilaya = q.commune ? String(communeOf(q.commune)?.wilaya ?? q.wilaya ?? '') : q.wilaya
   if (wilaya) and.push({ wilaya: { equals: wilaya } })
   if (q.gender === 'femme' || q.gender === 'homme') and.push({ gender: { equals: q.gender } })
-  if (q.language) and.push({ languages: { in: [q.language] } })
+  if (q.language && LANGUAGES.some((l) => l.value === q.language)) and.push({ languages: { in: [q.language] } })
   if (q.text) and.push({ or: [{ displayName: { like: q.text } }, { bio: { like: q.text } }] })
   const { docs } = await p.find({ collection: 'providers', where: { and }, depth: 1, limit: 300, overrideAccess: true })
   const cards = docs.filter((d) => !q.commune || covers(d, q.commune)).map(toCard)

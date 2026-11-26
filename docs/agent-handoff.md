@@ -1,5 +1,13 @@
 # Reprise — 25 novembre 2026
 
+## Mise à jour — 26 novembre 2026 : deux erreurs de /etat corrigées
+
+- Branche `agent/prestataires-filtres` (depuis `preview` acbddf7).
+- Photos libres : échec « Il y a eu un problème lors du téléversement du fichier ». Cause lue dans les journaux Vercel : `column "_objectkey" does not exist` (champ ajouté par Payload 3.93 au greffon Vercel Blob, actif seulement avec `BLOB_READ_WRITE_TOKEN`, donc jamais vu en local ni en CI). Migration `20261126_090000_media_object_key` (ajout `IF NOT EXISTS`). Reproduit puis vérifié en local avec un jeton factice : lecture de `media` en erreur avant, correcte après.
+- Services : « Failed query … providers ». Cause reproduite en local : valeur hors liste (catégorie, activité, wilaya, langue) dans l’adresse. `searchProviders` vérifie les valeurs avant la requête.
+- `pnpm check` OK (733 fichiers), `pnpm test` 103 fichiers / 691 tests OK. Non vérifié : build et e2e (CI).
+- Prochaine action : CI, fusion vers `preview`, puis vers `main` avec le feu vert de Rad ; la passe photos-libres suivante (16 h UTC) doit copier des photos.
+
 ## Mise à jour — 25 novembre 2026 : panne Vercel, retour en Pro, pare-feu
 
 - Panne : passage de l’équipe Vercel en offre gratuite → blocage « FAIR_USE_LIMITS_EXCEEDED » (CPU 33 h 49 / 4 h, écritures ISR 3,7 M / 200 k sur 30 jours glissants), site en 402 « Deployment Paused », levée prévue le 25/12. Leçon : ne jamais rétrograder une offre sans comparer l’usage des 30 derniers jours aux limites cibles.
