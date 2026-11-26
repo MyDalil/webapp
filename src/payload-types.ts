@@ -540,6 +540,7 @@ export interface Media {
    */
   thumbhash?: string | null;
   uploadedBy?: (number | null) | Member;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -3668,6 +3669,7 @@ export interface MediaSelect<T extends boolean = true> {
   hash?: T;
   thumbhash?: T;
   uploadedBy?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
